@@ -1,0 +1,31 @@
+[tool.poetry]
+name = "tasha"
+version = "0.3.34"
+description = "A program to create 5th edition Dungeons & Dragons characters."
+authors = ["Marcus T Taylor <mtaylor9754@hotmail.com>"]
+license = "GPL-3.0-only"
+readme = "README.md"
+repository = "https://codeberg.org/mtttech/Tasha"
+classifiers = [
+    "Environment :: Console",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Games/Entertainment",
+    "Topic :: Games/Entertainment :: Role-Playing",
+    "Topic :: Utilities",
+]
+packages = [{include = "tasha"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+dice = "^4.0.0"
+prompt-toolkit = "^3.0.39"
+toml = "^0.10.2"
+
+[tool.poetry.scripts]
+tasha = 'tasha:main'
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
