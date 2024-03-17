@@ -350,7 +350,7 @@ class SRDUtils:
     def getRacialMagic(self, race: str, caster_level: int) -> List[str]:
         """Returns racial magic spells by race/subclass, if applicable."""
         actual_race = race.split(", ")
-        if len(race) > 1:
+        if len(actual_race) > 1:
             spells = self.srd["subraces"][actual_race[1]]["spells"]
         else:
             spells = self.srd["races"][actual_race[0]]["spells"]
