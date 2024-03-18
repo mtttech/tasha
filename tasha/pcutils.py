@@ -49,6 +49,41 @@ class Character:
         except KeyError:
             self.initiative = 0
 
+    def reset(self) -> None:
+        self.alignment = ""
+        self.allotted_asi = 0
+        self.allotted_skills = 0
+        self.armors = list()
+        self.attributes = dict()
+        self.background = "Soldier"
+        self.bonus = dict()
+        self.cantrips = list()
+        self.classes = dict()
+        self.equipment = list()
+        self.feats = list()
+        self.features = list()
+        self.gender = ""
+        self.gold = 0
+        self.height = 0
+        self.initiative = 0
+        self.known_spells = dict()
+        self.languages = list()
+        self.level = 1
+        self.name = "Unnamed"
+        self.prepared_spells = dict()
+        self.proficiency_bonus = 0
+        self.race = ""
+        self.resistances = list()
+        self.savingthrows = list()
+        self.size = "Medium"
+        self.skills = list()
+        self.speed = 30
+        self.spell_slots = list()
+        self.tools = list()
+        self.traits = list()
+        self.weapons = list()
+        self.weight = 0
+
     def roll_hit_points(self) -> int:
         """Calculates the character's total hit points."""
         try:

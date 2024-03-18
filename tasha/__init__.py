@@ -308,8 +308,7 @@ class TashaCmd:
                             ),
                         ],
                     )
-                exit(0)
-
+                    oSheet.reset()
         else:
             raise TashaCmdError("Unrecognized command string specified.")
 
