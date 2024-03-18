@@ -74,7 +74,7 @@ speed = 30
 spell_slots = [ 5, 4, 3,]
 tools = [ "Disguise kit", "Forgery Kit",]
 traits = [ "Darkvision", "Fey Ancestry", "Keen Senses", "Trance", "Drow Magic", "Drow Weapon Training", "Sunlight Sensitivity", "Superior Darkvision", "Dancing Lights", "Faerie Fire",]
-version = "0.3.31"
+version = "0.3.36"
 weapons = [ "Dagger", "Dart", "Light Crossbow", "Sling", "Quarterstaff",]
 weight = 108
 

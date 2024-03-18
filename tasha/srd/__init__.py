@@ -1,3 +1,5 @@
+from typing import Any, Dict
+
 from . import (
     alignments,
     backgrounds,
@@ -5,7 +7,7 @@ from . import (
     feats,
     languages,
     metrics,
-    multiclasses, 
+    multiclasses,
     proficiencies,
     races,
     skills,
@@ -14,7 +16,7 @@ from . import (
     subraces,
 )
 
-srd5e = dict()
+srd5e: Dict[str, Any] = dict()
 srd5e.update(alignments.alignments)
 srd5e.update(backgrounds.backgrounds)
 srd5e.update(classes.classes)

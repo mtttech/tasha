@@ -41,7 +41,7 @@ class Character:
     weapons: list = field(default_factory=list)
     weight: int = field(default=0)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         self.hit_points = self.roll_hit_points()
         self.proficiency_bonus = ceil(self.level / 4) + 1
         try:
@@ -95,7 +95,6 @@ class Character:
         for class_slot, klass in enumerate(tuple(self.classes.keys())):
             max_hit_die = self.classes[klass]["hit_die"]
             avg_hit_die = ceil(max_hit_die / 2) + 1
-
             if class_slot == 0:
                 total_hit_points = max_hit_die + modifier
             else:
