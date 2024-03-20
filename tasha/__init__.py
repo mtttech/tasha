@@ -1322,14 +1322,18 @@ def assignSpells() -> None:
     def set_spells() -> None:
         """Select's character's spells."""
 
-        def filter_arcanum_spells(sp: List[str], pc_spell_list: List[str]) -> List[str]:
+        def getArcanumSpellSelections(
+            pc_spell_list: List[str], warlock_spell_list: List[str]
+        ) -> List[str]:
             """Removes 6-9 level spells if a spell is already known for that level."""
             for spell_level in [6, 7, 8, 9]:
                 for spell in pc_spell_list:
                     spell_level_query = f"(lv. {spell_level})"
                     if spell_level_query in spell:
-                        sp = [s for s in sp if spell_level_query not in s]
-            return sp
+                        warlock_spell_list = [
+                            s for s in warlock_spell_list if spell_level_query not in s
+                        ]
+            return warlock_spell_list
 
         for klass in oPC.getMyClasses():
             allotted_spell_total = oSRD.getSpellTotal(
@@ -1348,7 +1352,7 @@ def assignSpells() -> None:
 
             for _ in range(allotted_spell_total):
                 if klass == "Warlock":
-                    spell_pool = filter_arcanum_spells(spell_pool, my_spell_list)
+                    spell_pool = getArcanumSpellSelections(my_spell_list, spell_pool)
 
                 spell = read(
                     f"Choose a spell ({spell_selection_counter}).",
@@ -1361,10 +1365,7 @@ def assignSpells() -> None:
             my_spell_pool = {}
             my_spell_pool[klass] = my_spell_list
 
-            if oSRD.isPreparedCaster(klass):
-                oSheet.set("known_spells", my_spell_pool)
-            else:
-                oSheet.set("prepared_spells", my_spell_pool)
+            oSheet.set("spellcasting", my_spell_pool)
 
     if len(oPC.getSpellSlots()) == 0:
         return

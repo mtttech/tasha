@@ -22,11 +22,9 @@ class Character:
     height: int = field(default=0)
     hit_points: int = field(init=False)
     initiative: int = field(default=0)
-    known_spells: dict = field(default_factory=dict)
     languages: list = field(default_factory=list)
     level: int = field(default=1)
     name: str = field(default="Unnamed")
-    prepared_spells: dict = field(default_factory=dict)
     proficiency_bonus: int = field(default=0)
     race: str = field(default="")
     resistances: list = field(default_factory=list)
@@ -35,6 +33,7 @@ class Character:
     skills: list = field(default_factory=list)
     speed: int = field(default=30)
     spell_slots: list = field(default_factory=list)
+    spellcasting: dict = field(default_factory=dict)
     tools: list = field(default_factory=list)
     traits: list = field(default_factory=list)
     version: str = field(default="")
@@ -66,11 +65,9 @@ class Character:
         self.gold = 0
         self.height = 0
         self.initiative = 0
-        self.known_spells = dict()
         self.languages = list()
         self.level = 1
         self.name = "Unnamed"
-        self.prepared_spells = dict()
         self.proficiency_bonus = 0
         self.race = ""
         self.resistances = list()
@@ -79,6 +76,7 @@ class Character:
         self.skills = list()
         self.speed = 30
         self.spell_slots = list()
+        self.spellcasting = dict()
         self.tools = list()
         self.traits = list()
         self.weapons = list()
