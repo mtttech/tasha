@@ -188,19 +188,7 @@ class TashaCmd:
             elif action == "roll":
                 results = assignAttributeValues(generate_attributes(value))
                 oSheet.set("attributes", results)
-                for attribute in tuple(results.keys()):
-                    echo(
-                        [
-                            ("class:attribute", f"{attribute[0:3].upper()}: "),
-                            (
-                                "class:number",
-                                "{} ({})".format(
-                                    oPC.getAttributeScore(attribute),
-                                    oPC.getAttributeModifier(attribute),
-                                ),
-                            ),
-                        ],
-                    )
+                review_attributes()
 
                 race = read(
                     f"What is your race?",
@@ -424,6 +412,22 @@ def read(message: str, selections: Union[List[str], Tuple[str, ...]]) -> str:
     """Captures user input."""
     prompt = TashaPrompt(PromptSession(bottom_toolbar=bottom_toolbar))
     return prompt.select(message, selections)
+
+
+def review_attributes() -> None:
+    for attribute in tuple(oPC.getAttributes().keys()):
+        echo(
+            [
+                ("class:attribute", f"{attribute[0:3].upper()}: "),
+                (
+                    "class:number",
+                    "{} ({})".format(
+                        oPC.getAttributeScore(attribute),
+                        oPC.getAttributeModifier(attribute),
+                    ),
+                ),
+            ],
+        )
 
 
 def assignAsiUpgrades() -> None:
@@ -1233,7 +1237,7 @@ def assignRacialTraits() -> None:
             if attribute in bonus_values:
                 base_attr = Attributes(base_values)
                 base_attr.add(attribute, bonus_values[attribute])
-                print(base_attr.attributes)
+        review_attributes()
 
     def assignTabaxiTraits() -> None:
         """Assign tabaxi features."""
