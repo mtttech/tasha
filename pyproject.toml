@@ -1,11 +1,11 @@
 [tool.poetry]
 name = "tasha"
-version = "0.3.36"
+version = "0.3.37"
 description = "A program to create 5th edition Dungeons & Dragons characters."
 authors = ["Marcus T Taylor <mtaylor9754@hotmail.com>"]
 license = "GPL-3.0-only"
 readme = "README.md"
-repository = "https://codeberg.org/mtttech/Tasha"
+repository = "https://github.com/mtttech/Tasha"
 classifiers = [
     "Environment :: Console",
     "License :: OSI Approved :: MIT License",
