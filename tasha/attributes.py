@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from math import floor
 from typing import Dict, List
 
 import dice
@@ -12,7 +11,7 @@ class Score:
     modifier: int = field(init=False)
     bonus: dict = field(default_factory=dict)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if self.attribute in self.bonus:
             self.score += self.bonus[self.attribute]
             if self.score > 20:
@@ -26,11 +25,13 @@ class Attributes:
 
     @staticmethod
     def _can_adjust(base_value: int, bonus_value: int) -> bool:
+        """Checks if bonus_value + base_value is greater than 20. False if > 20, True otherwise."""
         if (base_value + bonus_value) > 20:
             return False
         return True
 
     def add(self, attribute: str, bonus: int) -> None:
+        """Applies bonus to the specified attribute."""
         old_value = self.attributes[attribute]["score"]
         if not self._can_adjust(old_value, bonus):
             return
@@ -61,5 +62,7 @@ def generate_attributes(threshold: int) -> List[int]:
 
 
 def get_modifier(score: int) -> int:
-    """Returns the modifier by calculation of the specified score."""
+    """Calculates the modifier for the specified score."""
+    from math import floor
+
     return floor((score - 10) / 2)
