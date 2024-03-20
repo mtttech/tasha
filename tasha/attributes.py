@@ -8,8 +8,8 @@ import dice
 class Score:
     attribute: str = ""
     score: int = 0
-    modifier: int = field(init=False)
     bonus: dict = field(default_factory=dict)
+    modifier: int = field(init=False)
 
     def __post_init__(self) -> None:
         if self.attribute in self.bonus:

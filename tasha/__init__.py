@@ -186,9 +186,7 @@ class TashaCmd:
 
             # Action: roll
             elif action == "roll":
-                results = assignAttributeValues(
-                    generate_attributes(value), oPC.getBonus()
-                )
+                results = assignAttributeValues(generate_attributes(value))
                 oSheet.set("attributes", results)
                 for attribute in tuple(results.keys()):
                     echo(
@@ -486,9 +484,7 @@ def assignAsiUpgrades() -> None:
         asi_counter -= 1
 
 
-def assignAttributeValues(
-    results: List[int], bonus: Dict[str, Dict[str, int]]
-) -> Dict[str, Dict[str, int]]:
+def assignAttributeValues(results: List[int]) -> Dict[str, Dict[str, int]]:
     """Assigns the six attributes and applies any bonuses where applicable."""
     attribute_options = [
         "Strength",
@@ -518,7 +514,7 @@ def assignAttributeValues(
     def setAttributeValue(attribute_name: str, attribute_value: int) -> None:
         attribute_options.remove(attribute_name)
         results.remove(attribute_value)
-        attr_values = asdict(Score(attribute_name, attribute_value, bonus))
+        attr_values = asdict(Score(attribute_name, attribute_value))
         del attr_values["attribute"]
         del attr_values["bonus"]
         attribute_array[attribute_name] = attr_values
@@ -1230,6 +1226,15 @@ def assignRacialTraits() -> None:
                 ),
             )
 
+    def assignRacialBonus(
+        base_values: Dict[str, Dict[str, int]], bonus_values: Dict[str, int]
+    ):
+        for attribute, _ in bonus_values.items():
+            if attribute in bonus_values:
+                base_attr = Attributes(base_values)
+                base_attr.add(attribute, bonus_values[attribute])
+                print(base_attr.attributes)
+
     def assignTabaxiTraits() -> None:
         """Assign tabaxi features."""
         if "Tabaxi" not in oPC.getMyRace():
@@ -1272,6 +1277,8 @@ def assignRacialTraits() -> None:
     if subrace != "":
         traits = oSRD.getEntryBySubrace(subrace)
         oSheet.set({"bonus": traits["bonus"], "traits": traits["traits"]})
+
+    assignRacialBonus(oPC.getAttributes(), oPC.getBonus())
 
     from tasha.metrics import Anthropometry
 

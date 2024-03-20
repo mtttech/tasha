@@ -188,7 +188,7 @@ class PlayerUtils:
         """Returns the score of a specified attribute."""
         return self.character_sheet.attributes[attribute]["score"]
 
-    def getBonus(self) -> Dict[str, Dict[str, int]]:
+    def getBonus(self) -> Dict[str, int]:
         """Returns the character's racial bonus."""
         return self.character_sheet.bonus
 
