@@ -307,13 +307,20 @@ class SRDUtils:
         except KeyError:
             return tuple(self.srd["subraces"].keys())
 
-    def getListTools(self, exclusions: Union[List[str], None] = None) -> List[str]:
+    def getListTools(
+        self,
+        exclusions: Union[List[str], None] = None,
+        startswith: Union[str, None] = None,
+    ) -> List[str]:
         """Returns a tuple of all applicable tool proficiencies minus exclusions, if applicable."""
+        tool_proficiencies = self.srd["proficiencies"]["tools"]
         if isinstance(exclusions, list):
-            return [
-                t for t in self.srd["proficiencies"]["tools"] if t not in exclusions
+            tool_proficiencies = [t for t in tool_proficiencies if t not in exclusions]
+        if isinstance(startswith, str):
+            tool_proficiencies = [
+                t for t in tool_proficiencies if t.startswith(startswith)
             ]
-        return self.srd["proficiencies"]["tools"]
+        return tool_proficiencies
 
     def getListWeapons(self, excluded: Union[List[str], None] = None) -> List[str]:
         """Returns a list of weapons, ignoring those in the excluded list."""
