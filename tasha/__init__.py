@@ -276,7 +276,7 @@ class TashaCmd:
                 assignClassFeatures()
                 assignClassSkills()
                 assignAsiUpgrades()
-                assignSpells()
+                assignSpellcastingFeatures()
                 cs = replace(
                     oSheet,
                     level=oPC.getTotalLevel(),
@@ -669,28 +669,16 @@ def assignBackgroundTraits() -> None:
                 "Gaming set - Three-Dragon Ante set",
             ]
         elif oPC.getMyBackground() == "Witchlight Hand":
-            tool_options = [
-                t
-                for t in oSRD.getListTools(oPC.getMyTools())
-                if t.startswith("Musical instrument")
-            ]
+            tool_options = oSRD.getListTools(oPC.getMyTools(), "Musical instrument")
             tool_options.append("Disguise kit")
         elif oPC.getMyBackground() in ("Entertainer", "Feylost", "Outlander"):
-            tool_options = [
-                t
-                for t in oSRD.getListTools(oPC.getMyTools())
-                if t.startswith("Musical instrument")
-            ]
+            tool_options = oSRD.getListTools(oPC.getMyTools(), "Musical instrument")
         elif oPC.getMyBackground() in (
             "Clan Crafter",
             "Folk Hero",
             "Guild Artisan",
         ):
-            tool_options = [
-                t
-                for t in oSRD.getListTools(oPC.getMyTools())
-                if t.startswith("Artisan's tools")
-            ]
+            tool_options = oSRD.getListTools(oPC.getMyTools(), "Artisan's tools")
         elif oPC.getMyBackground() == "Noble":
             tool_options = [
                 "Gaming set - Dice set",
@@ -867,6 +855,18 @@ def assignFeatEnhancements(feat: str) -> None:
             getAdjustableAttributes(attribute_bonuses),
         )
         base_attributes.add(attribute_bonus, 1)
+
+    # Artificer Initiate
+    if feat == "Artificer Initiate":
+        oSheet.set(
+            "tools",
+            read(
+                "Choose a '{}' background bonus tool proficiency.".format(
+                    oPC.getMyBackground()
+                ),
+                oSRD.getListTools(oPC.getMyTools(), "Artisan's tools"),
+            ),
+        )
 
     # Dungeon Delver
     if feat == "Dungeon Delver":
@@ -1070,10 +1070,10 @@ def assignFeatEnhancements(feat: str) -> None:
 
 
 def assignRacialTraits() -> None:
-    """Assign racial/subracial traits."""
+    """Assigns racial/subracial traits."""
 
     def assignDragonbornTraits() -> None:
-        """Assign dragonborn features."""
+        """Assigns dragonborn features."""
         if "Dragonborn" not in oPC.getMyRace():
             return
         draconic_ancestry = read(
@@ -1107,7 +1107,7 @@ def assignRacialTraits() -> None:
         oSheet.set("resistances", draconic_resistances[draconic_ancestry])
 
     def assignHalfelfTraits() -> None:
-        """Assign half-elf features."""
+        """Assigns half-elf features."""
         if "Halfelf" not in oPC.getMyRace():
             return
         attribute = read(
@@ -1143,7 +1143,7 @@ def assignRacialTraits() -> None:
             )
 
     def assignHobgoblinTraits() -> None:
-        """Assign hobgoblin features."""
+        """Assigns hobgoblin features."""
         if "Hobgoblin" not in oPC.getMyRace():
             return
         for _ in range(2):
@@ -1180,7 +1180,7 @@ def assignRacialTraits() -> None:
             )
 
     def assignHumanTraits() -> None:
-        """Assign human features."""
+        """Assigns human features."""
         if "Human" not in oPC.getMyRace():
             return
         oSheet.set(
@@ -1192,7 +1192,7 @@ def assignRacialTraits() -> None:
         )
 
     def assignKenkuTraits() -> None:
-        """Assign kenku features."""
+        """Assigns kenku features."""
         if "Kenku" not in oPC.getMyRace():
             return
         for _ in range(2):
@@ -1211,7 +1211,7 @@ def assignRacialTraits() -> None:
             )
 
     def assignLizardfolkTraits() -> None:
-        """Assign lizardfolk features."""
+        """Assigns lizardfolk features."""
         if "Lizardfolk" not in oPC.getMyRace():
             return
         for _ in range(2):
@@ -1230,9 +1230,10 @@ def assignRacialTraits() -> None:
                 ),
             )
 
-    def assignRacialBonus(
-        base_values: Dict[str, Dict[str, int]], bonus_values: Dict[str, int]
-    ):
+    def assignRacialBonus() -> None:
+        """Assigns racial bonuses to attributes."""
+        base_values = oPC.getAttributes()
+        bonus_values = oPC.getBonus()
         for attribute, _ in bonus_values.items():
             if attribute in bonus_values:
                 base_attr = Attributes(base_values)
@@ -1240,7 +1241,7 @@ def assignRacialTraits() -> None:
         review_attributes()
 
     def assignTabaxiTraits() -> None:
-        """Assign tabaxi features."""
+        """Assigns tabaxi features."""
         if "Tabaxi" not in oPC.getMyRace():
             return
         oSheet.set(
@@ -1282,7 +1283,7 @@ def assignRacialTraits() -> None:
         traits = oSRD.getEntryBySubrace(subrace)
         oSheet.set({"bonus": traits["bonus"], "traits": traits["traits"]})
 
-    assignRacialBonus(oPC.getAttributes(), oPC.getBonus())
+    assignRacialBonus()
 
     from tasha.metrics import Anthropometry
 
@@ -1299,8 +1300,8 @@ def assignRacialTraits() -> None:
     )
 
 
-def assignSpells() -> None:
-    """Subroutine for determining the character's spells features."""
+def assignSpellcastingFeatures() -> None:
+    """Assigns character's spellcasting features, if applicable."""
     if not oPC.isSpellcaster():
         return
 
@@ -1330,7 +1331,7 @@ def assignSpells() -> None:
 
             oSheet.set("cantrips", my_cantrip_pool)
 
-    def set_spells() -> None:
+    def assignSpells() -> None:
         """Select's character's spells."""
 
         def getArcanumSpellSelections(
@@ -1382,7 +1383,7 @@ def assignSpells() -> None:
         return
 
     assignCantrips()
-    set_spells()
+    assignSpells()
 
 
 def hasFeatRequirements(feat: str) -> Union[Literal[False], Literal[True]]:
@@ -1423,9 +1424,9 @@ def hasFeatRequirements(feat: str) -> Union[Literal[False], Literal[True]]:
         if feat_requirements[category] is None:
             continue
 
-        if category == "ability":
-            for ability, minimum_score in feat_requirements[category].items():
-                if oPC.getAttributeScore(ability) < minimum_score:
+        if category == "attribute":
+            for attribute, minimum_score in feat_requirements[category].items():
+                if oPC.getAttributeScore(attribute) < minimum_score:
                     return False
 
         if category == "caster":
