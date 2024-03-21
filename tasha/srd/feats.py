@@ -1,7 +1,7 @@
 feats = {
     "feats": {
         "Actor": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -11,7 +11,17 @@ feats = {
             "weapons": [],
         },
         "Alert": {
-            "ability": None,
+            "attribute": None,
+            "armors": [],
+            "caster": None,
+            "proficiency": None,
+            "race": None,
+            "subrace": None,
+            "tools": [],
+            "weapons": [],
+        },
+        "Artificer Initiate": {
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -21,7 +31,7 @@ feats = {
             "weapons": [],
         },
         "Athlete": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -31,7 +41,7 @@ feats = {
             "weapons": [],
         },
         "Bountiful Luck": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -41,7 +51,7 @@ feats = {
             "weapons": [],
         },
         "Charger": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -51,7 +61,7 @@ feats = {
             "weapons": [],
         },
         "Chef": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -61,7 +71,7 @@ feats = {
             "weapons": [],
         },
         "Crossbow Expert": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -71,7 +81,7 @@ feats = {
             "weapons": [],
         },
         "Crusher": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -81,7 +91,7 @@ feats = {
             "weapons": [],
         },
         "Defensive Duelist": {
-            "ability": {"Dexterity": 13},
+            "attribute": {"Dexterity": 13},
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -91,7 +101,7 @@ feats = {
             "weapons": [],
         },
         "Dragon Fear": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -101,7 +111,7 @@ feats = {
             "weapons": [],
         },
         "Dragon Hide": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -111,7 +121,7 @@ feats = {
             "weapons": [],
         },
         "Drow High Magic": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -121,7 +131,7 @@ feats = {
             "weapons": [],
         },
         "Dual Wielder": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -131,7 +141,7 @@ feats = {
             "weapons": [],
         },
         "Dungeon Delver": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": False,
             "proficiency": None,
@@ -141,7 +151,7 @@ feats = {
             "weapons": [],
         },
         "Durable": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -151,7 +161,7 @@ feats = {
             "weapons": [],
         },
         "Dwarven Fortitude": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -161,7 +171,7 @@ feats = {
             "weapons": [],
         },
         "Eldritch Adept": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -171,7 +181,7 @@ feats = {
             "weapons": [],
         },
         "Elemental Adept": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": True,
             "proficiency": None,
@@ -181,7 +191,7 @@ feats = {
             "weapons": [],
         },
         "Elven Accuracy": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -191,7 +201,7 @@ feats = {
             "weapons": [],
         },
         "Fade Away": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -201,7 +211,7 @@ feats = {
             "weapons": [],
         },
         "Fey Teleportation": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -211,7 +221,7 @@ feats = {
             "weapons": [],
         },
         "Fey Touched": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -221,7 +231,7 @@ feats = {
             "weapons": [],
         },
         "Fighting Initiative": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -231,7 +241,7 @@ feats = {
             "weapons": [],
         },
         "Flames of Phlegethos": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -241,7 +251,7 @@ feats = {
             "weapons": [],
         },
         "Grappler": {
-            "ability": {"Strength": 13},
+            "attribute": {"Strength": 13},
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -251,7 +261,7 @@ feats = {
             "weapons": [],
         },
         "Great Weapon Master": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -261,7 +271,7 @@ feats = {
             "weapons": [],
         },
         "Gunner": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -271,7 +281,7 @@ feats = {
             "weapons": ["Firearms"],
         },
         "Healer": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -281,7 +291,7 @@ feats = {
             "weapons": [],
         },
         "Heavily Armored": {
-            "ability": None,
+            "attribute": None,
             "armors": [
                 "Heavy",
             ],
@@ -293,7 +303,7 @@ feats = {
             "weapons": [],
         },
         "Heavy Armor Master": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": {"armors": ["Heavy"]},
@@ -303,7 +313,7 @@ feats = {
             "weapons": [],
         },
         "Infernal Constitution": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -313,7 +323,7 @@ feats = {
             "weapons": [],
         },
         "Inspiring Leader": {
-            "ability": {"Charisma": 13},
+            "attribute": {"Charisma": 13},
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -323,7 +333,7 @@ feats = {
             "weapons": [],
         },
         "Keen Mind": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -333,7 +343,7 @@ feats = {
             "weapons": [],
         },
         "Lightly Armored": {
-            "ability": None,
+            "attribute": None,
             "armors": [
                 "Light",
             ],
@@ -345,7 +355,7 @@ feats = {
             "weapons": [],
         },
         "Linguist": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -355,7 +365,7 @@ feats = {
             "weapons": [],
         },
         "Lucky": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -365,7 +375,7 @@ feats = {
             "weapons": [],
         },
         "Mage Slayer": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -375,7 +385,7 @@ feats = {
             "weapons": [],
         },
         "Magic Initiate": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -385,7 +395,7 @@ feats = {
             "weapons": [],
         },
         "Martial Adept": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -395,7 +405,7 @@ feats = {
             "weapons": [],
         },
         "Medium Armor Master": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": {"armors": ["Medium"]},
@@ -405,7 +415,7 @@ feats = {
             "weapons": [],
         },
         "Metamagic Adept": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -415,7 +425,7 @@ feats = {
             "weapons": [],
         },
         "Mobile": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -425,7 +435,7 @@ feats = {
             "weapons": [],
         },
         "Moderately Armored": {
-            "ability": None,
+            "attribute": None,
             "armors": ["Medium", "Shield"],
             "caster": None,
             "proficiency": {"armors": ["Light"]},
@@ -435,7 +445,7 @@ feats = {
             "weapons": [],
         },
         "Mounted Combatant": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -445,7 +455,7 @@ feats = {
             "weapons": [],
         },
         "Observant": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -455,7 +465,7 @@ feats = {
             "weapons": [],
         },
         "Orcish Fury": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -465,7 +475,7 @@ feats = {
             "weapons": [],
         },
         "Piercer": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -475,7 +485,7 @@ feats = {
             "weapons": [],
         },
         "Poisoner": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -485,7 +495,7 @@ feats = {
             "weapons": [],
         },
         "Polearm Master": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -495,7 +505,7 @@ feats = {
             "weapons": [],
         },
         "Prodigy": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -505,7 +515,7 @@ feats = {
             "weapons": [],
         },
         "Resilient": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -515,7 +525,7 @@ feats = {
             "weapons": [],
         },
         "Ritual Caster": {
-            "ability": {"Intelligence": 13, "Wisdom": 13},
+            "attribute": {"Intelligence": 13, "Wisdom": 13},
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -525,7 +535,7 @@ feats = {
             "weapons": [],
         },
         "Savage Attacker": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -535,7 +545,7 @@ feats = {
             "weapons": [],
         },
         "Second Chance": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -545,7 +555,7 @@ feats = {
             "weapons": [],
         },
         "Sentinel": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -555,7 +565,7 @@ feats = {
             "weapons": [],
         },
         "Shadow Touched": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -565,7 +575,7 @@ feats = {
             "weapons": [],
         },
         "Sharpshooter": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -575,7 +585,7 @@ feats = {
             "weapons": [],
         },
         "Shield Master": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -585,7 +595,7 @@ feats = {
             "weapons": [],
         },
         "Skill Expert": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -595,7 +605,7 @@ feats = {
             "weapons": [],
         },
         "Skilled": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -605,7 +615,7 @@ feats = {
             "weapons": [],
         },
         "Skulker": {
-            "ability": {"Dexterity": 13},
+            "attribute": {"Dexterity": 13},
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -615,7 +625,7 @@ feats = {
             "weapons": [],
         },
         "Slasher": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -625,7 +635,7 @@ feats = {
             "weapons": [],
         },
         "Spell Sniper": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -635,7 +645,7 @@ feats = {
             "weapons": [],
         },
         "Squat Nimbleness": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -645,7 +655,7 @@ feats = {
             "weapons": [],
         },
         "Svirfneblin Magic": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -655,7 +665,7 @@ feats = {
             "weapons": [],
         },
         "Tavern Brawler": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -668,7 +678,7 @@ feats = {
             ],
         },
         "Telekinetic": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -678,7 +688,7 @@ feats = {
             "weapons": [],
         },
         "Telepathic": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -688,7 +698,7 @@ feats = {
             "weapons": [],
         },
         "Tough": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -698,7 +708,7 @@ feats = {
             "weapons": [],
         },
         "War Caster": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -708,7 +718,7 @@ feats = {
             "weapons": [],
         },
         "Weapon Master": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
@@ -718,7 +728,7 @@ feats = {
             "weapons": [],
         },
         "Wood Elf Magic": {
-            "ability": None,
+            "attribute": None,
             "armors": [],
             "caster": None,
             "proficiency": None,
