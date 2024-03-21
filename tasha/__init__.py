@@ -846,7 +846,7 @@ def assignFeatEnhancements(feat: str) -> None:
             attribute_bonuses = ["Constitution", "Strength"]
         elif feat == "Second Chance":
             attribute_bonuses = ["Charisma", "Constitution", "Dexterity"]
-        elif feat in ("Telekinetic", "Telepathic"):
+        elif feat in ("Fey Touched", "Telekinetic", "Telepathic"):
             attribute_bonuses = ["Intelligence", "Wisdom", "Charisma"]
         elif feat == "Weapon Master":
             attribute_bonuses = ["Dexterity", "Strength"]
@@ -876,7 +876,7 @@ def assignFeatEnhancements(feat: str) -> None:
     if feat in ("Drow High Magic", "Svirfneblin Magic", "Wood Elf Magic"):
         if feat == "Drow High Magic":
             oSheet.set(
-                "traits",
+                "features",
                 [
                     "Detect Magic",
                     "Dispel Magic",
@@ -885,7 +885,7 @@ def assignFeatEnhancements(feat: str) -> None:
             )
         elif feat == "Svirfneblin Magic":
             oSheet.set(
-                "traits",
+                "features",
                 [
                     "Blindness/Deafness",
                     "Blur",
@@ -913,7 +913,7 @@ def assignFeatEnhancements(feat: str) -> None:
             )
 
             oSheet.set(
-                "traits",
+                "features",
                 [
                     "Longstrider",
                     "Pass Without Trace",
@@ -926,7 +926,11 @@ def assignFeatEnhancements(feat: str) -> None:
 
     # Fey Teleportation
     if feat == "Fey Teleportation":
-        oSheet.set({"languages": "Sylvan", "traits": "Misty Step"})
+        oSheet.set({"languages": "Sylvan", "features": "Misty Step"})
+
+    # Fey Touched
+    if feat == "Fey Touched":
+        oSheet.set("features", "Misty Step")
 
     # Gunner
     if feat == "Gunner":
@@ -1049,11 +1053,11 @@ def assignFeatEnhancements(feat: str) -> None:
 
     # Telekinetic
     if feat == "Telekinetic":
-        oSheet.set("traits", "Mage Hand")
+        oSheet.set("features", "Mage Hand")
 
     # Telepathic
     if feat == "Telepathic":
-        oSheet.set("traits", "Detect Thoughts")
+        oSheet.set("features", "Detect Thoughts")
 
     # Weapon Master
     if feat == "Weapon Master":
