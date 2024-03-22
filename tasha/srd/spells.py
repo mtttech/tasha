@@ -1,6 +1,6 @@
 spells = {
     "spells": {
-        "Arcane Trickster": {   # Enchantment & Illusion Wizard Spells
+        "Arcane Trickster": {  # Enchantment & Illusion Wizard Spells
             0: [
                 "Acid Splash",
                 "Blade Ward",
@@ -576,7 +576,7 @@ spells = {
                 "True Resurrection",
             ],
         },
-        "Eldritch Knight": {    # Abjuration and Evocation Wizard Spells
+        "Eldritch Knight": {  # Abjuration and Evocation Wizard Spells
             0: [
                 "Acid Splash",
                 "Blade Ward",

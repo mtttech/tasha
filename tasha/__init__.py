@@ -437,9 +437,7 @@ def assignAsiUpgrades() -> None:
         return
 
     def assignAttributeUpgrade() -> None:
-        bonus = int(
-            read("How many points do you wish to apply?", ["1", "2"])
-        )
+        bonus = int(read("How many points do you wish to apply?", ["1", "2"]))
         bonus_attributes = list()
         if bonus == 1:
             num_of_bonuses = 2
@@ -730,6 +728,10 @@ def assignCantrips(
         my_cantrip_list.append(cantrip)
         cantrip_pool.remove(cantrip)
         cantrip_selection_counter -= 1
+
+    if subklass == "Arcane Trickster" and "Mage Hand" not in my_cantrip_list:
+        my_cantrip_list.append("Mage Hand")
+
     return my_cantrip_list
 
 
