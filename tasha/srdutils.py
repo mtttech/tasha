@@ -121,14 +121,14 @@ class SRDUtils:
     def getClassSpellList(
         self, klass: str, spell_level: int, subklass=None
     ) -> List[str]:
-        if subklass in (
-            "Arcane Trickster",
-            "Eldritch Knight",
-        ):
-            klass = "Wizard"
-
         try:
-            spell_list_by_level = self.srd["spells"][klass][spell_level]
+            if subklass in (
+                "Arcane Trickster",
+                "Eldritch Knight",
+            ):
+                spell_list_by_level = self.srd["spells"][subklass][spell_level]
+            else:
+                spell_list_by_level = self.srd["spells"][klass][spell_level]
             if len(spell_list_by_level) == 0:
                 raise KeyError
 
@@ -225,8 +225,10 @@ class SRDUtils:
         """Returns a list of all applicable backgrounds."""
         return tuple(self.srd["backgrounds"].keys())
 
-    def getListCantrips(self, klass: str, subklass: str) -> List[str]:
-        """Returns a list of cantrips available by class."""
+    def getListCantrips(
+        self, klass: str, subklass: Union[str, None] = None
+    ) -> List[str]:
+        """Returns a list of cantrips available by class/subclass."""
         return self.getClassSpellList(klass, 0, subklass)
 
     def getListClasses(self) -> Tuple[str, ...]:
