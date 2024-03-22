@@ -438,7 +438,7 @@ def assignAsiUpgrades() -> None:
 
     def assignAttributeUpgrade() -> None:
         bonus = int(
-            read("How many points do you wish to apply to an attribute?", ["1", "2"])
+            read("How many points do you wish to apply?", ["1", "2"])
         )
         bonus_attributes = list()
         if bonus == 1:
@@ -704,6 +704,35 @@ def assignBackgroundTraits() -> None:
         )
 
 
+def assignCantrips(
+    klass: str,
+    cantrips_known: Union[int, None] = None,
+    subklass: Union[str, None] = None,
+) -> List[str]:
+    """Selects character's cantrips."""
+    if subklass is not None:
+        subklass = oPC.getClassSubclass(klass)
+
+    my_cantrip_list = list()
+    cantrip_pool = oSRD.getListCantrips(klass, subklass)
+    if len(cantrip_pool) == 0:
+        return my_cantrip_list
+
+    if cantrips_known is None:
+        cantrips_known = int(oPC.getSpellSlots()[0])
+    cantrip_selection_counter = cantrips_known
+
+    for _ in range(cantrips_known):
+        cantrip = read(
+            f"Choose a cantrip ({cantrip_selection_counter}).",
+            cantrip_pool,
+        )
+        my_cantrip_list.append(cantrip)
+        cantrip_pool.remove(cantrip)
+        cantrip_selection_counter -= 1
+    return my_cantrip_list
+
+
 def assignClassFeatures() -> None:
     """Assigns class features."""
 
@@ -846,7 +875,7 @@ def assignFeatEnhancements(feat: str) -> None:
             attribute_bonuses = ["Constitution", "Strength"]
         elif feat == "Second Chance":
             attribute_bonuses = ["Charisma", "Constitution", "Dexterity"]
-        elif feat in ("Fey Touched", "Telekinetic", "Telepathic"):
+        elif feat in ("Fey Touched", "Shadow Touched", "Telekinetic", "Telepathic"):
             attribute_bonuses = ["Intelligence", "Wisdom", "Charisma"]
         elif feat == "Weapon Master":
             attribute_bonuses = ["Dexterity", "Strength"]
@@ -858,12 +887,11 @@ def assignFeatEnhancements(feat: str) -> None:
 
     # Artificer Initiate
     if feat == "Artificer Initiate":
+        oSheet.set("features", assignCantrips("Artificer", 1))
         oSheet.set(
             "tools",
             read(
-                "Choose a '{}' background bonus tool proficiency.".format(
-                    oPC.getMyBackground()
-                ),
+                f"Choose a '{oPC.getMyBackground()}' background bonus tool proficiency.",
                 oSRD.getListTools(oPC.getMyTools(), "Artisan's tools"),
             ),
         )
@@ -894,24 +922,7 @@ def assignFeatEnhancements(feat: str) -> None:
                 ],
             )
         elif feat == "Wood Elf Magic":
-            bonus_spells = [
-                "Druidcraft",
-                "Guidance",
-                "Mending",
-                "Poison Spray",
-                "Produce Flame",
-                "Resistance",
-                "Shillelagh",
-                "Thorn Whip",
-            ]
-            oSheet.set(
-                "traits",
-                read(
-                    "Choose a bonus wood elf spell.",
-                    bonus_spells,
-                ),
-            )
-
+            oSheet.set("features", assignCantrips("Druid", 1))
             oSheet.set(
                 "features",
                 [
@@ -1013,6 +1024,9 @@ def assignFeatEnhancements(feat: str) -> None:
         base_attributes.add(attribute_bonus, 1)
         oSheet.set("savingthrows", attribute_bonus.capitalize())
 
+    # Shadow Touched
+    if feat == "Shadow Touched":
+        oSheet.set("features", "Invisibility")
     # Skilled
     if feat == "Skilled":
         for _ in range(3):
@@ -1309,32 +1323,6 @@ def assignSpellcastingFeatures() -> None:
     if not oPC.isSpellcaster():
         return
 
-    def assignCantrips() -> None:
-        """Selects character's cantrips."""
-        for klass in oPC.getMyClasses():
-            cantrip_pool = oSRD.getListCantrips(klass, oPC.getClassSubclass(klass))
-
-            if len(cantrip_pool) == 0:
-                continue
-
-            my_cantrip_list = list()
-            cantrips_known = oSheet.spell_slots[0]
-            cantrip_selection_counter = cantrips_known
-
-            for _ in range(cantrips_known):
-                cantrip = read(
-                    f"Choose a cantrip ({cantrip_selection_counter}).",
-                    cantrip_pool,
-                )
-                my_cantrip_list.append(cantrip)
-                cantrip_pool.remove(cantrip)
-                cantrip_selection_counter -= 1
-
-            my_cantrip_pool = {}
-            my_cantrip_pool[klass] = my_cantrip_list
-
-            oSheet.set("cantrips", my_cantrip_pool)
-
     def assignSpells() -> None:
         """Select's character's spells."""
 
@@ -1386,7 +1374,9 @@ def assignSpellcastingFeatures() -> None:
     if len(oPC.getSpellSlots()) == 0:
         return
 
-    assignCantrips()
+    for klass in oPC.getMyClasses():
+        oSheet.set("cantrips", {klass: assignCantrips(klass)})
+
     assignSpells()
 
 
