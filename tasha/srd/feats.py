@@ -571,7 +571,7 @@ feats = {
             "proficiency": None,
             "race": None,
             "subrace": None,
-            "tools": ["Artisan's tools - Cook's utensils"],
+            "tools": [],
             "weapons": [],
         },
         "Sharpshooter": {
