@@ -78,7 +78,6 @@ races = {
             "traits": ["Darkvision", "Fey Ancestry", "Keen Senses", "Trance"],
             "weapons": [],
         },
-        """
         "Fairy": {
             "armors": [],
             "bonus": {},
@@ -97,7 +96,6 @@ races = {
             ],
             "weapons": [],
         },
-        """
         "Firbolg": {
             "armors": [],
             "bonus": {"Strength": 1, "Wisdom": 2},
@@ -217,7 +215,6 @@ races = {
             "traits": ["Brave", "Halfling Nimbleness", "Lucky"],
             "weapons": [],
         },
-        """
         "Harengon": {
             "armors": [],
             "bonus": {},
@@ -237,7 +234,6 @@ races = {
             ],
             "weapons": [],
         },
-        """
         "Hobgoblin": {
             "armors": [],
             "bonus": {"Constitution": 2, "Intelligence": 1},
