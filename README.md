@@ -25,7 +25,7 @@
 
 ```
 # Clone the repository.
-git clone https://codeberg.org/mtttech/Tasha.git
+git clone https://github.com/mtttech/Tasha.git
 
 # Install the project environment.
 cd Tasha
@@ -74,7 +74,7 @@ speed = 30
 spell_slots = [ 4, 3,]
 tools = [ "Disguise kit", "Forgery Kit",]
 traits = [ "Darkvision", "Hellish Resistance", "Legacy of Malbolge", "Minor Illusion",]
-version = "0.3.37"
+version = "0.3.38"
 weapons = [ "Dagger", "Dart", "Light Crossbow", "Sling", "Quarterstaff",]
 weight = 135
 
