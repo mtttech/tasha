@@ -825,7 +825,7 @@ spells = {
                 "Cordon of Arrows",
                 "Darkvision",
                 "Find Traps",
-                "Healing Spriit",
+                "Healing Spirit",
                 "Lesser Restoration",
                 "Locate Animals or Plants",
                 "Locate Object",
