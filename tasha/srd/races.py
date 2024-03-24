@@ -78,6 +78,26 @@ races = {
             "traits": ["Darkvision", "Fey Ancestry", "Keen Senses", "Trance"],
             "weapons": [],
         },
+        """
+        "Fairy": {
+            "armors": [],
+            "bonus": {},
+            "languages": [
+                "Common",
+            ],
+            "resistances": [],
+            "size": "Small",
+            "skills": [],
+            "spells": {1: ["Druidcraft"], 3: ["Faerie Fire"], 5: ["Enlarge/Reduce"]},
+            "subrace": [],
+            "tools": [],
+            "traits": [
+                "Fairy Magic",
+                "Flight",
+            ],
+            "weapons": [],
+        },
+        """
         "Firbolg": {
             "armors": [],
             "bonus": {"Strength": 1, "Wisdom": 2},
@@ -197,6 +217,27 @@ races = {
             "traits": ["Brave", "Halfling Nimbleness", "Lucky"],
             "weapons": [],
         },
+        """
+        "Harengon": {
+            "armors": [],
+            "bonus": {},
+            "languages": [
+                "Common",
+            ],
+            "resistances": [],
+            "size": "Small",
+            "skills": [],
+            "spells": [],
+            "subrace": [],
+            "tools": [],
+            "traits": [
+                "Hare Trigger",
+                "Lucky Footwork",
+                "Rabbit Hop",
+            ],
+            "weapons": [],
+        },
+        """
         "Hobgoblin": {
             "armors": [],
             "bonus": {"Constitution": 2, "Intelligence": 1},

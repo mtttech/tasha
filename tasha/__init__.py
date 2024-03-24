@@ -1143,7 +1143,6 @@ def assignRacialTraits() -> None:
         base = Attributes(oPC.getAttributes())
         base.add(attribute, 1)
         oSheet.set("bonus", {attribute: 1})
-        oSheet.attributes = base.attributes
 
         oSheet.set(
             "languages",
@@ -1272,6 +1271,28 @@ def assignRacialTraits() -> None:
             ),
         )
 
+    def assignWitchlightTraits() -> None:
+        """Assigns fairy or harengon features."""
+        if "Fairy" not in oPC.getMyRace() or "Harengon" not in oPC.getMyRace():
+            return
+
+        base = Attributes(oPC.getAttributes())
+        bonus_values = [2, 1]
+        bonus_attributes = ["Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma"]
+        for bonus in bonus_values:
+            attribute = read("Choose your racial bonus attribute.", bonus_attributes)
+            bonus_attributes.remove(attribute)
+            base.add(attribute, bonus)
+            oSheet.set("bonus", {attribute: bonus})
+
+        oSheet.set(
+            "languages",
+            read(
+                "Choose your racial bonus language.",
+                oSRD.getListLanguages(oPC.getMyLanguages()),
+            ),
+        )
+
     full_race = oPC.getMyRace().split(", ")
     if len(full_race) > 1:
         race, subrace = full_race
@@ -1297,6 +1318,7 @@ def assignRacialTraits() -> None:
     assignKenkuTraits()
     assignLizardfolkTraits()
     assignTabaxiTraits()
+    assignWitchlightTraits()
     assignBackgroundTraits()
 
     if subrace != "":
