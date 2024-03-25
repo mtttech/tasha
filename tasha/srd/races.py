@@ -1,5 +1,6 @@
 races = {
     "races": {
+        # VGtM pg 104
         "Aasimar": {
             "armors": [],
             "bonus": {"Charisma": 2},
@@ -96,6 +97,7 @@ races = {
             ],
             "weapons": [],
         },
+        # VGtM pg 106
         "Firbolg": {
             "armors": [],
             "bonus": {"Strength": 1, "Wisdom": 2},
@@ -153,6 +155,7 @@ races = {
             "traits": ["Darkvision", "Fury of the Small", "Nimble Escape"],
             "weapons": [],
         },
+        # VGtM pg 108
         "Goliath": {
             "armors": [],
             "bonus": {"Constitution": 1, "Strength": 2},
@@ -267,6 +270,7 @@ races = {
             "traits": ["Languages"],
             "weapons": [],
         },
+        # VGtM pg 109
         "Kenku": {
             "armors": [],
             "bonus": {"Dexterity": 2, "Wisdom": 1},
@@ -298,6 +302,7 @@ races = {
             ],
             "weapons": [],
         },
+        # VGtM pg 111
         "Lizardfolk": {
             "armors": [],
             "bonus": {"Constitution": 2, "Wisdom": 1},
@@ -331,6 +336,7 @@ races = {
             "traits": ["Darkvision", "Aggressive", "Menacing", "Powerful Build"],
             "weapons": [],
         },
+        # VGtM pg 113
         "Tabaxi": {
             "armors": [],
             "bonus": {"Charisma": 1, "Dexterity": 2},
@@ -373,6 +379,7 @@ races = {
             "traits": ["Darkvision", "Hellish Resistance"],
             "weapons": [],
         },
+        # VGtM pg 115
         "Triton": {
             "armors": [],
             "bonus": {"Charisma": 1, "Constitution": 1, "Strength": 1},
