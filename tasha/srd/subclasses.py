@@ -40,6 +40,7 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
+        # XGtE pg 28
         "Arcane Archer": {
             "armors": [],
             "features": {
@@ -181,6 +182,7 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
+        # XGtE pg 30
         "Cavalier": {
             "armors": [],
             "features": {
@@ -209,6 +211,7 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
+        # XGtE pg 22
         "Circle of Dreams": {
             "armors": [],
             "features": {
@@ -352,6 +355,7 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
+        # XGtE pg 23
         "Circle of the Shepherd": {
             "armors": [],
             "features": {
@@ -429,6 +433,7 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
+        # XGtE pg 14
         "College of Glamour": {
             "armors": [],
             "features": {
@@ -453,6 +458,7 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
+        # XGtE pg 15
         "College of Swords": {
             "armors": ["Medium"],
             "features": {
@@ -477,6 +483,7 @@ subclasses = {
             "tools": [],
             "weapons": ["Martial"],
         },
+        # XGtE pg 16
         "College of Whispers": {
             "armors": [],
             "features": {
@@ -505,6 +512,7 @@ subclasses = {
                 "Martial",
             ],
         },
+        # XGtE pg 50
         "Divine Soul": {
             "armors": [],
             "features": {
@@ -578,6 +586,7 @@ subclasses = {
             "tools": ["Artisan's tools - Smith's tools"],
             "weapons": [],
         },
+        # XGtE pg 41
         "Gloom Stalker": {
             "armors": [],
             "features": {
@@ -609,6 +618,7 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
+        # XGtE pg 42
         "Horizon Walker": {
             "armors": [],
             "features": {
@@ -639,6 +649,7 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
+        # XGtE pg 45
         "Inquisitive": {
             "armors": [],
             "features": {
@@ -694,6 +705,7 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
+        # XGtE pg 46
         "Mastermind": {
             "armors": [],
             "features": {
@@ -707,6 +719,7 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
+        # XGtE pg 43
         "Monster Slayer": {
             "armors": [],
             "features": {
@@ -755,6 +768,7 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
+        # XGtE pg 37
         "Oath of Conquest": {
             "armors": [],
             "features": {
@@ -807,6 +821,7 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
+        # XGtE pg 38
         "Oath of Redemption": {
             "armors": [],
             "features": {
@@ -1093,6 +1108,7 @@ subclasses = {
             ],
             "weapons": [],
         },
+        # XGtE pg 31
         "Samurai": {
             "armors": [],
             "features": {
@@ -1211,6 +1227,7 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
+        # XGtE pg 47
         "Scout": {
             "armors": [],
             "features": {
@@ -1224,6 +1241,7 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
+        # XGtE pg 50
         "Shadow Magic": {
             "armors": [],
             "features": {
@@ -1254,6 +1272,7 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
+        # XGtE pg 51
         "Storm Sorcery": {
             "armors": [],
             "features": {
@@ -1283,6 +1302,7 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
+        # XGtE pg 47
         "Swashbuckler": {
             "armors": [],
             "features": {
@@ -1323,6 +1343,7 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
+        # XGtE pg 54
         "The Celestial": {
             "armors": [],
             "features": {
@@ -1388,6 +1409,7 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
+        # XGtE pg 55
         "The Hexblade": {
             "armors": [],
             "features": {
@@ -1469,6 +1491,7 @@ subclasses = {
             "tools": [],
             "weapons": ["Martial"],
         },
+        # XGtE pg 59
         "War Magic": {
             "armors": [],
             "features": {
@@ -1525,6 +1548,7 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
+        # XGtE pg 33
         "Way of the Drunken Master": {
             "armors": [],
             "features": {
@@ -1573,6 +1597,7 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
+        # XGtE pg 34
         "Way of the Kensei": {
             "armors": [],
             "features": {
@@ -1621,6 +1646,7 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
+        # XGtE pg 35
         "Way of the Sun Soul": {
             "armors": [],
             "features": {
