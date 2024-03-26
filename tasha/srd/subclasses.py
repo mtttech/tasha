@@ -1,5 +1,6 @@
 subclasses = {
     "subclasses": {
+        # TCoE pg 66
         "Aberrant Mind": {
             "armors": [],
             "features": {
@@ -13,6 +14,7 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
+        # TCoE pg 14
         "Alchemist": {
             "armors": [],
             "features": {
@@ -68,6 +70,7 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
+        # TCoE pg 15
         "Armorer": {
             "armors": ["Heavy"],
             "features": {
@@ -86,6 +89,7 @@ subclasses = {
             "tools": ["Artisan's tools - Smith's tools"],
             "weapons": [],
         },
+        # TCoE pg 17
         "Artillerist": {
             "armors": [],
             "features": {
@@ -138,6 +142,7 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
+        # TCoE pg 18
         "Battle Smith": {
             "armors": [],
             "features": {
@@ -169,6 +174,7 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
+        # TCoE pg 76
         "Bladesinging": {
             "armors": ["Light"],
             "features": {
@@ -225,6 +231,7 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
+        # TCoE pg 36
         "Circle of Spores": {
             "armors": [],
             "features": {
@@ -238,6 +245,7 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
+        # TCoE pg 38
         "Circle of Stars": {
             "armors": [],
             "features": {
@@ -251,6 +259,7 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
+        # TCoE pg 39
         "Circle of Wildfire": {
             "armors": [],
             "features": {
@@ -395,6 +404,7 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
+        # TCoE pg 68
         "Clockwork Soul": {
             "armors": [],
             "features": {
@@ -554,6 +564,7 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
+        # TCoE pg 58
         "Fey Wanderer": {
             "armors": [],
             "features": {
@@ -804,6 +815,7 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
+        # TCoE pg 53
         "Oath of Glory": {
             "armors": [],
             "features": {
@@ -891,6 +903,7 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
+        # TCoE pg 54
         "Oath of the Watchers": {
             "armors": [],
             "features": {
@@ -908,6 +921,7 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
+        # TCoE pg 31
         "Order Domain": {
             "armors": [
                 "Heavy",
@@ -924,6 +938,7 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
+        # TCoE pg 77
         "Order of Scribes": {
             "armors": [],
             "features": {
@@ -937,6 +952,7 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
+        # TCoE pg 25
         "Path of Wild Magic": {
             "armors": [],
             "features": {
@@ -976,6 +992,7 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
+        # TCoE pg 24
         "Path of the Beast": {
             "armors": [],
             "features": {
@@ -1041,6 +1058,7 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
+        # TCoE pg 32
         "Peace Domain": {
             "armors": [],
             "features": {
@@ -1055,6 +1073,7 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
+        # TCoE pg 62
         "Phantom": {
             "armors": [],
             "features": {
@@ -1072,6 +1091,7 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
+        # TCoE pg 42
         "Psi Warrior": {
             "armors": [],
             "features": {
@@ -1086,6 +1106,7 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
+        # TCoE pg 44
         "Rune Knight": {
             "armors": [],
             "features": {
@@ -1256,6 +1277,7 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
+        # TCoE pg 63
         "Soulknife": {
             "armors": [],
             "features": {
@@ -1286,6 +1308,7 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
+        # TCoE pg 59
         "Swarmkeeper": {
             "armors": [],
             "features": {
@@ -1357,6 +1380,7 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
+        # TCoE pg 72
         "The Fathomless": {
             "armors": [],
             "features": {
@@ -1383,6 +1407,7 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
+        # TCoE pg 73
         "The Genie": {
             "armors": [],
             "features": {
@@ -1463,6 +1488,7 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
+        # TCoE pg 34
         "Twilight Domain": {
             "armors": [],
             "features": {
@@ -1505,6 +1531,7 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
+        # TCoE pg 49
         "Way of Mercy": {
             "armors": [],
             "features": {
@@ -1535,6 +1562,7 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
+        # TCoE pg 50
         "Way of the Astral Self": {
             "armors": [],
             "features": {
