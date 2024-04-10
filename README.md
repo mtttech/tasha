@@ -23,6 +23,8 @@
 
 ### Installation & Usage
 
+#### Installation
+
 ```
 # Clone the repository.
 git clone https://github.com/mtttech/Tasha.git
@@ -30,16 +32,15 @@ git clone https://github.com/mtttech/Tasha.git
 # Install the project environment.
 cd Tasha
 poetry install
-
-# Starts the program.
-poetry run tasha
 ```
 
-### Commands
+#### Usage
 
-The following commands are defined in order of usage.
+To begin, run the program by typing the following command ```poetry run tasha```.
 
-* **roll** ***threshold***: This command performs multiple functions but primarily it generates the six ability scores at a certain thresold. For example if you use the command 'roll 60', Tasha will keep rolling your scores until they total or exceed 60. You are then given the option to assign the generated scores, choose your race/subrace, gender, and background.
-* **add class** ***class***: This command sets your character's class. Run the command again selecting a different class to multiclass (minimum requirements are enforced). This command only works after the 'roll' commmand has been run.
-* **set** ***(alignment|name)*** ***value***: These commands are hopefully pretty self-explanatory. They are responsible for setting your alignment and name respectively. This command can be used at anytime but must be used before the 'save' command.
+From there, you must more or less run the following commands in the order they are listed. Details about each command are further laid out below.
+
+* **roll** ***threshold***: This command performs multiple functions but primarily generates the six ability scores at a certain thresold. For example, if you use the command ```roll 60```, Tasha will keep rolling your scores until they total or exceed 60. Once generated, you are given the option to assign your scores, choose your race/subrace (if applicable), gender, and background.
+* **add class** ***class***: This command sets your character's class. Run the command again, selecting a different class to multiclass (minimum requirements are enforced). This command only works after the **roll** commmand has been run.
+* **set** ***(alignment|name)*** ***value***: These commands are hopefully pretty self-explanatory. They are responsible for setting your alignment and name respectively. This command can "technically" be used at anytime but must be used before the **save** command.
 * **save**: This command finalizes your character. It allows you to select a subclass (if applicable), choose skills, choose your ability score improvements (if applicable) and select spells (if applicable). Finally your character is saved to a TOML file in your ***$HOME/.config/tasha/characters*** directory. This command can only be run after the first three.
