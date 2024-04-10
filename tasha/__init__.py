@@ -183,6 +183,8 @@ class TashaCmd:
 
             if action == "roll" and not isinstance(value, int):
                 raise TashaCmdError("This action roll parameter requires an int value.")
+            if not value >= 60 or not value <= 90:
+                raise TashaCmdError("The threshold value must be between 60-90.")
 
             # Action: roll
             elif action == "roll":
