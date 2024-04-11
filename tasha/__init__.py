@@ -108,7 +108,7 @@ class TashaCmd:
 
         if len(self.args) == 3:
             parameter = self.args[1]
-            value = capitalize(self.args[2])
+            threshold = capitalize(self.args[2])
 
             if action in (
                 "add",
@@ -121,15 +121,15 @@ class TashaCmd:
                 if parameter == "class":
                     if not oPC.hasAttributes():
                         raise TashaCmdError("You must generate your attributes first!")
-                    if value not in oSRD.getListClasses():
-                        raise ValueError(f"Invalid class '{value}' specified.")
-                    if oPC.hasClasses() and value not in oSRD.getListMulticlasses(
+                    if threshold not in oSRD.getListClasses():
+                        raise ValueError(f"Invalid class '{threshold}' specified.")
+                    if oPC.hasClasses() and threshold not in oSRD.getListMulticlasses(
                         oPC.getMyClasses(),
                         oPC.getTotalLevel(),
                         oPC.getAttributes(),
                     ):
                         raise TashaCmdError(
-                            f"You don't meet the requirements to multiclass to a '{value}'!"
+                            f"You don't meet the requirements to multiclass to a '{threshold}'!"
                         )
                     level_allowance = 20
                     level_allowance = level_allowance - oPC.getTotalLevel()
@@ -138,14 +138,14 @@ class TashaCmd:
 
                     level = int(
                         read(
-                            f"What is your '{value}' level (1-{level_allowance})?",
+                            f"What is your '{threshold}' level (1-{level_allowance})?",
                             [str(_) for _ in list(range(1, level_allowance + 1))],
                         )
                     )
-                    oSheet.classes[value] = {}
-                    oSheet.classes[value]["hit_die"] = oSRD.getHitDieByClass(value)
-                    oSheet.classes[value]["level"] = level
-                    oSheet.classes[value]["subclass"] = ""
+                    oSheet.classes[threshold] = {}
+                    oSheet.classes[threshold]["hit_die"] = oSRD.getHitDieByClass(threshold)
+                    oSheet.classes[threshold]["level"] = level
+                    oSheet.classes[threshold]["subclass"] = ""
 
             # Action: set
             if action == "set":
@@ -155,22 +155,22 @@ class TashaCmd:
                 ):
                     if (
                         parameter == "alignment"
-                        and value not in oSRD.getListAlignments()
+                        and threshold not in oSRD.getListAlignments()
                     ):
-                        raise TashaCmdError(f"Invalid alignment '{value}' specified.")
-                    oSheet.set(parameter, value)
+                        raise TashaCmdError(f"Invalid alignment '{threshold}' specified.")
+                    oSheet.set(parameter, threshold)
                 elif parameter == "race":
-                    if value not in oSRD.getListRaces():
-                        raise ValueError(f"Invalid race '{value}' specified.")
-                    subrace_options = oSRD.getListSubraces(value)
+                    if threshold not in oSRD.getListRaces():
+                        raise ValueError(f"Invalid race '{threshold}' specified.")
+                    subrace_options = oSRD.getListSubraces(threshold)
                     if len(subrace_options) == 0:
-                        oSheet.set(parameter, value)
+                        oSheet.set(parameter, threshold)
                     else:
                         subrace = read(
-                            f"What is your {value} subrace?",
+                            f"What is your {threshold} subrace?",
                             subrace_options,
                         )
-                        oSheet.set(parameter, "{}, {}".format(value, subrace))
+                        oSheet.set(parameter, "{}, {}".format(threshold, subrace))
 
                     gender = read(
                         "What is your gender?",
@@ -179,39 +179,40 @@ class TashaCmd:
                     oSheet.set("gender", gender)
                     assignRacialTraits()
         elif len(self.args) == 2:
-            value = int(self.args[1])
+            if not self.args[1].isnumeric():
+                raise TashaCmdError("The roll action threshold value must be numerical.")
+            else:
+                threshold = int(self.args[1])
+            if not threshold >= 60 or not threshold <= 90:
+                raise TashaCmdError("The roll action threshold value must be between 60-90.")
+            """
+            if len(oSheet.classes) > 0:
+                oSheet.classes = dict()
+                raise TashaCmdError("Cleared class selections")
+            """
+            oSheet.set("attributes", assignAttributeValues(generate_attributes(threshold)))
+            review_attributes()
 
-            if action == "roll" and not isinstance(value, int):
-                raise TashaCmdError("This action roll parameter requires an int value.")
-            if not value >= 60 or not value <= 90:
-                raise TashaCmdError("The threshold value must be between 60-90.")
-
-            # Action: roll
-            elif action == "roll":
-                results = assignAttributeValues(generate_attributes(value))
-                oSheet.set("attributes", results)
-                review_attributes()
-
-                race = read(
-                    f"What is your race?",
-                    oSRD.getListRaces(),
+            race = read(
+                f"What is your race?",
+                oSRD.getListRaces(),
+            )
+            subrace_options = oSRD.getListSubraces(race)
+            if len(subrace_options) == 0:
+                oSheet.set("race", race)
+            else:
+                subrace = read(
+                    f"What is your {race} subrace?",
+                    subrace_options,
                 )
-                subrace_options = oSRD.getListSubraces(race)
-                if len(subrace_options) == 0:
-                    oSheet.set("race", race)
-                else:
-                    subrace = read(
-                        f"What is your {race} subrace?",
-                        subrace_options,
-                    )
-                    oSheet.set("race", "{}, {}".format(race, subrace))
+                oSheet.set("race", "{}, {}".format(race, subrace))
 
-                gender = read(
-                    "What is your gender?",
-                    ("Female", "Male"),
-                )
-                oSheet.set("gender", gender)
-                assignRacialTraits()
+            gender = read(
+                "What is your gender?",
+                ("Female", "Male"),
+            )
+            oSheet.set("gender", gender)
+            assignRacialTraits()
         elif len(self.args) == 1:
             # Action: help
             if action == "help":
@@ -1280,7 +1281,14 @@ def assignRacialTraits() -> None:
 
         base = Attributes(oPC.getAttributes())
         bonus_values = [2, 1]
-        bonus_attributes = ["Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma"]
+        bonus_attributes = [
+            "Strength",
+            "Dexterity",
+            "Constitution",
+            "Intelligence",
+            "Wisdom",
+            "Charisma",
+        ]
         for bonus in bonus_values:
             attribute = read("Choose your racial bonus attribute.", bonus_attributes)
             bonus_attributes.remove(attribute)
