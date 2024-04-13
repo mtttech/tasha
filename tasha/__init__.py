@@ -59,142 +59,66 @@ class TashaParserError(Exception):
     pass
 
 
-class TashaCmd:
-    def __init__(self, *args) -> None:
-        self.args = args
+def run(*args) -> None:
+    action = args[0]
+    if len(args) == 3:
+        parameter = args[1]
+        value = capitalize(args[2])
 
-    def run(self) -> None:
-        def is_complete() -> bool:
-            """Returns True if character is completed, False otherwise."""
-            try:
-                if oPC.getMyAlignment() == "":
-                    raise ValueError("you have not set an alignment.")
-                elif oPC.getMyName() == "":
-                    raise ValueError("you have not set a name.")
-                elif not oPC.hasClasses():
-                    raise ValueError("you do not have at least one class.")
-            except ValueError as e:
-                error(e.__str__())
-                return False
-            return True
-
-        action = self.args[0]
-
-        if len(self.args) == 3:
-            parameter = self.args[1]
-            value = capitalize(self.args[2])
-
-            # Action: add
-            if action == "add":
-                if parameter == "class":
-                    if not oPC.hasAttributes():
-                        raise TashaCmdError(
-                            "the add action requires you to run the roll action first!"
-                        )
-                    if value not in oSRD.getListClasses():
-                        raise TashaCmdError(f"you selected an invalid class '{value}'.")
-                    if oPC.hasClasses() and value not in oSRD.getListMulticlasses(
-                        oPC.getMyClasses(),
-                        oPC.getTotalLevel(),
-                        oPC.getAttributes(),
-                    ):
-                        raise TashaCmdError(
-                            f"you don't meet the requirements to multiclass."
-                        )
-                    level_allowance = 20
-                    level_allowance = level_allowance - oPC.getTotalLevel()
-                    if level_allowance == 0:
-                        raise TashaCmdError("you cannot select anymore classes.")
-
-                    level = int(
-                        read(
-                            f"What is your '{value}' level (1-{level_allowance})?",
-                            [str(_) for _ in list(range(1, level_allowance + 1))],
-                        )
+        # Action: add
+        if action == "add":
+            if parameter == "class":
+                if not oPC.hasAttributes():
+                    raise TashaCmdError(
+                        "the add action requires you to run the roll action first!"
                     )
-                    oSheet.classes[value] = {}
-                    oSheet.classes[value]["hit_die"] = oSRD.getHitDieByClass(value)
-                    oSheet.classes[value]["level"] = level
-                    oSheet.classes[value]["subclass"] = ""
-
-            # Action: set
-            if action == "set":
-                if parameter in (
-                    "alignment",
-                    "name",
+                if value not in oSRD.getListClasses():
+                    raise TashaCmdError(f"you selected an invalid class '{value}'.")
+                if oPC.hasClasses() and value not in oSRD.getListMulticlasses(
+                    oPC.getMyClasses(),
+                    oPC.getTotalLevel(),
+                    oPC.getAttributes(),
                 ):
-                    if (
-                        parameter == "alignment"
-                        and value not in oSRD.getListAlignments()
-                    ):
-                        raise TashaCmdError(
-                            f"you selected an invalid alignment '{value}'."
-                        )
-                    oSheet.set(parameter, value)
-                elif parameter == "race":
-                    if value not in oSRD.getListRaces():
-                        raise ValueError(f"you selected an invalid race '{value}'.")
-                    subrace_options = oSRD.getListSubraces(value)
-                    if len(subrace_options) == 0:
-                        oSheet.set(parameter, value)
-                    else:
-                        subrace = read(
-                            f"What is your {value} subrace?",
-                            subrace_options,
-                        )
-                        oSheet.set(parameter, "{}, {}".format(value, subrace))
-
-                    gender = read(
-                        "What is your gender?",
-                        ("Female", "Male"),
-                    )
-                    oSheet.set("gender", gender)
-                    assignRacialTraits()
-        elif len(self.args) == 2:
-            # Action: roll
-            if action == "roll":
-                if not self.args[1].isnumeric():
                     raise TashaCmdError(
-                        "the roll action threshold requires a numeric value."
+                        f"you don't meet the requirements to multiclass."
                     )
-                else:
-                    threshold = int(self.args[1])
+                level_allowance = 20
+                level_allowance = level_allowance - oPC.getTotalLevel()
+                if level_allowance == 0:
+                    raise TashaCmdError("you cannot select anymore classes.")
 
-                if not threshold >= 60 or not threshold <= 90:
-                    raise TashaCmdError(
-                        "the roll action threshold value must be between 60-90."
+                level = int(
+                    read(
+                        f"What is your '{value}' level (1-{level_allowance})?",
+                        [str(_) for _ in list(range(1, level_allowance + 1))],
                     )
-
-                if len(oSheet.classes) > 0:
-                    oSheet.bonus = dict()
-                    oSheet.classes = dict()
-                    oSheet.gender = ""
-                    oSheet.languages = list()
-                    oSheet.race = ""
-                    oSheet.size = "Medium"
-                    oSheet.skills = list()
-                    oSheet.traits = list()
-                    oSheet.weapons = list()
-                    raise TashaCmdError("the roll action has been previously run.")
-
-                oSheet.set(
-                    "attributes", assignAttributeValues(generate_attributes(threshold))
                 )
-                review_attributes()
+                oSheet.classes[value] = {}
+                oSheet.classes[value]["hit_die"] = oSRD.getHitDieByClass(value)
+                oSheet.classes[value]["level"] = level
+                oSheet.classes[value]["subclass"] = ""
 
-                race = read(
-                    f"What is your race?",
-                    oSRD.getListRaces(),
-                )
-                subrace_options = oSRD.getListSubraces(race)
+        # Action: set
+        if action == "set":
+            if parameter in (
+                "alignment",
+                "name",
+            ):
+                if parameter == "alignment" and value not in oSRD.getListAlignments():
+                    raise TashaCmdError(f"you selected an invalid alignment '{value}'.")
+                oSheet.set(parameter, value)
+            elif parameter == "race":
+                if value not in oSRD.getListRaces():
+                    raise ValueError(f"you selected an invalid race '{value}'.")
+                subrace_options = oSRD.getListSubraces(value)
                 if len(subrace_options) == 0:
-                    oSheet.set("race", race)
+                    oSheet.set(parameter, value)
                 else:
                     subrace = read(
-                        f"What is your {race} subrace?",
+                        f"What is your {value} subrace?",
                         subrace_options,
                     )
-                    oSheet.set("race", f"{race}, {subrace}")
+                    oSheet.set(parameter, "{}, {}".format(value, subrace))
 
                 gender = read(
                     "What is your gender?",
@@ -202,103 +126,156 @@ class TashaCmd:
                 )
                 oSheet.set("gender", gender)
                 assignRacialTraits()
-        elif len(self.args) == 1:
-            # Action: help
-            if action == "help":
-                help_text = [
-                    ("", "\n"),
-                    ("class:title", "{} {}".format(__package__, __version__)),
-                    ("", "\n\n\t"),
-                    (
-                        "",
-                        "A program for creating 5th edition Dungeons & Dragons characters.",
-                    ),
-                    ("", "\n\n"),
-                    ("class:title", "Command Help:"),
-                    ("", "\n\n\t"),
-                    (
-                        "class:command",
-                        "add (class) [value]: ",
-                    ),
-                    ("", "Sets character class(es)."),
-                    ("", "\n\t"),
-                    ("class:command", "roll [threshold]: "),
-                    (
-                        "",
-                        "Roll up a character - sets attributes|race|subrace|gender|background.",
-                    ),
-                    ("", "\n\t"),
-                    (
-                        "class:command",
-                        "set (alignment|name) [value]: ",
-                    ),
-                    ("", "Sets character values."),
-                    ("", "\n\t"),
-                    (
-                        "class:command",
-                        "save: ",
-                    ),
-                    ("", "Finalizes and saves the character."),
-                    ("", "\n\t"),
-                    ("class:command", "quit: "),
-                    ("", "Exits the program."),
-                    ("", "\n"),
-                ]
-                echo(help_text)
-            # Action: quit
-            if action == "quit":
-                raise KeyboardInterrupt(f"thank you for using {__package__}!")
-            # Action: save
-            if action == "save":
-                if is_complete():
-                    oSheet.set(
-                        {
-                            "allotted_asi": oSRD.calculateAllottedAsi(
-                                oPC.getMyRawClasses()
-                            ),
-                            "traits": oSRD.getRacialMagic(
-                                oPC.getMyRace(), oPC.getTotalLevel()
-                            ),
-                            "version": __version__,
-                        }
-                    )
-                    assignClassFeatures()
-                    assignClassSkills()
-                    assignAsiUpgrades()
-                    assignSpellcastingFeatures()
-                    cs = replace(
-                        oSheet,
-                        level=oPC.getTotalLevel(),
-                    )
-
-                    with Path(character_dir, "{}.toml".format(oPC.getMyName())).open(
-                        "w"
-                    ) as record_sheet:
-                        toml.dump(asdict(cs), record_sheet)
-                        echo(
-                            [
-                                (
-                                    "class:success",
-                                    "Character created successfully.",
-                                ),
-                            ],
-                        )
-                        oSheet.reset()
+    elif len(args) == 2:
+        if action == "roll":
+            if not args[1].isnumeric():
+                raise TashaCmdError(
+                    "the roll action threshold requires a numeric value."
+                )
+            roll(int(args[1]))
+    elif len(args) == 1:
+        if action == "help":
+            help_text()
+        if action == "quit":
+            raise KeyboardInterrupt(f"thank you for using {__package__}!")
+        if action == "save":
+            save()
 
 
-class TashaParser:
-    def __init__(self, command_str: str) -> None:
-        self.command_str = command_str
+def help_text() -> None:
+    """Performs the help action."""
+    help_text = [
+        ("", "\n"),
+        ("class:title", "{} {}".format(__package__, __version__)),
+        ("", "\n\n\t"),
+        (
+            "",
+            "A program for creating 5th edition Dungeons & Dragons characters.",
+        ),
+        ("", "\n\n"),
+        ("class:title", "Command Help:"),
+        ("", "\n\n\t"),
+        (
+            "class:command",
+            "add (class) [value]: ",
+        ),
+        ("", "Sets character class(es)."),
+        ("", "\n\t"),
+        ("class:command", "roll [threshold]: "),
+        (
+            "",
+            "Roll up a character - sets attributes|race|subrace|gender|background.",
+        ),
+        ("", "\n\t"),
+        (
+            "class:command",
+            "set (alignment|name) [value]: ",
+        ),
+        ("", "Sets character values."),
+        ("", "\n\t"),
+        (
+            "class:command",
+            "save: ",
+        ),
+        ("", "Finalizes and saves the character."),
+        ("", "\n\t"),
+        ("class:command", "quit: "),
+        ("", "Exits the program."),
+        ("", "\n"),
+    ]
+    echo(help_text)
 
-    def run(self) -> List[str]:
-        if len(self.command_str) == 0:
-            raise TashaParserError("Empty command string specified.")
-        command_list = self.command_str.split(" ")
-        # Has more than three items, merge the excess values with the third slice.
-        if len(command_list) > 3:
-            command_list[2] = " ".join(command_list[2:])
-            del command_list[3:]
-        return command_list
+
+def roll(threshold: int) -> None:
+    """Performs the roll function."""
+    if not threshold >= 60 or not threshold <= 90:
+        raise TashaCmdError("the roll action threshold value must be between 60-90.")
+
+    if len(oSheet.classes) > 0:
+        oSheet.bonus = dict()
+        oSheet.classes = dict()
+        oSheet.gender = ""
+        oSheet.languages = list()
+        oSheet.race = ""
+        oSheet.size = "Medium"
+        oSheet.skills = list()
+        oSheet.traits = list()
+        oSheet.weapons = list()
+        raise TashaCmdError("the roll action has been previously run.")
+
+    oSheet.set("attributes", assignAttributeValues(generate_attributes(threshold)))
+    review_attributes()
+
+    race = read(
+        f"What is your race?",
+        oSRD.getListRaces(),
+    )
+    subrace_options = oSRD.getListSubraces(race)
+    if len(subrace_options) == 0:
+        oSheet.set("race", race)
+    else:
+        subrace = read(
+            f"What is your {race} subrace?",
+            subrace_options,
+        )
+        oSheet.set("race", f"{race}, {subrace}")
+
+    gender = read(
+        "What is your gender?",
+        ("Female", "Male"),
+    )
+    oSheet.set("gender", gender)
+    assignRacialTraits()
+
+
+def save() -> None:
+    """Performs the save action."""
+    if oPC.getMyAlignment() == "":
+        raise TashaCmdError("you have not set an alignment.")
+    elif oPC.getMyName() == "":
+        raise TashaCmdError("you have not set a name.")
+    elif not oPC.hasClasses():
+        raise TashaCmdError("you do not have at least one class.")
+
+    oSheet.set(
+        {
+            "allotted_asi": oSRD.calculateAllottedAsi(oPC.getMyRawClasses()),
+            "traits": oSRD.getRacialMagic(oPC.getMyRace(), oPC.getTotalLevel()),
+            "version": __version__,
+        }
+    )
+    assignClassFeatures()
+    assignClassSkills()
+    assignAsiUpgrades()
+    assignSpellcastingFeatures()
+    cs = replace(
+        oSheet,
+        level=oPC.getTotalLevel(),
+    )
+
+    with Path(character_dir, f"{oPC.getMyName()}.toml").open("w") as record:
+        toml.dump(asdict(cs), record)
+        echo(
+            [
+                (
+                    "class:success",
+                    "Character created successfully.",
+                ),
+            ],
+        )
+        oSheet.reset()
+
+
+def parse(command_str: str) -> List[str]:
+    """Formats the specified command string."""
+    if len(command_str) == 0:
+        raise TashaParserError("Empty command string specified.")
+    command_list = command_str.split(" ")
+    # Has more than three items, merge the excess values with the third slice.
+    if len(command_list) > 3:
+        command_list[2] = " ".join(command_list[2:])
+        del command_list[3:]
+    return command_list
 
 
 class TashaPrompt:
@@ -1546,7 +1523,7 @@ def main() -> None:
                 completer=nested_completer,
                 style=stylesheet,
             )
-            TashaCmd(*TashaParser(cmd_str).run()).run()
+            run(*parse(cmd_str))
         except (TashaCmdError, TashaParserError, ValueError) as e:
             error(e.__str__())
             pass
