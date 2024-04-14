@@ -97,7 +97,7 @@ class TashaValidator(Validator):
 
 
 def tasha_main(command: str) -> None:
-    """Formats the specified command string."""
+    """Tasha program gateway."""
     if len(command) == 0:
         tasha_help()
 
@@ -138,6 +138,7 @@ def tasha_main(command: str) -> None:
 
 
 def tasha_add(value: str) -> None:
+    """Performs the add action."""
     if value not in oSRD.getListClasses():
         raise TashaCmdError("the add class action requires a valid class.")
 
@@ -153,10 +154,12 @@ def tasha_add(value: str) -> None:
     if level_allowance == 0:
         raise TashaCmdError("you cannot select anymore classes.")
 
+    level_range = [str(_) for _ in list(range(1, level_allowance + 1))]
     level = int(
-        read(
-            f"What is your '{value}' level (1-{level_allowance})?",
-            [str(_) for _ in list(range(1, level_allowance + 1))],
+        sp_read(
+            message=f"What is your '{value}' level (1-{level_allowance})?",
+            selections=level_range,
+            completer=NestedCompleter.from_nested_dict(populate_completer(level_range)),
         )
     )
     oSheet.classes[value] = {}
@@ -409,20 +412,32 @@ def assignAsiUpgrades() -> None:
         return
 
     def assignAttributeUpgrade() -> None:
-        bonus = int(read("How many points do you wish to apply?", ["1", "2"]))
+        bonus_options = ["1", "2"]
+        bonus = int(
+            sp_read(
+                message="How many points do you wish to apply?",
+                selections=bonus_options,
+                completer=NestedCompleter.from_nested_dict(
+                    populate_completer(bonus_options)
+                ),
+            )
+        )
         bonus_attributes = list()
         if bonus == 1:
             num_of_bonuses = 2
         else:
             num_of_bonuses = 1
+
+        upgradeable_attributes = [
+            a for a in oPC.getUpgradeableAttributes(bonus) if a not in bonus_attributes
+        ]
         for _ in range(0, num_of_bonuses):
-            attribute = read(
-                "Which attribute do you wish to enhance?",
-                [
-                    a
-                    for a in oPC.getUpgradeableAttributes(bonus)
-                    if a not in bonus_attributes
-                ],
+            attribute = sp_read(
+                message="Which attribute do you wish to enhance?",
+                selections=upgradeable_attributes,
+                completer=NestedCompleter.from_nested_dict(
+                    populate_completer(upgradeable_attributes)
+                ),
             )
             bonus_attributes.append(attribute)
             base = Attributes(oPC.getAttributes())
@@ -432,8 +447,13 @@ def assignAsiUpgrades() -> None:
     def assignFeatUpgrade() -> None:
         excluded_feats = list()
         while True:
-            feat = read(
-                "Choose a feat.", oSRD.getListFeats(oPC.getMyFeats() + excluded_feats)
+            feat_options = oSRD.getListFeats(oPC.getMyFeats() + excluded_feats)
+            feat = sp_read(
+                message="Choose a feat.",
+                selections=feat_options,
+                completer=NestedCompleter.from_nested_dict(
+                    populate_completer(feat_options)
+                ),
             )
             if hasFeatRequirements(feat):
                 assignFeatEnhancements(feat)
@@ -443,13 +463,17 @@ def assignAsiUpgrades() -> None:
                 error(f"You don't meet the requirements for '{feat}'.")
 
     asi_counter = allotted_asi
+    upgrade_options = [
+        "ability",
+        "feat",
+    ]
     for _ in range(0, allotted_asi):
-        option = read(
-            f"Would you like to select a feat or increase an ability? ({asi_counter})",
-            [
-                "ability",
-                "feat",
-            ],
+        option = sp_read(
+            message=f"Would you like to select a feat or increase an ability? ({asi_counter})",
+            selections=upgrade_options,
+            completer=NestedCompleter.from_nested_dict(
+                populate_completer(upgrade_options)
+            ),
         )
         if option == "Ability":
             assignAttributeUpgrade()
@@ -498,11 +522,14 @@ def assignAttributeValues(results: List[int]) -> Dict[str, Dict[str, int]]:
             setAttributeValue(attribute_options[0], results[0])
             break
         else:
-            attribute = read(
-                "Assign {} ({}) to which attribute?".format(
+            attribute = sp_read(
+                message="Assign {} ({}) to which attribute?".format(
                     results[0], ", ".join([str(d) for d in results])
                 ),
-                attribute_options,
+                selections=attribute_options,
+                completer=NestedCompleter.from_nested_dict(
+                    populate_completer(attribute_options)
+                ),
             )
             setAttributeValue(attribute, results[0])
     return setAttributeOrder(attribute_array)
@@ -512,9 +539,12 @@ def assignBackgroundTraits() -> None:
     """Subroutine for determining the character's background features."""
     oSheet.set(
         "background",
-        read(
-            f"What is your background?",
-            oSRD.getListBackground(),
+        sp_read(
+            message=f"What is your background?",
+            selections=oSRD.getListBackground(),
+            completer=NestedCompleter.from_nested_dict(
+                populate_completer(oSRD.getListBackground())
+            ),
         ),
     )
 
@@ -572,11 +602,12 @@ def assignBackgroundTraits() -> None:
                     l for l in bonus_languages if l not in oPC.getMyLanguages()
                 ]
             for _ in range(number_of_languages):
-                language = read(
-                    "Choose a '{}' background bonus language.".format(
-                        oPC.getMyBackground()
+                language = sp_read(
+                    message=f"Choose a '{oPC.getMyBackground()}' background bonus language.",
+                    selections=bonus_languages,
+                    completer=NestedCompleter.from_nested_dict(
+                        populate_completer(bonus_languages)
                     ),
-                    bonus_languages,
                 )
                 oSheet.set(
                     "languages",
