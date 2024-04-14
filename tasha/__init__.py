@@ -36,13 +36,13 @@ try:
         try:
             __version__ = toml.load(pyproject)["tool"]["poetry"]["version"]
         except KeyError:
-            print(f"There was an error detecting the {__package__} version number.")
+            print(f"couldn't detect {__package__}'s version number.")
             exit(1)
 except FileNotFoundError:
     print("Cannot locate the required 'pyproject.toml' file.")
     exit(1)
 
-character_dir = Path.home() / ".config" / "{__package__}" / "characters"
+character_dir = Path.home() / ".config" / f"{__package__}" / "characters"
 if not character_dir.exists():
     character_dir.mkdir(parents=True)
 
@@ -56,22 +56,35 @@ class TashaPrompt:
         self.session = session
 
     def select(
-        self, message: str, selections: Union[List[str], Tuple[str, ...]]
+        self,
+        message: Union[str, Literal[None]] = None,
+        selections: Union[Iterable[Any], Literal[None]] = None,
     ) -> str:
-        return capitalize(
-            self.session.prompt(
-                [("class:prompt", f"> {message} ")],
+        if message is not None:
+            prompt_prefix = FormattedText([("class:prompt", f">> {message} ")])
+        else:
+            prompt_prefix = FormattedText([("class:prompt", f">> ")])
+
+        if selections is None:
+            response = self.session.prompt(
+                prompt_prefix,
+                style=stylesheet,
+            )
+        else:
+            response = self.session.prompt(
+                prompt_prefix,
                 completer=NestedCompleter.from_nested_dict(
                     populate_completer(selections)
                 ),
                 style=stylesheet,
                 validator=TashaValidator(selections),
             )
-        )
+
+        return capitalize(response)
 
 
 class TashaValidator(Validator):
-    def __init__(self, allowed_options: Union[List[str], Tuple[str, ...]]) -> None:
+    def __init__(self, allowed_options: Iterable[Any]) -> None:
         super().__init__()
         self.allowed_options = [o.lower() for o in allowed_options]
 
@@ -83,12 +96,12 @@ class TashaValidator(Validator):
             )
 
 
-def tasha_main(command_str: str) -> None:
+def tasha_main(command: str) -> None:
     """Formats the specified command string."""
-    if len(command_str) == 0:
+    if len(command) == 0:
         tasha_help()
 
-    args = command_str.split(" ")
+    args = command.split(" ")
     if len(args) > 3:
         args[2] = " ".join(args[2:])
         del args[3:]
@@ -216,25 +229,37 @@ def tasha_roll(threshold: int) -> None:
     oSheet.set("attributes", assignAttributeValues(generate_attributes(threshold)))
     review_attributes()
 
-    race = read(
-        f"What is your race?",
-        oSRD.getListRaces(),
+    race = sp_read(
+        message="What is your race?",
+        selections=oSRD.getListRaces(),
+        completer=NestedCompleter.from_nested_dict(
+            populate_completer(oSRD.getListRaces())
+        ),
     )
     subrace_options = oSRD.getListSubraces(race)
     if len(subrace_options) == 0:
         oSheet.set("race", race)
     else:
-        subrace = read(
-            f"What is your {race} subrace?",
-            subrace_options,
+        subrace = sp_read(
+            message=f"What is your {race} subrace?",
+            selections=subrace_options,
+            completer=NestedCompleter.from_nested_dict(
+                populate_completer(subrace_options)
+            ),
         )
         oSheet.set("race", f"{race}, {subrace}")
 
-    gender = read(
-        "What is your gender?",
-        ("Female", "Male"),
+    gender_options = ["Female", "Male"]
+    oSheet.set(
+        "gender",
+        sp_read(
+            message="What is your gender?",
+            selections=gender_options,
+            completer=NestedCompleter.from_nested_dict(
+                populate_completer(gender_options)
+            ),
+        ),
     )
-    oSheet.set("gender", gender)
     assignRacialTraits()
 
 
@@ -291,7 +316,7 @@ def tasha_set(parameter: str, value: str) -> None:
         oSheet.set(parameter, value)
 
 
-def bottom_toolbar() -> List[Tuple[str, ...]]:
+def tasha_toolbar() -> List[Tuple[str, ...]]:
     """Returns the prompt_toolkit bottom toolbar."""
     gender = oPC.getMyGender()
     if gender == "Female":
@@ -348,16 +373,16 @@ def error(message: str) -> None:
     echo([("class:error", message)])
 
 
-def populate_completer(options: Union[List[str], Tuple[str, ...]]) -> Dict[str, Any]:
+def populate_completer(options: Iterable[Any]) -> Dict[str, Any]:
     """Returns a dictionary of applicable selections."""
     options = [o.lower() for o in options if isinstance(o, str)]
     filler = [None for _ in options]
     return dict(zip(options, filler))
 
 
-def read(message: str, selections: Union[List[str], Tuple[str, ...]]) -> str:
+def read(message: str, selections: Union[Iterable[Any], Literal[None]] = None) -> str:
     """Captures user input."""
-    prompt = TashaPrompt(PromptSession(bottom_toolbar=bottom_toolbar))
+    prompt = TashaPrompt(PromptSession(bottom_toolbar=tasha_toolbar))
     return prompt.select(message, selections)
 
 
@@ -1476,6 +1501,21 @@ def isPreparedCaster(self) -> bool:
     return False
 
 
+def sp_read(**args) -> str:
+    session = PromptSession(
+        bottom_toolbar=tasha_toolbar,
+        completer=None if "completer" not in args else args["completer"],
+        style=stylesheet,
+    )
+    prompt = TashaPrompt(session)
+    message = None if "message" not in args else args["message"]
+
+    if "selections" in args and isinstance(args["selections"], list):
+        return prompt.select(message, args["selections"])
+
+    return prompt.select(message)
+
+
 def main() -> None:
     nested_completer = NestedCompleter.from_nested_dict(
         {
@@ -1494,19 +1534,9 @@ def main() -> None:
     )
 
     while True:
-        session: PromptSession = PromptSession(
-            bottom_toolbar=bottom_toolbar,
-            completer=nested_completer,
-            refresh_interval=5.0,
-        )
-
         try:
-            command = session.prompt(
-                FormattedText([("class:prompt", ">> ")]),
-                completer=nested_completer,
-                style=stylesheet,
-            )
-            tasha_main(command)
+            command = sp_read(completer=nested_completer)
+            tasha_main(command.lower())
         except TashaCmdError as e:
             error(e.__str__())
             pass
