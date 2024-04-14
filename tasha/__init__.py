@@ -51,10 +51,6 @@ class TashaCmdError(Exception):
     pass
 
 
-class TashaParserError(Exception):
-    pass
-
-
 class TashaPrompt:
     def __init__(self, session: PromptSession) -> None:
         self.session = session
@@ -87,7 +83,16 @@ class TashaValidator(Validator):
             )
 
 
-def tasha_main(*args) -> None:
+def tasha_main(command_str: str) -> None:
+    """Formats the specified command string."""
+    if len(command_str) == 0:
+        tasha_help()
+
+    args = command_str.split(" ")
+    if len(args) > 3:
+        args[2] = " ".join(args[2:])
+        del args[3:]
+
     action = args[0]
     if len(args) == 3:
         parameter = args[1]
@@ -284,20 +289,6 @@ def tasha_set(parameter: str, value: str) -> None:
             raise TashaCmdError(f"you selected an invalid alignment '{value}'.")
 
         oSheet.set(parameter, value)
-
-
-def parse(command_str: str) -> List[str]:
-    """Formats the specified command string."""
-    if len(command_str) == 0:
-        raise TashaParserError("Empty command string specified.")
-
-    command_list = command_str.split(" ")
-
-    # Condense arguments into the last slice if there is more than three.
-    if len(command_list) > 3:
-        command_list[2] = " ".join(command_list[2:])
-        del command_list[3:]
-    return command_list
 
 
 def bottom_toolbar() -> List[Tuple[str, ...]]:
@@ -1515,8 +1506,8 @@ def main() -> None:
                 completer=nested_completer,
                 style=stylesheet,
             )
-            tasha_main(*parse(command))
-        except (TashaCmdError, TashaParserError) as e:
+            tasha_main(command)
+        except TashaCmdError as e:
             error(e.__str__())
             pass
         except KeyboardInterrupt as e:
