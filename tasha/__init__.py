@@ -39,7 +39,7 @@ try:
             print(f"couldn't detect {__package__}'s version number.")
             exit(1)
 except FileNotFoundError:
-    print("Cannot locate the required 'pyproject.toml' file.")
+    print("cannot locate 'pyproject.toml'.")
     exit(1)
 
 character_dir = Path.home() / ".config" / f"{__package__}" / "characters"
@@ -214,7 +214,7 @@ def tasha_help() -> None:
 
 def tasha_roll(threshold: int) -> None:
     """Performs the roll function."""
-    if not threshold >= 60 or not threshold <= 90:
+    if not threshold in range(60, 91):
         raise TashaCmdError("the roll action threshold value must be between 60-90.")
 
     if len(oSheet.classes) > 0:
@@ -390,6 +390,7 @@ def read(message: str, selections: Union[Iterable[Any], Literal[None]] = None) -
 
 
 def review_attributes() -> None:
+    """Prints out all attributes."""
     for attribute in tuple(oPC.getAttributes().keys()):
         echo(
             [
@@ -644,9 +645,12 @@ def assignBackgroundTraits() -> None:
         bonus_skills = [s for s in bonus_skills if s not in oPC.getMySkills()]
         oSheet.set(
             "skills",
-            read(
-                "Choose a '{}' background bonus skill.".format(oPC.getMyBackground()),
-                bonus_skills,
+            sp_read(
+                message=f"Choose a '{oPC.getMyBackground()}' background bonus skill.",
+                selections=bonus_skills,
+                completer=NestedCompleter.from_nested_dict(
+                    populate_completer(bonus_skills)
+                ),
             ),
         )
 
@@ -696,11 +700,12 @@ def assignBackgroundTraits() -> None:
             ]
         oSheet.set(
             "tools",
-            read(
-                "Choose a '{}' background bonus tool proficiency.".format(
-                    oPC.getMyBackground()
+            sp_read(
+                message=f"Choose a '{oPC.getMyBackground()}' background bonus tool proficiency.",
+                selections=tool_options,
+                completer=NestedCompleter.from_nested_dict(
+                    populate_completer(tool_options)
                 ),
-                tool_options,
             ),
         )
 
@@ -802,9 +807,14 @@ def assignClassFeatures() -> None:
 def assignClassSkills() -> None:
     """Subroutine for determining the character's skills features."""
     for _ in range(0, oPC.getAllottedSkills()):
-        skill = read(
-            "Choose your class skill.",
-            oSRD.getClassSkills(oPC.getMyClasses()[0], oPC.getMySkills()),
+        skill = sp_read(
+            message="Choose your class skill.",
+            selections=oSRD.getClassSkills(oPC.getMyClasses()[0], oPC.getMySkills()),
+            completer=NestedCompleter.from_nested_dict(
+                populate_completer(
+                    oSRD.getClassSkills(oPC.getMyClasses()[0], oPC.getMySkills())
+                )
+            ),
         )
         oSheet.set("skills", skill.capitalize())
 
@@ -884,20 +894,27 @@ def assignFeatEnhancements(feat: str) -> None:
             attribute_bonuses = ["Intelligence", "Wisdom", "Charisma"]
         elif feat == "Weapon Master":
             attribute_bonuses = ["Dexterity", "Strength"]
-        attribute_bonus = read(
-            "Choose an attribute to upgrade.",
-            getAdjustableAttributes(attribute_bonuses),
+        attribute_bonus = sp_read(
+            message="Choose an attribute to upgrade.",
+            selections=getAdjustableAttributes(attribute_bonuses),
+            completer=NestedCompleter.from_nested_dict(
+                populate_completer(getAdjustableAttributes(attribute_bonuses))
+            ),
         )
         base_attributes.add(attribute_bonus, 1)
 
     # Artificer Initiate
     if feat == "Artificer Initiate":
         oSheet.set("features", assignCantrips("Artificer", 1))
+        bonus_tools = oSRD.getListTools(oPC.getMyTools(), "Artisan's tools")
         oSheet.set(
             "tools",
-            read(
-                f"Choose a '{oPC.getMyBackground()}' background bonus tool proficiency.",
-                oSRD.getListTools(oPC.getMyTools(), "Artisan's tools"),
+            sp_read(
+                message=f"Choose a '{oPC.getMyBackground()}' background bonus tool proficiency.",
+                selections=bonus_tools,
+                completer=NestedCompleter.from_nested_dict(
+                    populate_completer(bonus_tools)
+                ),
             ),
         )
 
@@ -972,11 +989,15 @@ def assignFeatEnhancements(feat: str) -> None:
     if feat == "Linguist":
         base_attributes.add("Intelligence", 1)
         for _ in range(3):
+            bonus_languages = oSRD.getListLanguages(oPC.getMyLanguages())
             oSheet.set(
                 "languages",
-                read(
-                    "Choose a bonus language.",
-                    oSRD.getListLanguages(oPC.getMyLanguages()),
+                sp_read(
+                    message="Choose a bonus language.",
+                    selections=bonus_languages,
+                    completer=NestedCompleter.from_nested_dict(
+                        populate_completer(bonus_languages)
+                    ),
                 ),
             )
 
@@ -1095,163 +1116,6 @@ def assignFeatEnhancements(feat: str) -> None:
 def assignRacialTraits() -> None:
     """Assigns racial/subracial traits."""
 
-    def assignDragonbornTraits() -> None:
-        """Assigns dragonborn features."""
-        if "Dragonborn" not in oPC.getMyRace():
-            return
-        draconic_ancestry = read(
-            "Choose your dragonborn's ancestry.",
-            (
-                "Black",
-                "Blue",
-                "Brass",
-                "Bronze",
-                "Copper",
-                "Gold",
-                "Green",
-                "Red",
-                "Silver",
-                "White",
-            ),
-        )
-        oSheet.set("ancestry", draconic_ancestry)
-        draconic_resistances = {
-            "Black": ["Acid"],
-            "Blue": ["Lightning"],
-            "Brass": ["Fire"],
-            "Bronze": ["Lightning"],
-            "Copper": ["Acid"],
-            "Gold": ["Fire"],
-            "Green": ["Poison"],
-            "Red": ["Fire"],
-            "Silver": ["Cold"],
-            "White": ["Cold"],
-        }
-        oSheet.set("resistances", draconic_resistances[draconic_ancestry])
-
-    def assignHalfelfTraits() -> None:
-        """Assigns half-elf features."""
-        if "Halfelf" not in oPC.getMyRace():
-            return
-        attribute = read(
-            "Choose your racial bonus attribute.",
-            [
-                "Strength",
-                "Dexterity",
-                "Constitution",
-                "Intelligence",
-                "Wisdom",
-            ],
-        )
-        base = Attributes(oPC.getAttributes())
-        base.add(attribute, 1)
-        oSheet.set("bonus", {attribute: 1})
-
-        oSheet.set(
-            "languages",
-            read(
-                "Choose your racial bonus language.",
-                oSRD.getListLanguages(oPC.getMyLanguages()),
-            ),
-        )
-
-        for _ in range(2):
-            oSheet.set(
-                "skills",
-                read(
-                    "Choose your racial bonus skill.",
-                    oSRD.getListSkills(oPC.getMySkills()),
-                ),
-            )
-
-    def assignHobgoblinTraits() -> None:
-        """Assigns hobgoblin features."""
-        if "Hobgoblin" not in oPC.getMyRace():
-            return
-        for _ in range(2):
-            bonus_weapons = [
-                "Battleaxe",
-                "Blowgun",
-                "Flail",
-                "Greataxe",
-                "Greatsword",
-                "Halberd",
-                "Hand Crossbow",
-                "Heavy Crossbow",
-                "Lance",
-                "Longbow",
-                "Longsword",
-                "Maul",
-                "Morningstar",
-                "Net",
-                "Pike",
-                "Rapier",
-                "Scimitar",
-                "Shortsword",
-                "Trident",
-                "War pick",
-                "Warhammer",
-                "Whip",
-            ]
-            oSheet.set(
-                "weapons",
-                read(
-                    "Choose your racial bonus weapon proficiency.",
-                    [w for w in bonus_weapons if w not in oPC.getMyWeapons()],
-                ),
-            )
-
-    def assignHumanTraits() -> None:
-        """Assigns human features."""
-        if "Human" not in oPC.getMyRace():
-            return
-        oSheet.set(
-            "languages",
-            read(
-                "Choose your racial bonus language.",
-                oSRD.getListLanguages(oPC.getMyLanguages()),
-            ),
-        )
-
-    def assignKenkuTraits() -> None:
-        """Assigns kenku features."""
-        if "Kenku" not in oPC.getMyRace():
-            return
-        for _ in range(2):
-            bonus_skills = [
-                "Acrobatics",
-                "Deception",
-                "Stealth",
-                "Sleight of Hand",
-            ]
-            oSheet.set(
-                "skills",
-                read(
-                    "Choose your racial bonus skill.",
-                    [s for s in bonus_skills if s not in oPC.getMySkills()],
-                ),
-            )
-
-    def assignLizardfolkTraits() -> None:
-        """Assigns lizardfolk features."""
-        if "Lizardfolk" not in oPC.getMyRace():
-            return
-        for _ in range(2):
-            bonus_skills = [
-                "Animal Handling",
-                "Nature",
-                "Perception",
-                "Stealth",
-                "Survival",
-            ]
-            oSheet.set(
-                "skills",
-                read(
-                    "Choose your racial bonus skill.",
-                    [s for s in bonus_skills if s not in oPC.getMySkills()],
-                ),
-            )
-
     def assignRacialBonus() -> None:
         """Assigns racial bonuses to attributes."""
         base_values = oPC.getAttributes()
@@ -1261,47 +1125,6 @@ def assignRacialTraits() -> None:
                 base_attr = Attributes(base_values)
                 base_attr.add(attribute, bonus_values[attribute])
         review_attributes()
-
-    def assignTabaxiTraits() -> None:
-        """Assigns tabaxi features."""
-        if "Tabaxi" not in oPC.getMyRace():
-            return
-        oSheet.set(
-            "languages",
-            read(
-                "Choose your racial bonus language.",
-                oSRD.getListLanguages(oPC.getMyLanguages()),
-            ),
-        )
-
-    def assignWitchlightTraits() -> None:
-        """Assigns fairy or harengon features."""
-        if "Fairy" not in oPC.getMyRace() or "Harengon" not in oPC.getMyRace():
-            return
-
-        base = Attributes(oPC.getAttributes())
-        bonus_values = [2, 1]
-        bonus_attributes = [
-            "Strength",
-            "Dexterity",
-            "Constitution",
-            "Intelligence",
-            "Wisdom",
-            "Charisma",
-        ]
-        for bonus in bonus_values:
-            attribute = read("Choose your racial bonus attribute.", bonus_attributes)
-            bonus_attributes.remove(attribute)
-            base.add(attribute, bonus)
-            oSheet.set("bonus", {attribute: bonus})
-
-        oSheet.set(
-            "languages",
-            read(
-                "Choose your racial bonus language.",
-                oSRD.getListLanguages(oPC.getMyLanguages()),
-            ),
-        )
 
     full_race = oPC.getMyRace().split(", ")
     if len(full_race) > 1:
@@ -1321,14 +1144,14 @@ def assignRacialTraits() -> None:
         }
     )
 
-    assignDragonbornTraits()
-    assignHobgoblinTraits()
-    assignHalfelfTraits()
-    assignHumanTraits()
-    assignKenkuTraits()
-    assignLizardfolkTraits()
-    assignTabaxiTraits()
-    assignWitchlightTraits()
+    assignTraitsDragonborn()
+    assignTraitsHobgoblin()
+    assignTraitsHalfelf()
+    assignTraitsHuman()
+    assignTraitsKenku()
+    assignTraitsLizardfolk()
+    assignTraitsTabaxi()
+    assignTraitsWitchlight()
     assignBackgroundTraits()
 
     if subrace != "":
@@ -1412,6 +1235,241 @@ def assignSpellcastingFeatures() -> None:
         oSheet.set("cantrips", {klass: assignCantrips(klass)})
 
     assignSpells()
+
+
+def assignTraitsDragonborn() -> None:
+    """Assigns dragonborn features."""
+    if "Dragonborn" not in oPC.getMyRace():
+        return
+    draconic_ancestry = read(
+        "Choose your dragonborn's ancestry.",
+        (
+            "Black",
+            "Blue",
+            "Brass",
+            "Bronze",
+            "Copper",
+            "Gold",
+            "Green",
+            "Red",
+            "Silver",
+            "White",
+        ),
+    )
+    oSheet.set("ancestry", draconic_ancestry)
+    draconic_resistances = {
+        "Black": ["Acid"],
+        "Blue": ["Lightning"],
+        "Brass": ["Fire"],
+        "Bronze": ["Lightning"],
+        "Copper": ["Acid"],
+        "Gold": ["Fire"],
+        "Green": ["Poison"],
+        "Red": ["Fire"],
+        "Silver": ["Cold"],
+        "White": ["Cold"],
+    }
+    oSheet.set("resistances", draconic_resistances[draconic_ancestry])
+
+
+def assignTraitsHalfelf() -> None:
+    """Assigns half-elf features."""
+    if "Halfelf" not in oPC.getMyRace():
+        return
+    attribute = read(
+        "Choose your racial bonus attribute.",
+        [
+            "Strength",
+            "Dexterity",
+            "Constitution",
+            "Intelligence",
+            "Wisdom",
+        ],
+    )
+    base = Attributes(oPC.getAttributes())
+    base.add(attribute, 1)
+    oSheet.set("bonus", {attribute: 1})
+
+    oSheet.set(
+        "languages",
+        read(
+            "Choose your racial bonus language.",
+            oSRD.getListLanguages(oPC.getMyLanguages()),
+        ),
+    )
+
+    for _ in range(2):
+        oSheet.set(
+            "skills",
+            read(
+                "Choose your racial bonus skill.",
+                oSRD.getListSkills(oPC.getMySkills()),
+            ),
+        )
+
+
+def assignTraitsHobgoblin() -> None:
+    """Assigns hobgoblin features."""
+    if "Hobgoblin" not in oPC.getMyRace():
+        return
+
+    for _ in range(2):
+        hobgoblin_weapons = [
+            "Battleaxe",
+            "Blowgun",
+            "Flail",
+            "Greataxe",
+            "Greatsword",
+            "Halberd",
+            "Hand Crossbow",
+            "Heavy Crossbow",
+            "Lance",
+            "Longbow",
+            "Longsword",
+            "Maul",
+            "Morningstar",
+            "Net",
+            "Pike",
+            "Rapier",
+            "Scimitar",
+            "Shortsword",
+            "Trident",
+            "War pick",
+            "Warhammer",
+            "Whip",
+        ]
+        bonus_weapons = [w for w in hobgoblin_weapons if w not in oPC.getMyWeapons()]
+        oSheet.set(
+            "weapons",
+            sp_read(
+                message="Choose your racial bonus weapon proficiency.",
+                selections=bonus_weapons,
+                completer=NestedCompleter.from_nested_dict(
+                    populate_completer(bonus_weapons)
+                ),
+            ),
+        )
+
+
+def assignTraitsHuman() -> None:
+    """Assigns human features."""
+    if "Human" not in oPC.getMyRace():
+        return
+
+    bonus_languages = oSRD.getListLanguages(oPC.getMyLanguages())
+    oSheet.set(
+        "languages",
+        sp_read(
+            message="Choose your racial bonus language.",
+            selections=bonus_languages,
+            completer=NestedCompleter.from_nested_dict(
+                populate_completer(bonus_languages)
+            ),
+        ),
+    )
+
+
+def assignTraitsKenku() -> None:
+    """Assigns kenku features."""
+    if "Kenku" not in oPC.getMyRace():
+        return
+
+    for _ in range(2):
+        kenku_skills = [
+            "Acrobatics",
+            "Deception",
+            "Stealth",
+            "Sleight of Hand",
+        ]
+        bonus_skills = [s for s in kenku_skills if s not in oPC.getMySkills()]
+        oSheet.set(
+            "skills",
+            sp_read(
+                message="Choose your racial bonus skill.",
+                selections=bonus_skills,
+                completer=NestedCompleter.from_nested_dict(
+                    populate_completer(bonus_skills)
+                ),
+            ),
+        )
+
+
+def assignTraitsLizardfolk() -> None:
+    """Assigns lizardfolk features."""
+    if "Lizardfolk" not in oPC.getMyRace():
+        return
+
+    for _ in range(2):
+        lizardfolk_skills = [
+            "Animal Handling",
+            "Nature",
+            "Perception",
+            "Stealth",
+            "Survival",
+        ]
+        bonus_skills = [s for s in lizardfolk_skills if s not in oPC.getMySkills()]
+        oSheet.set(
+            "skills",
+            sp_read(
+                message="Choose your racial bonus skill.",
+                selections=bonus_skills,
+                completer=NestedCompleter.from_nested_dict(
+                    populate_completer(bonus_skills)
+                ),
+            ),
+        )
+
+
+def assignTraitsTabaxi() -> None:
+    """Assigns tabaxi features."""
+    if "Tabaxi" not in oPC.getMyRace():
+        return
+
+    bonus_languages = oSRD.getListLanguages(oPC.getMyLanguages())
+    oSheet.set(
+        "languages",
+        sp_read(
+            message="Choose your racial bonus language.",
+            selections=bonus_languages,
+            completer=NestedCompleter.from_nested_dict(
+                populate_completer(bonus_languages)
+            ),
+        ),
+    )
+
+
+def assignTraitsWitchlight() -> None:
+    """Assigns fairy or harengon features."""
+    if "Fairy" not in oPC.getMyRace() or "Harengon" not in oPC.getMyRace():
+        return
+
+    base = Attributes(oPC.getAttributes())
+    bonus_values = [2, 1]
+    bonus_attributes = [
+        "Strength",
+        "Dexterity",
+        "Constitution",
+        "Intelligence",
+        "Wisdom",
+        "Charisma",
+    ]
+    for bonus in bonus_values:
+        attribute = read("Choose your racial bonus attribute.", bonus_attributes)
+        bonus_attributes.remove(attribute)
+        base.add(attribute, bonus)
+        oSheet.set("bonus", {attribute: bonus})
+
+    bonus_languages = oSRD.getListLanguages(oPC.getMyLanguages())
+    oSheet.set(
+        "languages",
+        sp_read(
+            message="Choose your racial bonus language.",
+            selections=bonus_languages,
+            completer=NestedCompleter.from_nested_dict(
+                populate_completer(bonus_languages)
+            ),
+        ),
+    )
 
 
 def hasFeatRequirements(feat: str) -> Union[Literal[False], Literal[True]]:
