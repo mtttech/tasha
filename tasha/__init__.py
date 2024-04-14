@@ -36,17 +36,13 @@ try:
         try:
             __version__ = toml.load(pyproject)["tool"]["poetry"]["version"]
         except KeyError:
-            print(
-                "There was an error detecting the {} version number.".format(
-                    __package__
-                )
-            )
+            print(f"There was an error detecting the {__package__} version number.")
             exit(1)
 except FileNotFoundError:
     print("Cannot locate the required 'pyproject.toml' file.")
     exit(1)
 
-character_dir = Path("~/.config/{}".format(__package__)).expanduser() / "characters"
+character_dir = Path.home() / ".config" / "{__package__}" / "characters"
 if not character_dir.exists():
     character_dir.mkdir(parents=True)
 
@@ -59,90 +55,99 @@ class TashaParserError(Exception):
     pass
 
 
-def run(*args) -> None:
+class TashaPrompt:
+    def __init__(self, session: PromptSession) -> None:
+        self.session = session
+
+    def select(
+        self, message: str, selections: Union[List[str], Tuple[str, ...]]
+    ) -> str:
+        return capitalize(
+            self.session.prompt(
+                [("class:prompt", f"> {message} ")],
+                completer=NestedCompleter.from_nested_dict(
+                    populate_completer(selections)
+                ),
+                style=stylesheet,
+                validator=TashaValidator(selections),
+            )
+        )
+
+
+class TashaValidator(Validator):
+    def __init__(self, allowed_options: Union[List[str], Tuple[str, ...]]) -> None:
+        super().__init__()
+        self.allowed_options = [o.lower() for o in allowed_options]
+
+    def validate(self, document):
+        if document.text not in self.allowed_options:
+            raise ValidationError(
+                message=f"option not found.",
+                cursor_position=0,
+            )
+
+
+def tasha_main(*args) -> None:
     action = args[0]
     if len(args) == 3:
         parameter = args[1]
         value = capitalize(args[2])
-
-        # Action: add
         if action == "add":
-            if parameter == "class":
-                if not oPC.hasAttributes():
-                    raise TashaCmdError(
-                        "the add action requires you to run the roll action first!"
-                    )
-                if value not in oSRD.getListClasses():
-                    raise TashaCmdError(f"you selected an invalid class '{value}'.")
-                if oPC.hasClasses() and value not in oSRD.getListMulticlasses(
-                    oPC.getMyClasses(),
-                    oPC.getTotalLevel(),
-                    oPC.getAttributes(),
-                ):
-                    raise TashaCmdError(
-                        f"you don't meet the requirements to multiclass."
-                    )
-                level_allowance = 20
-                level_allowance = level_allowance - oPC.getTotalLevel()
-                if level_allowance == 0:
-                    raise TashaCmdError("you cannot select anymore classes.")
-
-                level = int(
-                    read(
-                        f"What is your '{value}' level (1-{level_allowance})?",
-                        [str(_) for _ in list(range(1, level_allowance + 1))],
-                    )
+            if not oPC.hasAttributes():
+                raise TashaCmdError(
+                    "the add action requires you to run the roll action first!"
                 )
-                oSheet.classes[value] = {}
-                oSheet.classes[value]["hit_die"] = oSRD.getHitDieByClass(value)
-                oSheet.classes[value]["level"] = level
-                oSheet.classes[value]["subclass"] = ""
+            tasha_add(value)
 
-        # Action: set
         if action == "set":
-            if parameter in (
-                "alignment",
-                "name",
-            ):
-                if parameter == "alignment" and value not in oSRD.getListAlignments():
-                    raise TashaCmdError(f"you selected an invalid alignment '{value}'.")
-                oSheet.set(parameter, value)
-            elif parameter == "race":
-                if value not in oSRD.getListRaces():
-                    raise ValueError(f"you selected an invalid race '{value}'.")
-                subrace_options = oSRD.getListSubraces(value)
-                if len(subrace_options) == 0:
-                    oSheet.set(parameter, value)
-                else:
-                    subrace = read(
-                        f"What is your {value} subrace?",
-                        subrace_options,
-                    )
-                    oSheet.set(parameter, "{}, {}".format(value, subrace))
+            tasha_set(parameter, value)
 
-                gender = read(
-                    "What is your gender?",
-                    ("Female", "Male"),
-                )
-                oSheet.set("gender", gender)
-                assignRacialTraits()
-    elif len(args) == 2:
+    if len(args) == 2:
         if action == "roll":
             if not args[1].isnumeric():
                 raise TashaCmdError(
                     "the roll action threshold requires a numeric value."
                 )
-            roll(int(args[1]))
-    elif len(args) == 1:
+            tasha_roll(int(args[1]))
+
+    if len(args) == 1:
         if action == "help":
-            help_text()
+            tasha_help()
         if action == "quit":
             raise KeyboardInterrupt(f"thank you for using {__package__}!")
         if action == "save":
-            save()
+            tasha_save()
 
 
-def help_text() -> None:
+def tasha_add(value: str) -> None:
+    if value not in oSRD.getListClasses():
+        raise TashaCmdError("the add class action requires a valid class.")
+
+    if oPC.hasClasses() and value not in oSRD.getListMulticlasses(
+        oPC.getMyClasses(),
+        oPC.getTotalLevel(),
+        oPC.getAttributes(),
+    ):
+        raise TashaCmdError(f"you don't meet the requirements to multiclass.")
+
+    level_allowance = 20
+    level_allowance = level_allowance - oPC.getTotalLevel()
+    if level_allowance == 0:
+        raise TashaCmdError("you cannot select anymore classes.")
+
+    level = int(
+        read(
+            f"What is your '{value}' level (1-{level_allowance})?",
+            [str(_) for _ in list(range(1, level_allowance + 1))],
+        )
+    )
+    oSheet.classes[value] = {}
+    oSheet.classes[value]["hit_die"] = oSRD.getHitDieByClass(value)
+    oSheet.classes[value]["level"] = level
+    oSheet.classes[value]["subclass"] = ""
+
+
+def tasha_help() -> None:
     """Performs the help action."""
     help_text = [
         ("", "\n"),
@@ -186,7 +191,7 @@ def help_text() -> None:
     echo(help_text)
 
 
-def roll(threshold: int) -> None:
+def tasha_roll(threshold: int) -> None:
     """Performs the roll function."""
     if not threshold >= 60 or not threshold <= 90:
         raise TashaCmdError("the roll action threshold value must be between 60-90.")
@@ -228,14 +233,17 @@ def roll(threshold: int) -> None:
     assignRacialTraits()
 
 
-def save() -> None:
+def tasha_save() -> None:
     """Performs the save action."""
     if oPC.getMyAlignment() == "":
-        raise TashaCmdError("you have not set an alignment.")
-    elif oPC.getMyName() == "":
-        raise TashaCmdError("you have not set a name.")
-    elif not oPC.hasClasses():
-        raise TashaCmdError("you do not have at least one class.")
+        raise TashaCmdError(
+            "cannot run save action because you haven't set an alignment."
+        )
+
+    if not oPC.hasClasses():
+        raise TashaCmdError(
+            "cannot run save action because you don't have at least one class."
+        )
 
     oSheet.set(
         {
@@ -266,48 +274,30 @@ def save() -> None:
         oSheet.reset()
 
 
+def tasha_set(parameter: str, value: str) -> None:
+    """Performs the set action."""
+    if parameter in (
+        "alignment",
+        "name",
+    ):
+        if parameter == "alignment" and value not in oSRD.getListAlignments():
+            raise TashaCmdError(f"you selected an invalid alignment '{value}'.")
+
+        oSheet.set(parameter, value)
+
+
 def parse(command_str: str) -> List[str]:
     """Formats the specified command string."""
     if len(command_str) == 0:
         raise TashaParserError("Empty command string specified.")
+
     command_list = command_str.split(" ")
-    # Has more than three items, merge the excess values with the third slice.
+
+    # Condense arguments into the last slice if there is more than three.
     if len(command_list) > 3:
         command_list[2] = " ".join(command_list[2:])
         del command_list[3:]
     return command_list
-
-
-class TashaPrompt:
-    def __init__(self, session: PromptSession) -> None:
-        self.session = session
-
-    def select(
-        self, message: str, selections: Union[List[str], Tuple[str, ...]]
-    ) -> str:
-        return capitalize(
-            self.session.prompt(
-                [("class:prompt", f"> {message} ")],
-                completer=NestedCompleter.from_nested_dict(
-                    populate_completer(selections)
-                ),
-                style=stylesheet,
-                validator=TashaValidator(selections),
-            )
-        )
-
-
-class TashaValidator(Validator):
-    def __init__(self, allowed_options: Union[List[str], Tuple[str, ...]]) -> None:
-        super().__init__()
-        self.allowed_options = [o.lower() for o in allowed_options]
-
-    def validate(self, document):
-        if document.text not in self.allowed_options:
-            raise ValidationError(
-                message=f"option not found.",
-                cursor_position=0,
-            )
 
 
 def bottom_toolbar() -> List[Tuple[str, ...]]:
@@ -341,8 +331,10 @@ def capitalize(string: Union[List[str], str]) -> str:
     """Capitalize the first letter of all words with the exception of certain words."""
     if isinstance(string, str):
         string = string.split(" ")
+
     if string[0] == "the":
         string[0] = string[0].capitalize()
+
     return " ".join(
         [
             (
@@ -1518,13 +1510,13 @@ def main() -> None:
         )
 
         try:
-            cmd_str = session.prompt(
+            command = session.prompt(
                 FormattedText([("class:prompt", ">> ")]),
                 completer=nested_completer,
                 style=stylesheet,
             )
-            run(*parse(cmd_str))
-        except (TashaCmdError, TashaParserError, ValueError) as e:
+            tasha_main(*parse(command))
+        except (TashaCmdError, TashaParserError) as e:
             error(e.__str__())
             pass
         except KeyboardInterrupt as e:
