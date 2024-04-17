@@ -143,7 +143,7 @@ class Character:
             raise ValueError(f"Accepts 1-2 arguments. {num_of_args} given.")
 
 
-class PlayerUtils:
+class Player:
     def __init__(self, character_sheet: Character) -> None:
         self.character_sheet = character_sheet
 

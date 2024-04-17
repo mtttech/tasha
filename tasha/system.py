@@ -21,7 +21,7 @@ class _SRDBuilder(Enum):
     subraces: object = srd5e["subraces"]
 
 
-class SRDUtils:
+class SystemResourceDocument:
     def __init__(self) -> None:
         self.srd = dict(
             zip(

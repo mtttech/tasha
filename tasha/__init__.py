@@ -10,12 +10,12 @@ from prompt_toolkit.validation import Validator, ValidationError
 import toml
 
 from tasha.attributes import Attributes, Score, generate_attributes, get_modifier
-from tasha.pcutils import Character, PlayerUtils
-from tasha.srdutils import SRDUtils
+from tasha.player import Character, Player
+from tasha.system import SystemResourceDocument
 
 oSheet = Character()
-oPC = PlayerUtils(oSheet)
-oSRD = SRDUtils()
+oPC = Player(oSheet)
+oSRD = SystemResourceDocument()
 stylesheet = Style.from_dict(
     {
         "attribute": "#fff bold",
@@ -36,7 +36,7 @@ try:
         try:
             __version__ = toml.load(pyproject)["tool"]["poetry"]["version"]
         except KeyError:
-            print(f"couldn't detect {__package__}'s version number.")
+            print(f"cannot detect {__package__}'s version number.")
             exit(1)
 except FileNotFoundError:
     print("cannot locate 'pyproject.toml'.")
@@ -154,12 +154,11 @@ def tasha_add(value: str) -> None:
     if level_allowance == 0:
         raise TashaCmdError("you cannot select anymore classes.")
 
-    level_range = [str(_) for _ in list(range(1, level_allowance + 1))]
     level = int(
-        sp_read(
+        Scan(
             message=f"What is your '{value}' level (1-{level_allowance})?",
-            selections=level_range,
-            completer=NestedCompleter.from_nested_dict(populate_completer(level_range)),
+            selections=[str(_) for _ in list(range(1, level_allowance + 1))],
+            completer=True,
         )
     )
     oSheet.classes[value] = {}
@@ -232,35 +231,28 @@ def tasha_roll(threshold: int) -> None:
     oSheet.set("attributes", assignAttributeValues(generate_attributes(threshold)))
     review_attributes()
 
-    race = sp_read(
+    race = Scan(
         message="What is your race?",
         selections=oSRD.getListRaces(),
-        completer=NestedCompleter.from_nested_dict(
-            populate_completer(oSRD.getListRaces())
-        ),
+        completer=True,
     )
     subrace_options = oSRD.getListSubraces(race)
     if len(subrace_options) == 0:
         oSheet.set("race", race)
     else:
-        subrace = sp_read(
+        subrace = Scan(
             message=f"What is your {race} subrace?",
             selections=subrace_options,
-            completer=NestedCompleter.from_nested_dict(
-                populate_completer(subrace_options)
-            ),
+            completer=True,
         )
         oSheet.set("race", f"{race}, {subrace}")
 
-    gender_options = ["Female", "Male"]
     oSheet.set(
         "gender",
-        sp_read(
+        Scan(
             message="What is your gender?",
-            selections=gender_options,
-            completer=NestedCompleter.from_nested_dict(
-                populate_completer(gender_options)
-            ),
+            selections=["Female", "Male"],
+            completer=True,
         ),
     )
     assignRacialTraits()
@@ -377,16 +369,10 @@ def error(message: str) -> None:
 
 
 def populate_completer(options: Iterable[Any]) -> Dict[str, Any]:
-    """Returns a dictionary of applicable selections."""
+    """Returns a dictionary of applicable selections for the NestedCompleter."""
     options = [o.lower() for o in options if isinstance(o, str)]
     filler = [None for _ in options]
     return dict(zip(options, filler))
-
-
-def read(message: str, selections: Union[Iterable[Any], Literal[None]] = None) -> str:
-    """Captures user input."""
-    prompt = TashaPrompt(PromptSession(bottom_toolbar=tasha_toolbar))
-    return prompt.select(message, selections)
 
 
 def review_attributes() -> None:
@@ -413,15 +399,12 @@ def assignAsiUpgrades() -> None:
         return
 
     def assignAttributeUpgrade() -> None:
-        bonus_options = ["1", "2"]
         bonus = int(
-            sp_read(
+            Scan(
                 message="How many points do you wish to apply?",
-                selections=bonus_options,
-                completer=NestedCompleter.from_nested_dict(
-                    populate_completer(bonus_options)
-                ),
-            )
+                selections=["1", "2"],
+                completer=True,
+            ),
         )
         bonus_attributes = list()
         if bonus == 1:
@@ -429,16 +412,15 @@ def assignAsiUpgrades() -> None:
         else:
             num_of_bonuses = 1
 
-        upgradeable_attributes = [
-            a for a in oPC.getUpgradeableAttributes(bonus) if a not in bonus_attributes
-        ]
         for _ in range(0, num_of_bonuses):
-            attribute = sp_read(
+            attribute = Scan(
                 message="Which attribute do you wish to enhance?",
-                selections=upgradeable_attributes,
-                completer=NestedCompleter.from_nested_dict(
-                    populate_completer(upgradeable_attributes)
-                ),
+                selections=[
+                    a
+                    for a in oPC.getUpgradeableAttributes(bonus)
+                    if a not in bonus_attributes
+                ],
+                completer=True,
             )
             bonus_attributes.append(attribute)
             base = Attributes(oPC.getAttributes())
@@ -448,13 +430,10 @@ def assignAsiUpgrades() -> None:
     def assignFeatUpgrade() -> None:
         excluded_feats = list()
         while True:
-            feat_options = oSRD.getListFeats(oPC.getMyFeats() + excluded_feats)
-            feat = sp_read(
+            feat = Scan(
                 message="Choose a feat.",
-                selections=feat_options,
-                completer=NestedCompleter.from_nested_dict(
-                    populate_completer(feat_options)
-                ),
+                selections=oSRD.getListFeats(oPC.getMyFeats() + excluded_feats),
+                completer=True,
             )
             if hasFeatRequirements(feat):
                 assignFeatEnhancements(feat)
@@ -464,17 +443,14 @@ def assignAsiUpgrades() -> None:
                 error(f"You don't meet the requirements for '{feat}'.")
 
     asi_counter = allotted_asi
-    upgrade_options = [
-        "ability",
-        "feat",
-    ]
     for _ in range(0, allotted_asi):
-        option = sp_read(
+        option = Scan(
             message=f"Would you like to select a feat or increase an ability? ({asi_counter})",
-            selections=upgrade_options,
-            completer=NestedCompleter.from_nested_dict(
-                populate_completer(upgrade_options)
-            ),
+            selections=[
+                "ability",
+                "feat",
+            ],
+            completer=True,
         )
         if option == "Ability":
             assignAttributeUpgrade()
@@ -523,14 +499,12 @@ def assignAttributeValues(results: List[int]) -> Dict[str, Dict[str, int]]:
             setAttributeValue(attribute_options[0], results[0])
             break
         else:
-            attribute = sp_read(
+            attribute = Scan(
                 message="Assign {} ({}) to which attribute?".format(
                     results[0], ", ".join([str(d) for d in results])
                 ),
                 selections=attribute_options,
-                completer=NestedCompleter.from_nested_dict(
-                    populate_completer(attribute_options)
-                ),
+                completer=True,
             )
             setAttributeValue(attribute, results[0])
     return setAttributeOrder(attribute_array)
@@ -540,12 +514,10 @@ def assignBackgroundTraits() -> None:
     """Subroutine for determining the character's background features."""
     oSheet.set(
         "background",
-        sp_read(
+        Scan(
             message=f"What is your background?",
             selections=oSRD.getListBackground(),
-            completer=NestedCompleter.from_nested_dict(
-                populate_completer(oSRD.getListBackground())
-            ),
+            completer=True,
         ),
     )
 
@@ -603,12 +575,10 @@ def assignBackgroundTraits() -> None:
                     l for l in bonus_languages if l not in oPC.getMyLanguages()
                 ]
             for _ in range(number_of_languages):
-                language = sp_read(
+                language = Scan(
                     message=f"Choose a '{oPC.getMyBackground()}' background bonus language.",
                     selections=bonus_languages,
-                    completer=NestedCompleter.from_nested_dict(
-                        populate_completer(bonus_languages)
-                    ),
+                    completer=True,
                 )
                 oSheet.set(
                     "languages",
@@ -642,15 +612,12 @@ def assignBackgroundTraits() -> None:
                 "Religion",
                 "Survial",
             ]
-        bonus_skills = [s for s in bonus_skills if s not in oPC.getMySkills()]
         oSheet.set(
             "skills",
-            sp_read(
+            Scan(
                 message=f"Choose a '{oPC.getMyBackground()}' background bonus skill.",
-                selections=bonus_skills,
-                completer=NestedCompleter.from_nested_dict(
-                    populate_completer(bonus_skills)
-                ),
+                selections=[s for s in bonus_skills if s not in oPC.getMySkills()],
+                completer=True,
             ),
         )
 
@@ -700,12 +667,10 @@ def assignBackgroundTraits() -> None:
             ]
         oSheet.set(
             "tools",
-            sp_read(
+            Scan(
                 message=f"Choose a '{oPC.getMyBackground()}' background bonus tool proficiency.",
                 selections=tool_options,
-                completer=NestedCompleter.from_nested_dict(
-                    populate_completer(tool_options)
-                ),
+                completer=True,
             ),
         )
 
@@ -729,9 +694,10 @@ def assignCantrips(
     cantrip_selection_counter = cantrips_known
 
     for _ in range(cantrips_known):
-        cantrip = read(
-            f"Choose a cantrip ({cantrip_selection_counter}).",
-            cantrip_pool,
+        cantrip = Scan(
+            message=f"Choose a cantrip ({cantrip_selection_counter}).",
+            selections=cantrip_pool,
+            completer=True,
         )
         my_cantrip_list.append(cantrip)
         cantrip_pool.remove(cantrip)
@@ -751,9 +717,10 @@ def assignClassFeatures() -> None:
         if not oPC.canSubclass(klass):
             return
 
-        subclass = read(
-            f"What is your '{klass}' subclass?",
-            oSRD.getListSubclasses(klass),
+        subclass = Scan(
+            message=f"What is your '{klass}' subclass?",
+            selections=oSRD.getListSubclasses(klass),
+            completer=True,
         )
         oSheet.classes[klass]["subclass"] = subclass
         base_subclass_traits = oSRD.getEntryBySubclass(subclass)
@@ -807,14 +774,10 @@ def assignClassFeatures() -> None:
 def assignClassSkills() -> None:
     """Subroutine for determining the character's skills features."""
     for _ in range(0, oPC.getAllottedSkills()):
-        skill = sp_read(
+        skill = Scan(
             message="Choose your class skill.",
             selections=oSRD.getClassSkills(oPC.getMyClasses()[0], oPC.getMySkills()),
-            completer=NestedCompleter.from_nested_dict(
-                populate_completer(
-                    oSRD.getClassSkills(oPC.getMyClasses()[0], oPC.getMySkills())
-                )
-            ),
+            completer=True,
         )
         oSheet.set("skills", skill.capitalize())
 
@@ -894,28 +857,24 @@ def assignFeatEnhancements(feat: str) -> None:
             attribute_bonuses = ["Intelligence", "Wisdom", "Charisma"]
         elif feat == "Weapon Master":
             attribute_bonuses = ["Dexterity", "Strength"]
-        attribute_bonus = sp_read(
+        attribute_bonus = Scan(
             message="Choose an attribute to upgrade.",
             selections=getAdjustableAttributes(attribute_bonuses),
-            completer=NestedCompleter.from_nested_dict(
-                populate_completer(getAdjustableAttributes(attribute_bonuses))
-            ),
+            completer=True,
         )
         base_attributes.add(attribute_bonus, 1)
 
     # Artificer Initiate
     if feat == "Artificer Initiate":
-        oSheet.set("features", assignCantrips("Artificer", 1))
-        bonus_tools = oSRD.getListTools(oPC.getMyTools(), "Artisan's tools")
         oSheet.set(
-            "tools",
-            sp_read(
-                message=f"Choose a '{oPC.getMyBackground()}' background bonus tool proficiency.",
-                selections=bonus_tools,
-                completer=NestedCompleter.from_nested_dict(
-                    populate_completer(bonus_tools)
+            {
+                "features": assignCantrips("Artificer", 1),
+                "tools": Scan(
+                    message=f"Choose a '{oPC.getMyBackground()}' background bonus tool proficiency.",
+                    selections=oSRD.getListTools(oPC.getMyTools(), "Artisan's tools"),
+                    completer=True,
                 ),
-            ),
+            }
         )
 
     # Dungeon Delver
@@ -989,15 +948,12 @@ def assignFeatEnhancements(feat: str) -> None:
     if feat == "Linguist":
         base_attributes.add("Intelligence", 1)
         for _ in range(3):
-            bonus_languages = oSRD.getListLanguages(oPC.getMyLanguages())
             oSheet.set(
                 "languages",
-                sp_read(
+                Scan(
                     message="Choose a bonus language.",
-                    selections=bonus_languages,
-                    completer=NestedCompleter.from_nested_dict(
-                        populate_completer(bonus_languages)
-                    ),
+                    selections=oSRD.getListLanguages(oPC.getMyLanguages()),
+                    completer=True,
                 ),
             )
 
@@ -1009,23 +965,26 @@ def assignFeatEnhancements(feat: str) -> None:
     if feat == "Prodigy":
         oSheet.set(
             "languages",
-            read(
-                "Choose a bonus language.",
-                oSRD.getListLanguages(oPC.getMyLanguages()),
+            Scan(
+                message="Choose a bonus language.",
+                selections=oSRD.getListLanguages(oPC.getMyLanguages()),
+                completer=True,
             ),
         )
         oSheet.set(
             "skills",
-            read(
-                "Choose a bonus skill.",
-                oSRD.getListSkills(oPC.getMySkills()),
+            Scan(
+                message="Choose a bonus skill.",
+                selections=oSRD.getListSkills(oPC.getMySkills()),
+                completer=True,
             ),
         )
         oSheet.set(
             "tools",
-            read(
-                "Choose a bonus skill.",
-                oSRD.getListTools(oPC.getMyTools()),
+            Scan(
+                message="Choose a bonus skill.",
+                selections=oSRD.getListTools(oPC.getMyTools()),
+                completer=True,
             ),
         )
 
@@ -1043,9 +1002,10 @@ def assignFeatEnhancements(feat: str) -> None:
         attribute_bonuses = [
             s for s in attribute_bonuses if s.capitalize() not in oSheet.savingthrows
         ]
-        attribute_bonus = read(
-            "Choose an attribute to upgrade.",
-            attribute_bonuses,
+        attribute_bonus = Scan(
+            message="Choose an attribute to upgrade.",
+            selections=attribute_bonuses,
+            completer=True,
         )
         base_attributes.add(attribute_bonus, 1)
         oSheet.set("savingthrows", attribute_bonus.capitalize())
@@ -1056,33 +1016,37 @@ def assignFeatEnhancements(feat: str) -> None:
     # Skilled
     if feat == "Skilled":
         for _ in range(3):
-            bonus_option = read(
-                "Choose a feat (Skilled) bonus skill or tool.",
-                ["Skill", "Tool"],
+            bonus_option = Scan(
+                message="Choose a feat (Skilled) bonus skill or tool.",
+                selections=["Skill", "Tool"],
+                completer=True,
             )
             if bonus_option == "Skill":
                 oSheet.set(
                     "skills",
-                    read(
-                        "Choose a bonus skill.",
-                        oSRD.getListSkills(oPC.getMySkills()),
+                    Scan(
+                        message="Choose a bonus skill.",
+                        selections=oSRD.getListSkills(oPC.getMySkills()),
+                        completer=True,
                     ),
                 )
             elif bonus_option == "Tool":
                 oSheet.set(
                     "tools",
-                    read(
-                        "Choose a bonus tool proficiency.",
-                        oSRD.getListTools(oPC.getMyTools()),
+                    Scan(
+                        message="Choose a bonus tool proficiency.",
+                        selections=oSRD.getListTools(oPC.getMyTools()),
+                        completer=True,
                     ),
                 )
 
     # Squat Nimbleness
     if feat == "Squat Nimbleness":
         attribute_bonuses = ["Dexterity", "Strength"]
-        attribute_bonus = read(
-            "Choose an attribute to upgrade.",
-            getAdjustableAttributes(attribute_bonuses),
+        attribute_bonus = Scan(
+            message="Choose an attribute to upgrade.",
+            selections=getAdjustableAttributes(attribute_bonuses),
+            completer=True,
         )
         if attribute_bonus == "Dexterity":
             oSheet.set("skills", "Acrobatics")
@@ -1102,11 +1066,13 @@ def assignFeatEnhancements(feat: str) -> None:
     # Weapon Master
     if feat == "Weapon Master":
         for _ in range(4):
+            bonus_weapons = oSRD.getListWeapons(oPC.getMyWeapons())
             oSheet.set(
                 "weapons",
-                read(
-                    "Choose a bonus weapon proficiency.",
-                    oSRD.getListWeapons(oPC.getMyWeapons()),
+                Scan(
+                    message="Choose a bonus weapon proficiency.",
+                    selections=bonus_weapons,
+                    completer=True,
                 ),
             )
 
@@ -1184,17 +1150,17 @@ def assignSpellcastingFeatures() -> None:
         """Select's character's spells."""
 
         def getArcanumSpellSelections(
-            pc_spell_list: List[str], warlock_spell_list: List[str]
+            player_spells: List[str], warlock_spells: List[str]
         ) -> List[str]:
             """Removes 6-9 level spells if a spell is already known for that level."""
-            for spell_level in [6, 7, 8, 9]:
-                for spell in pc_spell_list:
-                    spell_level_query = f"(lv. {spell_level})"
-                    if spell_level_query in spell:
-                        warlock_spell_list = [
-                            s for s in warlock_spell_list if spell_level_query not in s
+            for spell_level in range(6, 10):
+                for spell in player_spells:
+                    level_query = f"(lv. {spell_level})"
+                    if level_query in spell:
+                        warlock_spells = [
+                            s for s in warlock_spells if level_query not in s
                         ]
-            return warlock_spell_list
+            return warlock_spells
 
         for klass in oPC.getMyClasses():
             allotted_spell_total = oSRD.getSpellTotal(
@@ -1215,9 +1181,10 @@ def assignSpellcastingFeatures() -> None:
                 if klass == "Warlock":
                     spell_pool = getArcanumSpellSelections(my_spell_list, spell_pool)
 
-                spell = read(
-                    f"Choose a spell ({spell_selection_counter}).",
-                    spell_pool,
+                spell = Scan(
+                    message=f"Choose a spell ({spell_selection_counter}).",
+                    selections=spell_pool,
+                    completer=True,
                 )
                 my_spell_list.append(spell)
                 spell_pool.remove(spell)
@@ -1241,20 +1208,23 @@ def assignTraitsDragonborn() -> None:
     """Assigns dragonborn features."""
     if "Dragonborn" not in oPC.getMyRace():
         return
-    draconic_ancestry = read(
-        "Choose your dragonborn's ancestry.",
-        (
-            "Black",
-            "Blue",
-            "Brass",
-            "Bronze",
-            "Copper",
-            "Gold",
-            "Green",
-            "Red",
-            "Silver",
-            "White",
-        ),
+
+    draconic_ancestors = [
+        "Black",
+        "Blue",
+        "Brass",
+        "Bronze",
+        "Copper",
+        "Gold",
+        "Green",
+        "Red",
+        "Silver",
+        "White",
+    ]
+    draconic_ancestry = Scan(
+        message="Choose your dragonborn's ancestry.",
+        selections=draconic_ancestors,
+        completer=True,
     )
     oSheet.set("ancestry", draconic_ancestry)
     draconic_resistances = {
@@ -1276,34 +1246,38 @@ def assignTraitsHalfelf() -> None:
     """Assigns half-elf features."""
     if "Halfelf" not in oPC.getMyRace():
         return
-    attribute = read(
-        "Choose your racial bonus attribute.",
-        [
-            "Strength",
-            "Dexterity",
-            "Constitution",
-            "Intelligence",
-            "Wisdom",
-        ],
+
+    attribute_bonuses = [
+        "Strength",
+        "Dexterity",
+        "Constitution",
+        "Intelligence",
+        "Wisdom",
+    ]
+    attribute = Scan(
+        message="Choose your racial bonus attribute.",
+        selections=attribute_bonuses,
+        completer=True,
     )
-    base = Attributes(oPC.getAttributes())
-    base.add(attribute, 1)
+    Attributes(oPC.getAttributes()).add(attribute, 1)
     oSheet.set("bonus", {attribute: 1})
 
     oSheet.set(
         "languages",
-        read(
-            "Choose your racial bonus language.",
-            oSRD.getListLanguages(oPC.getMyLanguages()),
+        Scan(
+            message="Choose your racial bonus language.",
+            selections=oSRD.getListLanguages(oPC.getMyLanguages()),
+            completer=True,
         ),
     )
 
     for _ in range(2):
         oSheet.set(
             "skills",
-            read(
-                "Choose your racial bonus skill.",
-                oSRD.getListSkills(oPC.getMySkills()),
+            Scan(
+                message="Choose your racial bonus skill.",
+                selections=oSRD.getListSkills(oPC.getMySkills()),
+                completer=True,
             ),
         )
 
@@ -1338,15 +1312,14 @@ def assignTraitsHobgoblin() -> None:
             "Warhammer",
             "Whip",
         ]
-        bonus_weapons = [w for w in hobgoblin_weapons if w not in oPC.getMyWeapons()]
         oSheet.set(
             "weapons",
-            sp_read(
+            Scan(
                 message="Choose your racial bonus weapon proficiency.",
-                selections=bonus_weapons,
-                completer=NestedCompleter.from_nested_dict(
-                    populate_completer(bonus_weapons)
-                ),
+                selections=[
+                    w for w in hobgoblin_weapons if w not in oPC.getMyWeapons()
+                ],
+                completer=True,
             ),
         )
 
@@ -1356,15 +1329,12 @@ def assignTraitsHuman() -> None:
     if "Human" not in oPC.getMyRace():
         return
 
-    bonus_languages = oSRD.getListLanguages(oPC.getMyLanguages())
     oSheet.set(
         "languages",
-        sp_read(
+        Scan(
             message="Choose your racial bonus language.",
-            selections=bonus_languages,
-            completer=NestedCompleter.from_nested_dict(
-                populate_completer(bonus_languages)
-            ),
+            selections=oSRD.getListLanguages(oPC.getMyLanguages()),
+            completer=True,
         ),
     )
 
@@ -1381,15 +1351,12 @@ def assignTraitsKenku() -> None:
             "Stealth",
             "Sleight of Hand",
         ]
-        bonus_skills = [s for s in kenku_skills if s not in oPC.getMySkills()]
         oSheet.set(
             "skills",
-            sp_read(
+            Scan(
                 message="Choose your racial bonus skill.",
-                selections=bonus_skills,
-                completer=NestedCompleter.from_nested_dict(
-                    populate_completer(bonus_skills)
-                ),
+                selections=[s for s in kenku_skills if s not in oPC.getMySkills()],
+                completer=True,
             ),
         )
 
@@ -1407,15 +1374,12 @@ def assignTraitsLizardfolk() -> None:
             "Stealth",
             "Survival",
         ]
-        bonus_skills = [s for s in lizardfolk_skills if s not in oPC.getMySkills()]
         oSheet.set(
             "skills",
-            sp_read(
+            Scan(
                 message="Choose your racial bonus skill.",
-                selections=bonus_skills,
-                completer=NestedCompleter.from_nested_dict(
-                    populate_completer(bonus_skills)
-                ),
+                selections=[s for s in lizardfolk_skills if s not in oPC.getMySkills()],
+                completer=True,
             ),
         )
 
@@ -1425,15 +1389,12 @@ def assignTraitsTabaxi() -> None:
     if "Tabaxi" not in oPC.getMyRace():
         return
 
-    bonus_languages = oSRD.getListLanguages(oPC.getMyLanguages())
     oSheet.set(
         "languages",
-        sp_read(
+        Scan(
             message="Choose your racial bonus language.",
-            selections=bonus_languages,
-            completer=NestedCompleter.from_nested_dict(
-                populate_completer(bonus_languages)
-            ),
+            selections=oSRD.getListLanguages(oPC.getMyLanguages()),
+            completer=True,
         ),
     )
 
@@ -1454,20 +1415,21 @@ def assignTraitsWitchlight() -> None:
         "Charisma",
     ]
     for bonus in bonus_values:
-        attribute = read("Choose your racial bonus attribute.", bonus_attributes)
+        attribute = Scan(
+            message="Choose your racial bonus attribute.",
+            selections=bonus_attributes,
+            completer=True,
+        )
         bonus_attributes.remove(attribute)
         base.add(attribute, bonus)
         oSheet.set("bonus", {attribute: bonus})
 
-    bonus_languages = oSRD.getListLanguages(oPC.getMyLanguages())
     oSheet.set(
         "languages",
-        sp_read(
+        Scan(
             message="Choose your racial bonus language.",
-            selections=bonus_languages,
-            completer=NestedCompleter.from_nested_dict(
-                populate_completer(bonus_languages)
-            ),
+            selections=oSRD.getListLanguages(oPC.getMyLanguages()),
+            completer=True,
         ),
     )
 
@@ -1590,10 +1552,36 @@ def isPreparedCaster(self) -> bool:
     return False
 
 
-def sp_read(**args) -> str:
+def Scan(**args) -> str:
+    """Captures/filters user input sends to Tasha prompt."""
+    if "completer" not in args:
+        args["completer"] = None
+
+    if args["completer"] == True:
+        args["completer"] = NestedCompleter.from_nested_dict(
+            populate_completer(args["selections"])
+        )
+
+    if "main_menu" in args and args["main_menu"] == True:
+        args["completer"] = NestedCompleter.from_nested_dict(
+            {
+                "add": {
+                    "class": populate_completer(oSRD.getListClasses()),
+                },
+                "help": None,
+                "quit": None,
+                "roll": None,
+                "save": None,
+                "set": {
+                    "alignment": populate_completer(oSRD.getListAlignments()),
+                    "name": None,
+                },
+            }
+        )
+
     session = PromptSession(
         bottom_toolbar=tasha_toolbar,
-        completer=None if "completer" not in args else args["completer"],
+        completer=None if args["completer"] is None else args["completer"],
         style=stylesheet,
     )
     prompt = TashaPrompt(session)
@@ -1606,25 +1594,9 @@ def sp_read(**args) -> str:
 
 
 def main() -> None:
-    nested_completer = NestedCompleter.from_nested_dict(
-        {
-            "add": {
-                "class": populate_completer(oSRD.getListClasses()),
-            },
-            "help": None,
-            "quit": None,
-            "roll": None,
-            "save": None,
-            "set": {
-                "alignment": populate_completer(oSRD.getListAlignments()),
-                "name": None,
-            },
-        }
-    )
-
     while True:
         try:
-            command = sp_read(completer=nested_completer)
+            command = Scan(main_menu=True)
             tasha_main(command.lower())
         except TashaCmdError as e:
             error(e.__str__())
