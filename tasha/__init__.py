@@ -26,6 +26,7 @@ stylesheet = Style.from_dict(
         "prompt": "#aaa bold",
         "success": "#32cd32 bold",
         "title": "#88cccc bold",
+        "warn": "#ffea00 bold",
     }
 )
 
@@ -208,7 +209,7 @@ def tasha_help() -> None:
         ("", "Exits the program."),
         ("", "\n"),
     ]
-    echo(help_text)
+    print_formatted_text(FormattedText(help_text), style=stylesheet)
 
 
 def tasha_roll(threshold: int) -> None:
@@ -288,14 +289,7 @@ def tasha_save() -> None:
 
     with Path(character_dir, f"{oPC.getMyName()}.toml").open("w") as record:
         toml.dump(asdict(cs), record)
-        echo(
-            [
-                (
-                    "class:success",
-                    "Character created successfully.",
-                ),
-            ],
-        )
+        ekko("Character created successfully.", 0)
         oSheet.reset()
 
 
@@ -358,14 +352,18 @@ def capitalize(string: Union[List[str], str]) -> str:
     )
 
 
-def echo(text: Iterable) -> None:
+def ekko(message: str, message_level: int) -> None:
     """Wrapper for prompt_toolkit print_formatted_text function."""
-    print_formatted_text(FormattedText(text), style=stylesheet)
 
+    def message_router(level: int) -> Iterable:
+        message_routes = {
+            0: [("class:success", message)],
+            1: [("class:error", message)],
+            2: [("class:warn", message)],
+        }
+        return message_routes[level]
 
-def error(message: str) -> None:
-    """Prints formatted error message."""
-    echo([("class:error", message)])
+    print_formatted_text(FormattedText(message_router(message_level)), style=stylesheet)
 
 
 def populate_completer(options: Iterable[Any]) -> Dict[str, Any]:
@@ -378,17 +376,9 @@ def populate_completer(options: Iterable[Any]) -> Dict[str, Any]:
 def review_attributes() -> None:
     """Prints out all attributes."""
     for attribute in tuple(oPC.getAttributes().keys()):
-        echo(
-            [
-                ("class:attribute", f"{attribute[0:3].upper()}: "),
-                (
-                    "class:number",
-                    "{} ({})".format(
-                        oPC.getAttributeScore(attribute),
-                        oPC.getAttributeModifier(attribute),
-                    ),
-                ),
-            ],
+        ekko(
+            f"{attribute}: {oPC.getAttributeScore(attribute)} ({oPC.getAttributeModifier(attribute)})",
+            0,
         )
 
 
@@ -440,7 +430,7 @@ def assignAsiUpgrades() -> None:
                 break
             else:
                 excluded_feats.append(feat)
-                error(f"You don't meet the requirements for '{feat}'.")
+                ekko(f"You don't meet the requirements for '{feat}'.", 2)
 
     asi_counter = allotted_asi
     for _ in range(0, allotted_asi):
@@ -1599,10 +1589,10 @@ def main() -> None:
             command = Scan(main_menu=True)
             tasha_main(command.lower())
         except TashaCmdError as e:
-            error(e.__str__())
+            ekko(e.__str__(), 2)
             pass
         except KeyboardInterrupt as e:
-            error(e.__str__())
+            ekko(e.__str__(), 1)
             exit(1)
 
 
