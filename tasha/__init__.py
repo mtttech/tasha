@@ -31,16 +31,30 @@ stylesheet = Style.from_dict(
 )
 
 
+def ekko(message: str, message_level: int) -> None:
+    """Wrapper for prompt_toolkit print_formatted_text function."""
+
+    def message_router(level: int) -> Iterable:
+        message_routes = {
+            0: [("class:success", message)],
+            1: [("class:error", message)],
+            2: [("class:warn", message)],
+        }
+        return message_routes[level]
+
+    print_formatted_text(FormattedText(message_router(message_level)), style=stylesheet)
+
+
 try:
     pyproject_file = Path(__file__).parents[1] / "pyproject.toml"
     with pyproject_file.open("r") as pyproject:
         try:
             __version__ = toml.load(pyproject)["tool"]["poetry"]["version"]
         except KeyError:
-            print(f"cannot detect {__package__}'s version number.")
+            ekko(f"cannot detect {__package__}'s version number.", 1)
             exit(1)
 except FileNotFoundError:
-    print("cannot locate 'pyproject.toml'.")
+    ekko("cannot locate 'pyproject.toml'.", 1)
     exit(1)
 
 character_dir = Path.home() / ".config" / f"{__package__}" / "characters"
@@ -350,20 +364,6 @@ def capitalize(string: Union[List[str], str]) -> str:
             for w in string
         ]
     )
-
-
-def ekko(message: str, message_level: int) -> None:
-    """Wrapper for prompt_toolkit print_formatted_text function."""
-
-    def message_router(level: int) -> Iterable:
-        message_routes = {
-            0: [("class:success", message)],
-            1: [("class:error", message)],
-            2: [("class:warn", message)],
-        }
-        return message_routes[level]
-
-    print_formatted_text(FormattedText(message_router(message_level)), style=stylesheet)
 
 
 def populate_completer(options: Iterable[Any]) -> Dict[str, Any]:
