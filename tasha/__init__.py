@@ -32,15 +32,15 @@ stylesheet = Style.from_dict(
 
 
 def ekko(message: str, message_level: int) -> None:
-    """Wrapper for prompt_toolkit print_formatted_text function."""
+    """Special wrapper for prompt_toolkit.print_formatted_text."""
 
-    def message_router(level: int) -> Iterable:
+    def message_router(message_route: int) -> List[Tuple[str, str]]:
         message_routes = {
             0: [("class:success", message)],
             1: [("class:error", message)],
             2: [("class:warn", message)],
         }
-        return message_routes[level]
+        return message_routes[message_route]
 
     print_formatted_text(FormattedText(message_router(message_level)), style=stylesheet)
 
@@ -60,6 +60,7 @@ except FileNotFoundError:
 character_dir = Path.home() / ".config" / f"{__package__}" / "characters"
 if not character_dir.exists():
     character_dir.mkdir(parents=True)
+    ekko(f"'{character_dir}' not found. Directory created.", 2)
 
 
 class TashaCmdError(Exception):
