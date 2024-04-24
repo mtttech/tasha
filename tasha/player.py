@@ -24,7 +24,7 @@ class Character:
     initiative: int = field(default=0)
     languages: list = field(default_factory=list)
     level: int = field(default=1)
-    name: str = field(default="Unnamed")
+    name: str = field(default="")
     proficiency_bonus: int = field(default=0)
     race: str = field(default="")
     resistances: list = field(default_factory=list)
@@ -67,7 +67,7 @@ class Character:
         self.initiative = 0
         self.languages = list()
         self.level = 1
-        self.name = "Unnamed"
+        self.name = ""
         self.proficiency_bonus = 0
         self.race = ""
         self.resistances = list()

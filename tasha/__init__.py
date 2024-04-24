@@ -79,7 +79,7 @@ class TashaPrompt:
         if message is not None:
             prompt_prefix = FormattedText([("class:prompt", f">> {message} ")])
         else:
-            prompt_prefix = FormattedText([("class:prompt", f">> ")])
+            prompt_prefix = FormattedText([("class:prompt", ">> ")])
 
         if selections is None:
             response = self.session.prompt(
@@ -276,6 +276,11 @@ def tasha_roll(threshold: int) -> None:
 
 def tasha_save() -> None:
     """Performs the save action."""
+    if oPC.getMyName() == "":
+        raise TashaCmdError(
+            "cannot run save action because you haven't set a name."
+        )
+
     if oPC.getMyAlignment() == "":
         raise TashaCmdError(
             "cannot run save action because you haven't set an alignment."
@@ -331,10 +336,14 @@ def tasha_toolbar() -> List[Tuple[str, ...]]:
         gender = ""
 
     if len(oPC.getAttributes()) > 0:
-        attributes = ""
+        attribute_string = list()
+        for a, v in oPC.getAttributes().items():
+            attribute_string.append("{}: {}".format(a[0:3], v["score"]))
+        attribute_string = " ".join(attribute_string)
+        attributes = f"  {attribute_string}"
     else:
         attributes = ""
-
+    
     return [
         (
             "class:bottom-toolbar",
