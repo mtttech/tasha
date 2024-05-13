@@ -39,7 +39,7 @@ cd Tasha
 
 Run tasha by running the following command ```python tasha.py```.
 
-It my be helpful to type the following command on first usage.
+It my be helpful to type the following command at the first usage.
 
 * **help**: This command displays all the available commands and a basic description of their purpose.
 
