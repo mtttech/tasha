@@ -9,9 +9,9 @@ from prompt_toolkit.styles import Style
 from prompt_toolkit.validation import Validator, ValidationError
 import toml
 
-from tasha.attributes import Attributes, Score, generate_attributes, get_modifier
-from tasha.player import Character, Player
-from tasha.system import SystemResourceDocument
+from attributes import Attributes, Score, generate_attributes, get_modifier
+from player import Character, Player
+from system import SystemResourceDocument
 
 oSheet = Character()
 oPC = Player(oSheet)
@@ -46,18 +46,18 @@ def ekko(message: str, message_level: int) -> None:
 
 
 try:
-    pyproject_file = Path(__file__).parents[1] / "pyproject.toml"
+    pyproject_file = Path(__file__).parents[0] / "pyproject.toml"
     with pyproject_file.open("r") as pyproject:
         try:
             __version__ = toml.load(pyproject)["tool"]["poetry"]["version"]
         except KeyError:
-            ekko(f"cannot detect {__package__}'s version number.", 1)
+            ekko(f"cannot detect my version number.", 1)
             exit(1)
 except FileNotFoundError:
     ekko("cannot locate 'pyproject.toml'.", 1)
     exit(1)
 
-character_dir = Path.home() / ".config" / f"{__package__}" / "characters"
+character_dir = Path.home() / ".config" / "tasha" / "characters"
 if not character_dir.exists():
     character_dir.mkdir(parents=True)
     ekko(f"'{character_dir}' not found. Directory created.", 2)
@@ -148,7 +148,7 @@ def tasha_main(command: str) -> None:
         if action == "help":
             tasha_help()
         if action == "quit":
-            raise KeyboardInterrupt(f"thank you for using {__package__}!")
+            raise KeyboardInterrupt("thank you for using tasha!")
         if action == "save":
             tasha_save()
 
@@ -187,7 +187,7 @@ def tasha_help() -> None:
     """Performs the help action."""
     help_text = [
         ("", "\n"),
-        ("class:title", "{} {}".format(__package__, __version__)),
+        ("class:title", f"tasha {__version__}"),
         ("", "\n\n\t"),
         (
             "",
@@ -277,9 +277,7 @@ def tasha_roll(threshold: int) -> None:
 def tasha_save() -> None:
     """Performs the save action."""
     if oPC.getMyName() == "":
-        raise TashaCmdError(
-            "cannot run save action because you haven't set a name."
-        )
+        raise TashaCmdError("cannot run save action because you haven't set a name.")
 
     if oPC.getMyAlignment() == "":
         raise TashaCmdError(
@@ -343,11 +341,11 @@ def tasha_toolbar() -> List[Tuple[str, ...]]:
         attributes = f"  {attribute_string}"
     else:
         attributes = ""
-    
+
     return [
         (
             "class:bottom-toolbar",
-            f" {__package__} {__version__} - Type 'help' for assistance :: "
+            f" tasha {__version__} - Type 'help' for assistance :: "
             f"{oPC.getMyName()} "
             f"{gender} {oPC.getMyRace()} "
             f"{'/'.join(oPC.getMyClasses())} "
@@ -738,7 +736,11 @@ def assignClassFeatures() -> None:
     for class_order, klass in enumerate(oPC.getMyClasses()):
         if class_order == 0:
             traits = oSRD.getEntryByClass(klass)
-            starting_gold = sum(dice.roll(traits["gold"]))
+            starting_gold = sum(
+                dice.roll(
+                    traits["gold"]
+                )  # pyright: ignore[reportArgumentType, reportCallIssue]
+            )
 
             oSheet.set(
                 {
@@ -1126,7 +1128,7 @@ def assignRacialTraits() -> None:
 
     assignRacialBonus()
 
-    from tasha.metrics import Anthropometry
+    from metrics import Anthropometry
 
     height, weight = Anthropometry(
         oSRD.getAnthropometryBase(race, subrace),

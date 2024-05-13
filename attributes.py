@@ -50,7 +50,14 @@ def generate_attributes(threshold: int) -> List[int]:
     3. or largest attribute < 15
     """
     while True:
-        dice_rolls = [sum(dice.roll("4d6^3")) for _ in range(6)]
+        dice_rolls = [
+            sum(
+                dice.roll(
+                    "4d6^3"
+                )  # pyright: ignore[reportArgumentType, reportCallIssue]
+            )
+            for _ in range(6)
+        ]
         if sum(dice_rolls) < threshold:
             continue
         if min(dice_rolls) < 8:

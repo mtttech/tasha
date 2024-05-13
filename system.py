@@ -2,7 +2,7 @@ from enum import Enum
 import itertools
 from typing import Any, Dict, Generator, List, Tuple, Union
 
-from tasha.srd import srd5e
+from d20 import srd5e
 
 
 class _SRDBuilder(Enum):

@@ -1,6 +1,6 @@
 # Tasha
 
-**Tasha** is a command-line tool used for creating 5e Dungeons & Dragons characters.
+**Tasha** is a tool for creating 5e Dungeons & Dragons characters.
 
 ### Supported rulebooks
 
@@ -29,14 +29,15 @@
 # Clone the repository.
 git clone https://github.com/mtttech/Tasha.git
 
-# Install the project environment.
+# Change into the cloned repo. 
 cd Tasha
-poetry install
+
+# Create (if necessary) and activate your virtual environment and install the requirements (if necessary).
 ```
 
 #### Usage
 
-To begin, run the program by typing the following command ```poetry run tasha```.
+Run tasha by running the following command ```python tasha.py```.
 
 From there, you must more or less run the following commands in the order they are listed. Details about each command are further laid out below.
 
