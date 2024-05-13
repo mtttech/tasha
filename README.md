@@ -39,7 +39,11 @@ cd Tasha
 
 Run tasha by running the following command ```python tasha.py```.
 
-From there, you must use the following commands. Details about each command are laid out below.
+It my be helpful to type the following command on first usage.
+
+* **help**: This command displays all the available commands and a basic description of their purpose.
+
+To create a character, you must use the following commands. Details about each command are below.
 
 * **roll** ***threshold***: This command performs multiple underlying functions but primarily generates the six ability scores at thresolds between a total of 60-90. For example, if you use the command ```roll 60```, Tasha will keep rolling your scores until they total or exceed 60. Once generated, you are given the option to assign your scores, choose your race/subrace (if applicable), gender, and background. If the ```add class``` action has been run and this action is run again, it will reset all the above values, including any chosen classes.
 * **add class** ***class***: This command sets your character's class. Run the command again, selecting a different class to multiclass to (minimum requirements are enforced). This command only works after the **roll** commmand has been run.
