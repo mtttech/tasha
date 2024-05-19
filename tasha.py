@@ -10,11 +10,11 @@ from prompt_toolkit.validation import Validator, ValidationError
 import toml
 
 from attributes import Attributes, Score, generate_attributes, get_modifier
-from player import Character, Player
+from player import CharacterSheet, PlayerCharacter
 from system import SystemResourceDocument
 
-oSheet = Character()
-oPC = Player(oSheet)
+oSheet = CharacterSheet()
+oPC = PlayerCharacter(oSheet)
 oSRD = SystemResourceDocument()
 stylesheet = Style.from_dict(
     {
@@ -49,7 +49,7 @@ try:
     pyproject_file = Path(__file__).parents[0] / "pyproject.toml"
     with pyproject_file.open("r") as pyproject:
         try:
-            __version__ = toml.load(pyproject)["tool"]["poetry"]["version"]
+            __version__ = toml.load(pyproject)["project"]["version"]
         except KeyError:
             ekko(f"cannot detect my version number.", 1)
             exit(1)

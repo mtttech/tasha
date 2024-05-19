@@ -4,7 +4,7 @@ from typing import Any, Dict, List, Literal, Tuple, Union
 
 
 @dataclass
-class Character:
+class CharacterSheet:
     alignment: str = field(default="")
     allotted_asi: int = field(default=0)
     allotted_skills: int = field(default=0)
@@ -143,8 +143,8 @@ class Character:
             raise ValueError(f"Accepts 1-2 arguments. {num_of_args} given.")
 
 
-class Player:
-    def __init__(self, character_sheet: Character) -> None:
+class PlayerCharacter:
+    def __init__(self, character_sheet: CharacterSheet) -> None:
         self.character_sheet = character_sheet
 
     def canSubclass(self, klass: str) -> Union[Literal[False], Literal[True]]:
