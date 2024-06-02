@@ -386,7 +386,7 @@ def populate_completer(options: Iterable[Any]) -> Dict[str, Any]:
 
 
 def review_attributes() -> None:
-    """Prints out all attributes."""
+    """Prints out all attributes (attribue/score/modifier)."""
     for attribute in tuple(oPC.getAttributes().keys()):
         ekko(
             f"{attribute}: {oPC.getAttributeScore(attribute)} ({oPC.getAttributeModifier(attribute)})",
@@ -395,12 +395,13 @@ def review_attributes() -> None:
 
 
 def assignAsiUpgrades() -> None:
-    """Assigns abilit1y score improvement upgrades."""
+    """Prompt assigns ability score improvements."""
     allotted_asi = oPC.getAllottedAsi()
     if allotted_asi == 0:
         return
 
     def assignAttributeUpgrade() -> None:
+        """Prompt assigns an attribute upgrade."""
         bonus = int(
             Scan(
                 message="How many points do you wish to apply?",
@@ -430,6 +431,7 @@ def assignAsiUpgrades() -> None:
             oSheet.attributes = base.attributes
 
     def assignFeatUpgrade() -> None:
+        """Prompt assigns a feat upgrade."""
         excluded_feats = list()
         while True:
             feat = Scan(
@@ -475,6 +477,7 @@ def assignAttributeValues(results: List[int]) -> Dict[str, Dict[str, int]]:
     results.sort(reverse=True)
 
     def setAttributeOrder(array: Dict[str, Any]) -> Dict[str, Any]:
+        """Returns the ordered attributes dictionary."""
         attribute_order = (
             "Strength",
             "Dexterity",
@@ -489,6 +492,7 @@ def assignAttributeValues(results: List[int]) -> Dict[str, Dict[str, int]]:
         return ordered_attributes
 
     def setAttributeValue(attribute_name: str, attribute_value: int) -> None:
+        """Sets the attribute_name to the specified attribute_value."""
         attribute_options.remove(attribute_name)
         results.remove(attribute_value)
         attr_values = asdict(Score(attribute_name, attribute_value))
@@ -500,20 +504,21 @@ def assignAttributeValues(results: List[int]) -> Dict[str, Dict[str, int]]:
         if len(results) == 1:
             setAttributeValue(attribute_options[0], results[0])
             break
-        else:
-            attribute = Scan(
-                message="Assign {} ({}) to which attribute?".format(
-                    results[0], ", ".join([str(d) for d in results])
-                ),
-                selections=attribute_options,
-                completer=True,
-            )
-            setAttributeValue(attribute, results[0])
+
+        attribute = Scan(
+            message="Assign {} ({}) to which attribute?".format(
+                results[0], ", ".join([str(d) for d in results])
+            ),
+            selections=attribute_options,
+            completer=True,
+        )
+        setAttributeValue(attribute, results[0])
+
     return setAttributeOrder(attribute_array)
 
 
 def assignBackgroundTraits() -> None:
-    """Subroutine for determining the character's background features."""
+    """Prompt for setting the character's background."""
     oSheet.set(
         "background",
         Scan(
@@ -715,7 +720,7 @@ def assignClassFeatures() -> None:
     """Assigns class features."""
 
     def assignSubclassFeatures(klass: str) -> None:
-        """Assigns subclass features."""
+        """Prompt assigns subclass features."""
         if not oPC.canSubclass(klass):
             return
 
@@ -778,7 +783,7 @@ def assignClassFeatures() -> None:
 
 
 def assignClassSkills() -> None:
-    """Subroutine for determining the character's skills features."""
+    """Prompt to determining the character's skills features."""
     for _ in range(0, oPC.getAllottedSkills()):
         skill = Scan(
             message="Choose your class skill.",
@@ -789,7 +794,7 @@ def assignClassSkills() -> None:
 
 
 def assignFeatEnhancements(feat: str) -> None:
-    """Assigns the proper enhancements by feat."""
+    """Prompt assigns the proper enhancements by feat."""
 
     def getAdjustableAttributes(checked_attributes: List[str]) -> List[str]:
         """Checks the checked_attributes for upgradeable attributes."""
@@ -1088,8 +1093,8 @@ def assignFeatEnhancements(feat: str) -> None:
 def assignRacialTraits() -> None:
     """Assigns racial/subracial traits."""
 
-    def assignRacialBonus() -> None:
-        """Assigns racial bonuses to attributes."""
+    def applyRacialBonus() -> None:
+        """Applies racial bonuses."""
         base_values = oPC.getAttributes()
         bonus_values = oPC.getBonus()
         for attribute, _ in bonus_values.items():
@@ -1130,7 +1135,7 @@ def assignRacialTraits() -> None:
         traits = oSRD.getEntryBySubrace(subrace)
         oSheet.set({"bonus": traits["bonus"], "traits": traits["traits"]})
 
-    assignRacialBonus()
+    applyRacialBonus()
 
     from metrics import Anthropometry
 
