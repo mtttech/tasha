@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Dict, List
+from typing import List
 
 import dice
 
@@ -19,29 +19,23 @@ class Score:
         self.modifier = get_modifier(self.score)
 
 
+@dataclass
 class Attributes:
-    def __init__(self, attributes: Dict[str, Dict[str, int]]) -> None:
-        self.attributes = attributes
-
-    @staticmethod
-    def _can_adjust(base_value: int, bonus_value: int) -> bool:
-        """Checks if bonus_value + base_value is greater than 20. False if > 20, True otherwise."""
-        if (base_value + bonus_value) > 20:
-            return False
-        return True
+    attributes: dict = field(default_factory=dict)
 
     def add(self, attribute: str, bonus: int) -> None:
         """Applies bonus to the specified attribute."""
         old_value = self.attributes[attribute]["score"]
-        if not self._can_adjust(old_value, bonus):
-            return
-        new_value = old_value + bonus
+        if (old_value + bonus) > 20:
+            new_value = 20
+        else:
+            new_value = old_value + bonus
         self.attributes[attribute]["score"] = new_value
         self.attributes[attribute]["modifier"] = get_modifier(new_value)
 
 
 def generate_attributes(threshold: int) -> List[int]:
-    """Generates the six attributes.
+    """Generates the character's six attributes.
 
     Continuously rerolls attributes if one of the following is true:
 

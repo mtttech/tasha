@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from math import ceil
-from typing import Any, Dict, List, Literal, Tuple, Union
+from typing import Any, Dict, List, Literal, NoReturn, Tuple, Union
 
 
 @dataclass
@@ -192,35 +192,37 @@ class PlayerCharacter:
         """Returns the character's racial bonus."""
         return self.character_sheet.bonus
 
-    def getCasterAttribute(self, klass: str, subklass: str) -> int:
-        """Return the primary spellcasting attribute by class/subclass."""
+    def getCasterAttribute(self, klass: str, subklass: str) -> int | NoReturn:
+        """Returns caster's primary attribute score by class/subclass."""
         if klass in (
             "Cleric",
             "Druid",
             "Ranger",
         ):
             return self.getAttributeScore("Wisdom")
-        elif klass in (
+
+        if klass in (
             "Bard",
             "Paladin",
             "Sorcerer",
             "Warlock",
         ):
             return self.getAttributeScore("Charisma")
-        elif klass in ("Artificer", "Wizard") or subklass in (
+
+        if klass in ("Artificer", "Wizard") or subklass in (
             "Arcane Trickster",
             "Eldritch Knight",
         ):
             return self.getAttributeScore("Intelligence")
-        else:
-            raise ValueError("Invalid spellcaster class specified.")
+
+        raise ValueError("Invalid spellcaster class specified.")
 
     def getClassLevel(self, klass: str) -> int:
-        """Returns the specified class' level."""
+        """Returns the specified level by klass."""
         return self.character_sheet.classes[klass]["level"]
 
     def getClassSubclass(self, klass: str) -> str:
-        """Returns the specified class' subclass."""
+        """Returns the specified subclass by klass."""
         return self.character_sheet.classes[klass]["subclass"]
 
     def getMyArmors(self) -> List[str]:
@@ -313,10 +315,11 @@ class PlayerCharacter:
         return self.character_sheet.spell_slots
 
     def getTotalLevel(self) -> int:
-        """Returns the total level for all selected classes."""
+        """Returns the total level for all character classes."""
         return sum([v["level"] for v in tuple(self.character_sheet.classes.values())])
 
     def getUpgradeableAttributes(self, bonus: int) -> List[str]:
+        """Returns a list of all upgradeable attributes."""
         upgradeable_attributes = list()
         for attribute, values in self.getAttributes().items():
             if (values["score"] + bonus) > 20:
@@ -325,18 +328,19 @@ class PlayerCharacter:
         return upgradeable_attributes
 
     def hasAttributes(self) -> bool:
+        """Returns True if attributes have been set. False otherwise."""
         return len(self.getAttributes()) > 0
 
     def hasClass(self, klass: str) -> bool:
-        """Returns True if character has classes. False otherwise."""
+        """Returns True if character is a member of klass. False otherwise."""
         return klass in self.getMyClasses()
 
     def hasClasses(self) -> bool:
-        """Returns True if character has classes. False otherwise."""
+        """Returns True if character has classes set. False otherwise."""
         return len(self.getMyClasses()) > 0
 
     def hasRace(self) -> bool:
-        """Returns True if character has a race. False otherwise."""
+        """Returns True if character has a set race. False otherwise."""
         return self.getMyRace() != ""
 
     def isSpellcaster(self) -> bool:

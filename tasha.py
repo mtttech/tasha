@@ -63,7 +63,7 @@ if not character_dir.exists():
     ekko(f"'{character_dir}' not found. Directory created.", 2)
 
 
-class TashaCmdError(Exception):
+class TashaCommandError(Exception):
     pass
 
 
@@ -115,7 +115,7 @@ class TashaValidator(Validator):
 def tasha_main(command: str) -> None:
     """Tasha program gateway."""
     if len(command) == 0:
-        tasha_help()
+        tasha_cmd_help()
 
     args = command.split(" ")
     if len(args) > 3:
@@ -128,47 +128,47 @@ def tasha_main(command: str) -> None:
         value = capitalize(args[2])
         if action == "add":
             if not oPC.hasAttributes():
-                raise TashaCmdError(
+                raise TashaCommandError(
                     "the add action requires you to run the roll action first!"
                 )
-            tasha_add(value)
+            tasha_cmd_add(value)
 
         if action == "set":
-            tasha_set(parameter, value)
+            tasha_cmd_set(parameter, value)
 
     if len(args) == 2:
         if action == "roll":
             if not args[1].isnumeric():
-                raise TashaCmdError(
+                raise TashaCommandError(
                     "the roll action threshold requires a numeric value."
                 )
-            tasha_roll(int(args[1]))
+            tasha_cmd_roll(int(args[1]))
 
     if len(args) == 1:
         if action == "help":
-            tasha_help()
+            tasha_cmd_help()
         if action == "quit":
             raise KeyboardInterrupt("thank you for using tasha!")
         if action == "save":
-            tasha_save()
+            tasha_cmd_save()
 
 
-def tasha_add(value: str) -> None:
+def tasha_cmd_add(value: str) -> None:
     """Performs the add action."""
     if value not in oSRD.getListClasses():
-        raise TashaCmdError("the add class action requires a valid class.")
+        raise TashaCommandError("the add class action requires a valid class.")
 
     if oPC.hasClasses() and value not in oSRD.getListMulticlasses(
         oPC.getMyClasses(),
         oPC.getTotalLevel(),
         oPC.getAttributes(),
     ):
-        raise TashaCmdError(f"you don't meet the requirements to multiclass.")
+        raise TashaCommandError(f"you don't meet the requirements to multiclass.")
 
     level_allowance = 20
     level_allowance = level_allowance - oPC.getTotalLevel()
     if level_allowance == 0:
-        raise TashaCmdError("you cannot select anymore classes.")
+        raise TashaCommandError("you cannot select anymore classes.")
 
     level = int(
         Scan(
@@ -183,7 +183,7 @@ def tasha_add(value: str) -> None:
     oSheet.classes[value]["subclass"] = ""
 
 
-def tasha_help() -> None:
+def tasha_cmd_help() -> None:
     """Performs the help action."""
     help_text = [
         ("", "\n"),
@@ -227,10 +227,12 @@ def tasha_help() -> None:
     print_formatted_text(FormattedText(help_text), style=stylesheet)
 
 
-def tasha_roll(threshold: int) -> None:
-    """Performs the roll function."""
+def tasha_cmd_roll(threshold: int) -> None:
+    """Performs the roll action."""
     if not threshold in range(60, 91):
-        raise TashaCmdError("the roll action threshold value must be between 60-90.")
+        raise TashaCommandError(
+            "the roll action threshold value must be between 60-90."
+        )
 
     if len(oSheet.classes) > 0:
         oSheet.bonus = dict()
@@ -242,7 +244,7 @@ def tasha_roll(threshold: int) -> None:
         oSheet.skills = list()
         oSheet.traits = list()
         oSheet.weapons = list()
-        raise TashaCmdError("the roll action has been previously run.")
+        raise TashaCommandError("the roll action has been previously run.")
 
     oSheet.set("attributes", assignAttributeValues(generate_attributes(threshold)))
     review_attributes()
@@ -274,18 +276,20 @@ def tasha_roll(threshold: int) -> None:
     assignRacialTraits()
 
 
-def tasha_save() -> None:
+def tasha_cmd_save() -> None:
     """Performs the save action."""
     if oPC.getMyName() == "":
-        raise TashaCmdError("cannot run save action because you haven't set a name.")
+        raise TashaCommandError(
+            "cannot run save action because you haven't set a name."
+        )
 
     if oPC.getMyAlignment() == "":
-        raise TashaCmdError(
+        raise TashaCommandError(
             "cannot run save action because you haven't set an alignment."
         )
 
     if not oPC.hasClasses():
-        raise TashaCmdError(
+        raise TashaCommandError(
             "cannot run save action because you don't have at least one class."
         )
 
@@ -311,14 +315,14 @@ def tasha_save() -> None:
         oSheet.reset()
 
 
-def tasha_set(parameter: str, value: str) -> None:
+def tasha_cmd_set(parameter: str, value: str) -> None:
     """Performs the set action."""
     if parameter in (
         "alignment",
         "name",
     ):
         if parameter == "alignment" and value not in oSRD.getListAlignments():
-            raise TashaCmdError(f"you selected an invalid alignment '{value}'.")
+            raise TashaCommandError(f"you selected an invalid alignment '{value}'.")
 
         oSheet.set(parameter, value)
 
@@ -1600,7 +1604,7 @@ def main() -> None:
         try:
             command = Scan(main_menu=True)
             tasha_main(command.lower())
-        except TashaCmdError as e:
+        except TashaCommandError as e:
             ekko(e.__str__(), 2)
             pass
         except KeyboardInterrupt as e:
