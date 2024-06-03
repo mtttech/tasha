@@ -12,7 +12,7 @@ import toml
 from actor import CharacterSheet, NonPlayerCharacter
 from attributes import Attributes, Score, generate_attributes, get_modifier
 from system import SystemResourceDocument
-from utility import capitalize, populate_completer
+from utility import param_to_upper, populate_completer
 
 oSheet = CharacterSheet()
 oNPC = NonPlayerCharacter(oSheet)
@@ -108,7 +108,7 @@ class TashaPrompt:
                 validator=TashaValidator(selections),
             )
 
-        return capitalize(response)
+        return param_to_upper(response)
 
 
 class TashaValidator(Validator):
@@ -137,7 +137,7 @@ def tasha_main(command: str) -> None:
     action = args[0]
     if len(args) == 3:
         parameter = args[1]
-        value = capitalize(args[2])
+        value = param_to_upper(args[2])
         if action == "add":
             if not oNPC.hasAttributes():
                 raise TashaCommandError(

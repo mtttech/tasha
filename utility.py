@@ -1,7 +1,7 @@
 from typing import Any, Dict, Iterable, List, Union
 
 
-def capitalize(string: Union[List[str], str]) -> str:
+def param_to_upper(string: Union[List[str], str]) -> str:
     """Capitalize the first letter of all words with the exception of certain words."""
     if isinstance(string, str):
         string = string.split(" ")
