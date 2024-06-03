@@ -49,6 +49,7 @@ class CharacterSheet:
             self.initiative = 0
 
     def reset(self) -> None:
+        """Resets character sheet values."""
         self.alignment = ""
         self.allotted_asi = 0
         self.allotted_skills = 0
@@ -143,9 +144,9 @@ class CharacterSheet:
             raise ValueError(f"Accepts 1-2 arguments. {num_of_args} given.")
 
 
-class PlayerCharacter:
-    def __init__(self, character_sheet: CharacterSheet) -> None:
-        self.character_sheet = character_sheet
+@dataclass
+class NonPlayerCharacter:
+    character_sheet: CharacterSheet
 
     def canSubclass(self, klass: str) -> Union[Literal[False], Literal[True]]:
         """Returns False if character cannot select a subclass. True otherwise."""

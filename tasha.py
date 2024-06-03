@@ -9,12 +9,12 @@ from prompt_toolkit.styles import Style
 from prompt_toolkit.validation import Validator, ValidationError
 import toml
 
+from actor import CharacterSheet, NonPlayerCharacter
 from attributes import Attributes, Score, generate_attributes, get_modifier
-from player import CharacterSheet, PlayerCharacter
 from system import SystemResourceDocument
 
 oSheet = CharacterSheet()
-oPC = PlayerCharacter(oSheet)
+oPC = NonPlayerCharacter(oSheet)
 oSRD = SystemResourceDocument()
 stylesheet = Style.from_dict(
     {
@@ -22,27 +22,34 @@ stylesheet = Style.from_dict(
         "bottom-toolbar": "#d8dee9 bg:#000",
         "command": "#ffff00 bold",
         "error": "#880000 bold",
+        "info": "#32cd32 bold",
         "number": "#32cd00",
         "prompt": "#aaa bold",
-        "success": "#32cd32 bold",
         "title": "#88cccc bold",
         "warn": "#ffea00 bold",
     }
 )
 
 
-def ekko(message: str, message_level: int) -> None:
-    """Special wrapper for prompt_toolkit.print_formatted_text."""
+def text_color_router(message: str, message_level: int) -> None:
+    color_routes = {
+        0: [("class:info", message)],
+        1: [("class:error", message)],
+        2: [("class:warn", message)],
+    }
+    print_formatted_text(FormattedText(color_routes[message_level]), style=stylesheet)
 
-    def message_router(message_route: int) -> List[Tuple[str, str]]:
-        message_routes = {
-            0: [("class:success", message)],
-            1: [("class:error", message)],
-            2: [("class:warn", message)],
-        }
-        return message_routes[message_route]
 
-    print_formatted_text(FormattedText(message_router(message_level)), style=stylesheet)
+def error(message: str) -> None:
+    text_color_router(message, 1)
+
+
+def info(message: str) -> None:
+    text_color_router(message, 0)
+
+
+def warn(message: str) -> None:
+    text_color_router(message, 2)
 
 
 try:
@@ -51,16 +58,16 @@ try:
         try:
             __version__ = toml.load(pyproject)["project"]["version"]
         except KeyError:
-            ekko(f"cannot detect my version number.", 1)
+            error(f"cannot detect my version number.")
             exit(1)
 except FileNotFoundError:
-    ekko("cannot locate 'pyproject.toml'.", 1)
+    error("cannot locate 'pyproject.toml'.")
     exit(1)
 
 character_dir = Path.home() / ".config" / "tasha" / "characters"
 if not character_dir.exists():
     character_dir.mkdir(parents=True)
-    ekko(f"'{character_dir}' not found. Directory created.", 2)
+    warn(f"'{character_dir}' not found. Directory created.")
 
 
 class TashaCommandError(Exception):
@@ -311,7 +318,7 @@ def tasha_cmd_save() -> None:
 
     with Path(character_dir, f"{oPC.getMyName()}.toml").open("w") as record:
         toml.dump(asdict(cs), record)
-        ekko("Character created successfully.", 0)
+        info("Character created successfully.")
         oSheet.reset()
 
 
@@ -388,9 +395,8 @@ def populate_completer(options: Iterable[Any]) -> Dict[str, Any]:
 def review_attributes() -> None:
     """Prints out all attributes (attribue/score/modifier)."""
     for attribute in tuple(oPC.getAttributes().keys()):
-        ekko(
-            f"{attribute}: {oPC.getAttributeScore(attribute)} ({oPC.getAttributeModifier(attribute)})",
-            0,
+        info(
+            f"{attribute}: {oPC.getAttributeScore(attribute)} ({oPC.getAttributeModifier(attribute)})"
         )
 
 
@@ -444,7 +450,7 @@ def assignAsiUpgrades() -> None:
                 break
             else:
                 excluded_feats.append(feat)
-                ekko(f"You don't meet the requirements for '{feat}'.", 2)
+                warn(f"You don't meet the requirements for '{feat}'.")
 
     asi_counter = allotted_asi
     for _ in range(0, allotted_asi):
@@ -1610,10 +1616,10 @@ def main() -> None:
             command = Scan(main_menu=True)
             tasha_main(command.lower())
         except TashaCommandError as e:
-            ekko(e.__str__(), 2)
+            warn(e.__str__())
             pass
         except KeyboardInterrupt as e:
-            ekko(e.__str__(), 1)
+            error(e.__str__())
             exit(1)
 
 
