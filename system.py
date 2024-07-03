@@ -45,13 +45,9 @@ class SystemResourceDocument:
                 value = sorted(value)
             yield value
 
-    def getSpellsByLevel(self, klass: str, spell_level: int) -> List[str]:
-        """Returns all spells available by klass and spell level."""
-        try:
-            spells_by_level = self.srd["spells"][klass][spell_level]
-            return [f"{s} (lv. {spell_level})" for s in spells_by_level]
-        except KeyError:
-            return list()
+    def getCantripsByClass(self, klass: str) -> List[str]:
+        """Returns all cantrips available to a class."""
+        return self.getSpellsByLevel(klass, 0)
 
     def getEntryByClass(self, klass: str) -> Dict[str, Any]:
         """Returns SRD entries by the chosen class."""
@@ -182,6 +178,14 @@ class SystemResourceDocument:
         except KeyError:
             return ""
 
+    def getSpellsByLevel(self, klass: str, spell_level: int) -> List[str]:
+        """Returns all spells available by klass and spell level."""
+        try:
+            spells_by_level = self.srd["spells"][klass][spell_level]
+            return [f"{s} (lv. {spell_level})" for s in spells_by_level]
+        except KeyError:
+            return list()
+
     def getSpellSlotsByClass(self, klass: str, caster_level: int) -> List[int]:
         """Returns a list of allotted spell slots by klass and level."""
         from math import ceil
@@ -210,16 +214,21 @@ class SystemResourceDocument:
             return self.getSpellsKnown(klass, level)
 
     def getSpellsByClass(self, klass: str, caster_level: int) -> List[str]:
-        """Returns all spells available to a class by the class' level."""
+        """Returns all spells (1st - 9th) available to a class by its level."""
         if caster_level > 20:
             caster_level = 20
 
         spell_list = []
         spell_slots = self.srd["classes"][klass]["spell_slots"][caster_level].split(",")
         for level, _ in enumerate(spell_slots):
-            if level == 0 and klass in (
-                "Paladin",
-                "Ranger",
+            if (
+                level == 0
+                or level == 0
+                and klass
+                in (
+                    "Paladin",
+                    "Ranger",
+                )
             ):
                 continue
             spell_list += self.getSpellsByLevel(klass, level)

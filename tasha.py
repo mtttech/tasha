@@ -13,7 +13,7 @@ from system import SystemResourceDocument
 
 __author__ = "Marcus T Taylor"
 __email__ = "mtaylor9754@hotmail.com"
-__version__ = "0.5.0"
+__version__ = "0.5.1"
 
 
 oSheet = CharacterSheet()
