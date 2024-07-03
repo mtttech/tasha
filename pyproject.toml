@@ -4,10 +4,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "tasha"
-version = "0.4.1"
+version = "0.5.0"
 dependencies = [
     "dice",
-    "prompt-toolkit",
+    "simple-term-menu",
     "toml",
 ]
 requires-python = ">=3.8"
@@ -17,7 +17,7 @@ authors = [
 maintainers = [
     {name = "Marcus T Taylor", email="mtaylor9754@hotmail.com"},
 ]
-description = "A program to create 5th edition Dungeons & Dragons characters."
+description = "Tasha is a tool for creating NPCs for Dungeons & Dragons (5e)."
 readme = "README.md"
 license = "GPL-3.0-only"
 classifiers = [
@@ -36,4 +36,5 @@ classifiers = [
 ]
 
 [project.urls]
-Repository = "https://github.com/mtttech/Tasha.git"
+Home = "https://github.com/mtttech/Tasha"
+Repository = "https://github.com/mtttech/Tasha"

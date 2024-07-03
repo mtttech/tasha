@@ -14,8 +14,8 @@ class Score:
     def __post_init__(self) -> None:
         if self.attribute in self.bonus:
             self.score += self.bonus[self.attribute]
-            if self.score > 20:
-                self.score = 20
+            if self.score > 30:
+                self.score = 30
         self.modifier = get_modifier(self.score)
 
 
@@ -26,8 +26,8 @@ class Attributes:
     def add(self, attribute: str, bonus: int) -> None:
         """Applies bonus to the specified attribute."""
         old_value = self.attributes[attribute]["score"]
-        if (old_value + bonus) > 20:
-            new_value = 20
+        if (old_value + bonus) > 30:
+            new_value = 30
         else:
             new_value = old_value + bonus
         self.attributes[attribute]["score"] = new_value
