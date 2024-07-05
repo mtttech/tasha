@@ -84,13 +84,19 @@ def attribute_generate_menu() -> Dict[str, Dict[str, int]]:
 
 def confirm_upgrade_menu() -> int | Tuple[int, ...] | None:
     menu = TerminalMenu(
-        ["Attribute", "Feat"], title="Ability Score Improvement Upgrade"
+        ["Attribute", "Feat"],
+        clear_screen=True,
+        title="Ability Score Improvement Upgrade",
     )
     return menu.show()
 
 
 def confirm_yesno_menu(message: str) -> bool:
-    menu = TerminalMenu(["No", "Yes"], title=message)
+    menu = TerminalMenu(
+        ["No", "Yes"],
+        clear_screen=True,
+        title=message,
+    )
     if menu.show() != 0:
         return True
     return False
@@ -112,14 +118,14 @@ def multi_select_menu(
     while True:
         menu = TerminalMenu(
             allotted_options,
+            clear_screen=True,
             multi_select=True,
             multi_select_select_on_accept=False,
             multi_select_empty_ok=True,
-            show_multi_select_hint=True,
             title=(
-                f"{title} Select ({required_num_of_selections})"
+                f"  Tasha {__version__}\n  Please select {title} ({required_num_of_selections})\n"
                 if required_num_of_selections != 0
-                else f"{title} Select"
+                else f"  Tasha {__version__}\n  Please select {title}\n"
             ),
         )
         menu.show()
@@ -167,8 +173,8 @@ def setArcanumSpells(
 def single_select_menu(allotted_options: list, title: str) -> str:
     menu = TerminalMenu(
         allotted_options,
-        status_bar=f"Please select your {title}.",
-        title=f"{title} Selection",
+        clear_screen=True,
+        title=f"  Tasha {__version__}\n  Please select {title}\n",
     )
     return allotted_options[
         menu.show()
@@ -183,7 +189,6 @@ def spellcasting_select_menu(klass: str, level: int) -> Dict[str, Any]:
         level,
         get_modifier(oNPC.getCasterAttribute(klass)),
     )
-    allotted_spell_total = 7
     # Set the selection counter.
     selection_counter = allotted_spell_total
     # Grab a listing of spells the player can pick from.
@@ -208,18 +213,18 @@ def spellcasting_select_menu(klass: str, level: int) -> Dict[str, Any]:
 
 def main() -> None:
     oSheet.set("name", name_entry())
-    oSheet.set("alignment", single_select_menu(oSRD.getListAlignments(), "Alignment"))
-    oSheet.set("type_", single_select_menu(oSRD.getListTypes(), "Type"))
-    oSheet.set("gender", single_select_menu(["Female", "Male"], "Gender"))
+    oSheet.set("alignment", single_select_menu(oSRD.getListAlignments(), "alignment"))
+    oSheet.set("type_", single_select_menu(oSRD.getListTypes(), "type"))
+    oSheet.set("gender", single_select_menu(["Female", "Male"], "gender"))
     oSheet.set("attributes", attribute_generate_menu())
 
-    size = single_select_menu(oSRD.getListSizes(), "Size")
+    size = single_select_menu(oSRD.getListSizes(), "size")
     oSheet.set("size", size)
     oSheet.set("hit_die", oSRD.getHitDieBySize(size))
     oSheet.set("hit_points", hit_dice_menu(size))
 
-    oSheet.set("senses", multi_select_menu(oSRD.getListSenses(), "Senses"))
-    oSheet.set("features", multi_select_menu(oSRD.getListFeatures(), "Features"))
+    oSheet.set("senses", multi_select_menu(oSRD.getListSenses(), "senses"))
+    oSheet.set("features", multi_select_menu(oSRD.getListFeatures(), "feature"))
     savingthrows = multi_select_menu(
         [
             "Strength",
@@ -235,24 +240,24 @@ def main() -> None:
         "savingthrows", list(savingthrows)  # pyright: ignore[reportArgumentType]
     )
 
-    armors = multi_select_menu(oSRD.getListArmors(), "Armor Proficiency")
+    armors = multi_select_menu(oSRD.getListArmors(), "armor proficiency")
     oSheet.set("armors", list(armors))  # pyright: ignore[reportArgumentType]
 
-    tools = multi_select_menu(oSRD.getListTools(), "Tool Proficiency")
+    tools = multi_select_menu(oSRD.getListTools(), "tool proficiency")
     oSheet.set("tools", list(tools))  # pyright: ignore[reportArgumentType]
 
-    weapons = multi_select_menu(oSRD.getListWeapons(), "Weapon Proficiency")
+    weapons = multi_select_menu(oSRD.getListWeapons(), "weapon proficiency")
     oSheet.set("weapons", list(weapons))  # pyright: ignore[reportArgumentType]
 
-    skills = multi_select_menu(oSRD.getListSkills(), "Skill")
+    skills = multi_select_menu(oSRD.getListSkills(), "skill")
     oSheet.set("skills", list(skills))  # pyright: ignore[reportArgumentType]
 
-    languages = multi_select_menu(oSRD.getListLanguages(), "Language")
+    languages = multi_select_menu(oSRD.getListLanguages(), "language")
     oSheet.set("languages", list(languages))  # pyright: ignore[reportArgumentType]
 
     if confirm_yesno_menu("Are you a spellcaster?"):
         spellcaster_klass = single_select_menu(
-            oSRD.getListClasses(), "Spellcasting Class"
+            oSRD.getListClasses(), "spellcasting class"
         )
         caster_level = int(
             single_select_menu(level_range, "What is your caster level?")
@@ -265,7 +270,7 @@ def main() -> None:
         )
 
     cs = CharacterSheet(**asdict(oSheet))
-    #print(cs)
+    # print(cs)
     fname = f"{oNPC.getMyName()}.toml"
     with Path(character_dir, fname).open("w") as record:
         toml.dump(asdict(cs), record)
