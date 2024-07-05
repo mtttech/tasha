@@ -3,9 +3,11 @@ from typing import Any, Dict
 from . import (
     alignments,
     classes,
+    features,
     languages,
     metrics,
     proficiencies,
+    senses,
     sizes,
     skills,
     spells,
@@ -15,9 +17,11 @@ from . import (
 srd5e: Dict[str, Any] = dict()
 srd5e.update(alignments.alignments)
 srd5e.update(classes.classes)
+srd5e.update(features.features)
 srd5e.update(languages.languages)
 srd5e.update(metrics.metrics)
 srd5e.update(proficiencies.proficiencies)
+srd5e.update(senses.senses)
 srd5e.update(sizes.sizes)
 srd5e.update(skills.skills)
 srd5e.update(spells.spells)

@@ -8,9 +8,11 @@ from d20 import srd5e
 class _SRDBuilder(Enum):
     alignments: object = srd5e["alignments"]
     classes: object = srd5e["classes"]
+    features: object = srd5e["features"]
     languages: object = srd5e["languages"]
     metrics: object = srd5e["metrics"]
     proficiencies: object = srd5e["proficiencies"]
+    senses: object = srd5e["senses"]
     sizes: object = srd5e["sizes"]
     skills: object = srd5e["skills"]
     spells: object = srd5e["spells"]
@@ -24,9 +26,11 @@ class SystemResourceDocument:
                 [
                     "alignments",
                     "classes",
+                    "features",
                     "languages",
                     "metrics",
                     "proficiencies",
+                    "senses",
                     "sizes",
                     "skills",
                     "spells",
@@ -101,18 +105,19 @@ class SystemResourceDocument:
         """Returns a tuple of all applicable classes."""
         return list(self.srd["classes"].keys())
 
-    def getListFeats(self, exclusions: Union[List[str], None] = None) -> List[str]:
-        """Returns a list of all applicable feats."""
-        feat_list = list(self.srd["feats"])
-        if isinstance(exclusions, list):
-            return [f for f in feat_list if f not in exclusions]
-        return feat_list
+    def getListFeatures(self) -> List[str]:
+        """Returns a list of all applicable features."""
+        return list(self.srd["features"].keys())
 
     def getListLanguages(self, exclusions: Union[List[str], None] = None) -> List[str]:
         """Returns a tuple of all applicable languages minus exclusions, if applicable."""
         if isinstance(exclusions, list):
             return [l for l in self.srd["languages"] if l not in exclusions]
         return self.srd["languages"]
+
+    def getListSenses(self) -> List[str]:
+        """Returns a list of all applicable senses."""
+        return self.srd["senses"]
 
     def getListSizes(self) -> List[str]:
         """Returns a list of all applicable backgrounds."""

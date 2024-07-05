@@ -9,6 +9,7 @@ class CharacterSheet:
     armors: list = field(default_factory=list)
     attributes: dict = field(default_factory=dict)
     cantrips: list = field(default_factory=list)
+    features: list = field(default_factory=list)
     gender: str = field(default="")
     hit_die: int = field(default=0)
     hit_points: int = field(default=0)
@@ -18,6 +19,7 @@ class CharacterSheet:
     name: str = field(default="")
     proficiency_bonus: int = field(default=0)
     savingthrows: list = field(default_factory=list)
+    senses: list = field(default_factory=list)
     size: str = field(default="")
     skills: list = field(default_factory=list)
     speed: int = field(default=30)
@@ -40,6 +42,7 @@ class CharacterSheet:
         self.armors = list()
         self.attributes = dict()
         self.cantrips = list()
+        self.features = list()
         self.gender = ""
         self.hit_die = 0
         self.hit_points = 0
@@ -49,6 +52,7 @@ class CharacterSheet:
         self.name = ""
         self.proficiency_bonus = 0
         self.savingthrows = list()
+        self.senses = list()
         self.size = ""
         self.skills = list()
         self.speed = 30

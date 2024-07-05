@@ -13,7 +13,7 @@ from system import SystemResourceDocument
 
 __author__ = "Marcus T Taylor"
 __email__ = "mtaylor9754@hotmail.com"
-__version__ = "0.5.1"
+__version__ = "0.5.2"
 
 
 oSheet = CharacterSheet()
@@ -218,6 +218,8 @@ def main() -> None:
     oSheet.set("hit_die", oSRD.getHitDieBySize(size))
     oSheet.set("hit_points", hit_dice_menu(size))
 
+    oSheet.set("senses", multi_select_menu(oSRD.getListSenses(), "Senses"))
+    oSheet.set("features", multi_select_menu(oSRD.getListFeatures(), "Features"))
     savingthrows = multi_select_menu(
         [
             "Strength",
@@ -263,12 +265,12 @@ def main() -> None:
         )
 
     cs = CharacterSheet(**asdict(oSheet))
-    print(cs)
+    #print(cs)
     fname = f"{oNPC.getMyName()}.toml"
     with Path(character_dir, fname).open("w") as record:
         toml.dump(asdict(cs), record)
-        print(f"character {fname} created successfully.")
-        print("character {} saved to {}.".format(fname, character_dir))
+        print(f"{fname} created successfully.")
+        print(f"{fname} saved to {character_dir}.")
 
 
 if __name__ == "__main__":
