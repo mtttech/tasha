@@ -200,7 +200,7 @@ class SystemResourceDocument:
 
         spell_slots = []
         actual_level = 0
-        if klass in ("Bard", "Cleric", "Druid", "Sorcerer", "Wizard"):
+        if klass in ("Bard", "Cleric", "Druid", "Sorcerer", "Warlock", "Wizard"):
             actual_level += caster_level
         elif klass in ("Artificer", "Paladin", "Ranger"):
             actual_level += ceil(caster_level / 2)
