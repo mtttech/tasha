@@ -1,19 +1,19 @@
 from dataclasses import asdict
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Iterable, Tuple
 
 from simple_term_menu import TerminalMenu
 import toml
 
 from actor import CharacterSheet, NonPlayerCharacter
 from attributes import Attributes, Score, generate_attributes, get_modifier
-from exceptions import NoSelectionError, RequiredLimitError
+from exceptions import NoSelectionError, SelectionLimitError
 from system import SystemResourceDocument
 
 
 __author__ = "Marcus T Taylor"
 __email__ = "mtaylor9754@hotmail.com"
-__version__ = "0.5.2"
+__version__ = "0.5.3"
 
 
 oSheet = CharacterSheet()
@@ -28,7 +28,33 @@ if not character_dir.exists():
     print("character save directory created.")
 
 
+class TashaMultiMenu(TerminalMenu):
+    def __init__(self, options: Iterable[str], message: str) -> None:
+        super().__init__(
+            options,
+            clear_screen=True,
+            multi_select=True,
+            multi_select_select_on_accept=False,
+            multi_select_empty_ok=True,
+            raise_error_on_interrupt=True,
+            status_bar=message,
+            title=f"  Tasha {__version__}\n  {message}\n",
+        )
+
+
+class TashaSingleMenu(TerminalMenu):
+    def __init__(self, options: Iterable[str], message: str) -> None:
+        super().__init__(
+            options,
+            clear_screen=True,
+            raise_error_on_interrupt=True,
+            status_bar=message,
+            title=f"  Tasha {__version__}\n  {message}\n",
+        )
+
+
 def attribute_assign_menu(rolls: List[str]) -> Dict[str, Dict[str, int]]:
+    """Prompt for assigning the six character attributes."""
     attributes = [
         "Strength",
         "Dexterity",
@@ -39,7 +65,9 @@ def attribute_assign_menu(rolls: List[str]) -> Dict[str, Dict[str, int]]:
     ]
     assigned_attributes = dict()
     for attribute in attributes:
-        score = single_select_menu(rolls, f"Attribute -> {attribute}")
+        score = single_select_menu(
+            rolls, f"Please assign a value to your '{attribute}' attribute."
+        )
         attr_pair = asdict(Score(attribute, int(score)))
         del attr_pair["attribute"]
         del attr_pair["bonus"]
@@ -72,32 +100,35 @@ def attribute_assign_menu(rolls: List[str]) -> Dict[str, Dict[str, int]]:
 
 
 def attribute_generate_menu() -> Dict[str, Dict[str, int]]:
+    """Prompt for randomly generating the six attributes."""
     while True:
         threshold_range = [str(t) for t in list(range(60, 91))]
-        threshold = single_select_menu(threshold_range, "Attribute Threshold")
+        threshold = single_select_menu(
+            threshold_range, "Please select your attribute threshold."
+        )
         rolls = [str(n) for n in generate_attributes(int(threshold))]
-        if not confirm_yesno_menu("Are these scores acceptable? " + " | ".join(rolls)):
+        if not confirm_yesno_menu(
+            "Are these scores acceptable: {}?".format(", ".join(rolls))
+        ):
             continue
         else:
             return attribute_assign_menu(rolls)
 
 
 def confirm_upgrade_menu() -> int | Tuple[int, ...] | None:
-    menu = TerminalMenu(
+    upgrade_menu = TashaSingleMenu(
         ["Attribute", "Feat"],
-        clear_screen=True,
-        title="Ability Score Improvement Upgrade",
+        "Ability Score Improvement Upgrade",
     )
-    return menu.show()
+    return upgrade_menu.show()
 
 
 def confirm_yesno_menu(message: str) -> bool:
-    menu = TerminalMenu(
+    yesno_menu = TashaSingleMenu(
         ["No", "Yes"],
-        clear_screen=True,
-        title=message,
+        message,
     )
-    if menu.show() != 0:
+    if yesno_menu.show() != 0:
         return True
     return False
 
@@ -113,32 +144,25 @@ def hit_dice_menu(size: str) -> int:
 
 
 def multi_select_menu(
-    allotted_options: list, title: str, required_num_of_selections: int = 0
+    allotted_options: list, message: str, required_num_of_selections: int = 0
 ) -> Tuple[str, ...] | None:
     while True:
-        menu = TerminalMenu(
+        menu = TashaMultiMenu(
             allotted_options,
-            clear_screen=True,
-            multi_select=True,
-            multi_select_select_on_accept=False,
-            multi_select_empty_ok=True,
-            title=(
-                f"  Tasha {__version__}\n  Please select {title} ({required_num_of_selections})\n"
+            (
+                f"{message} ({required_num_of_selections})\n"
                 if required_num_of_selections != 0
-                else f"  Tasha {__version__}\n  Please select {title}\n"
+                else f"{message}\n"
             ),
         )
         menu.show()
         menu_selections = menu.chosen_menu_entries
         if required_num_of_selections != 0:
-            if (
-                len(menu_selections)  # pyright: ignore[reportArgumentType]
-                != required_num_of_selections
-            ):
-                raise RequiredLimitError  # Less selections than required.
+            if len(menu_selections) != required_num_of_selections:  # pyright: ignore
+                raise SelectionLimitError  # Less selections than required.
 
         try:
-            if len(menu_selections) == 0:  # pyright: ignore[reportArgumentType]
+            if len(menu_selections) == 0:  # pyright: ignore
                 raise NoSelectionError  # No selections made.
         except TypeError:
             return tuple()
@@ -171,60 +195,79 @@ def setArcanumSpells(
 
 
 def single_select_menu(allotted_options: list, title: str) -> str:
-    menu = TerminalMenu(
+    select_menu = TashaSingleMenu(
         allotted_options,
-        clear_screen=True,
-        title=f"  Tasha {__version__}\n  Please select {title}\n",
+        title,
     )
-    return allotted_options[
-        menu.show()
-    ]  # pyright: ignore[reportArgumentType, reportCallIssue]
+    return allotted_options[select_menu.show()]  # pyright: ignore
 
 
-def spellcasting_select_menu(klass: str, level: int) -> Dict[str, Any]:
-    """Prompt for selecting character spells."""
-    # Get the total number of known/prepared spells.
+def spellcasting_select_menu(klass: str, class_level: int) -> Dict[str, Any]:
+    """Prompt for selecting character spellcasting features."""
     allotted_spell_total = oSRD.getSpellTotal(
         klass,
-        level,
+        class_level,
         get_modifier(oNPC.getCasterAttribute(klass)),
     )
-    # Set the selection counter.
-    selection_counter = allotted_spell_total
-    # Grab a listing of spells the player can pick from.
-    available_selections = oSRD.getSpellsByClass(klass, level)
+    spell_selection_counter = allotted_spell_total
+    prepared_spells = list()
 
-    selected_spells = list()
-    for _ in range(0, allotted_spell_total):
-        spell = single_select_menu(
-            available_selections, f"Choose a known/prepared spell ({selection_counter})"
-        )
-        selected_spells.append(spell)
-        available_selections.remove(spell)
-        # Adjust warlock Arcanum spell selections, if warlock.
-        if klass == "Warlock":
-            available_selections = setArcanumSpells(
-                selected_spells, available_selections
+    while len(prepared_spells) < allotted_spell_total:
+        spell_levels = [
+            str(l + 1)
+            for l, _ in enumerate(oSRD.getSpellSlotsByClass(klass, class_level)[1:])
+        ]
+        main_menu = TashaSingleMenu(spell_levels, "Spell Level Menu")
+        main_menu_sel = main_menu.show()
+        chosen_spell_level = int(spell_levels[main_menu_sel])  # pyright: ignore
+
+        chosen_spell = None
+        while chosen_spell is None:
+            magic_spells = [
+                s
+                for s in oSRD.getSpellsByLevel(klass, chosen_spell_level)
+                if s not in prepared_spells
+            ]
+            spell_menu = TashaSingleMenu(
+                magic_spells,
+                f"Level {chosen_spell_level} Spells ({spell_selection_counter})",
             )
-        selection_counter -= 1
+            spell_menu_sel = spell_menu.show()
 
-    return {klass: selected_spells}
+            chosen_spell = magic_spells[spell_menu_sel]  # pyright: ignore
+            prepared_spells.append(chosen_spell)
+            spell_selection_counter -= 1
+
+    return {klass: prepared_spells}
 
 
 def main() -> None:
     oSheet.set("name", name_entry())
-    oSheet.set("alignment", single_select_menu(oSRD.getListAlignments(), "alignment"))
-    oSheet.set("type_", single_select_menu(oSRD.getListTypes(), "type"))
-    oSheet.set("gender", single_select_menu(["Female", "Male"], "gender"))
+    oSheet.set(
+        "alignment",
+        single_select_menu(oSRD.getListAlignments(), "Please select your alignment."),
+    )
+    oSheet.set(
+        "type_",
+        single_select_menu(oSRD.getListTypes(), "Please select your monster type."),
+    )
+    oSheet.set(
+        "gender", single_select_menu(["Female", "Male"], "Please select your gender.")
+    )
     oSheet.set("attributes", attribute_generate_menu())
 
-    size = single_select_menu(oSRD.getListSizes(), "size")
+    size = single_select_menu(oSRD.getListSizes(), "Please select your size.")
     oSheet.set("size", size)
     oSheet.set("hit_die", oSRD.getHitDieBySize(size))
     oSheet.set("hit_points", hit_dice_menu(size))
 
-    oSheet.set("senses", multi_select_menu(oSRD.getListSenses(), "senses"))
-    oSheet.set("features", multi_select_menu(oSRD.getListFeatures(), "feature"))
+    oSheet.set(
+        "senses", multi_select_menu(oSRD.getListSenses(), "Please select your senses.")
+    )
+    oSheet.set(
+        "features",
+        multi_select_menu(oSRD.getListFeatures(), "Please select your features."),
+    )
     savingthrows = multi_select_menu(
         [
             "Strength",
@@ -234,33 +277,43 @@ def main() -> None:
             "Wisdom",
             "Charisma",
         ],
-        "Saving Throw Proficiency",
+        "Please select your proficient saving throws.",
     )
     oSheet.set(
         "savingthrows", list(savingthrows)  # pyright: ignore[reportArgumentType]
     )
 
-    armors = multi_select_menu(oSRD.getListArmors(), "armor proficiency")
+    armors = multi_select_menu(
+        oSRD.getListArmors(), "Please select your armor proficiencies."
+    )
     oSheet.set("armors", list(armors))  # pyright: ignore[reportArgumentType]
 
-    tools = multi_select_menu(oSRD.getListTools(), "tool proficiency")
+    tools = multi_select_menu(
+        oSRD.getListTools(), "Please select your tool proficiencies."
+    )
     oSheet.set("tools", list(tools))  # pyright: ignore[reportArgumentType]
 
-    weapons = multi_select_menu(oSRD.getListWeapons(), "weapon proficiency")
+    weapons = multi_select_menu(
+        oSRD.getListWeapons(), "Please select your weapon proficiencies."
+    )
     oSheet.set("weapons", list(weapons))  # pyright: ignore[reportArgumentType]
 
-    skills = multi_select_menu(oSRD.getListSkills(), "skill")
+    skills = multi_select_menu(
+        oSRD.getListSkills(), "Please select your proficient skills."
+    )
     oSheet.set("skills", list(skills))  # pyright: ignore[reportArgumentType]
 
-    languages = multi_select_menu(oSRD.getListLanguages(), "language")
+    languages = multi_select_menu(
+        oSRD.getListLanguages(), "Please select your known languages."
+    )
     oSheet.set("languages", list(languages))  # pyright: ignore[reportArgumentType]
 
     if confirm_yesno_menu("Are you a spellcaster?"):
         spellcaster_klass = single_select_menu(
-            oSRD.getListClasses(), "spellcasting class"
+            oSRD.getListClasses(), "Please select your spellcasting class."
         )
         caster_level = int(
-            single_select_menu(level_range, "What is your caster level?")
+            single_select_menu(level_range, "What is your spellcaster level?")
         )
         oSheet.set(
             "spell_slots", oSRD.getSpellSlotsByClass(spellcaster_klass, caster_level)
