@@ -11,7 +11,6 @@
 ### Dependencies
 
 * [dice](https://github.com/borntyping/python-dice)
-* [prompt_toolkit](https://github.com/prompt-toolkit/python-prompt-toolkit)
 * [toml](https://github.com/uiri/toml)
 
 ### Installation & Usage
@@ -31,3 +30,5 @@ cd Tasha
 #### Usage
 
 Run tasha by running the following command ```python tasha.py```.
+
+Program functionality has been severely hampered in the meantime.
