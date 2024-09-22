@@ -1,3 +1,2 @@
 dice==4.0.0
-simple-term-menu==1.6.4
 toml==0.10.2

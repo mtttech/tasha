@@ -1,35 +1,45 @@
 from dataclasses import dataclass, field
 from math import ceil
-from typing import Any, Dict, List, NoReturn
+from typing import Any, Dict, List, Literal, NoReturn, Tuple, Union
 
 
 @dataclass
 class CharacterSheet:
     alignment: str = field(default="")
+    allotted_asi: int = field(default=0)
+    allotted_skills: int = field(default=0)
     armors: list = field(default_factory=list)
     attributes: dict = field(default_factory=dict)
+    background: str = field(default="Soldier")
+    bonus: dict = field(default_factory=dict)
     cantrips: list = field(default_factory=list)
+    classes: dict = field(default_factory=dict)
+    equipment: list = field(default_factory=list)
+    feats: list = field(default_factory=list)
     features: list = field(default_factory=list)
     gender: str = field(default="")
-    hit_die: int = field(default=0)
-    hit_points: int = field(default=0)
+    gold: int = field(default=0)
+    hit_points: int = field(init=False)
     initiative: int = field(default=0)
     languages: list = field(default_factory=list)
     level: int = field(default=1)
     name: str = field(default="")
     proficiency_bonus: int = field(default=0)
+    race: str = field(default="")
+    resistances: list = field(default_factory=list)
     savingthrows: list = field(default_factory=list)
-    senses: list = field(default_factory=list)
-    size: str = field(default="")
+    size: str = field(default="Medium")
     skills: list = field(default_factory=list)
     speed: int = field(default=30)
     spell_slots: list = field(default_factory=list)
     spellcasting: dict = field(default_factory=dict)
     tools: list = field(default_factory=list)
-    type_: str = field(default="")
+    traits: list = field(default_factory=list)
+    version: str = field(default="")
     weapons: list = field(default_factory=list)
 
     def __post_init__(self) -> None:
+        self.hit_points = self.roll_hit_points()
         self.proficiency_bonus = ceil(self.level / 4) + 1
         try:
             self.initiative = self.attributes["Dexterity"]["modifier"]
@@ -39,28 +49,64 @@ class CharacterSheet:
     def reset(self) -> None:
         """Resets character sheet values."""
         self.alignment = ""
+        self.allotted_asi = 0
+        self.allotted_skills = 0
         self.armors = list()
         self.attributes = dict()
+        self.background = "Soldier"
+        self.bonus = dict()
         self.cantrips = list()
+        self.classes = dict()
+        self.equipment = list()
+        self.feats = list()
         self.features = list()
         self.gender = ""
-        self.hit_die = 0
-        self.hit_points = 0
+        self.gold = 0
         self.initiative = 0
         self.languages = list()
         self.level = 1
         self.name = ""
         self.proficiency_bonus = 0
+        self.race = ""
+        self.resistances = list()
         self.savingthrows = list()
-        self.senses = list()
-        self.size = ""
+        self.size = "Medium"
         self.skills = list()
         self.speed = 30
         self.spell_slots = list()
         self.spellcasting = dict()
         self.tools = list()
-        self.type_ = ""
+        self.traits = list()
         self.weapons = list()
+
+    def roll_hit_points(self) -> int:
+        """Calculates the character's total hit points."""
+        try:
+            modifier = self.attributes["Constitution"]["modifier"]
+        except KeyError:
+            modifier = 0
+
+        total_hit_points = 0
+        for class_slot, klass in enumerate(tuple(self.classes.keys())):
+            max_hit_die = self.classes[klass]["hit_die"]
+            avg_hit_die = ceil(max_hit_die / 2) + 1
+            if class_slot == 0:
+                total_hit_points = max_hit_die + modifier
+            else:
+                total_hit_points += avg_hit_die + modifier
+
+            if self.classes[klass]["level"] > 1:
+                total_hit_points += sum(
+                    [
+                        avg_hit_die + modifier
+                        for _ in range(1, self.classes[klass]["level"])
+                    ]
+                )
+
+        try:
+            return total_hit_points
+        except UnboundLocalError:
+            return 0
 
     def __setitem__(self, name: str, value: Any) -> None:
         key_value = eval(f"self.{name}")
@@ -98,6 +144,35 @@ class CharacterSheet:
 class NonPlayerCharacter:
     character_sheet: CharacterSheet
 
+    def canSubclass(self, klass: str) -> Union[Literal[False], Literal[True]]:
+        """Returns False if character cannot select a subclass. True otherwise."""
+        if (
+            klass
+            in (
+                "Artificer",
+                "Barbarian",
+                "Bard",
+                "Fighter",
+                "Monk",
+                "Paladin",
+                "Ranger",
+                "Rogue",
+            )
+            and self.getClassLevel(klass) < 3
+        ):
+            return False
+        if klass in ("Cleric", "Druid", "Wizard") and self.getClassLevel(klass) < 2:
+            return False
+        return True
+
+    def getAllottedAsi(self) -> int:
+        """Returns the character's allotted ability score improvement total."""
+        return self.character_sheet.allotted_asi
+
+    def getAllottedSkills(self) -> int:
+        """Returns the character's allotted skill total."""
+        return self.character_sheet.allotted_skills
+
     def getAttributes(self) -> Dict[str, Dict[str, Any]]:
         """Returns a dictionary of all attributes."""
         return self.character_sheet.attributes
@@ -110,7 +185,7 @@ class NonPlayerCharacter:
         """Returns the score of a specified attribute."""
         return self.character_sheet.attributes[attribute]["score"]
 
-    def getCasterAttribute(self, klass: str) -> int | NoReturn:
+    def getCasterAttribute(self, klass: str, subklass: str) -> int | NoReturn:
         """Returns caster's primary attribute score by class/subclass."""
         if klass in (
             "Cleric",
@@ -127,10 +202,21 @@ class NonPlayerCharacter:
         ):
             return self.getAttributeScore("Charisma")
 
-        if klass in ("Artificer", "Wizard"):
+        if klass in ("Artificer", "Wizard") or subklass in (
+            "Arcane Trickster",
+            "Eldritch Knight",
+        ):
             return self.getAttributeScore("Intelligence")
 
         raise ValueError("Invalid spellcaster class specified.")
+
+    def getClassLevel(self, klass: str) -> int:
+        """Returns the specified level by klass."""
+        return self.character_sheet.classes[klass]["level"]
+
+    def getClassSubclass(self, klass: str) -> str:
+        """Returns the specified subclass by klass."""
+        return self.character_sheet.classes[klass]["subclass"]
 
     def getMyArmors(self) -> List[str]:
         """Returns the character's armor proficiency list."""
@@ -140,13 +226,21 @@ class NonPlayerCharacter:
         """Returns the character's alignment."""
         return self.character_sheet.alignment
 
+    def getMyBackground(self):
+        """Returns the character's background."""
+        return self.character_sheet.background
+
+    def getMyClasses(self) -> Tuple[str, ...]:
+        """Returns all the character's class names."""
+        return tuple(self.character_sheet.classes.keys())
+
+    def getMyFeats(self) -> List[str]:
+        """Returns the character's feat list."""
+        return self.character_sheet.feats
+
     def getMyGender(self) -> str:
         """Returns the character's gender."""
         return self.character_sheet.gender
-
-    def getMyHitDie(self) -> int:
-        """Returns the character's hit die."""
-        return self.character_sheet.hit_die
 
     def getMyLanguages(self):
         """Returns the character's languages."""
@@ -155,6 +249,14 @@ class NonPlayerCharacter:
     def getMyName(self) -> str:
         """Returns the character's name."""
         return self.character_sheet.name
+
+    def getMyRace(self) -> str:
+        """Returns the character's race."""
+        return self.character_sheet.race
+
+    def getMyRawClasses(self) -> Dict[str, Dict[str, Any]]:
+        """Returns all the character's class info."""
+        return self.character_sheet.classes
 
     def getMySavingThrows(self) -> List[str]:
         """Returns the character's saving throw list."""
@@ -168,6 +270,17 @@ class NonPlayerCharacter:
         """Returns the character's speed."""
         return self.character_sheet.speed
 
+    def getMySubclasses(self) -> List[str]:
+        """Returns all the character's selected subclasses."""
+        return [v["subclass"] for v in tuple(self.character_sheet.classes.values())]
+
+    def getMySubrace(self) -> str:
+        """Returns the character's subrace, if applicable."""
+        race = self.character_sheet.race.split(", ")
+        if len(race) > 1:
+            return race[1]
+        return ""
+
     def getMyTools(self) -> List[str]:
         """Returns the character's tool proficiency list."""
         return self.character_sheet.tools
@@ -176,6 +289,74 @@ class NonPlayerCharacter:
         """Returns the character's weapon proficiency list."""
         return self.character_sheet.weapons
 
+    def getSkillTotal(self) -> int:
+        """Returns the total number of allotted skills by class."""
+        klass = self.getMyClasses()[0]
+        if klass in (
+            "Bard",
+            "Ranger",
+        ):
+            skill_total = 3
+        elif klass in ("Rogue",):
+            skill_total = 4
+        else:
+            skill_total = 2
+        return skill_total
+
     def getSpellSlots(self) -> List[str]:
         """Returns the character's spell slots."""
         return self.character_sheet.spell_slots
+
+    def getTotalLevel(self) -> int:
+        """Returns the total level for all character classes."""
+        return sum([v["level"] for v in tuple(self.character_sheet.classes.values())])
+
+    def getUpgradeableAttributes(self, bonus: int) -> List[str]:
+        """Returns a list of all upgradeable attributes."""
+        upgradeable_attributes = list()
+        for attribute, values in self.getAttributes().items():
+            if (values["score"] + bonus) > 20:
+                continue
+            upgradeable_attributes.append(attribute)
+        return upgradeable_attributes
+
+    def hasAttributes(self) -> bool:
+        """Returns True if attributes have been set. False otherwise."""
+        return len(self.getAttributes()) > 0
+
+    def hasClass(self, klass: str) -> bool:
+        """Returns True if character is a member of klass. False otherwise."""
+        return klass in self.getMyClasses()
+
+    def hasClasses(self) -> bool:
+        """Returns True if character has classes set. False otherwise."""
+        return len(self.getMyClasses()) > 0
+
+    def hasRace(self) -> bool:
+        """Returns True if character has a set race. False otherwise."""
+        return self.getMyRace() != ""
+
+    def isSpellcaster(self) -> bool:
+        """Returns True if the character is a spellcaster. False otherwise."""
+        if any(
+            klass in self.getMyClasses()
+            for klass in (
+                "Artificer",
+                "Bard",
+                "Cleric",
+                "Druid",
+                "Paladin",
+                "Sorcerer",
+                "Ranger",
+                "Warlock",
+                "Wizard",
+            )
+        ) or any(
+            subklass in self.getMySubclasses()
+            for subklass in (
+                "Arcane Trickster",
+                "Eldritch Knight",
+            )
+        ):
+            return True
+        return False

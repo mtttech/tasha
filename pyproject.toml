@@ -4,10 +4,9 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "tasha"
-version = "0.5.2"
+version = "0.6.0"
 dependencies = [
     "dice",
-    "simple-term-menu",
     "toml",
 ]
 requires-python = ">=3.8"

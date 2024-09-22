@@ -1,11 +1,17 @@
 # Tasha
 
+**Tasha** is a tool for creating 5e Dungeons & Dragons characters.
+
+### Supported rulebooks
+
+  * [*Player's Handbook 2024*](https://www.amazon.com/Dungeons-Dragons-Players-Handbook-Rulebook/dp/0786969512/ref=sr_1_1?crid=Q5CVDF9LEKCR&dib=eyJ2IjoiMSJ9.KggBZNS4k50B6gIGZykwyAllHlDPYc0OKbcSPRUnOeaf7xarl1Qh75B-svm690jDc5Ubb8NE7-FQlF93zPqJ4nzpY9hKrLipiAh3VdIXeklwDRgL2xhQ4qlb6L5frqXVCqZ5F1owxNa8HJ0u-NuittVd-wUBE2oeEdJ71qed1yNp4NM-Xmo6BZeInTeROhQtepObqQHkIYTsFvWXlIEA_iVEtS8JKbZkLz0AxGnJY9U.zsuk-fEv2n0ZfuKE8fzhKVaVLpChNEwjNZm2S8lZZIk&dib_tag=se&keywords=players%2Bhandbook%2B5e%2B2024&qid=1727028562&sprefix=players%2Caps%2C149&sr=8-1&th=1)
+
 ## QUICKSTART
 
 ### Dependencies
 
 * [dice](https://github.com/borntyping/python-dice)
-* [simple-term-menu](https://github.com/IngoMeyer441/simple-term-menu)
+* [prompt_toolkit](https://github.com/prompt-toolkit/python-prompt-toolkit)
 * [toml](https://github.com/uiri/toml)
 
 ### Installation & Usage
@@ -16,18 +22,12 @@
 # Clone the repository.
 git clone https://github.com/mtttech/Tasha.git
 
-# Change into the cloned repo directory. 
+# Change into the cloned repo. 
 cd Tasha
 
-# Create your virtual environment and install the dependencies (if necessary).
+# Create your virtual environment and install the requirements (if necessary).
 ```
 
 #### Usage
 
-Run the following command ```python tasha.py``` to begin.
-
-When started, the program will run a series of prompts that construct your character.
-
-When generating attributes, you select a threshold value between 60-90. This will prompt the application to keep rolling the six ability scores until they total or exceed this value.
-
-Completed characters are saved as a TOML file, using the name of the character as its file name. They can be found in your ***$HOME/.config/tasha/characters*** directory.
+Run tasha by running the following command ```python tasha.py```.

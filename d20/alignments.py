@@ -9,6 +9,5 @@ alignments = {
         "Lawful Evil",
         "Lawful Neutral",
         "Lawful Good",
-        "Unaligned",
     ],
 }
