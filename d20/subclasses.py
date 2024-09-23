@@ -1129,125 +1129,6 @@ subclasses = {
             ],
             "weapons": [],
         },
-        # XGtE pg 31
-        "Samurai": {
-            "armors": [],
-            "features": {
-                3: ["Bonus Proficiency", "Fighting Spirit (5 temp. hp)"],
-                7: ["Elegant Courtier"],
-                10: ["Tireless Spirit, Fighting Spirit (10 temp. hp)"],
-                15: ["Rapid Strike", "Fighting Spirit (15 temp. hp)"],
-                18: ["Strength before Death"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        "School of Abjuration": {
-            "armors": [],
-            "features": {
-                2: ["Abjuration Savant", "Arcane Ward"],
-                6: ["Projected Ward"],
-                10: ["Improved Abjuration"],
-                14: ["Spell Resistance"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        "School of Conjuration": {
-            "armors": [],
-            "features": {
-                2: ["Conjuration Savant", "Minor Conjuration"],
-                6: ["Benign Transposition"],
-                10: ["Focused Conjuration"],
-                14: ["Durable Summons"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        "School of Divination": {
-            "armors": [],
-            "features": {
-                2: ["Divination Savant", "Portent"],
-                6: ["Expert Divination"],
-                10: ["The Third Eye"],
-                14: ["Greater Portent"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        "School of Enchantment": {
-            "armors": [],
-            "features": {
-                2: ["Enchantment Savant", "Hypnotic Gaze"],
-                6: ["Instinctive Charm"],
-                10: ["Split Enchantment"],
-                14: ["Alter Memories"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        "School of Evocation": {
-            "armors": [],
-            "features": {
-                2: ["Evocation Savant", "Sculpt Spells"],
-                6: ["Potent Cantrip"],
-                10: ["Empowered Evocation"],
-                14: ["Overchannel"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        "School of Illusion": {
-            "armors": [],
-            "features": {
-                2: ["Illusion Savant", "Improved Minor Illusion"],
-                6: ["Malleable Illusions"],
-                10: ["Illusory Self"],
-                14: ["Illusory Reality"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        "School of Necromancy": {
-            "armors": [],
-            "features": {
-                2: ["Necromancy Savant", "Grim Harvest"],
-                6: ["Undead Thralls"],
-                10: ["Inured to Undeath"],
-                14: ["Command Undead"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        "School of Transmutation": {
-            "armors": [],
-            "features": {
-                2: ["Transmutation Savant", "Minor Alchemy"],
-                6: ["Transmuter's Stone"],
-                10: ["Shapechanger"],
-                14: ["Master Transmuter"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
         # XGtE pg 47
         "Scout": {
             "armors": [],
@@ -1353,114 +1234,6 @@ subclasses = {
             "tools": [],
             "weapons": ["Martial"],
         },
-        "The Archfey": {
-            "armors": [],
-            "features": {
-                1: ["Expanded Spell List", "Fey Presence"],
-                6: ["Misty Escape"],
-                10: ["Beguiling Defenses"],
-                14: ["Dark Delerium"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        # XGtE pg 54
-        "The Celestial": {
-            "armors": [],
-            "features": {
-                1: ["Bonus Cantrips", "Expanded Spell List", "Healing Light"],
-                6: ["Radiant Soul"],
-                10: ["Celestial Resilience"],
-                14: ["Searing Vengeance"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        # TCoE pg 72
-        "The Fathomless": {
-            "armors": [],
-            "features": {
-                1: ["Expanded Spell List", "Tentacle of the Deep", "Gift of the Sea"],
-                6: ["Oceanic Soul", "Guardian Coil"],
-                10: ["Grasping Tentacles"],
-                14: ["Fathomless Plunge"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        "The Fiend": {
-            "armors": [],
-            "features": {
-                1: ["Dark One's Blessing", "Expanded Spell List"],
-                6: ["Dark One's Own Luck"],
-                10: ["Fiendish Resilience"],
-                14: ["Hurl Through Hell"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        # TCoE pg 73
-        "The Genie": {
-            "armors": [],
-            "features": {
-                1: ["Expanded Spell List", "Genie's Vessel"],
-                6: ["Elemental Gift"],
-                10: ["Sanctuary Vessel"],
-                14: ["Limited Wish"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        "The Great Old One": {
-            "armors": [],
-            "features": {
-                1: ["Awakened Mind", "Expanded Spell List"],
-                6: ["Entropic Ward"],
-                10: ["Thought Shield"],
-                14: ["Create Thrall"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        # XGtE pg 55
-        "The Hexblade": {
-            "armors": [],
-            "features": {
-                1: ["Expanded Spell List", "Hexblade's Curse", "Hex Warrior"],
-                6: ["Accursed Specter"],
-                10: ["Armor of Hexes"],
-                14: ["Master of Hexes"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        "The Undying": {
-            "armors": [],
-            "features": {
-                1: ["Expanded Spell List", "Among the Dead"],
-                6: ["Defy Death"],
-                10: ["Undying Nature"],
-                14: ["Indestructible Life"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
         "Thief": {
             "armors": [],
             "features": {
@@ -1488,21 +1261,6 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
-        # TCoE pg 34
-        "Twilight Domain": {
-            "armors": [],
-            "features": {
-                1: ["Vigilant Blessing"],
-                2: ["Channel Divinity - Twilight Sanctuary"],
-                6: ["Steps of Night"],
-                8: ["Divine Strike"],
-                17: ["Twilight Shroud"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
         "War Domain": {
             "armors": ["Heavy"],
             "features": {
@@ -1516,20 +1274,6 @@ subclasses = {
             "skills": [],
             "tools": [],
             "weapons": ["Martial"],
-        },
-        # XGtE pg 59
-        "War Magic": {
-            "armors": [],
-            "features": {
-                2: ["Arcane Deflection", "Tactical Wit"],
-                6: ["Power Surge"],
-                10: ["Durable Magic"],
-                14: ["Deflecting Shroud"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
         },
         # TCoE pg 49
         "Way of Mercy": {
@@ -1562,34 +1306,6 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
-        # TCoE pg 50
-        "Way of the Astral Self": {
-            "armors": [],
-            "features": {
-                3: ["Arms of the Astral Self"],
-                6: ["Visage of the Astral Self"],
-                11: ["Body of the Astral Self"],
-                17: ["Awakened Astral Self"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        # XGtE pg 33
-        "Way of the Drunken Master": {
-            "armors": [],
-            "features": {
-                3: ["Bonus Proficiencies", "Drunken Technique"],
-                6: ["Tipsy Sway"],
-                11: ["Drunkard's Luck"],
-                17: ["Intoxicated Frenzy"],
-            },
-            "languages": [],
-            "skills": ["Performance"],
-            "tools": [],
-            "weapons": [],
-        },
         "Way of the Four Elements": {
             "armors": [],
             "features": {
@@ -1618,29 +1334,6 @@ subclasses = {
                     "Breath of Winter",
                     "River of Hungry Flame",
                     "Wave of Rolling Earth",
-                ],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        # XGtE pg 34
-        "Way of the Kensei": {
-            "armors": [],
-            "features": {
-                3: ["Path of the Kensei (2 weapons)"],
-                6: [
-                    "One with the Blade",
-                    "Path of the Kensei (3 weapons)",
-                ],
-                11: [
-                    "Sharpen the Blade",
-                    "Path of the Kensei (4 weapons)",
-                ],
-                17: [
-                    "Unerring Accuracy",
-                    "Path of the Kensei (5 weapons)",
                 ],
             },
             "languages": [],
@@ -1695,6 +1388,112 @@ subclasses = {
                 6: ["Bend Luck"],
                 14: ["Controlled Chaos"],
                 18: ["Spell Bombardment"],
+            },
+            "languages": [],
+            "skills": [],
+            "tools": [],
+            "weapons": [],
+        },
+        # Warlock Subclasses
+        "Archfey Patron": {
+            "armors": [],
+            "features": {
+                3: ["Archfey Spells", "Steps of the Fey"],
+                6: ["Misty Escape"],
+                10: ["Beguiling Defenses"],
+                14: ["Bewitching Magic"],
+            },
+            "languages": [],
+            "skills": [],
+            "tools": [],
+            "weapons": [],
+        },
+        "Celestial Patron": {
+            "armors": [],
+            "features": {
+                3: ["Celestial Spells", "Healing Light"],
+                6: ["Radiant Soul"],
+                10: ["Celestial Resilience"],
+                14: ["Searing Vengeance"],
+            },
+            "languages": [],
+            "skills": [],
+            "tools": [],
+            "weapons": [],
+        },
+        "Fiend Patron": {
+            "armors": [],
+            "features": {
+                3: ["Dark One's Blessing", "Fiend Spells"],
+                6: ["Dark One's Own Luck"],
+                10: ["Fiendish Resilience"],
+                14: ["Hurl Through Hell"],
+            },
+            "languages": [],
+            "skills": [],
+            "tools": [],
+            "weapons": [],
+        },
+        "Great Old One Patron": {
+            "armors": [],
+            "features": {
+                3: ["Awakened Mind", "Great Old One Spells", "Psychic Spells"],
+                6: ["Clairvoyant Combatant"],
+                10: ["Eldritch Hex", "Thought Shield"],
+                14: ["Create Thrall"],
+            },
+            "languages": [],
+            "skills": [],
+            "tools": [],
+            "weapons": [],
+        },
+        # Wizard Subclasses
+        "Abjurer": {
+            "armors": [],
+            "features": {
+                3: ["Abjuration Savant", "Arcane Ward"],
+                6: ["Projected Ward"],
+                10: ["Spell Breaker"],
+                14: ["Spell Resistance"],
+            },
+            "languages": [],
+            "skills": [],
+            "tools": [],
+            "weapons": [],
+        },
+        "Diviner": {
+            "armors": [],
+            "features": {
+                3: ["Divination Savant", "Portent"],
+                6: ["Expert Divination"],
+                10: ["The Third Eye"],
+                14: ["Greater Portent"],
+            },
+            "languages": [],
+            "skills": [],
+            "tools": [],
+            "weapons": [],
+        },
+        "Evoker": {
+            "armors": [],
+            "features": {
+                3: ["Evocation Savant", "Potent Cantrip"],
+                6: ["Sculpt Spells"],
+                10: ["Empowered Evocation"],
+                14: ["Overchannel"],
+            },
+            "languages": [],
+            "skills": [],
+            "tools": [],
+            "weapons": [],
+        },
+        "Illusionist": {
+            "armors": [],
+            "features": {
+                3: ["Illusion Savant", "Improved Illusions"],
+                6: ["Phantasmal Creatures"],
+                10: ["Illusory Self"],
+                14: ["Illusory Reality"],
             },
             "languages": [],
             "skills": [],
