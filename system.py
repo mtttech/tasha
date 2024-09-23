@@ -1,24 +1,7 @@
-from collections.abc import Generator
-from enum import Enum
 import itertools
 from typing import Any, Dict, List, Tuple, Union
 
 from d20 import srd5e
-
-
-class _SRDBuilder(Enum):
-    alignments: object = srd5e["alignments"]
-    backgrounds: object = srd5e["backgrounds"]
-    classes: object = srd5e["classes"]
-    feats: object = srd5e["feats"]
-    languages: object = srd5e["languages"]
-    lineages: object = srd5e["lineages"]
-    multiclasses: object = srd5e["multiclasses"]
-    proficiencies: object = srd5e["proficiencies"]
-    species: object = srd5e["species"]
-    skills: object = srd5e["skills"]
-    spells: object = srd5e["spells"]
-    subclasses: object = srd5e["subclasses"]
 
 
 class SystemResourceDocument:
@@ -39,18 +22,9 @@ class SystemResourceDocument:
                     "spells",
                     "subclasses",
                 ],
-                [d for d in self._load_definitions()],
+                list(srd5e.values()),
             )
         )
-
-    @staticmethod
-    def _load_definitions() -> Generator:
-        """Loads dnd SRD definitions."""
-        for definition in _SRDBuilder:
-            value = definition.value
-            if isinstance(value, list):
-                value = sorted(value)
-            yield value
 
     def calculateAllottedAsi(self, klasses: Dict[str, Any]) -> int:
         """Returns the number of allotted ability score improvements."""
@@ -63,50 +37,6 @@ class SystemResourceDocument:
                 if "Ability Score Improvement" in class_features[level]:
                     allotted_asi += 1
         return allotted_asi
-
-    def getAnthropometryBase(self, race: str, subrace: str = "") -> Tuple[str, str]:
-        """get the base height/weight metrics using character's race."""
-        base_height = self.getAnthropometryBaseHeight(race)
-        base_weight = self.getAnthropometryBaseWeight(race)
-        if base_height is None or base_weight is None:
-            base_height = self.getAnthropometryBaseHeight(subrace)
-            base_weight = self.getAnthropometryBaseWeight(subrace)
-        if base_height is None or base_weight is None:
-            raise ValueError("No racial/subracial base metric data found.")
-        return (base_height, base_weight)
-
-    def getAnthropometryBaseHeight(self, race: str) -> Union[str, None]:
-        """Returns the base height values by race."""
-        try:
-            return self.srd["metrics"][race]["height"]
-        except KeyError:
-            return None
-
-    def getAnthropometryBaseWeight(self, race: str) -> Union[str, None]:
-        """Returns the base weight values by race."""
-        try:
-            return self.srd["metrics"][race]["weight"]
-        except KeyError:
-            return None
-
-    def getAnthropometryDominantSex(self, race: str) -> str:
-        """Returns the 'dominant' gender by race, if applicable."""
-        try:
-            return self.srd["metrics"][race]["dominant"]
-        except KeyError:
-            return ""
-
-    def getAnthropometrySource(self, race: str, subrace: str = "") -> str:
-        """Returns the name of the race or subrace the metric data belongs to."""
-        if (result := self.getMetricsByRace(race)) is None:
-            result = self.getMetricsByRace(subrace)
-            if result is not None:
-                return subrace
-            else:
-                raise ValueError(
-                    "No racial/subracial metric data source could be determined."
-                )
-        return race
 
     def getClassSkills(
         self, klass: str, exclusions: Union[List[str], None] = None

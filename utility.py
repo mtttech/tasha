@@ -1,17 +1,20 @@
 from typing import Dict, List
 
 
-def stdin(message: str, options: List[str], loop_count=1) -> List[str]:
+def stdin(message: str, options: List[str] | int, loop_count=1) -> List[str]:
     """Used to captured user input."""
 
     def expand_options() -> Dict[int, str]:
         expanded_options = dict()
-        for index, option in enumerate(options):
+        for index, option in enumerate(options): # pyright: ignore
             expanded_options[index + 1] = option
         return expanded_options
 
+    if isinstance(options, int):
+        options = list(str(n + 1) for n in range(options))
+
     selections = list()
-    for _ in range(1, loop_count):
+    for _ in range(0, loop_count):
         expanded_options = expand_options()
         if len(expanded_options) == loop_count:
             return list(expanded_options.values())
@@ -29,7 +32,7 @@ def stdin(message: str, options: List[str], loop_count=1) -> List[str]:
             chosen_option = expanded_options[int(user_input)]
             selections.append(chosen_option)
             options.remove(chosen_option)
-        except (KeyError, TypeError):
+        except (KeyError, TypeError, ValueError):
             return stdin(message, options)
 
     return selections

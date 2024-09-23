@@ -1090,7 +1090,7 @@ def step1():
     step_one_complete = False
     while not step_one_complete:
         klass = utility.stdin("What class are you?", oSRD.getClasses())
-        level = input("What is your level? ")
+        level = utility.stdin("What is your level?", 20)
         print(klass, level)
         step_one_complete = True
 
@@ -1119,7 +1119,7 @@ def step2():
         language = utility.stdin(
             "Choose three languages.", oSRD.getStandardLanguages(), loop_count=3
         )
-        print(background, species, skills, language)
+        print(background, species, feat, skills, language)
         step_two_complete = True
 
 
