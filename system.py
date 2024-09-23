@@ -224,6 +224,10 @@ class SystemResourceDocument:
         """Returns a list of all applicable backgrounds."""
         return list(self.srd["backgrounds"].keys())
 
+    def getSkillsByBackground(self, background: str) -> List[str]:
+        """Returns a list of skills by background."""
+        return self.srd["backgrounds"][background]["skills"]
+
     def getListCantrips(
         self, klass: str, subklass: Union[str, None] = None
     ) -> List[str]:
@@ -240,6 +244,14 @@ class SystemResourceDocument:
         if isinstance(exclusions, list):
             return [f for f in feat_list if f not in exclusions]
         return feat_list
+
+    def getFeatsByCategory(self, category: str) -> List[str]:
+        """Returns a list of all applicable feats."""
+        requested_feats = list()
+        for feat, params in self.srd["feats"].items():
+            if params["category"] == category:
+                requested_feats.append(feat)
+        return requested_feats
 
     def getRareLanguages(self, excl: Union[List[str], None] = None) -> List[str]:
         """Returns all rare languages (minus exclusions, if applicable)."""

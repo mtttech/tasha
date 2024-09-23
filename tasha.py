@@ -1105,20 +1105,26 @@ def step2():
         ability_scores = input("Choose background ability bonus array.")
         # 2/1
         # 1/1/1s
-        feat = input("Choose a feat from your background. ")
-        for _ in range(2):
-            skills = input("Choose two skills from your background. ")
+        feat = utility.stdin(
+            "Choose a feat from your background. ", oSRD.getFeatsByCategory("Origin")
+        )
+        skills = utility.stdin(
+            "Choose two skills from your background.",
+            oSRD.getSkillsByBackground(background[0]),
+            loop_count=2,
+        )
         tool = input("Choose a tool proficiency from your background. ")
         # Choose equipment
         species = utility.stdin("What is your species?", oSRD.getSpecies())
-        for _ in range(3):
-            language = input("Choose three languages. ")
-        print(background, species)
+        language = utility.stdin(
+            "Choose three languages.", oSRD.getStandardLanguages(), loop_count=3
+        )
+        print(background, species, skills, language)
         step_two_complete = True
 
 
 def step3():
-    # Generate assign ability scores
+    # Generate/Assign ability scores
     pass
 
 

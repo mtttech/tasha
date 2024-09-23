@@ -17,7 +17,6 @@ languages = {
             "Dwarvish",
             "Elvish",
             "Giant",
-            "Gith",
             "Gnomish",
             "Goblin",
             "Halfling",
