@@ -81,10 +81,10 @@ backgrounds = {
             "feats": ["Alert"],
             "skills": ["Athletics", "Perception"],
             "tools": [
-                "Gaming set - Dice set",
-                "Gaming set - Dragonchess set",
-                "Gaming set - Playing card set",
-                "Gaming set - Three-Dragon Ante set",
+                "Gaming Set - Dice Set",
+                "Gaming Set - Dragonchess Set",
+                "Gaming Set - Playing card Set",
+                "Gaming Set - Three-Dragon Ante Set",
             ],
         },
         "Guide": {
@@ -112,10 +112,10 @@ backgrounds = {
             "feats": ["Skilled"],
             "skills": ["History", "Persuasion"],
             "tools": [
-                "Gaming set - Dice set",
-                "Gaming set - Dragonchess set",
-                "Gaming set - Playing card set",
-                "Gaming set - Three-Dragon Ante set",
+                "Gaming Set - Dice Set",
+                "Gaming Set - Dragonchess Set",
+                "Gaming Set - Playing card Set",
+                "Gaming Set - Three-Dragon Ante Set",
             ],
         },
         "Sage": {
@@ -129,10 +129,10 @@ backgrounds = {
             "feats": ["Tavern Brawler"],
             "skills": ["Athletics", "Perception"],
             "tools": [
-                "Gaming set - Dice set",
-                "Gaming set - Dragonchess set",
-                "Gaming set - Playing card set",
-                "Gaming set - Three-Dragon Ante set",
+                "Gaming Set - Dice Set",
+                "Gaming Set - Dragonchess Set",
+                "Gaming Set - Playing card Set",
+                "Gaming Set - Three-Dragon Ante Set",
             ],
         },
         "Scribe": {

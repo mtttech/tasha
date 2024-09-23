@@ -154,9 +154,17 @@ class SystemResourceDocument:
         """Returns a list of all applicable backgrounds."""
         return list(self.srd["backgrounds"].keys())
 
+    def getAbilityByBackground(self, background: str) -> List[str]:
+        """Returns a list of abilities by background."""
+        return self.srd["backgrounds"][background]["ability"]
+
     def getSkillsByBackground(self, background: str) -> List[str]:
         """Returns a list of skills by background."""
         return self.srd["backgrounds"][background]["skills"]
+
+    def getToolsByBackground(self, background: str) -> List[str]:
+        """Returns a list of all tool proficiencies by background."""
+        return self.srd["backgrounds"][background]["tools"]
 
     def getListCantrips(
         self, klass: str, subklass: Union[str, None] = None
@@ -168,7 +176,7 @@ class SystemResourceDocument:
         """Returns a tuple of all applicable classes."""
         return list(self.srd["classes"].keys())
 
-    def getListFeats(self, exclusions: Union[List[str], None] = None) -> List[str]:
+    def getFeats(self, exclusions: Union[List[str], None] = None) -> List[str]:
         """Returns a list of all applicable feats."""
         feat_list = list(self.srd["feats"])
         if isinstance(exclusions, list):
@@ -256,15 +264,15 @@ class SystemResourceDocument:
         except KeyError:
             return tuple(self.srd["lineages"].keys())
 
-    def getListTools(
+    def getToolProficiencies(
         self,
-        exclusions: Union[List[str], None] = None,
+        excl: Union[List[str], None] = None,
         startswith: Union[str, None] = None,
     ) -> List[str]:
         """Returns a tuple of all applicable tool proficiencies minus exclusions, if applicable."""
         tool_proficiencies = self.srd["proficiencies"]["tools"]
-        if isinstance(exclusions, list):
-            tool_proficiencies = [t for t in tool_proficiencies if t not in exclusions]
+        if isinstance(excl, list):
+            tool_proficiencies = [t for t in tool_proficiencies if t not in excl]
         if isinstance(startswith, str):
             tool_proficiencies = [
                 t for t in tool_proficiencies if t.startswith(startswith)

@@ -1,16 +1,16 @@
 from dataclasses import asdict, replace
 from pathlib import Path
-from typing import Any, Dict, List, Literal, Tuple, Union
+from typing import Any, Dict, List, Literal, Union
 
 import toml
 
-from actor import CharacterSheet, NonPlayerCharacter
+from actor import CharacterSheet, PlayerCharacter
 from attributes import Attributes, Score, generate_attributes, get_modifier
 from system import SystemResourceDocument
-import utility
+import utils
 
 oSheet = CharacterSheet()
-oNPC = NonPlayerCharacter(oSheet)
+oPC = PlayerCharacter(oSheet)
 oSRD = SystemResourceDocument()
 
 
@@ -32,24 +32,17 @@ if not character_dir.exists():
     print(f"creating character directory.")
 
 
-class TashaCommandError(Exception):
-    pass
-
-
 def tasha_cmd_add(value: str) -> None:
     """Performs the add action."""
-    if value not in oSRD.getClasses():
-        raise TashaCommandError("the add class action requires a valid class.")
-
-    if oNPC.hasClasses() and value not in oSRD.getListMulticlasses(
-        oNPC.getMyClasses(),
-        oNPC.getTotalLevel(),
-        oNPC.getAttributes(),
+    if oPC.hasClasses() and value not in oSRD.getListMulticlasses(
+        oPC.getMyClasses(),
+        oPC.getTotalLevel(),
+        oPC.getAttributes(),
     ):
         raise TashaCommandError(f"you don't meet the requirements to multiclass.")
 
     level_allowance = 20
-    level_allowance = level_allowance - oNPC.getTotalLevel()
+    level_allowance = level_allowance - oPC.getTotalLevel()
     if level_allowance == 0:
         raise TashaCommandError("you cannot select anymore classes.")
 
@@ -68,25 +61,10 @@ def tasha_cmd_add(value: str) -> None:
 
 def tasha_cmd_save() -> None:
     """Performs the save action."""
-    if oNPC.getMyName() == "":
-        raise TashaCommandError(
-            "cannot run save action because you haven't set a name."
-        )
-
-    if oNPC.getMyAlignment() == "":
-        raise TashaCommandError(
-            "cannot run save action because you haven't set an alignment."
-        )
-
-    if not oNPC.hasClasses():
-        raise TashaCommandError(
-            "cannot run save action because you don't have at least one class."
-        )
-
     oSheet.set(
         {
-            "allotted_asi": oSRD.calculateAllottedAsi(oNPC.getMyRawClasses()),
-            "traits": oSRD.getRacialMagic(oNPC.getMyRace(), oNPC.getTotalLevel()),
+            "allotted_asi": oSRD.calculateAllottedAsi(oPC.getMyRawClasses()),
+            "traits": oSRD.getRacialMagic(oPC.getMySpecies(), oPC.getTotalLevel()),
             "version": __version__,
         }
     )
@@ -96,69 +74,26 @@ def tasha_cmd_save() -> None:
     assignSpellcastingFeatures()
     cs = replace(
         oSheet,
-        level=oNPC.getTotalLevel(),
+        level=oPC.getTotalLevel(),
     )
 
-    with Path(character_dir, f"{oNPC.getMyName()}.toml").open("w") as record:
+    with Path(character_dir, f"{oPC.getMyName()}.toml").open("w") as record:
         toml.dump(asdict(cs), record)
         print("Character created successfully.")
         oSheet.reset()
 
 
-def tasha_cmd_set(parameter: str, value: str) -> None:
-    """Performs the set action."""
-    if parameter in (
-        "alignment",
-        "name",
-    ):
-        if parameter == "alignment" and value not in oSRD.getListAlignments():
-            raise TashaCommandError(f"you selected an invalid alignment '{value}'.")
-
-        oSheet.set(parameter, value)
-
-
-def tasha_toolbar() -> List[Tuple[str, ...]]:
-    """Returns the prompt_toolkit bottom toolbar."""
-    gender = oNPC.getMyGender()
-    if gender == "Female":
-        gender = ""
-    elif gender == "Male":
-        gender = ""
-    else:
-        gender = ""
-
-    if len(oNPC.getAttributes()) > 0:
-        attribute_string = list()
-        for a, v in oNPC.getAttributes().items():
-            attribute_string.append("{}: {}".format(a[0:3], v["score"]))
-        attribute_string = " ".join(attribute_string)
-        attributes = f"  {attribute_string}"
-    else:
-        attributes = ""
-
-    return [
-        (
-            "class:bottom-toolbar",
-            f" tasha {__version__} - Type 'help' for assistance :: "
-            f"{oNPC.getMyName()} "
-            f"{gender} {oNPC.getMyRace()} "
-            f"{'/'.join(oNPC.getMyClasses())} "
-            f"{attributes} ",
-        )
-    ]
-
-
 def review_attributes() -> None:
     """Prints out all attributes (attribue/score/modifier)."""
-    for attribute in tuple(oNPC.getAttributes().keys()):
+    for attribute in tuple(oPC.getAttributes().keys()):
         print(
-            f"{attribute}: {oNPC.getAttributeScore(attribute)} ({oNPC.getAttributeModifier(attribute)})"
+            f"{attribute}: {oPC.getAttributeScore(attribute)} ({oPC.getAttributeModifier(attribute)})"
         )
 
 
 def assignAsiUpgrades() -> None:
     """Prompt assigns ability score improvements."""
-    allotted_asi = oNPC.getAllottedAsi()
+    allotted_asi = oPC.getAllottedAsi()
     if allotted_asi == 0:
         return
 
@@ -182,13 +117,13 @@ def assignAsiUpgrades() -> None:
                 message="Which attribute do you wish to enhance?",
                 selections=[
                     a
-                    for a in oNPC.getUpgradeableAttributes(bonus)
+                    for a in oPC.getUpgradeableAttributes(bonus)
                     if a not in bonus_attributes
                 ],
                 completer=True,
             )
             bonus_attributes.append(attribute)
-            base = Attributes(oNPC.getAttributes())
+            base = Attributes(oPC.getAttributes())
             base.add(attribute, bonus)
             oSheet.attributes = base.attributes
 
@@ -198,7 +133,7 @@ def assignAsiUpgrades() -> None:
         while True:
             feat = Scan(
                 message="Choose a feat.",
-                selections=oSRD.getListFeats(oNPC.getMyFeats() + excluded_feats),
+                selections=oSRD.getFeats(oPC.getMyFeats() + excluded_feats),
                 completer=True,
             )
             if hasFeatRequirements(feat):
@@ -290,7 +225,7 @@ def assignBackgroundTraits() -> None:
         ),
     )
 
-    background_traits = oSRD.getEntryByBackground(oNPC.getMyBackground())
+    background_traits = oSRD.getEntryByBackground(oPC.getMyBackground())
     oSheet.set(
         {
             "equipment": background_traits["equipment"],
@@ -301,7 +236,7 @@ def assignBackgroundTraits() -> None:
     )
 
     # Backgrounds that have a bonus language(s).
-    if oNPC.getMyBackground() in (
+    if oPC.getMyBackground() in (
         "Acolyte",
         "City Watch",
         "Clan Crafter",
@@ -318,14 +253,14 @@ def assignBackgroundTraits() -> None:
         "Witchlight Hand",
     ):
         if (
-            oNPC.getMyBackground() == "Clan Crafter"
-            and "Dwarvish" not in oNPC.getMyLanguages()
+            oPC.getMyBackground() == "Clan Crafter"
+            and "Dwarvish" not in oPC.getMyLanguages()
         ):
             oSheet.set("languages", "Dwarvish")
         else:
             number_of_languages = (
                 2
-                if oNPC.getMyBackground()
+                if oPC.getMyBackground()
                 in (
                     "Acolyte",
                     "City Watch",
@@ -336,16 +271,16 @@ def assignBackgroundTraits() -> None:
                 )
                 else 1
             )
-            if oNPC.getMyBackground() != "Feylost":
-                bonus_languages = oSRD.getStandardLanguages(oNPC.getMyLanguages())
+            if oPC.getMyBackground() != "Feylost":
+                bonus_languages = oSRD.getStandardLanguages(oPC.getMyLanguages())
             else:
                 bonus_languages = ("Elvish", "Gnomish", "Goblin", "Sylvan")
                 bonus_languages = [
-                    l for l in bonus_languages if l not in oNPC.getMyLanguages()
+                    l for l in bonus_languages if l not in oPC.getMyLanguages()
                 ]
             for _ in range(number_of_languages):
                 language = Scan(
-                    message=f"Choose a '{oNPC.getMyBackground()}' background bonus language.",
+                    message=f"Choose a '{oPC.getMyBackground()}' background bonus language.",
                     selections=bonus_languages,
                     completer=True,
                 )
@@ -357,14 +292,14 @@ def assignBackgroundTraits() -> None:
                     bonus_languages.remove(language)
 
     # Backgrounds that have bonus skills proficiencies.
-    if oNPC.getMyBackground() in (
+    if oPC.getMyBackground() in (
         "Cloistered Scholar",
         "Faction Agent",
     ):
         bonus_skills = []
-        if oNPC.getMyBackground() == "Cloistered Scholar":
+        if oPC.getMyBackground() == "Cloistered Scholar":
             bonus_skills = ["Arcana", "Nature", "Religion"]
-        elif oNPC.getMyBackground() == "Faction Agent":
+        elif oPC.getMyBackground() == "Faction Agent":
             bonus_skills = [
                 "Animal Handling",
                 "Arcana",
@@ -384,14 +319,14 @@ def assignBackgroundTraits() -> None:
         oSheet.set(
             "skills",
             Scan(
-                message=f"Choose a '{oNPC.getMyBackground()}' background bonus skill.",
-                selections=[s for s in bonus_skills if s not in oNPC.getMySkills()],
+                message=f"Choose a '{oPC.getMyBackground()}' background bonus skill.",
+                selections=[s for s in bonus_skills if s not in oPC.getMySkills()],
                 completer=True,
             ),
         )
 
     # Backgrounds that have bonus tool proficiencies.
-    if oNPC.getMyBackground() in (
+    if oPC.getMyBackground() in (
         "Criminal",
         "Entertainer",
         "Feylost",
@@ -402,31 +337,18 @@ def assignBackgroundTraits() -> None:
         "Soldier",
         "Witchlight Hand",
     ):
-        if oNPC.getMyBackground() == "Criminal":
+        if oPC.getMyBackground() == "Criminal":
             tool_options = [
                 "Gaming set - Dice set",
                 "Gaming set - Dragonchess set",
                 "Gaming set - Playing card set",
                 "Gaming set - Three-Dragon Ante set",
             ]
-        elif oNPC.getMyBackground() == "Witchlight Hand":
-            tool_options = oSRD.getListTools(oNPC.getMyTools(), "Musical instrument")
+        elif oPC.getMyBackground() == "Witchlight Hand":
+            tool_options = oSRD.getToolProficiencies(
+                oPC.getMyTools(), "Musical instrument"
+            )
             tool_options.append("Disguise kit")
-        elif oNPC.getMyBackground() in ("Entertainer", "Feylost", "Outlander"):
-            tool_options = oSRD.getListTools(oNPC.getMyTools(), "Musical instrument")
-        elif oNPC.getMyBackground() in (
-            "Clan Crafter",
-            "Folk Hero",
-            "Guild Artisan",
-        ):
-            tool_options = oSRD.getListTools(oNPC.getMyTools(), "Artisan's tools")
-        elif oNPC.getMyBackground() == "Noble":
-            tool_options = [
-                "Gaming set - Dice set",
-                "Gaming set - Dragonchess set",
-                "Gaming set - Playing card set",
-                "Gaming set - Three-Dragon Ante set",
-            ]
         else:
             tool_options = [
                 "Gaming set - Dice set",
@@ -437,7 +359,7 @@ def assignBackgroundTraits() -> None:
         oSheet.set(
             "tools",
             Scan(
-                message=f"Choose a '{oNPC.getMyBackground()}' background bonus tool proficiency.",
+                message=f"Choose a '{oPC.getMyBackground()}' background bonus tool proficiency.",
                 selections=tool_options,
                 completer=True,
             ),
@@ -451,7 +373,7 @@ def assignCantrips(
 ) -> List[str]:
     """Selects character's cantrips."""
     if subklass is not None:
-        subklass = oNPC.getClassSubclass(klass)
+        subklass = oPC.getClassSubclass(klass)
 
     my_cantrip_list = list()
     cantrip_pool = oSRD.getListCantrips(klass, subklass)
@@ -459,7 +381,7 @@ def assignCantrips(
         return my_cantrip_list
 
     if cantrips_known is None:
-        cantrips_known = int(oNPC.getSpellSlots()[0])
+        cantrips_known = int(oPC.getSpellSlots()[0])
     cantrip_selection_counter = cantrips_known
 
     for _ in range(cantrips_known):
@@ -483,7 +405,7 @@ def assignClassFeatures() -> None:
 
     def assignSubclassFeatures(klass: str) -> None:
         """Prompt assigns subclass features."""
-        if not oNPC.canSubclass(klass):
+        if not oPC.canSubclass(klass):
             return
 
         subclass = Scan(
@@ -498,15 +420,13 @@ def assignClassFeatures() -> None:
                 "armors": base_subclass_traits["armors"],
                 "tools": base_subclass_traits["tools"],
                 "weapons": base_subclass_traits["weapons"],
-                "features": oSRD.getFeaturesByClass(
-                    subclass, oNPC.getClassLevel(klass)
-                ),
+                "features": oSRD.getFeaturesByClass(subclass, oPC.getClassLevel(klass)),
             }
         )
 
     import dice
 
-    for class_order, klass in enumerate(oNPC.getMyClasses()):
+    for class_order, klass in enumerate(oPC.getMyClasses()):
         if class_order == 0:
             traits = oSRD.getEntryByClass(klass)
             starting_gold = sum(
@@ -517,14 +437,14 @@ def assignClassFeatures() -> None:
 
             oSheet.set(
                 {
-                    "allotted_skills": oNPC.getSkillTotal(),
+                    "allotted_skills": oPC.getSkillTotal(),
                     "armors": traits["armors"],
                     "languages": traits["languages"],
                     "savingthrows": traits["savingthrows"],
                     "tools": traits["tools"],
                     "weapons": traits["weapons"],
                     "features": oSRD.getFeaturesByClass(
-                        klass, oNPC.getClassLevel(klass)
+                        klass, oPC.getClassLevel(klass)
                     ),
                     "gold": starting_gold * 10 if klass != "Monk" else starting_gold,
                 }
@@ -542,16 +462,16 @@ def assignClassFeatures() -> None:
         assignSubclassFeatures(klass)
 
     oSheet.set(
-        "spell_slots", oSRD.getSpellSlots(oNPC.getMyRawClasses(), oNPC.getTotalLevel())
+        "spell_slots", oSRD.getSpellSlots(oPC.getMyRawClasses(), oPC.getTotalLevel())
     )
 
 
 def assignClassSkills() -> None:
     """Prompt to determining the character's skills features."""
-    for _ in range(0, oNPC.getAllottedSkills()):
+    for _ in range(0, oPC.getAllottedSkills()):
         skill = Scan(
             message="Choose your class skill.",
-            selections=oSRD.getClassSkills(oNPC.getMyClasses()[0], oNPC.getMySkills()),
+            selections=oSRD.getClassSkills(oPC.getMyClasses()[0], oPC.getMySkills()),
             completer=True,
         )
         oSheet.set("skills", skill.capitalize())
@@ -564,7 +484,7 @@ def assignFeatEnhancements(feat: str) -> None:
         """Checks the checked_attributes for upgradeable attributes."""
         adjustable_attributes = list()
         for attribute in checked_attributes:
-            adjusted_score = oNPC.getAttributeScore(attribute) + 1
+            adjusted_score = oPC.getAttributeScore(attribute) + 1
             if adjusted_score <= 20:
                 adjustable_attributes.append(attribute)
         return adjustable_attributes
@@ -577,7 +497,7 @@ def assignFeatEnhancements(feat: str) -> None:
         }
     )
 
-    base_attributes = Attributes(oNPC.getAttributes())
+    base_attributes = Attributes(oPC.getAttributes())
 
     # Actor/Heavy Armor Master/Keen Mind
     if feat in ("Actor", "Heavy Armor Master", "Keen Mind"):
@@ -592,9 +512,6 @@ def assignFeatEnhancements(feat: str) -> None:
     if feat in (
         "Athlete",
         "Chef",
-        "Dragon Fear",
-        "Dragon Hide",
-        "Elven Accuracy",
         "Fade Away",
         "Fey Teleportation",
         "Lightly Armored",
@@ -639,23 +556,6 @@ def assignFeatEnhancements(feat: str) -> None:
         )
         base_attributes.add(attribute_bonus, 1)
 
-    # Artificer Initiate
-    if feat == "Artificer Initiate":
-        oSheet.set(
-            {
-                "features": assignCantrips("Artificer", 1),
-                "tools": Scan(
-                    message=f"Choose a '{oNPC.getMyBackground()}' background bonus tool proficiency.",
-                    selections=oSRD.getListTools(oNPC.getMyTools(), "Artisan's tools"),
-                    completer=True,
-                ),
-            }
-        )
-
-    # Dungeon Delver
-    if feat == "Dungeon Delver":
-        oSheet.set("resistances", "Traps")
-
     # Durable/Dwarven Fortitude
     if feat in ("Durable", "Dwarven Fortitude"):
         base_attributes.add("Constitution", 1)
@@ -663,48 +563,6 @@ def assignFeatEnhancements(feat: str) -> None:
     # Heavily Armored
     if feat == "Heavily Armored":
         base_attributes.add("Strength", 1)
-
-    # Infernal Constitution
-    if feat == "Infernal Constitution":
-        base_attributes.add("Constitution", 1)
-        oSheet.set(
-            "resistances",
-            [
-                "Cold",
-                "Poison",
-            ],
-        )
-
-    # Mobile
-    if feat == "Mobile":
-        oSheet.set("speed", oNPC.getMySpeed() + 10)
-
-    # Prodigy
-    if feat == "Prodigy":
-        oSheet.set(
-            "languages",
-            Scan(
-                message="Choose a bonus language.",
-                selections=oSRD.getStandardLanguages(oNPC.getMyLanguages()),
-                completer=True,
-            ),
-        )
-        oSheet.set(
-            "skills",
-            Scan(
-                message="Choose a bonus skill.",
-                selections=oSRD.getListSkills(oNPC.getMySkills()),
-                completer=True,
-            ),
-        )
-        oSheet.set(
-            "tools",
-            Scan(
-                message="Choose a bonus skill.",
-                selections=oSRD.getListTools(oNPC.getMyTools()),
-                completer=True,
-            ),
-        )
 
     # Resilient
     if feat == "Resilient":
@@ -741,7 +599,7 @@ def assignFeatEnhancements(feat: str) -> None:
                     "skills",
                     Scan(
                         message="Choose a bonus skill.",
-                        selections=oSRD.getListSkills(oNPC.getMySkills()),
+                        selections=oSRD.getListSkills(oPC.getMySkills()),
                         completer=True,
                     ),
                 )
@@ -750,25 +608,10 @@ def assignFeatEnhancements(feat: str) -> None:
                     "tools",
                     Scan(
                         message="Choose a bonus tool proficiency.",
-                        selections=oSRD.getListTools(oNPC.getMyTools()),
+                        selections=oSRD.getToolProficiencies(oPC.getMyTools()),
                         completer=True,
                     ),
                 )
-
-    # Squat Nimbleness
-    if feat == "Squat Nimbleness":
-        attribute_bonuses = ["Dexterity", "Strength"]
-        attribute_bonus = Scan(
-            message="Choose an attribute to upgrade.",
-            selections=getAdjustableAttributes(attribute_bonuses),
-            completer=True,
-        )
-        if attribute_bonus == "Dexterity":
-            oSheet.set("skills", "Acrobatics")
-        if attribute_bonus == "Strength":
-            oSheet.set("skills", "Athletics")
-        oSheet.set("speed", oNPC.getMySpeed() + 5)
-        base_attributes.add(attribute_bonus, 1)
 
     # Telekinetic
     if feat == "Telekinetic":
@@ -781,7 +624,7 @@ def assignFeatEnhancements(feat: str) -> None:
     # Weapon Master
     if feat == "Weapon Master":
         for _ in range(4):
-            bonus_weapons = oSRD.getListWeapons(oNPC.getMyWeapons())
+            bonus_weapons = oSRD.getListWeapons(oPC.getMyWeapons())
             oSheet.set(
                 "weapons",
                 Scan(
@@ -796,22 +639,11 @@ def assignFeatEnhancements(feat: str) -> None:
 
 def assignRacialTraits() -> None:
     """Assigns racial/subracial traits."""
-
-    def applyRacialBonus() -> None:
-        """Applies racial bonuses."""
-        base_values = oNPC.getAttributes()
-        bonus_values = oNPC.getBonus()
-        for attribute, _ in bonus_values.items():
-            if attribute in bonus_values:
-                base_attr = Attributes(base_values)
-                base_attr.add(attribute, bonus_values[attribute])
-        review_attributes()
-
-    full_race = oNPC.getMyRace().split(", ")
+    full_race = oPC.getMySpecies().split(", ")
     if len(full_race) > 1:
         race, subrace = full_race
     else:
-        race, subrace = (oNPC.getMyRace(), "")
+        race, subrace = (oPC.getMySpecies(), "")
 
     traits = oSRD.getEntryBySpecies(race)
     oSheet.set(
@@ -826,33 +658,16 @@ def assignRacialTraits() -> None:
     )
 
     assignTraitsDragonborn()
-    assignTraitsHuman()
     assignBackgroundTraits()
 
     if subrace != "":
         traits = oSRD.getEntryByLineage(subrace)
         oSheet.set({"bonus": traits["bonus"], "traits": traits["traits"]})
 
-    applyRacialBonus()
-
-    from metrics import Anthropometry
-
-    height, weight = Anthropometry(
-        oSRD.getAnthropometryBase(race, subrace),
-        oNPC.getMyGender(),
-        oSRD.getAnthropometryDominantSex(oSRD.getAnthropometrySource(race, subrace)),
-    ).calculate()
-    oSheet.set(
-        {
-            "height": height,
-            "weight": weight,
-        }
-    )
-
 
 def assignSpellcastingFeatures() -> None:
     """Assigns character's spellcasting features, if applicable."""
-    if not oNPC.isSpellcaster():
+    if not oPC.isSpellcaster():
         return
 
     def assignSpells() -> None:
@@ -871,18 +686,18 @@ def assignSpellcastingFeatures() -> None:
                         ]
             return warlock_spells
 
-        for klass in oNPC.getMyClasses():
+        for klass in oPC.getMyClasses():
             allotted_spell_total = oSRD.getSpellTotal(
                 klass,
-                oNPC.getClassLevel(klass),
+                oPC.getClassLevel(klass),
                 get_modifier(
-                    oNPC.getCasterAttribute(klass, oNPC.getClassSubclass(klass))
+                    oPC.getCasterAttribute(klass, oPC.getClassSubclass(klass))
                 ),
             )
             spell_selection_counter = allotted_spell_total
 
             spell_pool = oSRD.getListSpells(
-                klass, oNPC.getClassSubclass(klass), oNPC.getClassLevel(klass)
+                klass, oPC.getClassSubclass(klass), oPC.getClassLevel(klass)
             )
             my_spell_list = list()
 
@@ -904,10 +719,10 @@ def assignSpellcastingFeatures() -> None:
 
             oSheet.set("spellcasting", my_spell_pool)
 
-    if len(oNPC.getSpellSlots()) == 0:
+    if len(oPC.getSpellSlots()) == 0:
         return
 
-    for klass in oNPC.getMyClasses():
+    for klass in oPC.getMyClasses():
         oSheet.set("cantrips", {klass: assignCantrips(klass)})
 
     assignSpells()
@@ -915,7 +730,7 @@ def assignSpellcastingFeatures() -> None:
 
 def assignTraitsDragonborn() -> None:
     """Assigns dragonborn features."""
-    if "Dragonborn" not in oNPC.getMyRace():
+    if "Dragonborn" not in oPC.getMySpecies():
         return
 
     draconic_ancestors = [
@@ -951,24 +766,9 @@ def assignTraitsDragonborn() -> None:
     oSheet.set("resistances", draconic_resistances[draconic_ancestry])
 
 
-def assignTraitsHuman() -> None:
-    """Assigns human features."""
-    if "Human" not in oNPC.getMyRace():
-        return
-
-    oSheet.set(
-        "languages",
-        Scan(
-            message="Choose your racial bonus language.",
-            selections=oSRD.getStandardLanguages(oNPC.getMyLanguages()),
-            completer=True,
-        ),
-    )
-
-
 def hasFeatRequirements(feat: str) -> Union[Literal[False], Literal[True]]:
     """Returns True if character meets feat prerequisites."""
-    if feat in oNPC.getMyFeats():
+    if feat in oPC.getMyFeats():
         return False
 
     # If Heavily, Lightly, or Moderately Armored feat selected and is a Monk.
@@ -980,7 +780,7 @@ def hasFeatRequirements(feat: str) -> Union[Literal[False], Literal[True]]:
             "Lightly Armored",
             "Moderately Armored",
         )
-        and "Monk" in oNPC.getMyClasses()
+        and "Monk" in oPC.getMyClasses()
     ):
         return False
 
@@ -990,13 +790,13 @@ def hasFeatRequirements(feat: str) -> Union[Literal[False], Literal[True]]:
         "Moderately Armored",
         "Weapon Master",
     ):
-        if feat == "Heavily Armored" and "Heavy" in oNPC.getMyArmors():
+        if feat == "Heavily Armored" and "Heavy" in oPC.getMyArmors():
             return False
-        if feat == "Lightly Armored" and "Light" in oNPC.getMyArmors():
+        if feat == "Lightly Armored" and "Light" in oPC.getMyArmors():
             return False
-        if feat == "Moderately Armored" and "Medium" in oNPC.getMyArmors():
+        if feat == "Moderately Armored" and "Medium" in oPC.getMyArmors():
             return False
-        if feat == "Weapon Master" and "Martial" in oNPC.getMyWeapons():
+        if feat == "Weapon Master" and "Martial" in oPC.getMyWeapons():
             return False
 
     feat_requirements = oSRD.getEntryByFeat(feat)
@@ -1004,13 +804,13 @@ def hasFeatRequirements(feat: str) -> Union[Literal[False], Literal[True]]:
         if feat_requirements[category] is None:
             continue
 
-        if category == "attribute":
+        if category == "ability":
             for attribute, minimum_score in feat_requirements[category].items():
-                if oNPC.getAttributeScore(attribute) < minimum_score:
+                if oPC.getAttributeScore(attribute) < minimum_score:
                     return False
 
         if category == "caster":
-            if not oNPC.isSpellcaster():
+            if not oPC.isSpellcaster():
                 return False
 
             if feat == "Magic Initiate":
@@ -1022,25 +822,25 @@ def hasFeatRequirements(feat: str) -> Union[Literal[False], Literal[True]]:
                     "Warlock",
                     "Wizard",
                 )
-                for klass in oNPC.getMyClasses():
+                for klass in oPC.getMyClasses():
                     if klass in applicable_classes:
                         return True
                 return False
 
             if feat == "Ritual Caster":
-                if not oNPC.hasClass("Cleric") or not oNPC.hasClass("Wizard"):
+                if not oPC.hasClass("Cleric") or not oPC.hasClass("Wizard"):
                     return False
 
                 if (
-                    "Cleric" in oNPC.getMyClasses()
-                    and oNPC.getAttributeScore("Wisdom")
+                    "Cleric" in oPC.getMyClasses()
+                    and oPC.getAttributeScore("Wisdom")
                     < feat_requirements["ability"]["Wisdom"]
                 ):
                     return False
 
                 if (
-                    "Wizard" in oNPC.getMyClasses()
-                    and oNPC.getAttributeScore("Intelligence")
+                    "Wizard" in oPC.getMyClasses()
+                    and oPC.getAttributeScore("Intelligence")
                     < feat_requirements["ability"]["Intelligence"]
                 ):
                     return False
@@ -1058,28 +858,13 @@ def hasFeatRequirements(feat: str) -> Union[Literal[False], Literal[True]]:
                     if armor not in required_armors:
                         return False
 
-        # Check race/subrace requirements
-        if category in ("race", "subrace"):
-            race = oNPC.getMyRace().split(", ")
-            if len(race) != 2:
-                race = race[0]
-                subrace = ""
-            else:
-                race = race[0]
-                subrace = race[1]
-
-            if category == "race" and race not in feat_requirements[category]:
-                return False
-            elif category == "subrace" and subrace not in feat_requirements[category]:
-                return False
-
     return True
 
 
 def isPreparedCaster(self) -> bool:
     """Returns True if character is a prepared spellcaster."""
     for klass in self.getMyClasses():
-        if klass in ("Artificer", "Cleric", "Druid", "Paladin", "Wizard"):
+        if klass in ("Cleric", "Druid", "Paladin", "Wizard"):
             return True
     return False
 
@@ -1087,40 +872,77 @@ def isPreparedCaster(self) -> bool:
 def step1():
     # Choose class
     # Select level
-    step_one_complete = False
-    while not step_one_complete:
-        klass = utility.stdin("What class are you?", oSRD.getClasses())
-        level = utility.stdin("What is your level?", 20)
-        print(klass, level)
-        step_one_complete = True
+    klass = utils.stdin("What class are you?", oSRD.getClasses())
+    level = int(utils.stdin("What is your level?", 20)[0])
+    oSheet.set("classes", {klass[0]: {"level": level, "subclass": ""}})
+    print(oSheet)
 
 
 def step2():
     # Choose a background
     # Choose a species
-    step_two_complete = False
-    while not step_two_complete:
-        background = utility.stdin("What is your background?", oSRD.getBackgrounds())
-        # Choose ability bonuses, 1 feat, two skills and one tool proficiency
-        ability_scores = input("Choose background ability bonus array.")
-        # 2/1
-        # 1/1/1s
-        feat = utility.stdin(
-            "Choose a feat from your background. ", oSRD.getFeatsByCategory("Origin")
+    # Choose equipment
+    background = utils.stdin("What is your background?", oSRD.getBackgrounds())
+    oSheet.set("background", background[0])
+
+    # Choose ability bonuses
+    ability_bonus_array = utils.stdin(
+        "Choose background ability bonus array.", ["2/1", "1/1/1"]
+    )
+    bonus_array = {
+        "Strength": 0,
+        "Dexterity": 0,
+        "Constitution": 0,
+        "Intelligence": 0,
+        "Wisdom": 0,
+        "Charisma": 0,
+    }
+    if ability_bonus_array[0] == "2/1":
+        background_abilities = oSRD.getAbilityByBackground(oPC.getMyBackground())
+
+        two_point_ability = utils.stdin(
+            "Choose which ability to apply a 2 point bonus.", background_abilities
         )
-        skills = utility.stdin(
-            "Choose two skills from your background.",
-            oSRD.getSkillsByBackground(background[0]),
-            loop_count=2,
+        chosen_ability = two_point_ability[0]
+        bonus_array[chosen_ability] = 2
+
+        one_point_ability = utils.stdin(
+            "Choose which ability to apply a 1 point bonus.", background_abilities
         )
-        tool = input("Choose a tool proficiency from your background. ")
-        # Choose equipment
-        species = utility.stdin("What is your species?", oSRD.getSpecies())
-        language = utility.stdin(
-            "Choose three languages.", oSRD.getStandardLanguages(), loop_count=3
-        )
-        print(background, species, feat, skills, language)
-        step_two_complete = True
+        chosen_ability = one_point_ability[0]
+        bonus_array[chosen_ability] = 1
+    if ability_bonus_array[0] == "1/1/1":
+        for ability in oSRD.getAbilityByBackground(oPC.getMyBackground()):
+            bonus_array[ability] = 1
+    oSheet.set("bonus", bonus_array)
+
+    feat = utils.stdin(
+        "Choose a feat from your background.", oSRD.getFeatsByCategory("Origin")
+    )
+    oSheet.set("feats", feat)
+
+    skills = utils.stdin(
+        "Choose two skills from your background.",
+        oSRD.getSkillsByBackground(oPC.getMyBackground()),
+        loop_count=2,
+    )
+    oSheet.set("skills", skills)
+
+    tool = utils.stdin(
+        "Choose a tool proficiency from your background.",
+        oSRD.getToolsByBackground(oPC.getMyBackground()),
+    )
+    oSheet.set("tools", tool)
+
+    species = utils.stdin("What is your species?", oSRD.getSpecies())
+    oSheet.set("species", species)
+
+    languages = utils.stdin(
+        "Choose three languages.", oSRD.getStandardLanguages(), loop_count=3
+    )
+    oSheet.set("languages", languages)
+
+    print(oSheet)
 
 
 def step3():
@@ -1128,14 +950,21 @@ def step3():
     pass
 
 
+def step4():
+    pass
+
+
 def step5():
-    gender = utility.stdin("What is your gender", ["", ""])
+    gender = utils.stdin("What is your gender?", ["Female", "Male"])
+    oSheet.set("gender", gender)
 
 
 def main() -> None:
     step1()
     step2()
     step3()
+    step4()
+    step5()
 
 
 if __name__ == "__main__":

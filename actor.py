@@ -10,7 +10,7 @@ class CharacterSheet:
     allotted_skills: int = field(default=0)
     armors: list = field(default_factory=list)
     attributes: dict = field(default_factory=dict)
-    background: str = field(default="Soldier")
+    background: str = field(default="")
     bonus: dict = field(default_factory=dict)
     cantrips: list = field(default_factory=list)
     classes: dict = field(default_factory=dict)
@@ -25,11 +25,11 @@ class CharacterSheet:
     level: int = field(default=1)
     name: str = field(default="")
     proficiency_bonus: int = field(default=0)
-    race: str = field(default="")
     resistances: list = field(default_factory=list)
     savingthrows: list = field(default_factory=list)
     size: str = field(default="Medium")
     skills: list = field(default_factory=list)
+    species: str = field(default="")
     speed: int = field(default=30)
     spell_slots: list = field(default_factory=list)
     spellcasting: dict = field(default_factory=dict)
@@ -141,7 +141,7 @@ class CharacterSheet:
 
 
 @dataclass
-class NonPlayerCharacter:
+class PlayerCharacter:
     character_sheet: CharacterSheet
 
     def canSubclass(self, klass: str) -> Union[Literal[False], Literal[True]]:
@@ -149,7 +149,6 @@ class NonPlayerCharacter:
         if (
             klass
             in (
-                "Artificer",
                 "Barbarian",
                 "Bard",
                 "Fighter",
@@ -250,9 +249,9 @@ class NonPlayerCharacter:
         """Returns the character's name."""
         return self.character_sheet.name
 
-    def getMyRace(self) -> str:
-        """Returns the character's race."""
-        return self.character_sheet.race
+    def getMySpecies(self) -> str:
+        """Returns the character's species."""
+        return self.character_sheet.species
 
     def getMyRawClasses(self) -> Dict[str, Dict[str, Any]]:
         """Returns all the character's class info."""
@@ -332,16 +331,15 @@ class NonPlayerCharacter:
         """Returns True if character has classes set. False otherwise."""
         return len(self.getMyClasses()) > 0
 
-    def hasRace(self) -> bool:
+    def hasSpecies(self) -> bool:
         """Returns True if character has a set race. False otherwise."""
-        return self.getMyRace() != ""
+        return self.getMySpecies() != ""
 
     def isSpellcaster(self) -> bool:
         """Returns True if the character is a spellcaster. False otherwise."""
         if any(
             klass in self.getMyClasses()
             for klass in (
-                "Artificer",
                 "Bard",
                 "Cleric",
                 "Druid",

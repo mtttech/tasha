@@ -6,7 +6,7 @@ def stdin(message: str, options: List[str] | int, loop_count=1) -> List[str]:
 
     def expand_options() -> Dict[int, str]:
         expanded_options = dict()
-        for index, option in enumerate(options): # pyright: ignore
+        for index, option in enumerate(options):  # pyright: ignore
             expanded_options[index + 1] = option
         return expanded_options
 
