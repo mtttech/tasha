@@ -410,7 +410,7 @@ def assignClassFeatures() -> None:
 
         subclass = Scan(
             message=f"What is your '{klass}' subclass?",
-            selections=oSRD.getListSubclasses(klass),
+            selections=oSRD.getSubclassesByClass(klass),
             completer=True,
         )
         oSheet.classes[klass]["subclass"] = subclass
@@ -870,12 +870,17 @@ def isPreparedCaster(self) -> bool:
 
 
 def step1():
-    # Choose class
+    # Choose class/subclass
     # Select level
-    klass = utils.stdin("What class are you?", oSRD.getClasses())
+    klass = utils.stdin("What class are you?", oSRD.getClasses())[0]
     level = int(utils.stdin("What is your level?", 20)[0])
-    oSheet.set("classes", {klass[0]: {"level": level, "subclass": ""}})
-    print(oSheet)
+    subclass = ""
+    if level >= 3:
+        subklass = utils.stdin(
+            "What subclass are you?", oSRD.getSubclassesByClass(klass)
+        )
+        subclass = subklass[0]
+    oSheet.set("classes", {klass: {"level": level, "subclass": subclass}})
 
 
 def step2():
@@ -934,15 +939,17 @@ def step2():
     )
     oSheet.set("tools", tool)
 
-    species = utils.stdin("What is your species?", oSRD.getSpecies())
+    species = utils.stdin("What is your species?", oSRD.getSpecies())[0]
+    lineages = oSRD.getLineagesBySpecies(species)
+    if len(lineages) != 0:
+        lineage = utils.stdin(f"Choose your {species} lineage.", lineages)[0]
+        species = f"{species}, {lineage}"
     oSheet.set("species", species)
 
     languages = utils.stdin(
         "Choose three languages.", oSRD.getStandardLanguages(), loop_count=3
     )
     oSheet.set("languages", languages)
-
-    print(oSheet)
 
 
 def step3():
@@ -955,7 +962,7 @@ def step4():
 
 
 def step5():
-    gender = utils.stdin("What is your gender?", ["Female", "Male"])
+    gender = utils.stdin("What is your gender?", ["Female", "Male"])[0]
     oSheet.set("gender", gender)
 
 
@@ -965,6 +972,8 @@ def main() -> None:
     step3()
     step4()
     step5()
+
+    print(oSheet)
 
 
 if __name__ == "__main__":

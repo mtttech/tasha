@@ -1,33 +1,5 @@
 subclasses = {
     "subclasses": {
-        # TCoE pg 66
-        "Aberrant Mind": {
-            "armors": [],
-            "features": {
-                1: ["Psionic Spells", "Telepathic Speech"],
-                6: ["Psionic Sorcery", "Psychic Defenses"],
-                14: ["Revelation in Flesh"],
-                18: ["Warping Implosion"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        # TCoE pg 14
-        "Alchemist": {
-            "armors": [],
-            "features": {
-                3: ["Tool Proficiency", "Alchemist Spells", "Experimental Elixir"],
-                5: ["Alchemical Savant"],
-                9: ["Restorative Reagents"],
-                15: ["Chemical Mastery"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": ["Artisan's tools - Alchemists supplies"],
-            "weapons": [],
-        },
         "Arcana Domain": {
             "armors": [],
             "features": {
@@ -36,382 +8,6 @@ subclasses = {
                 6: ["Spell Breaker"],
                 8: ["Potent Spellcasting"],
                 17: ["Arcane Mastery"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        # XGtE pg 28
-        "Arcane Archer": {
-            "armors": [],
-            "features": {
-                3: ["Arcane Archer Lore", "Arcane Shot (2 options)"],
-                7: ["Curving Shot", "Magic Arrow", "Arcane Shot (3 options)"],
-                10: ["Arcane Shot (4 options)"],
-                15: ["Ever-Ready Shot", "Arcane Shot (5 options)"],
-                18: ["Arcane Shot (6 options, improved shots)"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        "Arcane Trickster": {
-            "armors": [],
-            "features": {
-                3: ["Mage Hand Legerdemain", "Spellcasting"],
-                9: ["Magical Ambush"],
-                13: ["Versatile Trickster"],
-                17: ["Spell Thief"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        # TCoE pg 15
-        "Armorer": {
-            "armors": ["Heavy"],
-            "features": {
-                3: [
-                    "Tools of the Trade",
-                    "Armorer Spells",
-                    "Arcane Armor",
-                    "Armor Model",
-                ],
-                5: ["Extra Attack"],
-                9: ["Armor Modifications"],
-                15: ["Perfected Armor"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": ["Artisan's tools - Smith's tools"],
-            "weapons": [],
-        },
-        # TCoE pg 17
-        "Artillerist": {
-            "armors": [],
-            "features": {
-                3: ["Tool Proficiency", "Artillerist Spells", "Eldritch Cannon"],
-                5: ["Arcane Firearm"],
-                9: ["Explosive Cannon"],
-                15: ["Fortified Position"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": ["Artisan's tools - Woodcarver's tools"],
-            "weapons": [],
-        },
-        "Assassin": {
-            "armors": [],
-            "features": {
-                3: ["Assassinate"],
-                9: ["Infiltration Expertise"],
-                13: ["Impostor"],
-                17: ["Death Strike"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": ["Disguise kit", "Poisoner's kit"],
-            "weapons": [],
-        },
-        "Banneret": {
-            "armors": [],
-            "features": {
-                3: ["Rallying Cry"],
-                7: ["Royal Envoy"],
-                10: ["Inspiring Surge"],
-                15: ["Bulwark"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        "Battle Master": {
-            "armors": [],
-            "features": {
-                3: ["Combat Superiority", "Student of War"],
-                7: ["Know Your Enemy"],
-                10: ["Improved Combat Superiority"],
-                15: ["Relentless"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        # TCoE pg 18
-        "Battle Smith": {
-            "armors": [],
-            "features": {
-                3: [
-                    "Tool Proficiency",
-                    "Battle Smith Spells",
-                    "Battle Ready",
-                    "Steel Defender",
-                ],
-                5: ["Extra Attack"],
-                9: ["Arcane Jolt"],
-                15: ["Improved Defender"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": ["Artisan's tools - Smith's tools"],
-            "weapons": ["Martial"],
-        },
-        "Beast Master": {
-            "armors": [],
-            "features": {
-                3: ["Ranger's Companion"],
-                7: ["Exceptional Training"],
-                11: ["Beastial Fury"],
-                15: ["Share Spells"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        # TCoE pg 76
-        "Bladesinging": {
-            "armors": ["Light"],
-            "features": {
-                2: ["Bladesong"],
-                6: ["Extra Attack"],
-                10: ["Song of Defense"],
-                14: ["Song of Victory"],
-            },
-            "languages": [],
-            "skills": ["Performance"],
-            "tools": [],
-            "weapons": [],
-        },
-        # XGtE pg 30
-        "Cavalier": {
-            "armors": [],
-            "features": {
-                3: ["Bonus Proficiency", "Born to the Saddle", "Unwavering Mark"],
-                7: ["Warding Maneuver"],
-                10: ["Hold the Line"],
-                15: ["Ferocious Charger"],
-                18: ["Vigilant Defender"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        "Champion": {
-            "armors": [],
-            "features": {
-                3: ["Improved Critical"],
-                7: ["Remarkable Athlete"],
-                10: ["Additional Fighting Style"],
-                15: ["Superior Critical"],
-                18: ["Survivor"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        # XGtE pg 22
-        "Circle of Dreams": {
-            "armors": [],
-            "features": {
-                2: ["Balm of the Summer Court"],
-                6: ["Hearth of Moonlight and Shadow"],
-                10: ["Hidden Paths"],
-                14: ["Walker in Dreams"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        # TCoE pg 36
-        "Circle of Spores": {
-            "armors": [],
-            "features": {
-                2: ["Circle Spells", "Halo of Spores", "Symbiotic Entity"],
-                6: ["Fungal Infestation"],
-                10: ["Spreading Spores"],
-                14: ["Fungal Body"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        # TCoE pg 38
-        "Circle of Stars": {
-            "armors": [],
-            "features": {
-                2: ["Star Map", "Starry Form"],
-                6: ["Cosmic Omen"],
-                10: ["Twinkling Constellations"],
-                14: ["Full of Stars"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        # TCoE pg 39
-        "Circle of Wildfire": {
-            "armors": [],
-            "features": {
-                2: ["Circle Spells", "Summon Wildfire Spirit"],
-                6: ["Enhance Bond"],
-                10: ["Cauterizing Flames"],
-                14: ["Blazing Revival"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        "Circle of the Arctic": {
-            "armors": [],
-            "features": {
-                2: ["Bonus Cantrip", "Natural Recovery"],
-                6: ["Land's Stride"],
-                10: ["Nature's Ward"],
-                14: ["Nature's Sanctuary"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        "Circle of the Coast": {
-            "armors": [],
-            "features": {
-                2: ["Bonus Cantrip", "Natural Recovery"],
-                6: ["Land's Stride"],
-                10: ["Nature's Ward"],
-                14: ["Nature's Sanctuary"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        "Circle of the Desert": {
-            "armors": [],
-            "features": {
-                2: ["Bonus Cantrip", "Natural Recovery"],
-                6: ["Land's Stride"],
-                10: ["Nature's Ward"],
-                14: ["Nature's Sanctuary"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        "Circle of the Forest": {
-            "armors": [],
-            "features": {
-                2: ["Bonus Cantrip", "Natural Recovery"],
-                6: ["Land's Stride"],
-                10: ["Nature's Ward"],
-                14: ["Nature's Sanctuary"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        "Circle of the Grassland": {
-            "armors": [],
-            "features": {
-                2: ["Bonus Cantrip", "Natural Recovery"],
-                6: ["Land's Stride"],
-                10: ["Nature's Ward"],
-                14: ["Nature's Sanctuary"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        "Circle of the Moon": {
-            "armors": [],
-            "features": {
-                2: ["Circle Forms", "Combat Wild Shape"],
-                6: ["Primal Strike"],
-                10: ["Elemental Wild Shape"],
-                14: ["Thousand Forms"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        "Circle of the Mountain": {
-            "armors": [],
-            "features": {
-                2: ["Bonus Cantrip", "Natural Recovery"],
-                6: ["Land's Stride"],
-                10: ["Nature's Ward"],
-                14: ["Nature's Sanctuary"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        # XGtE pg 23
-        "Circle of the Shepherd": {
-            "armors": [],
-            "features": {
-                2: ["Speech of the Woods", "Spirit Totem"],
-                6: ["Mighty Summoner"],
-                10: ["Guardian Spirit"],
-                14: ["Faithful Summons"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        "Circle of the Swamp": {
-            "armors": [],
-            "features": {
-                2: ["Bonus Cantrip", "Natural Recovery"],
-                6: ["Land's Stride"],
-                10: ["Nature's Ward"],
-                14: ["Nature's Sanctuary"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        "Circle of the Underdark": {
-            "armors": [],
-            "features": {
-                2: ["Bonus Cantrip", "Natural Recovery"],
-                6: ["Land's Stride"],
-                10: ["Nature's Ward"],
-                14: ["Nature's Sanctuary"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        # TCoE pg 68
-        "Clockwork Soul": {
-            "armors": [],
-            "features": {
-                1: ["Clockwork Magic", "Restore Balance"],
-                6: ["Bastion of Law"],
-                14: ["Trance of Order"],
-                18: ["Clockwork Cavalcade"],
             },
             "languages": [],
             "skills": [],
@@ -468,19 +64,6 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
-        # XGtE pg 15
-        "College of Swords": {
-            "armors": ["Medium"],
-            "features": {
-                3: ["Blade Flourish", "Bonus Proficiencies", "Fighting Style"],
-                6: ["Extra Attack"],
-                14: ["Master's Flourish"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": ["Scimitar"],
-        },
         "College of Valor": {
             "armors": ["Medium", "Shield"],
             "features": {
@@ -522,66 +105,6 @@ subclasses = {
                 "Martial",
             ],
         },
-        # XGtE pg 50
-        "Divine Soul": {
-            "armors": [],
-            "features": {
-                1: ["Favored by the Gods"],
-                3: ["Divine Magic", "Favored by the Gods"],
-                6: ["Empowered Healing"],
-                14: ["Otherworldly Wings"],
-                18: ["Unearthly Recovery"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        "Draconic Bloodline": {
-            "armors": [],
-            "features": {
-                1: ["Draconic Resilience", "Dragon Ancestor"],
-                6: ["Elemental Affinity"],
-                14: ["Dragon Wings"],
-                18: ["Draconic Presence"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        "Eldritch Knight": {
-            "armors": [],
-            "features": {
-                3: ["Spellcasting", "Weapon Bond"],
-                7: ["War Magic"],
-                10: ["Eldritch Strike"],
-                15: ["Arcane Charge"],
-                18: ["Improved War Magic"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        # TCoE pg 58
-        "Fey Wanderer": {
-            "armors": [],
-            "features": {
-                3: [
-                    "Dreadful Strikes",
-                    "Fey Wanderer Magic",
-                    "Otherwordly Glamour",
-                ],
-                7: ["Beguiling Twist"],
-                11: ["Fey Reinforcements"],
-                15: ["Misty Wanderer"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
         "Forge Domain": {
             "armors": ["Heavy"],
             "features": {
@@ -597,24 +120,6 @@ subclasses = {
             "tools": ["Artisan's tools - Smith's tools"],
             "weapons": [],
         },
-        # XGtE pg 41
-        "Gloom Stalker": {
-            "armors": [],
-            "features": {
-                3: [
-                    "Dread Ambusher",
-                    "Gloom Stalker Magic",
-                    "Umbral Sight",
-                ],
-                7: ["Iron Mind"],
-                11: ["Stalker's Flurry"],
-                15: ["Shadowy Dodge"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
         "Grave Domain": {
             "armors": [],
             "features": {
@@ -623,51 +128,6 @@ subclasses = {
                 6: ["Sentinel at Death's Door"],
                 8: ["Potent Spellcasting"],
                 17: ["Keeper of Souls"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        # XGtE pg 42
-        "Horizon Walker": {
-            "armors": [],
-            "features": {
-                3: [
-                    "Detect Portal",
-                    "Horizon Walker Magic",
-                    "Planar Warrior (1d8)",
-                ],
-                7: ["Etheral Step"],
-                11: ["Distant Strike", "Planar Warrior (2d8)"],
-                15: ["Spectral Defense"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        "Hunter": {
-            "armors": [],
-            "features": {
-                3: ["Hunter's Prey"],
-                7: ["Defensive Tactics"],
-                11: ["Multiattack"],
-                15: ["Superior Hunter's Defense"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        # XGtE pg 45
-        "Inquisitive": {
-            "armors": [],
-            "features": {
-                3: ["Ear for Deceit", "Eye for Detail", "Insightful Fighting"],
-                9: ["Steady Eye"],
-                13: ["Unerring Eye"],
-                17: ["Eye for Weakness"],
             },
             "languages": [],
             "skills": [],
@@ -716,38 +176,6 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
-        # XGtE pg 46
-        "Mastermind": {
-            "armors": [],
-            "features": {
-                3: ["Master of Intrigue", "Master of Tactics"],
-                9: ["Insightful Manipulator"],
-                13: ["Misdirection"],
-                17: ["Soul of Deceit"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        # XGtE pg 43
-        "Monster Slayer": {
-            "armors": [],
-            "features": {
-                3: [
-                    "Hunter's Sense",
-                    "Monster Slayer Magic",
-                    "Slayer's Prey",
-                ],
-                7: ["Supernatural Defense"],
-                11: ["Magic User's Nemesis"],
-                15: ["Slayer's Counter"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
         "Nature Domain": {
             "armors": ["Heavy"],
             "features": {
@@ -756,165 +184,6 @@ subclasses = {
                 6: ["Dampen Elements"],
                 8: ["Divine Strike"],
                 17: ["Master of Nature"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        "Oathbreaker": {
-            "armors": [],
-            "features": {
-                3: [
-                    "Channel Divinity - Control Undead",
-                    "Channel Divinity - Dreadful Aspect",
-                    "Oathbreaker Spells",
-                ],
-                7: ["Aura of Hate"],
-                15: ["Supernatural Resistance"],
-                20: ["Dread Lord"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        # XGtE pg 37
-        "Oath of Conquest": {
-            "armors": [],
-            "features": {
-                3: [
-                    "Channel Divinity - Conquering Presence",
-                    "Channel Divinity - Guided Strike",
-                    "Oath Spells",
-                ],
-                7: ["Aura of Conquest"],
-                15: ["Scornful Rebuke"],
-                18: ["Aura of Conquest"],
-                20: ["Invincible Conqueror"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        "Oath of Devotion": {
-            "armors": [],
-            "features": {
-                3: [
-                    "Channel Divinity - Sacred Weapon",
-                    "Channel Divinity - Turn the Unholy",
-                    "Oath Spells",
-                ],
-                6: ["Aura of Devotion"],
-                15: ["Purity of Spirit"],
-                20: ["Holy Nimbus"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        # TCoE pg 53
-        "Oath of Glory": {
-            "armors": [],
-            "features": {
-                3: [
-                    "Channel Divinity - Peerless Athlete",
-                    "Channel Divinity - Inspiring Smite",
-                    "Oath Spells",
-                ],
-                7: ["Aura of Alacrity"],
-                15: ["Glorious Defense"],
-                20: ["Living Legend"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        # XGtE pg 38
-        "Oath of Redemption": {
-            "armors": [],
-            "features": {
-                3: [
-                    "Channel Divinity - Emissary of Peace",
-                    "Channel Divinity - Rebuke the Violent",
-                    "Oath Spells",
-                ],
-                7: ["Aura of the Guardian (10 ft.)"],
-                15: ["Protective Spirit"],
-                18: ["Aura of the Guardian (30 ft.)"],
-                20: ["Emissary of Redemption"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        "Oath of Vengeance": {
-            "armors": [],
-            "features": {
-                3: [
-                    "Channel Divinity - Abjure Enemy",
-                    "Channel Divinity - Vow of Enmity",
-                    "Oath Spells",
-                ],
-                7: ["Relentless Avenger"],
-                15: ["Soul of Vengeance"],
-                20: ["Avenging Angel"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        "Oath of the Ancients": {
-            "armors": [],
-            "features": {
-                3: [
-                    "Channel Divinity - Nature's Wrath",
-                    "Channel Divinity - Turn the Faithless",
-                    "Oath Spells",
-                ],
-                7: ["Aura of Warding"],
-                15: ["Undying Sentinel"],
-                20: ["Elder Champion"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        "Oath of the Crown": {
-            "armors": [],
-            "features": {
-                3: [
-                    "Channel Divinity - Champion's Challenge",
-                    "Channel Divinity - Turn the Tide",
-                    "Oath Spells",
-                ],
-                7: ["Divine Allegiance"],
-                15: ["Unyielding Spirit"],
-                20: ["Exalted Champion"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        # TCoE pg 54
-        "Oath of the Watchers": {
-            "armors": [],
-            "features": {
-                3: [
-                    "Channel Divinity - Watcher's Will",
-                    "Channel Divinity - Abjure the Extraplanar",
-                    "Oath Spells",
-                ],
-                7: ["Aura of the Sentinel"],
-                15: ["Vigilant Rebuke"],
-                20: ["Mortal Bulwark"],
             },
             "languages": [],
             "skills": [],
@@ -932,20 +201,6 @@ subclasses = {
                 6: ["Embodiment of the Law"],
                 8: ["Divine Strike"],
                 17: ["Order's Wrath"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        # TCoE pg 77
-        "Order of Scribes": {
-            "armors": [],
-            "features": {
-                2: ["Wizardly Quill", "Awakened Spellbook"],
-                6: ["Manifest Mind"],
-                10: ["Master Scrivener"],
-                14: ["One With the Word"],
             },
             "languages": [],
             "skills": [],
@@ -1073,153 +328,6 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
-        # TCoE pg 62
-        "Phantom": {
-            "armors": [],
-            "features": {
-                3: [
-                    "Steady Aim",
-                    "Whispers of the Dead",
-                    "Wails From the Grave",
-                ],
-                9: ["Tokens of the Departed"],
-                13: ["Ghost Walk"],
-                17: ["Death's Friend"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        # TCoE pg 42
-        "Psi Warrior": {
-            "armors": [],
-            "features": {
-                3: ["Psionic Power"],
-                7: ["Telekinetic Adept"],
-                10: ["Guarded Mind"],
-                15: ["Bulwark of Force"],
-                18: ["Telekinetic Master"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        # TCoE pg 44
-        "Rune Knight": {
-            "armors": [],
-            "features": {
-                3: [
-                    "Bonus Proficiencies",
-                    "Rune Carver",
-                    "Giant's Might",
-                ],
-                7: ["Runic Shield"],
-                10: ["Great Stature"],
-                15: ["Master of Runes"],
-                18: ["Runic Juggernaut"],
-            },
-            "languages": [
-                "Giant",
-            ],
-            "skills": [],
-            "tools": [
-                "Artisan's tools - Smith's tools",
-            ],
-            "weapons": [],
-        },
-        # XGtE pg 47
-        "Scout": {
-            "armors": [],
-            "features": {
-                3: ["Skirmisher", "Survivalist"],
-                9: ["Superior Mobility"],
-                13: ["Ambush Master"],
-                17: ["Sudden Strike"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        # XGtE pg 50
-        "Shadow Magic": {
-            "armors": [],
-            "features": {
-                1: ["Eyes of the Dark (darkvision)", "Strength of the Grave"],
-                3: ["Eyes of the Dark (darkness)"],
-                6: ["Hound of Ill Omen"],
-                14: ["Shadow Walk"],
-                18: ["Umbral Form"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        # TCoE pg 63
-        "Soulknife": {
-            "armors": [],
-            "features": {
-                3: [
-                    "Psionic Power",
-                    "Psychic Blades",
-                ],
-                9: ["Soul Blades"],
-                13: ["Psychic Veil"],
-                17: ["Rend Mind"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        # XGtE pg 51
-        "Storm Sorcery": {
-            "armors": [],
-            "features": {
-                1: ["Wind Speaker", "Tempestuous Magic"],
-                6: ["Heart of the Storm", "Storm Guide"],
-                14: ["Storm's Fury"],
-                18: ["Wind Soul"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        # TCoE pg 59
-        "Swarmkeeper": {
-            "armors": [],
-            "features": {
-                3: [
-                    "Gathered Swarm",
-                    "Swarmkeeper Magic",
-                ],
-                7: ["Writhing Tide"],
-                11: ["Mighty Swarm"],
-                15: ["Swarming Dispersal"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        # XGtE pg 47
-        "Swashbuckler": {
-            "armors": [],
-            "features": {
-                3: ["Fancy Footwork", "Rakish Audacity"],
-                9: ["Panache"],
-                13: ["Elegant Maneuver"],
-                17: ["Master Duelist"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
         "Tempest Domain": {
             "armors": ["Heavy"],
             "features": {
@@ -1233,19 +341,6 @@ subclasses = {
             "skills": [],
             "tools": [],
             "weapons": ["Martial"],
-        },
-        "Thief": {
-            "armors": [],
-            "features": {
-                3: ["Fast Hands", "Second-Story Work"],
-                9: ["Supreme Sneak"],
-                13: ["Use Magic Device"],
-                17: ["Thief's Reflexes"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
         },
         "Trickery Domain": {
             "armors": [],
@@ -1275,230 +370,337 @@ subclasses = {
             "tools": [],
             "weapons": ["Martial"],
         },
-        # TCoE pg 49
-        "Way of Mercy": {
-            "armors": [],
+        # Druid Subclasses
+        "Circle of the Land": {
+            "features": {
+                2: ["Bonus Cantrip", "Natural Recovery"],
+                6: ["Land's Stride"],
+                10: ["Nature's Ward"],
+                14: ["Nature's Sanctuary"],
+            },
+        },
+        "Circle of the Moon": {
+            "features": {
+                2: ["Circle Forms", "Combat Wild Shape"],
+                6: ["Primal Strike"],
+                10: ["Elemental Wild Shape"],
+                14: ["Thousand Forms"],
+            },
+        },
+        "Circle of the Sea": {
+            "features": {
+                2: ["Bonus Cantrip", "Natural Recovery"],
+                6: ["Land's Stride"],
+                10: ["Nature's Ward"],
+                14: ["Nature's Sanctuary"],
+            },
+        },
+        "Circle of the Stars": {
+            "features": {
+                2: ["Star Map", "Starry Form"],
+                6: ["Cosmic Omen"],
+                10: ["Twinkling Constellations"],
+                14: ["Full of Stars"],
+            },
+        },
+        # Fighter Subclasses
+        "Battle Master": {
+            "features": {
+                3: ["Combat Superiority", "Student of War"],
+                7: ["Know Your Enemy"],
+                10: ["Improved Combat Superiority"],
+                15: ["Relentless"],
+                18: ["Ultimate Combat Superiority"],
+            },
+        },
+        "Champion": {
+            "features": {
+                3: ["Improved Critical", "Remarkable Athlete"],
+                7: ["Additional Fighting Style"],
+                10: ["Heroic Warrior"],
+                15: ["Superior Critical"],
+                18: ["Survivor"],
+            },
+        },
+        "Eldritch Knight": {
+            "features": {
+                3: ["Spellcasting", "War Bond"],
+                7: ["War Magic"],
+                10: ["Eldritch Strike"],
+                15: ["Arcane Charge"],
+                18: ["Improved War Magic"],
+            },
+        },
+        "Psi Warrior": {
+            "features": {
+                3: ["Psionic Power"],
+                7: ["Telekinetic Adept"],
+                10: ["Guarded Mind"],
+                15: ["Bulwark of Force"],
+                18: ["Telekinetic Master"],
+            },
+        },
+        # Monk Subclasses
+        "Warrior of Mercy": {
             "features": {
                 3: [
-                    "Implements of Mercy",
                     "Hand of Healing",
                     "Hand of Harm",
+                    "Implements of Mercy",
                 ],
                 6: ["Physician's Touch"],
                 11: ["Flurry of Healing and Harm"],
                 17: ["Hand of Ultimate Mercy"],
             },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
         },
-        "Way of Shadow": {
-            "armors": [],
+        "Warrior of Shadow": {
             "features": {
                 3: ["Shadow Arts"],
                 6: ["Shadow Step"],
-                11: ["Cloak of Shadows"],
-                17: ["Opportunist"],
+                11: ["Improved Shadow Step"],
+                17: ["Cloak of Shadows"],
             },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
         },
-        "Way of the Four Elements": {
-            "armors": [],
+        "Warrior of the Elements": {
             "features": {
                 3: [
-                    "Disciple of the Elements",
                     "Elemental Attunement",
-                    "Fangs of the Fire Snake",
-                    "Fist of Four Thunders",
-                    "Fist of Unbroken Air",
-                    "Rush of the Gale Spirits",
-                    "Shade the Flowing River",
-                    "Sweeping Cinder Strike",
-                    "Water Whip",
+                    "Manipulate Elements",
                 ],
-                6: [
-                    "Clench of the North Wind",
-                    "Gong of the Summit",
-                ],
-                11: [
-                    "Eternal Mountain Defense",
-                    "Flames of the Phoenix",
-                    "Mist Stance",
-                    "Ride the Wind",
-                ],
-                17: [
-                    "Breath of Winter",
-                    "River of Hungry Flame",
-                    "Wave of Rolling Earth",
-                ],
+                6: ["Elemental Burst"],
+                11: ["Stride of the Elements"],
+                17: ["Elemental Epitome"],
             },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
         },
-        "Way of the Long Death": {
-            "armors": [],
-            "features": {
-                3: ["Touch of Death"],
-                6: ["Hour of Reaping"],
-                11: ["Mastery of Death"],
-                17: ["Touch of the Long Death"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        "Way of the Open Hand": {
-            "armors": [],
+        "Warrior of the Open Hand": {
             "features": {
                 3: ["Open Hand Technique"],
                 6: ["Wholeness of Body"],
-                11: ["Tranquility"],
+                11: ["Fleet Step"],
                 17: ["Quivering Palm"],
             },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
         },
-        # XGtE pg 35
-        "Way of the Sun Soul": {
-            "armors": [],
+        # Paladin Subclasses
+        "Oath of Devotion": {
             "features": {
-                3: ["Radiant Sun Bolt"],
-                6: ["Searing Arc Strike"],
-                11: ["Searing Sunburst"],
-                17: ["Sun Shield"],
+                3: [
+                    "Oath of Devotion Spells",
+                    "Sacred Weapon",
+                ],
+                6: ["Aura of Devotion"],
+                15: ["Smite of Protection"],
+                20: ["Holy Nimbus"],
             },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
         },
-        "Wild Magic": {
+        "Oath of Glory": {
+            "features": {
+                3: [
+                    "Inspiring Smite",
+                    "Oath of Glory Spells",
+                ],
+                7: ["Aura of Alacrity"],
+                15: ["Glorious Defense"],
+                20: ["Living Legend"],
+            },
+        },
+        "Oath of the Ancients": {
+            "features": {
+                3: [
+                    "Nature's Wrath",
+                    "Oath of the Ancients Spells",
+                ],
+                7: ["Aura of Warding"],
+                15: ["Undying Sentinel"],
+                20: ["Elder Champion"],
+            },
+        },
+        "Oath of Vengeance": {
+            "features": {
+                3: [
+                    "Oath of Vengeance Spells",
+                    "Vow of Enmity",
+                ],
+                7: ["Relentless Avenger"],
+                15: ["Soul of Vengeance"],
+                20: ["Avenging Angel"],
+            },
+        },
+        # Ranger Subclasses
+        "Beast Master": {
+            "features": {
+                3: ["Primal Companion"],
+                7: ["Exceptional Training"],
+                11: ["Beastial Fury"],
+                15: ["Share Spells"],
+            },
+        },
+        "Fey Wanderer": {
+            "features": {
+                3: [
+                    "Dreadful Strikes",
+                    "Fey Wanderer Spells",
+                    "Otherwordly Glamour",
+                ],
+                7: ["Beguiling Twist"],
+                11: ["Fey Reinforcements"],
+                15: ["Misty Wanderer"],
+            },
+        },
+        "Gloom Stalker": {
+            "features": {
+                3: [
+                    "Dread Ambusher",
+                    "Gloom Stalker Spells",
+                    "Umbral Sight",
+                ],
+                7: ["Iron Mind"],
+                11: ["Stalker's Flurry"],
+                15: ["Shadowy Dodge"],
+            },
+        },
+        "Hunter": {
+            "features": {
+                3: ["Hunter's Lore", "Hunter's Prey"],
+                7: ["Defensive Tactics"],
+                11: ["Superior Hunter's Prey"],
+                15: ["Superior Hunter's Defense"],
+            },
+        },
+        # Rogue Subclasses
+        "Arcane Trickster": {
             "armors": [],
             "features": {
-                1: ["Tides of Chaos", "Wild Magic Surge"],
+                3: ["Mage Hand Legerdemain", "Spellcasting"],
+                9: ["Magical Ambush"],
+                13: ["Versatile Trickster"],
+                17: ["Spell Thief"],
+            },
+        },
+        "Assassin": {
+            "features": {
+                3: ["Assassinate", "Assassin's Tool"],
+                9: ["Infiltration Expertise"],
+                13: ["Envenom Weapons"],
+                17: ["Death Strike"],
+            },
+        },
+        "Soulknife": {
+            "features": {
+                3: [
+                    "Psionic Power",
+                    "Psychic Blades",
+                ],
+                9: ["Soul Blades"],
+                13: ["Psychic Veil"],
+                17: ["Rend Mind"],
+            },
+        },
+        "Thief": {
+            "features": {
+                3: ["Fast Hands", "Second-Story Work"],
+                9: ["Supreme Sneak"],
+                13: ["Use Magic Device"],
+                17: ["Thief's Reflexes"],
+            },
+        },
+        # Sorcerer Subclasses
+        "Aberrant Sorcery": {
+            "features": {
+                1: ["Psionic Spells", "Telepathic Speech"],
+                6: ["Psionic Sorcery", "Psychic Defenses"],
+                14: ["Revelation in Flesh"],
+                18: ["Warping Implosion"],
+            },
+        },
+        "Clockwork Soul": {
+            "features": {
+                3: ["Clockwork Spells", "Restore Balance"],
+                6: ["Bastion of Law"],
+                14: ["Trance of Order"],
+                18: ["Clockwork Cavalcade"],
+            },
+        },
+        "Draconic Sorcery": {
+            "features": {
+                3: ["Draconic Resilience", "Dragonic Spells"],
+                6: ["Elemental Affinity"],
+                14: ["Dragon Wings"],
+                18: ["Dragon Companion"],
+            },
+        },
+        "Wild Magic Sorcery": {
+            "features": {
+                3: ["Wild Magic Surge", "Tides of Chaos"],
                 6: ["Bend Luck"],
                 14: ["Controlled Chaos"],
-                18: ["Spell Bombardment"],
+                18: ["Tamed Surge"],
             },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
         },
         # Warlock Subclasses
         "Archfey Patron": {
-            "armors": [],
             "features": {
                 3: ["Archfey Spells", "Steps of the Fey"],
                 6: ["Misty Escape"],
                 10: ["Beguiling Defenses"],
                 14: ["Bewitching Magic"],
             },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
         },
         "Celestial Patron": {
-            "armors": [],
             "features": {
                 3: ["Celestial Spells", "Healing Light"],
                 6: ["Radiant Soul"],
                 10: ["Celestial Resilience"],
                 14: ["Searing Vengeance"],
             },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
         },
         "Fiend Patron": {
-            "armors": [],
             "features": {
                 3: ["Dark One's Blessing", "Fiend Spells"],
                 6: ["Dark One's Own Luck"],
                 10: ["Fiendish Resilience"],
                 14: ["Hurl Through Hell"],
             },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
         },
         "Great Old One Patron": {
-            "armors": [],
             "features": {
                 3: ["Awakened Mind", "Great Old One Spells", "Psychic Spells"],
                 6: ["Clairvoyant Combatant"],
                 10: ["Eldritch Hex", "Thought Shield"],
                 14: ["Create Thrall"],
             },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
         },
         # Wizard Subclasses
         "Abjurer": {
-            "armors": [],
             "features": {
                 3: ["Abjuration Savant", "Arcane Ward"],
                 6: ["Projected Ward"],
                 10: ["Spell Breaker"],
                 14: ["Spell Resistance"],
             },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
         },
         "Diviner": {
-            "armors": [],
             "features": {
                 3: ["Divination Savant", "Portent"],
                 6: ["Expert Divination"],
                 10: ["The Third Eye"],
                 14: ["Greater Portent"],
             },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
         },
         "Evoker": {
-            "armors": [],
             "features": {
                 3: ["Evocation Savant", "Potent Cantrip"],
                 6: ["Sculpt Spells"],
                 10: ["Empowered Evocation"],
                 14: ["Overchannel"],
             },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
         },
         "Illusionist": {
-            "armors": [],
             "features": {
                 3: ["Illusion Savant", "Improved Illusions"],
                 6: ["Phantasmal Creatures"],
                 10: ["Illusory Self"],
                 14: ["Illusory Reality"],
             },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
         },
     },
 }

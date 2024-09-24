@@ -250,19 +250,17 @@ class SystemResourceDocument:
 
         return spell_list
 
-    def getListSubclasses(self, klass=None) -> Tuple[Any, ...]:
-        """Returns a tuple of all applicable subclasses."""
-        try:
-            return tuple(self.srd["classes"][klass]["subclass"])
-        except KeyError:
-            return tuple(self.srd["subclasses"].keys())
+    def getSubclassesByClass(self, klass: str) -> List[str]:
+        """Returns a list of subclasses by class."""
+        return list(self.srd["classes"][klass]["subclass"])
 
-    def getLineages(self, species=None) -> Tuple[str, ...]:
-        """Returns a tuple of all applicable lineages."""
-        try:
-            return tuple(self.srd["species"][species]["lineage"])
-        except KeyError:
-            return tuple(self.srd["lineages"].keys())
+    def getLineages(self) -> List[str]:
+        """Returns a list of all lineages."""
+        return list(self.srd["lineages"].keys())
+
+    def getLineagesBySpecies(self, species=None) -> List[str]:
+        """Returns a list of lineages by species."""
+        return list(self.srd["species"][species]["lineage"])
 
     def getToolProficiencies(
         self,
@@ -303,13 +301,6 @@ class SystemResourceDocument:
             ]
 
         return all_weapons
-
-    def getMetricsByRace(self, race: str) -> Union[Dict[str, str], None]:
-        """Returns metric data by race."""
-        try:
-            return self.srd["metrics"][race]
-        except KeyError:
-            return None
 
     def getRacialMagic(self, race: str, caster_level: int) -> List[str]:
         """Returns racial magic spells by race/subclass, if applicable."""

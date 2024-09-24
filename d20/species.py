@@ -59,7 +59,7 @@ species = {
             ],
         },
         "Gnome": {
-            "lineage": ["Deep", "Forest", "Rock"],
+            "lineage": ["Forest", "Rock"],
             "resistances": [],
             "size": "Small",
             "skills": [],
