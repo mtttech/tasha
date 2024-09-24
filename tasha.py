@@ -1,6 +1,6 @@
 from dataclasses import asdict, replace
 from pathlib import Path
-from typing import Any, Dict, List, Literal, Tuple, Union
+from typing import Any, Dict, List, Literal, Union
 
 import toml
 
@@ -20,40 +20,12 @@ if not character_dir.exists():
     print(f"creating character directory.")
 
 
-def tasha_cmd_add(value: str) -> None:
-    """Performs the add action."""
-    if oPC.hasClasses() and value not in oSRD.getListMulticlasses(
-        oPC.getMyClasses(),
-        oPC.getTotalLevel(),
-        oPC.getAttributes(),
-    ):
-        raise TashaCommandError(f"you don't meet the requirements to multiclass.")
-
-    level_allowance = 20
-    level_allowance = level_allowance - oPC.getTotalLevel()
-    if level_allowance == 0:
-        raise TashaCommandError("you cannot select anymore classes.")
-
-    level = int(
-        Scan(
-            message=f"What is your '{value}' level (1-{level_allowance})?",
-            selections=[str(_) for _ in list(range(1, level_allowance + 1))],
-            completer=True,
-        )
-    )
-    oSheet.classes[value] = {}
-    oSheet.classes[value]["hit_die"] = oSRD.getHitDieByClass(value)
-    oSheet.classes[value]["level"] = level
-    oSheet.classes[value]["subclass"] = ""
-
-
 def tasha_cmd_save() -> None:
     """Performs the save action."""
     oSheet.set(
         {
             "allotted_asi": oSRD.calculateAllottedAsi(oPC.getMyRawClasses()),
             "traits": oSRD.getRacialMagic(oPC.getMySpecies(), oPC.getTotalLevel()),
-            "version": __version__,
         }
     )
     assignClassFeatures()
@@ -200,28 +172,6 @@ def assignAttributeValues(results: List[int]) -> Dict[str, Dict[str, int]]:
         setAttributeValue(attribute, results[0])
 
     return setAttributeOrder(attribute_array)
-
-
-def assignBackgroundTraits() -> None:
-    """Prompt for setting the character's background."""
-    oSheet.set(
-        "background",
-        Scan(
-            message=f"What is your background?",
-            selections=oSRD.getBackgrounds(),
-            completer=True,
-        ),
-    )
-
-    background_traits = oSRD.getEntryByBackground(oPC.getMyBackground())
-    oSheet.set(
-        {
-            "equipment": background_traits["equipment"],
-            "gold": background_traits["gold"],
-            "skills": background_traits["skills"],
-            "tools": background_traits["tools"],
-        }
-    )
 
 
 def assignCantrips(
@@ -516,7 +466,6 @@ def assignRacialTraits() -> None:
     )
 
     assignTraitsDragonborn()
-    assignBackgroundTraits()
 
     if subrace != "":
         traits = oSRD.getEntryByLineage(subrace)
@@ -727,7 +676,7 @@ def isPreparedCaster(self) -> bool:
     return False
 
 
-def step1() -> Tuple[str, int, str]:
+def step1():
     # Choose class/subclass
     # Select level
     klass = utils.stdin("What class are you?", oSRD.getClasses())[0]
@@ -738,7 +687,7 @@ def step1() -> Tuple[str, int, str]:
             "What subclass are you?", oSRD.getSubclassesByClass(klass)
         )
         subclass = subklass[0]
-    return klass, level, subclass
+    oSheet.set("classes", {klass: {"level": level, "subclass": subclass}})
 
 
 def step2():
@@ -826,14 +775,17 @@ def step5():
 
 
 def main() -> None:
-    klass, level, subclass = step1()
-    step2()
-    step3()
-    step4()
-    step5()
+    try:
+        step1()
+        step2()
+        step3()
+        step4()
+        step5()
 
-    oSheet.set("classes", {klass: {"level": level, "subclass": subclass}})
-    print(oSheet)
+        print(oSheet)
+    except KeyboardInterrupt:
+        print()
+        pass
 
 
 if __name__ == "__main__":

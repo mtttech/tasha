@@ -1,33 +1,6 @@
 subclasses = {
     "subclasses": {
-        "Arcana Domain": {
-            "armors": [],
-            "features": {
-                1: ["Arcane Initiate"],
-                2: ["Channel Divinity - Arcane Abjuration"],
-                6: ["Spell Breaker"],
-                8: ["Potent Spellcasting"],
-                17: ["Arcane Mastery"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        "College of Creation": {
-            "armors": [],
-            "features": {
-                3: ["Mote of Potential", "Performance of Creation"],
-                6: ["Animating Performance"],
-                14: ["Creative Crescendo"],
-                14: ["Vengeful Ancestors", "Spirit Shield (4d6)"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        "College of Eloquence": {
+        "College of Dance": {
             "armors": [],
             "features": {
                 3: ["Silver Tongue", "Unsettling Words"],
@@ -76,179 +49,8 @@ subclasses = {
             "tools": [],
             "weapons": ["Martial"],
         },
-        # XGtE pg 16
-        "College of Whispers": {
-            "armors": [],
-            "features": {
-                3: ["Psychic Blades", "Words of Terror"],
-                6: ["Mantle of Whispers"],
-                14: ["Shadow Lore"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        "Death Domain": {
-            "armors": [],
-            "features": {
-                1: ["Reaper"],
-                2: ["Channel Divinity - Touch of Death"],
-                6: ["Inescapable Destruction"],
-                8: ["Divine Strike"],
-                17: ["Improved Reaper"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [
-                "Martial",
-            ],
-        },
-        "Forge Domain": {
-            "armors": ["Heavy"],
-            "features": {
-                1: ["Bonus Proficiencies", "Blessing of the Forge"],
-                2: ["Channel Divinity - Artisan's Blessing"],
-                6: ["Soul of the Forge"],
-                8: ["Divine Strike (1d8)"],
-                14: ["Divine Strike (2d8)"],
-                17: ["Saint of Forge and Fire"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": ["Artisan's tools - Smith's tools"],
-            "weapons": [],
-        },
-        "Grave Domain": {
-            "armors": [],
-            "features": {
-                1: ["Circle of Mortality", "Eyes of the Grave"],
-                2: ["Channel Divinity - Path to the Grave"],
-                6: ["Sentinel at Death's Door"],
-                8: ["Potent Spellcasting"],
-                17: ["Keeper of Souls"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        "Knowledge Domain": {
-            "armors": [],
-            "features": {
-                1: ["Blessings of Knowledge"],
-                2: ["Channel Divinity - Knowledge of the Ages"],
-                6: ["Channel Divinity - Read Thoughts"],
-                8: ["Potent Spellcasting"],
-                17: ["Visions of the Past"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        "Life Domain": {
-            "armors": ["Heavy"],
-            "features": {
-                1: ["Disciple of Life"],
-                3: ["Channel Divinity - Preserve Life"],
-                6: ["Blessed Healer"],
-                8: ["Divine Strike"],
-                17: ["Supreme Healing"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        "Light Domain": {
-            "armors": [],
-            "features": {
-                1: ["Bonus Cantrip", "Warding Flare"],
-                2: ["Channel Divinity - Radiance of the Dawn"],
-                6: ["Improved Flare"],
-                8: ["Potent Spellcasting"],
-                17: ["Corona of Light"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        "Nature Domain": {
-            "armors": ["Heavy"],
-            "features": {
-                1: ["Acolyte of Nature"],
-                2: ["Channel Divinity - Charm Animals and Plants"],
-                6: ["Dampen Elements"],
-                8: ["Divine Strike"],
-                17: ["Master of Nature"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        # TCoE pg 31
-        "Order Domain": {
-            "armors": [
-                "Heavy",
-            ],
-            "features": {
-                1: ["Voice of Authority"],
-                2: ["Channel Divinity - Order's Demand"],
-                6: ["Embodiment of the Law"],
-                8: ["Divine Strike"],
-                17: ["Order's Wrath"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        # TCoE pg 25
-        "Path of Wild Magic": {
-            "armors": [],
-            "features": {
-                3: ["Magic Awareness", "Wild Surge"],
-                6: ["Bolstering Magic"],
-                10: ["Unstable Backlash"],
-                14: ["Controlled Surge"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        "Path of the Ancestral Guardian": {
-            "armors": [],
-            "features": {
-                3: ["Ancestral Protectors"],
-                6: ["Spirit Shield (2d6)"],
-                10: ["Consult the Spirits", "Spirit Shield (3d6)"],
-                14: ["Vengeful Ancestors", "Spirit Shield (4d6)"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        "Path of the Battlerager": {
-            "armors": [],
-            "features": {
-                3: ["Battlerager Armor"],
-                6: ["Reckless Abandon"],
-                10: ["Battlerager Charge"],
-                14: ["Spiked Retribution"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
         # TCoE pg 24
-        "Path of the Beast": {
+        "Path of the Wild Heart": {
             "armors": [],
             "features": {
                 3: ["Form of the Beast"],
@@ -274,20 +76,7 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
-        "Path of the Storm Herald": {
-            "armors": [],
-            "features": {
-                3: ["Storm Aura"],
-                6: ["Storm Soul"],
-                10: ["Shielding Storm"],
-                14: ["Raging Storm"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        "Path of the Totem Warrior": {
+        "Path of the World Tree": {
             "armors": [],
             "features": {
                 3: ["Beast Sense", "Speak with Animals", "Totem Spirit"],
@@ -313,37 +102,26 @@ subclasses = {
             "tools": [],
             "weapons": [],
         },
-        # TCoE pg 32
-        "Peace Domain": {
-            "armors": [],
+        # Cleric Subclasses
+        "Life Domain": {
             "features": {
-                1: ["Emboldening Bond"],
-                2: ["Channel Divinity - Balm of Peace"],
-                6: ["Protective Bond"],
-                8: ["Potent Spellcasting"],
-                17: ["Expansive Bond"],
-            },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
-        },
-        "Tempest Domain": {
-            "armors": ["Heavy"],
-            "features": {
-                1: ["Wrath of the Storm"],
-                2: ["Channel Divinity - Destructive Wrath"],
-                6: ["Thunderbolt Strike"],
+                1: ["Disciple of Life"],
+                3: ["Channel Divinity - Preserve Life"],
+                6: ["Blessed Healer"],
                 8: ["Divine Strike"],
-                17: ["Stormborn"],
+                17: ["Supreme Healing"],
             },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": ["Martial"],
+        },
+        "Light Domain": {
+            "features": {
+                1: ["Bonus Cantrip", "Warding Flare"],
+                2: ["Channel Divinity - Radiance of the Dawn"],
+                6: ["Improved Flare"],
+                8: ["Potent Spellcasting"],
+                17: ["Corona of Light"],
+            },
         },
         "Trickery Domain": {
-            "armors": [],
             "features": {
                 1: ["Blessing of the Trickster"],
                 2: ["Channel Divinity - Invoke Duplicity"],
@@ -351,13 +129,8 @@ subclasses = {
                 8: ["Divine Strike"],
                 17: ["Improved Duplicity"],
             },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": [],
         },
         "War Domain": {
-            "armors": ["Heavy"],
             "features": {
                 1: ["War Priest"],
                 2: ["Channel Divinity - Guided Strike"],
@@ -365,39 +138,35 @@ subclasses = {
                 8: ["Divine Strike"],
                 17: ["Avatar of Battle"],
             },
-            "languages": [],
-            "skills": [],
-            "tools": [],
-            "weapons": ["Martial"],
         },
         # Druid Subclasses
         "Circle of the Land": {
             "features": {
-                2: ["Bonus Cantrip", "Natural Recovery"],
-                6: ["Land's Stride"],
+                3: ["Circle of the Land Spells", "Land's Aid"],
+                6: ["Natural Recovery"],
                 10: ["Nature's Ward"],
                 14: ["Nature's Sanctuary"],
             },
         },
         "Circle of the Moon": {
             "features": {
-                2: ["Circle Forms", "Combat Wild Shape"],
-                6: ["Primal Strike"],
-                10: ["Elemental Wild Shape"],
-                14: ["Thousand Forms"],
+                3: ["Circle Forms", "Circle of the Moon Spells"],
+                6: ["Improved Circle Forms"],
+                10: ["Moonlight Step"],
+                14: ["Lunar Form"],
             },
         },
         "Circle of the Sea": {
             "features": {
-                2: ["Bonus Cantrip", "Natural Recovery"],
-                6: ["Land's Stride"],
-                10: ["Nature's Ward"],
-                14: ["Nature's Sanctuary"],
+                3: ["Circle of the Sea Spells", "Wrath of the Sea"],
+                6: ["Aquatic Affinity"],
+                10: ["Stormborn"],
+                14: ["Oceanic Gift"],
             },
         },
         "Circle of the Stars": {
             "features": {
-                2: ["Star Map", "Starry Form"],
+                3: ["Star Map", "Starry Form"],
                 6: ["Cosmic Omen"],
                 10: ["Twinkling Constellations"],
                 14: ["Full of Stars"],
