@@ -35,7 +35,6 @@ class CharacterSheet:
     spellcasting: dict = field(default_factory=dict)
     tools: list = field(default_factory=list)
     traits: list = field(default_factory=list)
-    version: str = field(default="")
     weapons: list = field(default_factory=list)
 
     def __post_init__(self) -> None:

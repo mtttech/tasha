@@ -1,6 +1,6 @@
 from dataclasses import asdict, replace
 from pathlib import Path
-from typing import Any, Dict, List, Literal, Union
+from typing import Any, Dict, List, Literal, Tuple, Union
 
 import toml
 
@@ -13,18 +13,6 @@ oSheet = CharacterSheet()
 oPC = PlayerCharacter(oSheet)
 oSRD = SystemResourceDocument()
 
-
-try:
-    pyproject_file = Path(__file__).parents[0] / "pyproject.toml"
-    with pyproject_file.open("r") as pyproject:
-        try:
-            __version__ = toml.load(pyproject)["project"]["version"]
-        except KeyError:
-            print(f"cannot detect my version number.")
-            exit(1)
-except FileNotFoundError:
-    print("cannot locate 'pyproject.toml'.")
-    exit(1)
 
 character_dir = Path.home() / ".config" / "tasha" / "characters"
 if not character_dir.exists():
@@ -234,136 +222,6 @@ def assignBackgroundTraits() -> None:
             "tools": background_traits["tools"],
         }
     )
-
-    # Backgrounds that have a bonus language(s).
-    if oPC.getMyBackground() in (
-        "Acolyte",
-        "City Watch",
-        "Clan Crafter",
-        "Cloistered Scholar",
-        "Faction Agent",
-        "Far Traveler",
-        "Feylost",
-        "Guild Artisan",
-        "Hermit",
-        "Investigator",
-        "Noble",
-        "Outlander",
-        "Sage",
-        "Witchlight Hand",
-    ):
-        if (
-            oPC.getMyBackground() == "Clan Crafter"
-            and "Dwarvish" not in oPC.getMyLanguages()
-        ):
-            oSheet.set("languages", "Dwarvish")
-        else:
-            number_of_languages = (
-                2
-                if oPC.getMyBackground()
-                in (
-                    "Acolyte",
-                    "City Watch",
-                    "Cloistered Scholar",
-                    "Faction Agent",
-                    "Investigator",
-                    "Sage",
-                )
-                else 1
-            )
-            if oPC.getMyBackground() != "Feylost":
-                bonus_languages = oSRD.getStandardLanguages(oPC.getMyLanguages())
-            else:
-                bonus_languages = ("Elvish", "Gnomish", "Goblin", "Sylvan")
-                bonus_languages = [
-                    l for l in bonus_languages if l not in oPC.getMyLanguages()
-                ]
-            for _ in range(number_of_languages):
-                language = Scan(
-                    message=f"Choose a '{oPC.getMyBackground()}' background bonus language.",
-                    selections=bonus_languages,
-                    completer=True,
-                )
-                oSheet.set(
-                    "languages",
-                    language,
-                )
-                if number_of_languages > 1:
-                    bonus_languages.remove(language)
-
-    # Backgrounds that have bonus skills proficiencies.
-    if oPC.getMyBackground() in (
-        "Cloistered Scholar",
-        "Faction Agent",
-    ):
-        bonus_skills = []
-        if oPC.getMyBackground() == "Cloistered Scholar":
-            bonus_skills = ["Arcana", "Nature", "Religion"]
-        elif oPC.getMyBackground() == "Faction Agent":
-            bonus_skills = [
-                "Animal Handling",
-                "Arcana",
-                "Deception",
-                "History",
-                "Insight",
-                "Intimidation",
-                "Investigation",
-                "Medicine",
-                "Nature",
-                "Perception",
-                "Performance",
-                "Persuasion",
-                "Religion",
-                "Survial",
-            ]
-        oSheet.set(
-            "skills",
-            Scan(
-                message=f"Choose a '{oPC.getMyBackground()}' background bonus skill.",
-                selections=[s for s in bonus_skills if s not in oPC.getMySkills()],
-                completer=True,
-            ),
-        )
-
-    # Backgrounds that have bonus tool proficiencies.
-    if oPC.getMyBackground() in (
-        "Criminal",
-        "Entertainer",
-        "Feylost",
-        "Folk Hero",
-        "Guild Artisan",
-        "Noble",
-        "Outlander",
-        "Soldier",
-        "Witchlight Hand",
-    ):
-        if oPC.getMyBackground() == "Criminal":
-            tool_options = [
-                "Gaming set - Dice set",
-                "Gaming set - Dragonchess set",
-                "Gaming set - Playing card set",
-                "Gaming set - Three-Dragon Ante set",
-            ]
-        elif oPC.getMyBackground() == "Witchlight Hand":
-            tool_options = oSRD.getToolProficiencies(
-                oPC.getMyTools(), "Musical instrument"
-            )
-            tool_options.append("Disguise kit")
-        else:
-            tool_options = [
-                "Gaming set - Dice set",
-                "Gaming set - Dragonchess set",
-                "Gaming set - Playing card set",
-                "Gaming set - Three-Dragon Ante set",
-            ]
-        oSheet.set(
-            "tools",
-            Scan(
-                message=f"Choose a '{oPC.getMyBackground()}' background bonus tool proficiency.",
-                selections=tool_options,
-                completer=True,
-            ),
-        )
 
 
 def assignCantrips(
@@ -869,7 +727,7 @@ def isPreparedCaster(self) -> bool:
     return False
 
 
-def step1():
+def step1() -> Tuple[str, int, str]:
     # Choose class/subclass
     # Select level
     klass = utils.stdin("What class are you?", oSRD.getClasses())[0]
@@ -880,7 +738,7 @@ def step1():
             "What subclass are you?", oSRD.getSubclassesByClass(klass)
         )
         subclass = subklass[0]
-    oSheet.set("classes", {klass: {"level": level, "subclass": subclass}})
+    return klass, level, subclass
 
 
 def step2():
@@ -940,6 +798,7 @@ def step2():
     oSheet.set("tools", tool)
 
     species = utils.stdin("What is your species?", oSRD.getSpecies())[0]
+    lineage = ""
     lineages = oSRD.getLineagesBySpecies(species)
     if len(lineages) != 0:
         lineage = utils.stdin(f"Choose your {species} lineage.", lineages)[0]
@@ -967,12 +826,13 @@ def step5():
 
 
 def main() -> None:
-    step1()
+    klass, level, subclass = step1()
     step2()
     step3()
     step4()
     step5()
 
+    oSheet.set("classes", {klass: {"level": level, "subclass": subclass}})
     print(oSheet)
 
 
