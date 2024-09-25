@@ -12,9 +12,7 @@ class CharacterSheet:
     attributes: dict = field(default_factory=dict)
     background: str = field(default="")
     bonus: dict = field(default_factory=dict)
-    cantrips: list = field(default_factory=list)
     classes: dict = field(default_factory=dict)
-    equipment: list = field(default_factory=list)
     feats: list = field(default_factory=list)
     features: list = field(default_factory=list)
     gender: str = field(default="")
@@ -25,14 +23,11 @@ class CharacterSheet:
     level: int = field(default=1)
     name: str = field(default="")
     proficiency_bonus: int = field(default=0)
-    resistances: list = field(default_factory=list)
     savingthrows: list = field(default_factory=list)
     size: str = field(default="Medium")
     skills: list = field(default_factory=list)
     species: str = field(default="")
     speed: int = field(default=30)
-    spell_slots: list = field(default_factory=list)
-    spellcasting: dict = field(default_factory=dict)
     tools: list = field(default_factory=list)
     traits: list = field(default_factory=list)
     weapons: list = field(default_factory=list)
@@ -60,7 +55,6 @@ class CharacterSheet:
         self.feats = list()
         self.features = list()
         self.gender = ""
-        self.gold = 0
         self.initiative = 0
         self.languages = list()
         self.level = 1
@@ -72,8 +66,6 @@ class CharacterSheet:
         self.size = "Medium"
         self.skills = list()
         self.speed = 30
-        self.spell_slots = list()
-        self.spellcasting = dict()
         self.tools = list()
         self.traits = list()
         self.weapons = list()
@@ -272,13 +264,6 @@ class PlayerCharacter:
         """Returns all the character's selected subclasses."""
         return [v["subclass"] for v in tuple(self.character_sheet.classes.values())]
 
-    def getMySubrace(self) -> str:
-        """Returns the character's subrace, if applicable."""
-        race = self.character_sheet.race.split(", ")
-        if len(race) > 1:
-            return race[1]
-        return ""
-
     def getMyTools(self) -> List[str]:
         """Returns the character's tool proficiency list."""
         return self.character_sheet.tools
@@ -300,10 +285,6 @@ class PlayerCharacter:
         else:
             skill_total = 2
         return skill_total
-
-    def getSpellSlots(self) -> List[str]:
-        """Returns the character's spell slots."""
-        return self.character_sheet.spell_slots
 
     def getTotalLevel(self) -> int:
         """Returns the total level for all character classes."""

@@ -14,13 +14,11 @@ class SystemResourceDocument:
                     "classes",
                     "feats",
                     "languages",
-                    "lineages",
                     "multiclasses",
                     "proficiencies",
                     "species",
                     "skills",
                     "spells",
-                    "subclasses",
                 ],
                 list(srd5e.values()),
             )
@@ -116,29 +114,6 @@ class SystemResourceDocument:
         except KeyError:
             raise ValueError(f"Cannot find an entry for the '{subclass}' subclass.")
 
-    def getEntryByLineage(self, lineage: str) -> Dict[str, Any]:
-        """Returns SRD entries by the chosen subrace."""
-        try:
-            return self.srd["lineages"][lineage]
-        except KeyError:
-            raise ValueError(f"Cannot find an entry for the '{lineage}' lineage.")
-
-    def getFeaturesByClass(self, klass: str, level: int) -> List[str]:
-        """Returns features by class/subclass and level."""
-        try:
-            class_features = self.srd["classes"][klass]["features"]
-        except KeyError:
-            try:
-                class_features = self.srd["classes"][klass]["features"]
-            except KeyError:
-                return []
-
-        class_features = list(
-            {k: v for k, v in class_features.items() if k <= level}.values()
-        )
-
-        return list(itertools.chain(*class_features))
-
     def getHitDieByClass(self, klass: str) -> int:
         """Returns the hit die for the specified class."""
         try:
@@ -146,7 +121,7 @@ class SystemResourceDocument:
         except KeyError:
             return 6
 
-    def getListAlignments(self) -> List[str]:
+    def getAlignments(self) -> List[str]:
         """Returns a list of all applicable alignments."""
         return self.srd["alignments"]
 
@@ -190,6 +165,18 @@ class SystemResourceDocument:
             if params["category"] == category:
                 requested_feats.append(feat)
         return requested_feats
+
+    def getFeaturesByClass(self, klass: str, class_level: int) -> List[str]:
+        """Returns class features by class."""
+        class_features = list()
+        for level, features in self.srd["classes"][klass]["features"].items():
+            if class_level >= level:
+                class_features = class_features + features
+        return class_features
+
+    def getSavingThrowsByClass(self, klass: str) -> List[str]:
+        """Returns saving throws by class."""
+        return self.srd["classes"][klass]["savingthrows"]
 
     def getRareLanguages(self, excl: Union[List[str], None] = None) -> List[str]:
         """Returns all rare languages (minus exclusions, if applicable)."""
@@ -252,15 +239,7 @@ class SystemResourceDocument:
 
     def getSubclassesByClass(self, klass: str) -> List[str]:
         """Returns a list of subclasses by class."""
-        return list(self.srd["classes"][klass]["subclass"])
-
-    def getLineages(self) -> List[str]:
-        """Returns a list of all lineages."""
-        return list(self.srd["lineages"].keys())
-
-    def getLineagesBySpecies(self, species=None) -> List[str]:
-        """Returns a list of lineages by species."""
-        return list(self.srd["species"][species]["lineage"])
+        return list(self.srd["classes"][klass]["subclasses"])
 
     def getToolProficiencies(
         self,
@@ -276,6 +255,10 @@ class SystemResourceDocument:
                 t for t in tool_proficiencies if t.startswith(startswith)
             ]
         return tool_proficiencies
+
+    def getTraitsBySpecies(self, species: str) -> List[str]:
+        """Returns a list of traits by species."""
+        return list(self.srd["species"][species]["traits"])
 
     def getListWeapons(self, excluded: Union[List[str], None] = None) -> List[str]:
         """Returns a list of weapons, ignoring those in the excluded list."""

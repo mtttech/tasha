@@ -22,7 +22,6 @@ classes = {
                 20: ["Primal Champion"],
             },
             "hit_die": 12,
-            "languages": [],
             "savingthrows": ["Constitution", "Strength"],
             "skills": [
                 "Animal Handling",
@@ -33,7 +32,7 @@ classes = {
                 "Survival",
             ],
             "spell_slots": {},
-            "subclass": [
+            "subclasses": [
                 "Path of the Berserker",
                 "Path of the Wild Heart",
                 "Path of the World Tree",
@@ -59,7 +58,6 @@ classes = {
                 20: ["Words of Creation"],
             },
             "hit_die": 8,
-            "languages": [],
             "prepared_spells": {
                 1: 4,
                 2: 5,
@@ -125,7 +123,7 @@ classes = {
                 19: "4,4,3,3,3,3,2,1,1,1",
                 20: "4,4,3,3,3,3,2,2,1,1",
             },
-            "subclass": [
+            "subclasses": [
                 "College of Dance",
                 "College of Glamour",
                 "College of Lore",
@@ -152,7 +150,6 @@ classes = {
                 20: ["Greater Divine Intervention"],
             },
             "hit_die": 8,
-            "languages": [],
             "savingthrows": ["Charisma", "Wisdom"],
             "skills": ["History", "Insight", "Medicine", "Persuasion", "Religion"],
             "spell_slots": {
@@ -177,7 +174,7 @@ classes = {
                 19: "5,4,3,3,3,3,2,1,1,1",
                 20: "5,4,3,3,3,3,2,2,1,1",
             },
-            "subclass": [
+            "subclasses": [
                 "Life Domain",
                 "Light Domain",
                 "Trickery Domain",
@@ -204,7 +201,6 @@ classes = {
                 20: ["Archdruid"],
             },
             "hit_die": 8,
-            "languages": ["Druidic"],
             "savingthrows": ["Intelligence", "Wisdom"],
             "skills": [
                 "Animal Handling",
@@ -238,7 +234,7 @@ classes = {
                 19: "4,4,3,3,3,3,2,1,1,1",
                 20: "4,4,3,3,3,3,2,2,1,1",
             },
-            "subclass": [
+            "subclasses": [
                 "Circle of the Land",
                 "Circle of the Moon",
                 "Circle of the Sea",
@@ -267,7 +263,6 @@ classes = {
                 20: ["Three Extra Attacks"],
             },
             "hit_die": 10,
-            "languages": [],
             "prepared_spells": {
                 1: 0,
                 2: 0,
@@ -323,7 +318,7 @@ classes = {
                 19: "3,4,3,3,1",
                 20: "3,4,3,3,1",
             },
-            "subclass": [
+            "subclasses": [
                 "Battle Master",
                 "Champion",
                 "Eldritch Knight",
@@ -355,7 +350,6 @@ classes = {
                 20: ["Body and Mind"],
             },
             "hit_die": 8,
-            "languages": [],
             "savingthrows": ["Dexterity", "Strength"],
             "skills": [
                 "Acrobatics",
@@ -366,7 +360,7 @@ classes = {
                 "Stealth",
             ],
             "spell_slots": {},
-            "subclass": [
+            "subclasses": [
                 "Warrior of Mercy",
                 "Warrior of Shadow",
                 "Warrior of the Elements",
@@ -395,7 +389,6 @@ classes = {
                 19: ["Epic Boon"],
             },
             "hit_die": 10,
-            "languages": [],
             "savingthrows": ["Charisma", "Wisdom"],
             "skills": [
                 "Athletics",
@@ -427,7 +420,7 @@ classes = {
                 19: "0,4,3,3,3,2",
                 20: "0,4,3,3,3,2",
             },
-            "subclass": [
+            "subclasses": [
                 "Oath of Devotion",
                 "Oath of Glory",
                 "Oath of the Ancients",
@@ -458,7 +451,6 @@ classes = {
                 20: ["Foe Slayer"],
             },
             "hit_die": 10,
-            "languages": [],
             "prepared_spells": {
                 1: 2,
                 2: 3,
@@ -515,7 +507,7 @@ classes = {
                 19: "0,4,3,3,3,2",
                 20: "0,4,3,3,3,2",
             },
-            "subclass": [
+            "subclasses": [
                 "Beast Master",
                 "Fey Wanderer",
                 "Gloom Stalker",
@@ -545,7 +537,6 @@ classes = {
                 20: ["Stroke of Luck"],
             },
             "hit_die": 8,
-            "languages": ["Thieves' cant"],
             "prepared_spells": {
                 1: 0,
                 2: 0,
@@ -604,7 +595,7 @@ classes = {
                 19: "3,4,3,3,1",
                 20: "3,4,3,3,1",
             },
-            "subclass": [
+            "subclasses": [
                 "Arcane Trickster",
                 "Assassin",
                 "Soulknife",
@@ -629,7 +620,6 @@ classes = {
                 20: ["Arcane Apotheosis"],
             },
             "hit_die": 6,
-            "languages": [],
             "prepared_spells": {
                 1: 2,
                 2: 4,
@@ -683,7 +673,7 @@ classes = {
                 19: "6,4,3,3,3,3,2,1,1,1",
                 20: "6,4,3,3,3,3,2,2,1,1",
             },
-            "subclass": [
+            "subclasses": [
                 "Aberrant Sorcery",
                 "Clockwork Sorcery",
                 "Draconic Sorcery",
@@ -708,7 +698,6 @@ classes = {
                 20: ["Eldritch Master"],
             },
             "hit_die": 8,
-            "languages": [],
             "prepared_spells": {
                 1: 2,
                 2: 3,
@@ -763,7 +752,7 @@ classes = {
                 19: "4,4,4,4,4,4,1,1,1,1",
                 20: "4,4,4,4,4,4,1,1,1,1",
             },
-            "subclass": [
+            "subclasses": [
                 "Archfey Patron",
                 "Celestial Patron",
                 "Fiend Patron",
@@ -788,7 +777,6 @@ classes = {
                 20: ["Signature Spells"],
             },
             "hit_die": 6,
-            "languages": [],
             "prepared_spells": {
                 1: 4,
                 2: 5,
@@ -842,7 +830,7 @@ classes = {
                 19: "5,4,3,3,3,3,2,1,1,1",
                 20: "5,4,3,3,3,3,2,2,1,1",
             },
-            "subclass": [
+            "subclasses": [
                 "Abjurer",
                 "Diviner",
                 "Evoker",

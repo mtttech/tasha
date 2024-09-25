@@ -1,11 +1,7 @@
 species = {
     "species": {
         "Aasimar": {
-            "lineage": [],
-            "resistances": ["Necrotic", "Radiant"],
             "size": "Medium",
-            "skills": [],
-            "spells": [],
             "traits": [
                 "Celestial Resistance",
                 "Celestial Revelation",
@@ -18,11 +14,7 @@ species = {
             ],
         },
         "Dragonborn": {
-            "lineage": [],
-            "resistances": [],
             "size": "Medium",
-            "skills": [],
-            "spells": [],
             "traits": [
                 "Breath Weapon",
                 "Damage Resistance",
@@ -32,11 +24,7 @@ species = {
             ],
         },
         "Dwarf": {
-            "lineage": [],
-            "resistances": ["Poison"],
             "size": "Medium",
-            "skills": [],
-            "spells": [],
             "traits": [
                 "Darkvision",
                 "Dwarven Resilience",
@@ -45,33 +33,21 @@ species = {
             ],
         },
         "Elf": {
-            "lineage": ["Drow", "High", "Wood"],
-            "resistances": ["Charm", "Sleep"],
             "size": "Medium",
-            "skills": ["Perception"],
-            "spells": [],
             "traits": [
                 "Darkvision",
-                "Elf Lineage",
+                "Elven Lineage",
                 "Fey Ancestry",
                 "Keen Senses",
                 "Trance",
             ],
         },
         "Gnome": {
-            "lineage": ["Forest", "Rock"],
-            "resistances": [],
             "size": "Small",
-            "skills": [],
-            "spells": [],
-            "traits": ["Darkvision", "Gnome Cunning", "Gnomish Lineage"],
+            "traits": ["Darkvision", "Gnomish Cunning", "Gnomish Lineage"],
         },
         "Goliath": {
-            "lineage": [],
-            "resistances": [],
             "size": "Medium",
-            "skills": ["Athletics"],
-            "spells": [],
             "traits": [
                 "Giant Ancestry",
                 "Large Form",
@@ -79,39 +55,19 @@ species = {
             ],
         },
         "Halfling": {
-            "lineage": [],
-            "resistances": [],
             "size": "Small",
-            "skills": [],
-            "spells": [],
             "traits": ["Brave", "Halfling Nimbleness", "Luck", "Naturally Stealthy"],
         },
         "Human": {
-            "lineage": [],
-            "resistances": [],
             "size": "Medium",
-            "skills": [],
-            "spells": [],
             "traits": ["Resourceful", "Skillful", "Versatile"],
         },
         "Orc": {
-            "lineage": [],
-            "resistances": [],
             "size": "Medium",
-            "skills": ["Intimidation"],
-            "spells": [],
             "traits": ["Adrenaline Rush", "Darkvision", "Relentless Endurance"],
         },
         "Tiefling": {
-            "lineage": [
-                "Abyssal",
-                "Chthonic",
-                "Internal",
-            ],
-            "resistances": ["Fire"],
             "size": "Medium",
-            "skills": [],
-            "spells": [],
             "traits": ["Darkvision", "Fiendish Legacy", "Otherworldly Presence"],
         },
     },
