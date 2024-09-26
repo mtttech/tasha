@@ -90,13 +90,6 @@ class SystemResourceDocument:
         except KeyError:
             raise ValueError(f"Cannot find an entry for the '{klass}' multiclass.")
 
-    def getHitDieByClass(self, klass: str) -> int:
-        """Returns the hit die for the specified class."""
-        try:
-            return self.srd["classes"][klass]["hit_die"]
-        except KeyError:
-            return 6
-
     def getAlignments(self) -> List[str]:
         """Returns a list of all applicable alignments."""
         return self.srd["alignments"]
@@ -145,6 +138,10 @@ class SystemResourceDocument:
             if class_level >= level:
                 class_features = class_features + features
         return class_features
+
+    def getHitDieByClass(self, klass: str) -> int:
+        """Returns hit die type by class."""
+        return self.srd["classes"][klass]["hit_die"]
 
     def getRareLanguages(self, excl: Union[List[str], None] = None) -> List[str]:
         """Returns all rare languages (minus exclusions, if applicable)."""
