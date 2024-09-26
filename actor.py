@@ -17,6 +17,7 @@ class CharacterSheet:
     features: list = field(default_factory=list)
     gender: str = field(default="")
     gold: int = field(default=0)
+    hit_die: int = field(default=0)
     hit_points: int = field(init=False)
     initiative: int = field(default=0)
     languages: list = field(default_factory=list)

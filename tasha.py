@@ -7,7 +7,7 @@ import toml
 from actor import CharacterSheet, PlayerCharacter
 from attributes import Attributes, Score, generate_attributes, get_modifier
 from d20 import SystemResourceDocument
-import utils
+from utils import stdin
 
 oSheet = CharacterSheet()
 oPC = PlayerCharacter(oSheet)
@@ -76,11 +76,11 @@ def assignAttributeValues(results: List[int]) -> Dict[str, Dict[str, int]]:"
 def step1():
     # Choose class/subclass
     # Select level
-    klass = utils.stdin("Choose a class.", oSRD.getClasses())[0]
-    level = int(utils.stdin("What is your character's class level?", 20)[0])
+    klass = stdin("Choose a class.", oSRD.getClasses())[0]
+    level = int(stdin("What is your character's class level?", 20)[0])
     subclass = ""
     if level >= 3:
-        subklass = utils.stdin(
+        subklass = stdin(
             "If you start at level 3 or higher, choose a subclass.",
             oSRD.getSubclassesByClass(klass),
         )
@@ -93,13 +93,11 @@ def step2():
     # Choose a background
     # Choose a species
     # Choose equipment
-    background = utils.stdin(
-        "Choose your character's background.", oSRD.getBackgrounds()
-    )
+    background = stdin("Choose your character's background.", oSRD.getBackgrounds())
     oSheet.set("background", background[0])
 
     # Choose ability bonuses
-    ability_bonus_array = utils.stdin(
+    ability_bonus_array = stdin(
         "A background lists three of your character's ability scores. Increase "
         "one by 2 and another one by 1, or increase all three by 1. None of "
         "these increases can raise a score above 20.",
@@ -116,13 +114,13 @@ def step2():
     if ability_bonus_array[0] == "Apply 2/1":
         background_abilities = oSRD.getAbilityByBackground(oPC.getMyBackground())
 
-        two_point_ability = utils.stdin(
+        two_point_ability = stdin(
             "Choose which ability to apply a 2 point bonus.", background_abilities
         )
         chosen_ability = two_point_ability[0]
         bonus_array[chosen_ability] = 2
 
-        one_point_ability = utils.stdin(
+        one_point_ability = stdin(
             "Choose which ability to apply a 1 point bonus.", background_abilities
         )
         chosen_ability = one_point_ability[0]
@@ -134,27 +132,27 @@ def step2():
 
     oSheet.set("bonus", bonus_array)
 
-    feat = utils.stdin(
+    feat = stdin(
         "A background gives your character a specified Origin feat.",
         oSRD.getFeatsByCategory("Origin"),
     )
     oSheet.set("feats", feat)
 
-    skills = utils.stdin(
+    skills = stdin(
         "A background gives your character proficiency in two specified skills.",
         oSRD.getSkillsByBackground(oPC.getMyBackground()),
         loop_count=2,
     )
     oSheet.set("skills", skills)
 
-    tool = utils.stdin(
+    tool = stdin(
         "Each background gives a character proficiency with one tool-either a "
         "specific tool or one chosen from the Artisan's Tools category.",
         oSRD.getToolsByBackground(oPC.getMyBackground()),
     )
     oSheet.set("tools", tool)
 
-    species = utils.stdin("Choose a species for your character.", oSRD.getSpecies())[0]
+    species = stdin("Choose a species for your character.", oSRD.getSpecies())[0]
     oSheet.set(
         {
             "size": oSRD.getSizeBySpecies(species),
@@ -164,7 +162,7 @@ def step2():
         }
     )
 
-    languages = utils.stdin(
+    languages = stdin(
         "Your character knows at least three languages: Common plus two languages.",
         oSRD.getStandardLanguages(),
         loop_count=2,
@@ -174,12 +172,12 @@ def step2():
 
 def step3():
     # Generate/Assign ability scores
-    pass
+    print(generate_attributes(67))
 
 
 def step4():
     # Choose an alignment
-    alignment = utils.stdin("Choose your alignment.", oSRD.getAlignments())[0]
+    alignment = stdin("Choose your alignment.", oSRD.getAlignments())[0]
     oSheet.set("alignment", alignment)
 
 
@@ -187,11 +185,12 @@ def step5():
     klass = oPC.getMyClasses()[0]
     oSheet.set(
         {
-            "savingthrows": oSRD.getSavingThrowsByClass(klass),
             "features": oSRD.getFeaturesByClass(klass, oPC.getClassLevel(klass)),
+            "hit_die": oSRD.getHitDieByClass(klass),
+            "savingthrows": oSRD.getSavingThrowsByClass(klass),
         }
     )
-    gender = utils.stdin("What is your gender?", ["Female", "Male"])[0]
+    gender = stdin("What's your gender?", ["Female", "Male"])[0]
     oSheet.set("gender", gender)
 
 
