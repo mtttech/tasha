@@ -279,7 +279,7 @@ def assignClassSkills() -> None:
     for _ in range(0, oPC.getAllottedSkills()):
         skill = Scan(
             message="Choose your class skill.",
-            selections=oSRD.getClassSkills(oPC.getMyClasses()[0], oPC.getMySkills()),
+            selections=oSRD.getSkillsByClass(oPC.getMyClasses()[0], oPC.getMySkills()),
             completer=True,
         )
         oSheet.set("skills", skill.capitalize())

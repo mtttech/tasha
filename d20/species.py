@@ -2,6 +2,7 @@ species = {
     "species": {
         "Aasimar": {
             "size": "Medium",
+            "speed": 30,
             "traits": [
                 "Celestial Resistance",
                 "Celestial Revelation",
@@ -15,6 +16,7 @@ species = {
         },
         "Dragonborn": {
             "size": "Medium",
+            "speed": 30,
             "traits": [
                 "Breath Weapon",
                 "Damage Resistance",
@@ -25,6 +27,7 @@ species = {
         },
         "Dwarf": {
             "size": "Medium",
+            "speed": 30,
             "traits": [
                 "Darkvision",
                 "Dwarven Resilience",
@@ -34,6 +37,7 @@ species = {
         },
         "Elf": {
             "size": "Medium",
+            "speed": 30,
             "traits": [
                 "Darkvision",
                 "Elven Lineage",
@@ -44,10 +48,12 @@ species = {
         },
         "Gnome": {
             "size": "Small",
+            "speed": 30,
             "traits": ["Darkvision", "Gnomish Cunning", "Gnomish Lineage"],
         },
         "Goliath": {
             "size": "Medium",
+            "speed": 35,
             "traits": [
                 "Giant Ancestry",
                 "Large Form",
@@ -56,18 +62,22 @@ species = {
         },
         "Halfling": {
             "size": "Small",
+            "speed": 30,
             "traits": ["Brave", "Halfling Nimbleness", "Luck", "Naturally Stealthy"],
         },
         "Human": {
             "size": "Medium",
+            "speed": 30,
             "traits": ["Resourceful", "Skillful", "Versatile"],
         },
         "Orc": {
             "size": "Medium",
+            "speed": 30,
             "traits": ["Adrenaline Rush", "Darkvision", "Relentless Endurance"],
         },
         "Tiefling": {
             "size": "Medium",
+            "speed": 30,
             "traits": ["Darkvision", "Fiendish Legacy", "Otherworldly Presence"],
         },
     },
