@@ -17,7 +17,7 @@ oSRD = SystemResourceDocument()
 character_dir = Path.home() / ".config" / "tasha" / "characters"
 if not character_dir.exists():
     character_dir.mkdir(parents=True)
-    print(f"creating character directory.")
+    print("Created the character save directory.")
 
 
 """
@@ -73,7 +73,42 @@ def assignAttributeValues(results: List[int]) -> Dict[str, Dict[str, int]]:"
 """
 
 
-def step1():
+def hasFeatRequirements(feat: str) -> Union[Literal[False], Literal[True]]:
+    """Returns True if character meets feat prerequisites."""
+    if feat in oPC.getMyFeats():
+        return False
+
+    raw_ability_requirements = oSRD.getAbilityRequirementByFeat(feat)
+    required_abilities = list(raw_ability_requirements.keys())
+    ability_chk_success = False
+    for ability in required_abilities:
+        if oPC.getAttributeScore(ability) >= raw_ability_requirements[ability]:
+            ability_chk_success = True
+
+    if not ability_chk_success:
+        return False
+
+    armor_requirements = oSRD.getArmorProficiencyRequirementByFeat(feat)
+    for armor in armor_requirements:
+        if armor not in oPC.getMyArmorProficiencies():
+            return False
+
+    features_requirements = oSRD.getFeatureRequirementByFeat(feat)
+    features_chk_success = False
+    for feature in features_requirements:
+        if feature in oPC.getMyArmorProficiencies():
+            features_chk_success = True
+
+    if not features_chk_success:
+        return False
+
+    if oPC.getTotalLevel() < oSRD.getLevelRequirementByFeat(feat):
+        return False
+
+    return True
+
+
+def step1() -> None:
     # Choose class/subclass
     # Select level
     klass = stdin("Choose a class.", oSRD.getClasses())[0]
@@ -89,7 +124,7 @@ def step1():
     oSheet.set("classes", {klass: {"level": level, "subclass": subclass}})
 
 
-def step2():
+def step2() -> None:
     # Choose a background
     # Choose a species
     # Choose equipment
@@ -170,18 +205,18 @@ def step2():
     oSheet.set("languages", ["Common"] + languages)
 
 
-def step3():
+def step3() -> None:
     # Generate/Assign ability scores
     print(generate_attributes(67))
 
 
-def step4():
+def step4() -> None:
     # Choose an alignment
     alignment = stdin("Choose your alignment.", oSRD.getAlignments())[0]
     oSheet.set("alignment", alignment)
 
 
-def step5():
+def step5() -> None:
     klass = oPC.getMyClasses()[0]
     oSheet.set(
         {

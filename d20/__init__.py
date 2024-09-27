@@ -108,7 +108,7 @@ class SystemResourceDocument:
         """Returns a list of cantrips available by class/subclass."""
         return self.getClassSpellList(klass, 0, subklass)
 
-    def getAbilityRequirementByFeat(self, feat: str) -> List[str]:
+    def getAbilityRequirementByFeat(self, feat: str) -> Dict[str, int]:
         """Returns ability score requirements by feat."""
         return self.srd["feats"][feat]["ability"]
 
@@ -155,7 +155,7 @@ class SystemResourceDocument:
         """Returns hit die type by class."""
         return self.srd["classes"][klass]["hit_die"]
 
-    def getLevelRequirementByFeat(self, feat: str) -> List[str]:
+    def getLevelRequirementByFeat(self, feat: str) -> int:
         """Returns level requirements by feat."""
         return self.srd["feats"][feat]["level"]
 

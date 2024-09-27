@@ -6,7 +6,7 @@ import toml
 
 from actor import CharacterSheet, PlayerCharacter
 from attributes import Attributes, Score, generate_attributes, get_modifier
-from system import SystemResourceDocument
+from d20 import SystemResourceDocument
 import utils
 
 oSheet = CharacterSheet()
@@ -416,7 +416,7 @@ def assignFeatEnhancements(feat: str) -> None:
                     "tools",
                     Scan(
                         message="Choose a bonus tool proficiency.",
-                        selections=oSRD.getToolProficiencies(oPC.getMyTools()),
+                        selections=oSRD.getToolProficiencies(oPC.getMyToolProficiencies()),
                         completer=True,
                     ),
                 )
@@ -432,7 +432,7 @@ def assignFeatEnhancements(feat: str) -> None:
     # Weapon Master
     if feat == "Weapon Master":
         for _ in range(4):
-            bonus_weapons = oSRD.getListWeapons(oPC.getMyWeapons())
+            bonus_weapons = oSRD.getListWeapons(oPC.getMyWeaponProficiencies())
             oSheet.set(
                 "weapons",
                 Scan(
@@ -571,101 +571,6 @@ def assignTraitsDragonborn() -> None:
         "White": ["Cold"],
     }
     oSheet.set("resistances", draconic_resistances[draconic_ancestry])
-
-
-def hasFeatRequirements(feat: str) -> Union[Literal[False], Literal[True]]:
-    """Returns True if character meets feat prerequisites."""
-    if feat in oPC.getMyFeats():
-        return False
-
-    # If Heavily, Lightly, or Moderately Armored feat selected and is a Monk.
-    # Otherwise feat is "Armor Related" or Weapon Master feat but already proficient.
-    if (
-        feat
-        in (
-            "Heavily Armored",
-            "Lightly Armored",
-            "Moderately Armored",
-        )
-        and "Monk" in oPC.getMyClasses()
-    ):
-        return False
-
-    if feat in (
-        "Heavily Armored",
-        "Lightly Armored",
-        "Moderately Armored",
-        "Weapon Master",
-    ):
-        if feat == "Heavily Armored" and "Heavy" in oPC.getMyArmors():
-            return False
-        if feat == "Lightly Armored" and "Light" in oPC.getMyArmors():
-            return False
-        if feat == "Moderately Armored" and "Medium" in oPC.getMyArmors():
-            return False
-        if feat == "Weapon Master" and "Martial" in oPC.getMyWeapons():
-            return False
-
-    feat_requirements = oSRD.getEntryByFeat(feat)
-    for category, _ in feat_requirements.items():
-        if feat_requirements[category] is None:
-            continue
-
-        if category == "ability":
-            for attribute, minimum_score in feat_requirements[category].items():
-                if oPC.getAttributeScore(attribute) < minimum_score:
-                    return False
-
-        if category == "caster":
-            if not oPC.isSpellcaster():
-                return False
-
-            if feat == "Magic Initiate":
-                applicable_classes = (
-                    "Bard",
-                    "Cleric",
-                    "Druid",
-                    "Sorcerer",
-                    "Warlock",
-                    "Wizard",
-                )
-                for klass in oPC.getMyClasses():
-                    if klass in applicable_classes:
-                        return True
-                return False
-
-            if feat == "Ritual Caster":
-                if not oPC.hasClass("Cleric") or not oPC.hasClass("Wizard"):
-                    return False
-
-                if (
-                    "Cleric" in oPC.getMyClasses()
-                    and oPC.getAttributeScore("Wisdom")
-                    < feat_requirements["ability"]["Wisdom"]
-                ):
-                    return False
-
-                if (
-                    "Wizard" in oPC.getMyClasses()
-                    and oPC.getAttributeScore("Intelligence")
-                    < feat_requirements["ability"]["Intelligence"]
-                ):
-                    return False
-
-        # Check proficiency requirements
-        if category == "proficiency":
-            if feat in (
-                "Heavy Armor Master",
-                "Heavily Armored",
-                "Medium Armor Master",
-                "Moderately Armored",
-            ):
-                required_armors = feat_requirements[category]["armors"]
-                for armor in required_armors:
-                    if armor not in required_armors:
-                        return False
-
-    return True
 
 
 def isPreparedCaster(self) -> bool:

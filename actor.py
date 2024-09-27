@@ -209,7 +209,7 @@ class PlayerCharacter:
         """Returns the specified subclass by klass."""
         return self.character_sheet.classes[klass]["subclass"]
 
-    def getMyArmors(self) -> List[str]:
+    def getMyArmorProficiencies(self) -> List[str]:
         """Returns the character's armor proficiency list."""
         return self.character_sheet.armors
 
@@ -265,11 +265,11 @@ class PlayerCharacter:
         """Returns all the character's selected subclasses."""
         return [v["subclass"] for v in tuple(self.character_sheet.classes.values())]
 
-    def getMyTools(self) -> List[str]:
+    def getMyToolProficiencies(self) -> List[str]:
         """Returns the character's tool proficiency list."""
         return self.character_sheet.tools
 
-    def getMyWeapons(self) -> List[str]:
+    def getMyWeaponProficiencies(self) -> List[str]:
         """Returns the character's weapon proficiency list."""
         return self.character_sheet.weapons
 
