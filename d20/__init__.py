@@ -108,9 +108,17 @@ class SystemResourceDocument:
         """Returns a list of cantrips available by class/subclass."""
         return self.getClassSpellList(klass, 0, subklass)
 
+    def getAbilityRequirementByFeat(self, feat: str) -> List[str]:
+        """Returns ability score requirements by feat."""
+        return self.srd["feats"][feat]["ability"]
+
     def getArmorProficienciesByClass(self, klass: str) -> List[str]:
         """Returns armor proficiencies by class."""
         return self.srd["classes"][klass]["armors"]
+
+    def getArmorProficiencyRequirementByFeat(self, feat: str) -> List[str]:
+        """Returns armor proficiencies requirements by feat."""
+        return self.srd["feats"][feat]["armors"]
 
     def getClasses(self) -> List[str]:
         """Returns a tuple of all applicable classes."""
@@ -131,6 +139,10 @@ class SystemResourceDocument:
                 requested_feats.append(feat)
         return requested_feats
 
+    def getFeatureRequirementByFeat(self, feat: str) -> List[str]:
+        """Returns feature requirements by feat."""
+        return self.srd["feats"][feat]["features"]
+
     def getFeaturesByClass(self, klass: str, class_level: int) -> List[str]:
         """Returns class features by class."""
         class_features = list()
@@ -142,6 +154,10 @@ class SystemResourceDocument:
     def getHitDieByClass(self, klass: str) -> int:
         """Returns hit die type by class."""
         return self.srd["classes"][klass]["hit_die"]
+
+    def getLevelRequirementByFeat(self, feat: str) -> List[str]:
+        """Returns level requirements by feat."""
+        return self.srd["feats"][feat]["level"]
 
     def getRareLanguages(self, excl: Union[List[str], None] = None) -> List[str]:
         """Returns all rare languages (minus exclusions, if applicable)."""
