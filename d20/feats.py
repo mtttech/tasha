@@ -1,7 +1,7 @@
 feats = {
     "feats": {
         "Ability Score Improvement": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "General",
             "features": None,
@@ -19,7 +19,7 @@ feats = {
             "weapons": [],
         },
         "Alert": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "Origin",
             "features": None,
@@ -28,7 +28,7 @@ feats = {
             "weapons": [],
         },
         "Archery": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "Fighting Style",
             "features": ["Fighting Style"],
@@ -46,7 +46,7 @@ feats = {
             "weapons": [],
         },
         "Blind Fighting": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "Fighting Style",
             "features": ["Fighting Style"],
@@ -55,7 +55,7 @@ feats = {
             "weapons": [],
         },
         "Boon of Combat Prowess": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "Epic Boon",
             "features": None,
@@ -64,7 +64,7 @@ feats = {
             "weapons": [],
         },
         "Boon of Dimensional Travel": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "Epic Boon",
             "features": None,
@@ -73,7 +73,7 @@ feats = {
             "weapons": [],
         },
         "Boon of Energy Resistance": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "Epic Boon",
             "features": None,
@@ -82,7 +82,7 @@ feats = {
             "weapons": [],
         },
         "Boon of Fate": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "Epic Boon",
             "features": None,
@@ -91,7 +91,7 @@ feats = {
             "weapons": [],
         },
         "Boon of Fortitude": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "Epic Boon",
             "features": None,
@@ -100,7 +100,7 @@ feats = {
             "weapons": [],
         },
         "Boon of Irresistible Offense": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "Epic Boon",
             "features": None,
@@ -109,7 +109,7 @@ feats = {
             "weapons": [],
         },
         "Boon of Recovery": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "Epic Boon",
             "features": None,
@@ -118,7 +118,7 @@ feats = {
             "weapons": [],
         },
         "Boon of Skill": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "Epic Boon",
             "features": None,
@@ -127,7 +127,7 @@ feats = {
             "weapons": [],
         },
         "Boon of Speed": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "Epic Boon",
             "features": None,
@@ -136,7 +136,7 @@ feats = {
             "weapons": [],
         },
         "Boon of Spell Recall": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "Epic Boon",
             "features": ["Spellcasting"],
@@ -145,7 +145,7 @@ feats = {
             "weapons": [],
         },
         "Boon of the Night Spirit": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "Epic Boon",
             "features": None,
@@ -154,7 +154,7 @@ feats = {
             "weapons": [],
         },
         "Boon of Truesight": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "Epic Boon",
             "features": None,
@@ -172,7 +172,7 @@ feats = {
             "weapons": [],
         },
         "Chef": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "General",
             "features": None,
@@ -181,7 +181,7 @@ feats = {
             "weapons": [],
         },
         "Crafter": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "Origin",
             "features": None,
@@ -199,7 +199,7 @@ feats = {
             "weapons": [],
         },
         "Crusher": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "General",
             "features": None,
@@ -208,7 +208,7 @@ feats = {
             "weapons": [],
         },
         "Defense": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "Fighting Style",
             "features": ["Fighting Style"],
@@ -235,7 +235,7 @@ feats = {
             "weapons": [],
         },
         "Dueling": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "Fighting Style",
             "features": ["Fighting Style"],
@@ -244,7 +244,7 @@ feats = {
             "weapons": [],
         },
         "Durable": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "General",
             "features": None,
@@ -253,7 +253,7 @@ feats = {
             "weapons": [],
         },
         "Elemental Adept": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "General",
             "features": ["Pact Magic", "Spellcasting"],
@@ -262,7 +262,7 @@ feats = {
             "weapons": [],
         },
         "Fey-Touched": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "General",
             "features": None,
@@ -280,7 +280,7 @@ feats = {
             "weapons": [],
         },
         "Great Weapon Fighting": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "Fighting Style",
             "features": ["Fighting Style"],
@@ -298,7 +298,7 @@ feats = {
             "weapons": [],
         },
         "Healer": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "Origin",
             "features": None,
@@ -307,7 +307,7 @@ feats = {
             "weapons": [],
         },
         "Heavily Armored": {
-            "ability": None,
+            "ability": {},
             "armors": ["Medium"],
             "category": "General",
             "features": None,
@@ -316,7 +316,7 @@ feats = {
             "weapons": [],
         },
         "Heavy Armor Master": {
-            "ability": None,
+            "ability": {},
             "armors": ["Heavy"],
             "category": "General",
             "features": None,
@@ -334,7 +334,7 @@ feats = {
             "weapons": [],
         },
         "Interception": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "Fighting Style",
             "features": ["Fighting Style"],
@@ -352,7 +352,7 @@ feats = {
             "weapons": [],
         },
         "Lightly Armored": {
-            "ability": None,
+            "ability": {},
             "armors": ["Light", "Shields"],
             "category": "General",
             "features": None,
@@ -361,7 +361,7 @@ feats = {
             "weapons": [],
         },
         "Lucky": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "Origin",
             "features": None,
@@ -370,7 +370,7 @@ feats = {
             "weapons": [],
         },
         "Mage Slayer": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "General",
             "features": None,
@@ -379,7 +379,7 @@ feats = {
             "weapons": [],
         },
         "Magic Initiate": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "Origin",
             "features": None,
@@ -388,7 +388,7 @@ feats = {
             "weapons": [],
         },
         "Martial Weapon Training": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "General",
             "features": None,
@@ -397,7 +397,7 @@ feats = {
             "weapons": [],
         },
         "Medium Armor Master": {
-            "ability": None,
+            "ability": {},
             "armors": ["Medium"],
             "category": "General",
             "features": None,
@@ -406,7 +406,7 @@ feats = {
             "weapons": [],
         },
         "Moderately Armored": {
-            "ability": None,
+            "ability": {},
             "armors": ["Light"],
             "category": "General",
             "features": None,
@@ -415,7 +415,7 @@ feats = {
             "weapons": [],
         },
         "Mounted Combatant": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "General",
             "features": None,
@@ -424,7 +424,7 @@ feats = {
             "weapons": [],
         },
         "Musician": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "Origin",
             "features": None,
@@ -442,7 +442,7 @@ feats = {
             "weapons": [],
         },
         "Piercer": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "General",
             "features": None,
@@ -451,7 +451,7 @@ feats = {
             "weapons": [],
         },
         "Poisoner": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "General",
             "features": None,
@@ -469,7 +469,7 @@ feats = {
             "weapons": [],
         },
         "Protection": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "Fighting Style",
             "features": ["Fighting Style"],
@@ -478,7 +478,7 @@ feats = {
             "weapons": [],
         },
         "Resilient": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "General",
             "features": None,
@@ -496,7 +496,7 @@ feats = {
             "weapons": [],
         },
         "Savage Attacker": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "Origin",
             "features": None,
@@ -514,7 +514,7 @@ feats = {
             "weapons": [],
         },
         "Shadow-Touched": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "General",
             "features": None,
@@ -532,7 +532,7 @@ feats = {
             "weapons": [],
         },
         "Shield Master": {
-            "ability": None,
+            "ability": {},
             "armors": ["Shield"],
             "category": "General",
             "features": None,
@@ -541,7 +541,7 @@ feats = {
             "weapons": [],
         },
         "Skilled": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "Origin",
             "features": None,
@@ -550,7 +550,7 @@ feats = {
             "weapons": [],
         },
         "Skill Expert": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "General",
             "features": None,
@@ -568,7 +568,7 @@ feats = {
             "weapons": [],
         },
         "Slasher": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "General",
             "features": None,
@@ -586,7 +586,7 @@ feats = {
             "weapons": [],
         },
         "Spell Sniper": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "General",
             "features": ["Spellcasting", "Pact Magic"],
@@ -595,7 +595,7 @@ feats = {
             "weapons": [],
         },
         "Tavern Brawler": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "Origin",
             "features": None,
@@ -604,7 +604,7 @@ feats = {
             "weapons": [],
         },
         "Telekinetic": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "General",
             "features": None,
@@ -613,7 +613,7 @@ feats = {
             "weapons": [],
         },
         "Telepathic": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "General",
             "features": None,
@@ -622,7 +622,7 @@ feats = {
             "weapons": [],
         },
         "Thrown Weapon Fighting": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "Fighting Style",
             "features": ["Fighting Style"],
@@ -631,7 +631,7 @@ feats = {
             "weapons": [],
         },
         "Tough": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "features": None,
             "category": "Origin",
@@ -640,7 +640,7 @@ feats = {
             "weapons": [],
         },
         "Two-Weapon Fighting": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "Fighting Style",
             "features": ["Fighting Style"],
@@ -649,7 +649,7 @@ feats = {
             "weapons": [],
         },
         "Unarmed Fighting": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "Fighting Style",
             "features": ["Fighting Style"],
@@ -658,7 +658,7 @@ feats = {
             "weapons": [],
         },
         "War Caster": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "General",
             "features": ["Spellcasting", "Pact Magic"],
@@ -667,7 +667,7 @@ feats = {
             "weapons": [],
         },
         "Weapon Master": {
-            "ability": None,
+            "ability": {},
             "armors": [],
             "category": "General",
             "features": None,

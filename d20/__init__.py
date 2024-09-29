@@ -50,11 +50,8 @@ class SystemResourceDocument:
         """Returns the number of allotted ability score improvements."""
         allotted_asi = 0
         for klass in tuple(klasses.keys()):
-            class_features = self.getEntryByClass(klass)["features"]
-            for level, _ in class_features.items():
-                if level > klasses[klass]["level"]:
-                    break
-                if "Ability Score Improvement" in class_features[level]:
+            for feature in self.getFeaturesByClass(klass, klasses[klass]["level"]):
+                if feature == "Ability Score Improvement":
                     allotted_asi += 1
         return allotted_asi
 
@@ -76,13 +73,6 @@ class SystemResourceDocument:
         except KeyError:
             return list()
 
-    def getEntryByClass(self, klass: str) -> Dict[str, Any]:
-        """Returns SRD entries by the chosen class."""
-        try:
-            return self.srd["classes"][klass]
-        except KeyError:
-            raise ValueError(f"Cannot find an entry for the '{klass}' class.")
-
     def getEntryByMulticlass(self, klass: str) -> Dict[str, Any]:
         """Returns SRD entries for multiclassing by the chosen class."""
         try:
@@ -90,16 +80,16 @@ class SystemResourceDocument:
         except KeyError:
             raise ValueError(f"Cannot find an entry for the '{klass}' multiclass.")
 
-    def getAlignments(self) -> List[str]:
-        """Returns a list of all applicable alignments."""
-        return self.srd["alignments"]
-
     def getAbilityByBackground(self, background: str) -> List[str]:
         """Returns a list of abilities by background."""
         return self.srd["backgrounds"][background]["ability"]
 
+    def getAlignments(self) -> List[str]:
+        """Returns a list of alignments."""
+        return self.srd["alignments"]
+
     def getBackgrounds(self) -> List[str]:
-        """Returns a list of all applicable backgrounds."""
+        """Returns a list of backgrounds."""
         return list(self.srd["backgrounds"].keys())
 
     def getListCantrips(
@@ -108,7 +98,7 @@ class SystemResourceDocument:
         """Returns a list of cantrips available by class/subclass."""
         return self.getClassSpellList(klass, 0, subklass)
 
-    def getAbilityRequirementByFeat(self, feat: str) -> Dict[str, int]:
+    def getAbilityRequirementsByFeat(self, feat: str) -> Dict[str, int]:
         """Returns ability score requirements by feat."""
         return self.srd["feats"][feat]["ability"]
 
@@ -117,29 +107,29 @@ class SystemResourceDocument:
         return self.srd["classes"][klass]["armors"]
 
     def getArmorProficiencyRequirementByFeat(self, feat: str) -> List[str]:
-        """Returns armor proficiencies requirements by feat."""
+        """Returns armor proficiency requirements by feat."""
         return self.srd["feats"][feat]["armors"]
 
     def getClasses(self) -> List[str]:
-        """Returns a tuple of all applicable classes."""
+        """Returns a list of classes."""
         return list(self.srd["classes"].keys())
 
-    def getFeats(self, exclusions: Union[List[str], None] = None) -> List[str]:
-        """Returns a list of all applicable feats."""
+    def getFeats(self, excl: Union[List[str], None] = None) -> List[str]:
+        """Returns a list of feats (excluding exceptions, if applicable)."""
         feat_list = list(self.srd["feats"])
-        if isinstance(exclusions, list):
-            return [f for f in feat_list if f not in exclusions]
+        if isinstance(excl, list):
+            return [f for f in feat_list if f not in excl]
         return feat_list
 
     def getFeatsByCategory(self, category: str) -> List[str]:
-        """Returns a list of all applicable feats."""
-        requested_feats = list()
+        """Returns a list of feats by category."""
+        feats_by_category = list()
         for feat, params in self.srd["feats"].items():
             if params["category"] == category:
-                requested_feats.append(feat)
-        return requested_feats
+                feats_by_category.append(feat)
+        return feats_by_category
 
-    def getFeatureRequirementByFeat(self, feat: str) -> List[str]:
+    def getFeatureRequirementsByFeat(self, feat: str) -> List[str]:
         """Returns feature requirements by feat."""
         return self.srd["feats"][feat]["features"]
 
@@ -156,7 +146,7 @@ class SystemResourceDocument:
         return self.srd["classes"][klass]["hit_die"]
 
     def getLevelRequirementByFeat(self, feat: str) -> int:
-        """Returns level requirements by feat."""
+        """Returns level requirement by feat."""
         return self.srd["feats"][feat]["level"]
 
     def getRareLanguages(self, excl: Union[List[str], None] = None) -> List[str]:
@@ -223,16 +213,16 @@ class SystemResourceDocument:
 
         return tuple([k for k in self.getClasses() if is_selectable_class(k)])
 
-    def getSpecies(self) -> List[str]:
-        """Returns a tuple of all applicable races."""
-        return list(self.srd["species"].keys())
-
-    def getListSkills(self, excl: Union[List[str], None] = None) -> List[str]:
-        """Returns a list of all skills, excluding any specified exclusions."""
+    def getSkills(self, excl: Union[List[str], None] = None) -> List[str]:
+        """Returns a list of skills, excluding any specified exclusions."""
         all_skills = list(self.srd["skills"].keys())
         if isinstance(excl, list):
             all_skills = [s for s in all_skills if s not in excl]
         return all_skills
+
+    def getSpecies(self) -> List[str]:
+        """Returns a list of species."""
+        return list(self.srd["species"].keys())
 
     def getListSpells(self, klass: str, subklass: str, level: int) -> List[str]:
         """Returns a list of available spells by available spell slots."""
