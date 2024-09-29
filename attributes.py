@@ -1,38 +1,6 @@
-from dataclasses import dataclass, field
 from typing import List
 
 import dice
-
-
-@dataclass
-class Score:
-    attribute: str = ""
-    score: int = 0
-    bonus: dict = field(default_factory=dict)
-    modifier: int = field(init=False)
-
-    def __post_init__(self) -> None:
-        if self.attribute in self.bonus:
-            self.score += self.bonus[self.attribute]
-            if self.score > 20:
-                self.score = 20
-        self.modifier = get_modifier(self.score)
-
-
-@dataclass
-class Attributes:
-    attributes: dict = field(default_factory=dict)
-
-    def add(self, attribute: str, bonus: int) -> None:
-        """Applies bonus to the specified attribute."""
-        old_value = self.attributes[attribute]["score"]
-        if (old_value + bonus) > 20:
-            new_value = 20
-        else:
-            new_value = old_value + bonus
-        self.attributes[attribute]["score"] = new_value
-        self.attributes[attribute]["modifier"] = get_modifier(new_value)
-
 
 def generate_attributes(threshold: int) -> List[int]:
     """Generates the character's six attributes.
