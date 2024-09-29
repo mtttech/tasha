@@ -1,11 +1,11 @@
 from dataclasses import asdict, replace
 from pathlib import Path
-from typing import Any, Dict, List, Literal, Union
+from typing import Literal, Union
 
 import toml
 
 from actor import CharacterSheet, PlayerCharacter
-from attributes import Attributes, Score, generate_attributes, get_modifier
+from attributes import generate_attributes, get_modifier
 from d20 import SystemResourceDocument
 from utils import stdin
 
@@ -20,70 +20,18 @@ if not character_dir.exists():
     print("Created the character save directory.")
 
 
-"""
-def assignAttributeValues(results: List[int]) -> Dict[str, Dict[str, int]]:"
-    attribute_options = [
-        "Strength",
-        "Dexterity",
-        "Constitution",
-        "Intelligence",
-        "Wisdom",
-        "Charisma",
-    ]
-    attribute_array = dict()
-    results.sort(reverse=True)
-
-    def setAttributeOrder(array: Dict[str, Any]) -> Dict[str, Any]:
-        attribute_order = (
-            "Strength",
-            "Dexterity",
-            "Constitution",
-            "Intelligence",
-            "Wisdom",
-            "Charisma",
-        )
-        ordered_attributes = dict()
-        for entry_key in attribute_order:
-            ordered_attributes[entry_key] = array[entry_key]
-        return ordered_attributes
-
-    def setAttributeValue(attribute_name: str, attribute_value: int) -> None:
-        attribute_options.remove(attribute_name)
-        results.remove(attribute_value)
-        attr_values = asdict(Score(attribute_name, attribute_value))
-        del attr_values["attribute"]
-        del attr_values["bonus"]
-        attribute_array[attribute_name] = attr_values
-
-    for _ in range(6):
-        if len(results) == 1:
-            setAttributeValue(attribute_options[0], results[0])
-            break
-
-        attribute = Scan(
-            message="Assign {} ({}) to which attribute?".format(
-                results[0], ", ".join([str(d) for d in results])
-            ),
-            selections=attribute_options,
-            completer=True,
-        )
-        setAttributeValue(attribute, results[0])
-
-    return setAttributeOrder(attribute_array)
-"""
-
-
 def hasFeatRequirements(feat: str) -> Union[Literal[False], Literal[True]]:
     """Returns True if character meets feat prerequisites."""
     if feat in oPC.getMyFeats():
         return False
 
-    raw_ability_requirements = oSRD.getAbilityRequirementByFeat(feat)
+    raw_ability_requirements = oSRD.getAbilityRequirementsByFeat(feat)
     required_abilities = list(raw_ability_requirements.keys())
     ability_chk_success = False
     for ability in required_abilities:
         if oPC.getAttributeScore(ability) >= raw_ability_requirements[ability]:
             ability_chk_success = True
+            break
 
     if not ability_chk_success:
         return False
@@ -93,11 +41,12 @@ def hasFeatRequirements(feat: str) -> Union[Literal[False], Literal[True]]:
         if armor not in oPC.getMyArmorProficiencies():
             return False
 
-    features_requirements = oSRD.getFeatureRequirementByFeat(feat)
+    features_requirements = oSRD.getFeatureRequirementsByFeat(feat)
     features_chk_success = False
     for feature in features_requirements:
         if feature in oPC.getMyArmorProficiencies():
             features_chk_success = True
+            break
 
     if not features_chk_success:
         return False
@@ -207,7 +156,33 @@ def step2() -> None:
 
 def step3() -> None:
     # Generate/Assign ability scores
-    print(generate_attributes(67))
+    ability_array = {
+        "Strength": {"score": 0, "modifier": 0},
+        "Dexterity": {"score": 0, "modifier": 0},
+        "Constitution": {"score": 0, "modifier": 0},
+        "Intelligence": {"score": 0, "modifier": 0},
+        "Wisdom": {"score": 0, "modifier": 0},
+        "Charisma": {"score": 0, "modifier": 0},
+    }
+    results = generate_attributes(67)
+    results.sort(reverse=True)
+    ability_names = list(ability_array.keys())
+    for score in results:
+        ability = stdin(f"Assign {score} to which ability?", ability_names)
+        ability_array[ability[0]] = {"score": score, "modifier": get_modifier(score)}
+
+    for ability, bonus in oPC.getMyBonus().items():
+        if bonus > 0:
+            old_score = ability_array[ability]["score"]
+            new_score = old_score + bonus
+            if new_score > 20:
+                new_score = 20
+            ability_array[ability] = {
+                "score": new_score,
+                "modifier": get_modifier(new_score),
+            }
+
+    oSheet.set("attributes", ability_array)
 
 
 def step4() -> None:
@@ -237,10 +212,9 @@ def main() -> None:
         step4()
         step5()
 
-        print(oSheet)
+        print(asdict(oSheet))
     except KeyboardInterrupt:
         print()
-        pass
 
 
 if __name__ == "__main__":

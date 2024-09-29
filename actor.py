@@ -221,6 +221,10 @@ class PlayerCharacter:
         """Returns the character's background."""
         return self.character_sheet.background
 
+    def getMyBonus(self):
+        """Returns the character's bonus."""
+        return self.character_sheet.bonus
+
     def getMyClasses(self) -> Tuple[str, ...]:
         """Returns all the character's class names."""
         return tuple(self.character_sheet.classes.keys())
