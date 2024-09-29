@@ -13,7 +13,6 @@ oSheet = CharacterSheet()
 oPC = PlayerCharacter(oSheet)
 oSRD = SystemResourceDocument()
 
-
 character_dir = Path.home() / ".config" / "tasha" / "characters"
 if not character_dir.exists():
     character_dir.mkdir(parents=True)
@@ -69,8 +68,22 @@ def step1() -> None:
             oSRD.getSubclassesByClass(klass),
         )
         subclass = subklass[0]
-    oSheet.set("armors", oSRD.getArmorProficienciesByClass(klass))
-    oSheet.set("classes", {klass: {"level": level, "subclass": subclass}})
+    oSheet.set(
+        {
+            "armors": oSRD.getArmorProficienciesByClass(klass),
+            "weapons": oSRD.getWeaponProficienciesByClass(klass),
+        }
+    )
+    oSheet.set(
+        "classes",
+        {
+            klass: {
+                "level": level,
+                "hit_die": oSRD.getHitDieByClass(klass),
+                "subclass": subclass,
+            }
+        },
+    )
 
 
 def step2() -> None:
@@ -192,11 +205,29 @@ def step4() -> None:
 
 
 def step5() -> None:
+    # Saving Throws
+    # Skills
+    # Passive Perception
+    # Hit Point Dice
+    # Initiative
     klass = oPC.getMyClasses()[0]
+    skills = oSRD.getSkillsByClass(klass, oPC.getMySkills())
+    if klass == "Rogue":
+        allotted_skills = 4
+    elif klass in ("Bard", "Ranger"):
+        allotted_skills = 3
+    else:
+        allotted_skills = 2
+    oSheet.set(
+        "skills",
+        stdin("Choose a class skill.", skills, loop_count=allotted_skills),
+    )
+
     oSheet.set(
         {
             "features": oSRD.getFeaturesByClass(klass, oPC.getClassLevel(klass)),
             "hit_die": oSRD.getHitDieByClass(klass),
+            "initiative": oPC.getAttributeModifier("Dexterity"),
             "savingthrows": oSRD.getSavingThrowsByClass(klass),
         }
     )
@@ -212,7 +243,18 @@ def main() -> None:
         step4()
         step5()
 
-        print(asdict(oSheet))
+        name = None
+        while name is None:
+            name = input("What is your name? ")
+            oSheet.set("name", name)
+
+        cs = replace(
+            oSheet,
+            level=oPC.getTotalLevel(),
+        )
+        with Path(character_dir, f"{oPC.getMyName()}.toml").open("w") as record:
+            toml.dump(asdict(cs), record)
+            print("Character created successfully.")
     except KeyboardInterrupt:
         print()
 

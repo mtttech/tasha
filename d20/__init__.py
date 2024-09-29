@@ -1,4 +1,3 @@
-import itertools
 from typing import Any, Dict, List, Tuple, Union
 
 from . import (
@@ -45,15 +44,6 @@ class SystemResourceDocument:
                 list(srd5e.values()),
             )
         )
-
-    def calculateAllottedAsi(self, klasses: Dict[str, Any]) -> int:
-        """Returns the number of allotted ability score improvements."""
-        allotted_asi = 0
-        for klass in tuple(klasses.keys()):
-            for feature in self.getFeaturesByClass(klass, klasses[klass]["level"]):
-                if feature == "Ability Score Improvement":
-                    allotted_asi += 1
-        return allotted_asi
 
     def getClassSpellList(
         self, klass: str, spell_level: int, subklass=None
@@ -260,31 +250,6 @@ class SystemResourceDocument:
         """Returns a list of traits by species."""
         return list(self.srd["species"][species]["traits"])
 
-    def getListWeapons(self, excluded: Union[List[str], None] = None) -> List[str]:
-        """Returns a list of weapons, ignoring those in the excluded list."""
-        weapons_as_dict = self.srd["proficiencies"]["weapons"]
-        martial, simple = weapons_as_dict.values()
-        all_weapons = sorted(itertools.chain(martial, simple))
-
-        if isinstance(excluded, list):
-            if "Simple" in excluded:
-                all_weapons = [
-                    w for w in all_weapons if w not in weapons_as_dict["Simple"]
-                ]
-
-            if "Martial" in excluded:
-                all_weapons = [
-                    w for w in all_weapons if w not in weapons_as_dict["Martial"]
-                ]
-
-            all_weapons = [
-                w
-                for w in all_weapons
-                if w not in excluded and w not in ("Martial", "Simple")
-            ]
-
-        return all_weapons
-
     def getSkillAbility(self, skill: str) -> str:
         """Returns the associated ability for a skill."""
         try:
@@ -334,6 +299,10 @@ class SystemResourceDocument:
             return self.srd["classes"][klass]["spells_known"][level]
         except KeyError:
             return 0
+
+    def getWeaponProficienciesByClass(self, klass: str) -> List[str]:
+        """Returns weapon proficiencies by class."""
+        return self.srd["classes"][klass]["weapons"]
 
     @staticmethod
     def isPreparedCaster(klass: str) -> bool:

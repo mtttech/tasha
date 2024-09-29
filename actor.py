@@ -6,8 +6,6 @@ from typing import Any, Dict, List, Literal, NoReturn, Tuple, Union
 @dataclass
 class CharacterSheet:
     alignment: str = field(default="")
-    allotted_asi: int = field(default=0)
-    allotted_skills: int = field(default=0)
     armors: list = field(default_factory=list)
     attributes: dict = field(default_factory=dict)
     background: str = field(default="")
@@ -44,8 +42,6 @@ class CharacterSheet:
     def reset(self) -> None:
         """Resets character sheet values."""
         self.alignment = ""
-        self.allotted_asi = 0
-        self.allotted_skills = 0
         self.armors = list()
         self.attributes = dict()
         self.background = "Soldier"
@@ -155,14 +151,6 @@ class PlayerCharacter:
         if klass in ("Cleric", "Druid", "Wizard") and self.getClassLevel(klass) < 2:
             return False
         return True
-
-    def getAllottedAsi(self) -> int:
-        """Returns the character's allotted ability score improvement total."""
-        return self.character_sheet.allotted_asi
-
-    def getAllottedSkills(self) -> int:
-        """Returns the character's allotted skill total."""
-        return self.character_sheet.allotted_skills
 
     def getAttributes(self) -> Dict[str, Dict[str, Any]]:
         """Returns a dictionary of all attributes."""

@@ -120,60 +120,6 @@ def assignAsiUpgrades() -> None:
         asi_counter -= 1
 
 
-def assignAttributeValues(results: List[int]) -> Dict[str, Dict[str, int]]:
-    """Assigns the six attributes and applies any bonuses where applicable."""
-    attribute_options = [
-        "Strength",
-        "Dexterity",
-        "Constitution",
-        "Intelligence",
-        "Wisdom",
-        "Charisma",
-    ]
-    attribute_array = dict()
-    results.sort(reverse=True)
-
-    def setAttributeOrder(array: Dict[str, Any]) -> Dict[str, Any]:
-        """Returns the ordered attributes dictionary."""
-        attribute_order = (
-            "Strength",
-            "Dexterity",
-            "Constitution",
-            "Intelligence",
-            "Wisdom",
-            "Charisma",
-        )
-        ordered_attributes = dict()
-        for entry_key in attribute_order:
-            ordered_attributes[entry_key] = array[entry_key]
-        return ordered_attributes
-
-    def setAttributeValue(attribute_name: str, attribute_value: int) -> None:
-        """Sets the attribute_name to the specified attribute_value."""
-        attribute_options.remove(attribute_name)
-        results.remove(attribute_value)
-        attr_values = asdict(Score(attribute_name, attribute_value))
-        del attr_values["attribute"]
-        del attr_values["bonus"]
-        attribute_array[attribute_name] = attr_values
-
-    for _ in range(6):
-        if len(results) == 1:
-            setAttributeValue(attribute_options[0], results[0])
-            break
-
-        attribute = Scan(
-            message="Assign {} ({}) to which attribute?".format(
-                results[0], ", ".join([str(d) for d in results])
-            ),
-            selections=attribute_options,
-            completer=True,
-        )
-        setAttributeValue(attribute, results[0])
-
-    return setAttributeOrder(attribute_array)
-
-
 def assignCantrips(
     klass: str,
     cantrips_known: Union[int, None] = None,

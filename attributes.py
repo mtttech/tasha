@@ -2,6 +2,7 @@ from typing import List
 
 import dice
 
+
 def generate_attributes(threshold: int) -> List[int]:
     """Generates the character's six attributes.
 
