@@ -15,8 +15,6 @@
 
 ### Installation & Usage
 
-#### Installation
-
 ```
 # Clone the repository.
 git clone https://github.com/mtttech/Tasha.git
@@ -25,10 +23,7 @@ git clone https://github.com/mtttech/Tasha.git
 cd Tasha
 
 # Create your virtual environment and install the requirements (if necessary).
+
+# Run the program
+python tasha.py
 ```
-
-#### Usage
-
-Run tasha by running the following command ```python tasha.py```.
-
-Program functionality has been severely hampered in the meantime.
