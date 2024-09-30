@@ -2,7 +2,7 @@ from typing import List
 
 
 def generate_abilities(threshold: int) -> List[int]:
-    """Generates the character's six attributes.
+    """Generates the character's six abilities.
 
     Continuously rerolls attributes if one of the following is true:
 
