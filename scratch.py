@@ -1,13 +1,9 @@
-from dataclasses import asdict, replace
 from pathlib import Path
-from typing import Any, Dict, List, Literal, Union
-
-import toml
+from typing import List, Union
 
 from actor import CharacterSheet, PlayerCharacter
-from attributes import Attributes, Score, generate_abilities, get_modifier
+from attributes import get_modifier
 from d20 import SystemResourceDocument
-import utils
 
 oSheet = CharacterSheet()
 oPC = PlayerCharacter(oSheet)
@@ -18,29 +14,6 @@ character_dir = Path.home() / ".config" / "tasha" / "characters"
 if not character_dir.exists():
     character_dir.mkdir(parents=True)
     print(f"creating character directory.")
-
-
-def tasha_cmd_save() -> None:
-    """Performs the save action."""
-    oSheet.set(
-        {
-            "allotted_asi": oSRD.calculateAllottedAsi(oPC.getMyRawClasses()),
-            "traits": oSRD.getRacialMagic(oPC.getMySpecies(), oPC.getTotalLevel()),
-        }
-    )
-    assignClassFeatures()
-    assignClassSkills()
-    assignAsiUpgrades()
-    assignSpellcastingFeatures()
-    cs = replace(
-        oSheet,
-        level=oPC.getTotalLevel(),
-    )
-
-    with Path(character_dir, f"{oPC.getMyName()}.toml").open("w") as record:
-        toml.dump(asdict(cs), record)
-        print("Character created successfully.")
-        oSheet.reset()
 
 
 def review_attributes() -> None:
@@ -152,84 +125,6 @@ def assignCantrips(
         my_cantrip_list.append("Mage Hand")
 
     return my_cantrip_list
-
-
-def assignClassFeatures() -> None:
-    """Assigns class features."""
-
-    def assignSubclassFeatures(klass: str) -> None:
-        """Prompt assigns subclass features."""
-        if not oPC.canSubclass(klass):
-            return
-
-        subclass = Scan(
-            message=f"What is your '{klass}' subclass?",
-            selections=oSRD.getSubclassesByClass(klass),
-            completer=True,
-        )
-        oSheet.classes[klass]["subclass"] = subclass
-        base_subclass_traits = oSRD.getEntryBySubclass(subclass)
-        oSheet.set(
-            {
-                "armors": base_subclass_traits["armors"],
-                "tools": base_subclass_traits["tools"],
-                "weapons": base_subclass_traits["weapons"],
-                "features": oSRD.getFeaturesByClass(subclass, oPC.getClassLevel(klass)),
-            }
-        )
-
-    import dice
-
-    for class_order, klass in enumerate(oPC.getMyClasses()):
-        if class_order == 0:
-            traits = oSRD.getEntryByClass(klass)
-            starting_gold = sum(
-                dice.roll(
-                    traits["gold"]
-                )  # pyright: ignore[reportArgumentType, reportCallIssue]
-            )
-
-            oSheet.set(
-                {
-                    "allotted_skills": oPC.getSkillTotal(),
-                    "armors": traits["armors"],
-                    "languages": traits["languages"],
-                    "savingthrows": traits["savingthrows"],
-                    "tools": traits["tools"],
-                    "weapons": traits["weapons"],
-                    "features": oSRD.getFeaturesByClass(
-                        klass, oPC.getClassLevel(klass)
-                    ),
-                    "gold": starting_gold * 10 if klass != "Monk" else starting_gold,
-                }
-            )
-        else:
-            traits = oSRD.getEntryByMulticlass(klass)
-            oSheet.set(
-                {
-                    "armors": traits["armors"],
-                    "tools": traits["tools"],
-                    "weapons": traits["weapons"],
-                }
-            )
-
-        assignSubclassFeatures(klass)
-
-    oSheet.set(
-        "spell_slots",
-        oSRD.getSpellSlotsByClass(oPC.getMyRawClasses(), oPC.getTotalLevel()),
-    )
-
-
-def assignClassSkills() -> None:
-    """Prompt to determining the character's skills features."""
-    for _ in range(0, oPC.getAllottedSkills()):
-        skill = Scan(
-            message="Choose your class skill.",
-            selections=oSRD.getSkillsByClass(oPC.getMyClasses()[0], oPC.getMySkills()),
-            completer=True,
-        )
-        oSheet.set("skills", skill.capitalize())
 
 
 def assignFeatEnhancements(feat: str) -> None:
@@ -392,33 +287,6 @@ def assignFeatEnhancements(feat: str) -> None:
             )
 
     oSheet.set({"feats": feat})
-
-
-def assignRacialTraits() -> None:
-    """Assigns racial/subracial traits."""
-    full_race = oPC.getMySpecies().split(", ")
-    if len(full_race) > 1:
-        race, subrace = full_race
-    else:
-        race, subrace = (oPC.getMySpecies(), "")
-
-    traits = oSRD.getEntryBySpecies(race)
-    oSheet.set(
-        {
-            "bonus": traits["bonus"],
-            "languages": traits["languages"],
-            "size": traits["size"],
-            "skills": traits["skills"],
-            "traits": traits["traits"],
-            "weapons": traits["weapons"],
-        }
-    )
-
-    assignTraitsDragonborn()
-
-    if subrace != "":
-        traits = oSRD.getEntryByLineage(subrace)
-        oSheet.set({"bonus": traits["bonus"], "traits": traits["traits"]})
 
 
 def assignSpellcastingFeatures() -> None:
