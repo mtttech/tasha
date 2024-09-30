@@ -27,3 +27,70 @@ cd Tasha
 # Run the program
 python tasha.py
 ```
+
+Characters created by Tasha are saved to your *HOME* directory within the *.config/tasha/characters* folder, which will be created if it doesn't already exist. Characters will be saved in the .TOML format. Below is an example of such a character.
+
+```
+alignment = "Chaotic Neutral"
+armors = [ "Light",]
+background = "Noble"
+cantrips = "2"
+feats = [ "Musician",]
+features = [ "Bardic Inspiration", "Spellcasting", "Expertise", "Jack of All Trades", "Bard Subclass",]
+gender = "Female"
+gold = 0
+hit_die = 8
+hit_points = 21
+initiative = 1
+languages = [ "Common", "Elvish", "Draconic",]
+level = 3
+name = "Sierra"
+prepared_spells = 6
+proficiency_bonus = 2
+savingthrows = [ "Charisma", "Dexterity",]
+size = "Medium"
+skills = [ "History", "Persuasion", "Arcana", "Animal Handling", "Insight",]
+species = "Elf"
+speed = 30
+spell_slots = [ 4, 2,]
+tools = [ "Gaming Set - Playing card Set", "Musical Instrument - Dulcimer", "Musical Instrument - Birdpipes", "Musical Instrument - Flute",]
+traits = [ "Darkvision", "Elven Lineage", "Fey Ancestry", "Keen Senses", "Trance",]
+weapons = [ "Simple",]
+
+[bonus]
+Strength = 1
+Dexterity = 0
+Constitution = 0
+Intelligence = 0
+Wisdom = 0
+Charisma = 2
+
+[attributes.Strength]
+score = 12
+modifier = 1
+
+[attributes.Dexterity]
+score = 13
+modifier = 1
+
+[attributes.Constitution]
+score = 13
+modifier = 1
+
+[attributes.Intelligence]
+score = 11
+modifier = 0
+
+[attributes.Wisdom]
+score = 9
+modifier = -1
+
+[attributes.Charisma]
+score = 18
+modifier = 4
+
+[classes.Bard]
+level = 3
+hit_die = 8
+subclass = "College of Glamour"
+```
