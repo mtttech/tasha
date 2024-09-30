@@ -5,7 +5,7 @@ from typing import Any, Dict, List, Literal, Union
 import toml
 
 from actor import CharacterSheet, PlayerCharacter
-from attributes import Attributes, Score, generate_attributes, get_modifier
+from attributes import Attributes, Score, generate_abilities, get_modifier
 from d20 import SystemResourceDocument
 import utils
 

@@ -5,7 +5,7 @@ from typing import Literal, Union
 import toml
 
 from actor import CharacterSheet, PlayerCharacter
-from attributes import generate_attributes, get_modifier
+from attributes import generate_abilities, get_modifier
 from d20 import SystemResourceDocument
 from utils import stdin
 
@@ -177,13 +177,14 @@ def step3() -> None:
         "Wisdom": {"score": 0, "modifier": 0},
         "Charisma": {"score": 0, "modifier": 0},
     }
-    results = generate_attributes(67)
+    results = generate_abilities(67)
     results.sort(reverse=True)
     ability_names = list(ability_array.keys())
     for score in results:
         ability = stdin(f"Assign {score} to which ability?", ability_names)
         ability_array[ability[0]] = {"score": score, "modifier": get_modifier(score)}
 
+    # Apply background ability bonuses.
     for ability, bonus in oPC.getMyBonus().items():
         if bonus > 0:
             old_score = ability_array[ability]["score"]
@@ -239,8 +240,28 @@ def step5() -> None:
             "spell_slots": oSRD.getSpellSlotsByClass(klass, oPC.getTotalLevel()),
         }
     )
-    gender = stdin("What's your gender?", ["Female", "Male"])[0]
-    oSheet.set("gender", gender)
+
+    if klass == "Bard":
+        oSheet.set(
+            "tools",
+            stdin(
+                "Choose your musical instrument tool proficiencies.",
+                oSRD.getToolsByClass(klass),
+                loop_count=3,
+            ),
+        )
+    elif klass == "Monk":
+        oSheet.set(
+            "tools",
+            stdin(
+                "Choose your artisan tool or musical instrument tool proficiencies.",
+                oSRD.getToolsByClass(klass),
+            ),
+        )
+    else:
+        oSheet.set("tools", oSRD.getToolsByClass(klass))
+
+    oSheet.set("gender", stdin("What's your gender?", ["Female", "Male"])[0])
 
 
 def main() -> None:

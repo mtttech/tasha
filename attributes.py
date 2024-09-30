@@ -1,9 +1,7 @@
 from typing import List
 
-import dice
 
-
-def generate_attributes(threshold: int) -> List[int]:
+def generate_abilities(threshold: int) -> List[int]:
     """Generates the character's six attributes.
 
     Continuously rerolls attributes if one of the following is true:
@@ -12,6 +10,8 @@ def generate_attributes(threshold: int) -> List[int]:
     2. or smallest attribute < 8
     3. or largest attribute < 15
     """
+    import dice
+
     while True:
         dice_rolls = [
             sum(

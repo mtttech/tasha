@@ -196,6 +196,10 @@ class SystemResourceDocument:
         """Returns a list of all tool proficiencies by background."""
         return self.srd["backgrounds"][background]["tools"]
 
+    def getToolsByClass(self, klass: str) -> List[str]:
+        """Returns a list of all tool proficiencies by class."""
+        return self.srd["classes"][klass]["tools"]
+
     def getListMulticlasses(
         self,
         klasses: Tuple[str, ...],
