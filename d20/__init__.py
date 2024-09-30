@@ -45,6 +45,13 @@ class SystemResourceDocument:
             )
         )
 
+    def getCantripsByClass(self, klass: str, level: int) -> int:
+        """Returns number of cantrips by class and level."""
+        cantrips_known = self.srd["classes"][klass]["cantrips"][level]
+        if len(cantrips_known) == 0:
+            return 0
+        return cantrips_known
+
     def getClassSpellList(
         self, klass: str, spell_level: int, subklass=None
     ) -> List[str]:
@@ -139,6 +146,13 @@ class SystemResourceDocument:
         """Returns level requirement by feat."""
         return self.srd["feats"][feat]["level"]
 
+    def getPreparedSpellsByClass(self, klass: str, level: int) -> int:
+        """Returns number of prepared spells by class and level."""
+        try:
+            return self.srd["classes"][klass]["prepared_spells"][level]
+        except KeyError:
+            return 0
+
     def getRareLanguages(self, excl: Union[List[str], None] = None) -> List[str]:
         """Returns all rare languages (minus exclusions, if applicable)."""
         language_list = self.srd["languages"]["rare"]
@@ -203,6 +217,13 @@ class SystemResourceDocument:
 
         return tuple([k for k in self.getClasses() if is_selectable_class(k)])
 
+    def getSkillAbility(self, skill: str) -> str:
+        """Returns the associated ability for a skill."""
+        try:
+            return self.srd["skills"][skill]["ability"]
+        except KeyError:
+            return ""
+
     def getSkills(self, excl: Union[List[str], None] = None) -> List[str]:
         """Returns a list of skills, excluding any specified exclusions."""
         all_skills = list(self.srd["skills"].keys())
@@ -214,8 +235,17 @@ class SystemResourceDocument:
         """Returns a list of species."""
         return list(self.srd["species"].keys())
 
+    def getSpellSlotsByClass(self, klass: str, level: int) -> List[int]:
+        """Returns spell slots by class and level."""
+        spell_slots = self.srd["classes"][klass]["spell_slots"][level]
+        if len(spell_slots) == 0:
+            return [
+                0,
+            ]
+        return [int(s) for s in spell_slots.split(",")]
+
     def getListSpells(self, klass: str, subklass: str, level: int) -> List[str]:
-        """Returns a list of available spells by available spell slots."""
+        """Returns a list of spells by available spell slots."""
         max_spell_level = self.srd["classes"][klass]["spell_slots"][level].split(",")
         spell_list = []
 
@@ -249,56 +279,6 @@ class SystemResourceDocument:
     def getTraitsBySpecies(self, species: str) -> List[str]:
         """Returns a list of traits by species."""
         return list(self.srd["species"][species]["traits"])
-
-    def getSkillAbility(self, skill: str) -> str:
-        """Returns the associated ability for a skill."""
-        try:
-            return self.srd["skills"][skill]["ability"]
-        except KeyError:
-            return ""
-
-    def getSpellSlots(
-        self, klasses: Dict[str, Dict[str, Any]], total_level: int
-    ) -> List[int]:
-        """Returns a list of allotted spell slots by klass and level."""
-        from math import ceil
-
-        classes = tuple(klasses.keys())
-        spell_slots = []
-        if len(classes) == 1:
-            spell_slots = self.srd["classes"][classes[0]]["spell_slots"][
-                total_level
-            ].split(",")
-        elif len(classes) > 1:
-            actual_level = 0
-            for klass in classes:
-                if klass in ("Bard", "Cleric", "Druid", "Sorcerer", "Wizard"):
-                    actual_level += klasses[klass]["level"]
-                elif klass in ("Artificer", "Paladin", "Ranger"):
-                    actual_level += ceil(klasses[klass]["level"] / 2)
-                elif klass in ("Fighter", "Rogue"):
-                    actual_level += ceil(klasses[klass]["level"] / 3)
-
-            spell_slots = self.srd["classes"]["Bard"]["spell_slots"][
-                actual_level
-            ].split(",")
-
-        return [int(s) for s in spell_slots] if len(spell_slots) > 0 else spell_slots
-
-    def getSpellTotal(self, klass: str, level: int, modifier: int) -> int:
-        """Returns the total number of known or prepared spells."""
-        if self.isPreparedCaster(klass):
-            number_of_prepared_spells = level + modifier
-            return 1 if number_of_prepared_spells < 1 else number_of_prepared_spells
-        else:
-            return self.getSpellsKnown(klass, level)
-
-    def getSpellsKnown(self, klass: str, level: int) -> int:
-        """Returns the number of known spells, if applicable."""
-        try:
-            return self.srd["classes"][klass]["spells_known"][level]
-        except KeyError:
-            return 0
 
     def getWeaponProficienciesByClass(self, klass: str) -> List[str]:
         """Returns weapon proficiencies by class."""

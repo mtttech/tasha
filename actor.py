@@ -10,6 +10,7 @@ class CharacterSheet:
     attributes: dict = field(default_factory=dict)
     background: str = field(default="")
     bonus: dict = field(default_factory=dict)
+    cantrips: int = field(default=0)
     classes: dict = field(default_factory=dict)
     feats: list = field(default_factory=list)
     features: list = field(default_factory=list)
@@ -21,12 +22,14 @@ class CharacterSheet:
     languages: list = field(default_factory=list)
     level: int = field(default=1)
     name: str = field(default="")
+    prepared_spells: int = field(default=0)
     proficiency_bonus: int = field(default=0)
     savingthrows: list = field(default_factory=list)
     size: str = field(default="Medium")
     skills: list = field(default_factory=list)
     species: str = field(default="")
     speed: int = field(default=30)
+    spell_slots: list = field(default_factory=list)
     tools: list = field(default_factory=list)
     traits: list = field(default_factory=list)
     weapons: list = field(default_factory=list)
@@ -38,34 +41,6 @@ class CharacterSheet:
             self.initiative = self.attributes["Dexterity"]["modifier"]
         except KeyError:
             self.initiative = 0
-
-    def reset(self) -> None:
-        """Resets character sheet values."""
-        self.alignment = ""
-        self.armors = list()
-        self.attributes = dict()
-        self.background = "Soldier"
-        self.bonus = dict()
-        self.cantrips = list()
-        self.classes = dict()
-        self.equipment = list()
-        self.feats = list()
-        self.features = list()
-        self.gender = ""
-        self.initiative = 0
-        self.languages = list()
-        self.level = 1
-        self.name = ""
-        self.proficiency_bonus = 0
-        self.race = ""
-        self.resistances = list()
-        self.savingthrows = list()
-        self.size = "Medium"
-        self.skills = list()
-        self.speed = 30
-        self.tools = list()
-        self.traits = list()
-        self.weapons = list()
 
     def roll_hit_points(self) -> int:
         """Calculates the character's total hit points."""

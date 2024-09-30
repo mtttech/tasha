@@ -210,6 +210,9 @@ def step5() -> None:
     # Passive Perception
     # Hit Point Dice
     # Initiative
+    # Cantrips
+    # Prepared Spells
+    # Spell Slots
     klass = oPC.getMyClasses()[0]
     skills = oSRD.getSkillsByClass(klass, oPC.getMySkills())
     if klass == "Rogue":
@@ -225,10 +228,15 @@ def step5() -> None:
 
     oSheet.set(
         {
+            "cantrips": oSRD.getCantripsByClass(klass, oPC.getTotalLevel()),
             "features": oSRD.getFeaturesByClass(klass, oPC.getClassLevel(klass)),
             "hit_die": oSRD.getHitDieByClass(klass),
             "initiative": oPC.getAttributeModifier("Dexterity"),
+            "prepared_spells": oSRD.getPreparedSpellsByClass(
+                klass, oPC.getTotalLevel()
+            ),
             "savingthrows": oSRD.getSavingThrowsByClass(klass),
+            "spell_slots": oSRD.getSpellSlotsByClass(klass, oPC.getTotalLevel()),
         }
     )
     gender = stdin("What's your gender?", ["Female", "Male"])[0]

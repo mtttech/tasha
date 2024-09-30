@@ -216,7 +216,8 @@ def assignClassFeatures() -> None:
         assignSubclassFeatures(klass)
 
     oSheet.set(
-        "spell_slots", oSRD.getSpellSlots(oPC.getMyRawClasses(), oPC.getTotalLevel())
+        "spell_slots",
+        oSRD.getSpellSlotsByClass(oPC.getMyRawClasses(), oPC.getTotalLevel()),
     )
 
 
