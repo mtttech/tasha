@@ -1,8 +1,6 @@
 from dataclasses import asdict, replace
 from pathlib import Path
-from typing import Literal, Union
-
-import toml
+from typing import List, Literal, Union
 
 from actor import CharacterSheet, PlayerCharacter
 from attributes import generate_abilities, get_modifier
@@ -19,41 +17,59 @@ if not character_dir.exists():
     print("Created the character save directory.")
 
 
-def hasFeatRequirements(feat: str) -> Union[Literal[False], Literal[True]]:
-    """Returns True if character meets feat prerequisites."""
-    if feat in oPC.getMyFeats():
-        return False
+def getSelectableFeats() -> List[str]:
+    """Returns a list of selectable feats."""
+    return [
+        f
+        for f in oSRD.getFeats()
+        if hasFeatRequirements(f) and f not in oPC.getMyFeats()
+    ]
 
+
+def hasFeatRequirements(feat: str) -> Union[Literal[False], Literal[True]]:
+    """Returns True if character meets feat prerequisites, False otherwise."""
     raw_ability_requirements = oSRD.getAbilityRequirementsByFeat(feat)
     required_abilities = list(raw_ability_requirements.keys())
-    ability_chk_success = False
-    for ability in required_abilities:
-        if oPC.getAttributeScore(ability) >= raw_ability_requirements[ability]:
-            ability_chk_success = True
-            break
+    if len(required_abilities) > 0:
+        ability_chk_success = False
+        for ability in required_abilities:
+            if oPC.getAttributeScore(ability) >= raw_ability_requirements[ability]:
+                ability_chk_success = True
+                break
 
-    if not ability_chk_success:
-        return False
-
-    armor_requirements = oSRD.getArmorProficiencyRequirementByFeat(feat)
-    for armor in armor_requirements:
-        if armor not in oPC.getMyArmorProficiencies():
+        if not ability_chk_success:
             return False
 
-    features_requirements = oSRD.getFeatureRequirementsByFeat(feat)
-    features_chk_success = False
-    for feature in features_requirements:
-        if feature in oPC.getMyArmorProficiencies():
-            features_chk_success = True
-            break
+    armor_requirements = oSRD.getArmorProficiencyRequirementByFeat(feat)
+    if len(armor_requirements) > 0:
+        for armor in armor_requirements:
+            if armor not in oPC.getMyArmorProficiencies():
+                return False
 
-    if not features_chk_success:
-        return False
+    features_requirements = oSRD.getFeatureRequirementsByFeat(feat)
+    if len(features_requirements) > 0:
+        features_chk_success = False
+        for feature in features_requirements:
+            if feature in oPC.getMyFeatures():
+                features_chk_success = True
+                break
+
+        if not features_chk_success:
+            return False
 
     if oPC.getTotalLevel() < oSRD.getLevelRequirementByFeat(feat):
         return False
 
     return True
+
+
+def loadPC(character_name: str) -> PlayerCharacter:
+    import tomllib
+
+    with Path(character_dir, f"{character_name}.toml").open("rb") as file:
+        data = tomllib.load(file)
+    del data["hit_points"]
+    return PlayerCharacter(CharacterSheet(**data))
 
 
 def step1() -> None:
@@ -227,10 +243,19 @@ def step5() -> None:
         stdin("Choose a class skill.", skills, loop_count=allotted_skills),
     )
 
+    ability_score_improvements = oSRD.getFeaturesByClass(
+        klass, oPC.getTotalLevel()
+    ).count("Ability Score Improvement")
     oSheet.set(
         {
             "cantrips": oSRD.getCantripsByClass(klass, oPC.getTotalLevel()),
+            "feats": stdin(
+                "Choose your feats.",
+                getSelectableFeats(),
+                loop_count=ability_score_improvements,
+            ),
             "features": oSRD.getFeaturesByClass(klass, oPC.getClassLevel(klass)),
+            "gender": stdin("What's your gender?", ["Female", "Male"])[0],
             "hit_die": oSRD.getHitDieByClass(klass),
             "initiative": oPC.getAttributeModifier("Dexterity"),
             "prepared_spells": oSRD.getPreparedSpellsByClass(
@@ -261,8 +286,6 @@ def step5() -> None:
     else:
         oSheet.set("tools", oSRD.getToolsByClass(klass))
 
-    oSheet.set("gender", stdin("What's your gender?", ["Female", "Male"])[0])
-
 
 def main() -> None:
     try:
@@ -281,9 +304,11 @@ def main() -> None:
             oSheet,
             level=oPC.getTotalLevel(),
         )
+        import toml
+
         with Path(character_dir, f"{oPC.getMyName()}.toml").open("w") as record:
             toml.dump(asdict(cs), record)
-            print("Character created successfully.")
+            print(f"Character '{oPC.getMyName()}' created successfully.")
     except KeyboardInterrupt:
         print()
 
