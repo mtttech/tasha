@@ -196,6 +196,10 @@ class PlayerCharacter:
         """Returns the character's feat list."""
         return self.character_sheet.feats
 
+    def getMyFeatures(self) -> List[str]:
+        """Returns the character's class features."""
+        return self.character_sheet.features
+
     def getMyGender(self) -> str:
         """Returns the character's gender."""
         return self.character_sheet.gender
