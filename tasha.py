@@ -19,11 +19,7 @@ if not character_dir.exists():
 
 def getSelectableFeats() -> List[str]:
     """Returns a list of selectable feats."""
-    return [
-        f
-        for f in oSRD.getFeats()
-        if hasFeatRequirements(f) and f not in oPC.getMyFeats()
-    ]
+    return [f for f in oSRD.getFeats() if hasFeatRequirements(f)]
 
 
 def hasFeatRequirements(feat: str) -> Union[Literal[False], Literal[True]]:
@@ -38,7 +34,7 @@ def hasFeatRequirements(feat: str) -> Union[Literal[False], Literal[True]]:
                 break
 
         if not ability_chk_success:
-            return False
+            return ability_chk_success
 
     armor_requirements = oSRD.getArmorProficiencyRequirementByFeat(feat)
     if len(armor_requirements) > 0:
@@ -55,7 +51,7 @@ def hasFeatRequirements(feat: str) -> Union[Literal[False], Literal[True]]:
                 break
 
         if not features_chk_success:
-            return False
+            return features_chk_success
 
     if oPC.getTotalLevel() < oSRD.getLevelRequirementByFeat(feat):
         return False
@@ -75,12 +71,14 @@ def loadPC(character_name: str) -> PlayerCharacter:
 def step1() -> None:
     # Choose class/subclass
     # Select level
-    klass = stdin("Choose a class.", oSRD.getClasses())[0]
-    level = int(stdin("What is your character's class level?", 20)[0])
+    print("Choose a class.")
+    klass = stdin(oSRD.getClasses())[0]
+    print("What is your character's class level?")
+    level = int(stdin(20)[0])
     subclass = ""
     if level >= 3:
+        print("If you start at level 3 or higher, choose a subclass.")
         subklass = stdin(
-            "If you start at level 3 or higher, choose a subclass.",
             oSRD.getSubclassesByClass(klass),
         )
         subclass = subklass[0]
@@ -106,14 +104,17 @@ def step2() -> None:
     # Choose a background
     # Choose a species
     # Choose equipment
-    background = stdin("Choose your character's background.", oSRD.getBackgrounds())
+    print("Choose your character's background.")
+    background = stdin(oSRD.getBackgrounds())
     oSheet.set("background", background[0])
 
     # Choose ability bonuses
-    ability_bonus_array = stdin(
+    print(
         "A background lists three of your character's ability scores. Increase "
         "one by 2 and another one by 1, or increase all three by 1. None of "
-        "these increases can raise a score above 20.",
+        "these increases can raise a score above 20."
+    )
+    ability_bonus_array = stdin(
         ["Apply 2/1", "Apply 1/1/1"],
     )
     bonus_array = {
@@ -127,15 +128,13 @@ def step2() -> None:
     if ability_bonus_array[0] == "Apply 2/1":
         background_abilities = oSRD.getAbilityByBackground(oPC.getMyBackground())
 
-        two_point_ability = stdin(
-            "Choose which ability to apply a 2 point bonus.", background_abilities
-        )
+        print("Choose which ability to apply a 2 point bonus.")
+        two_point_ability = stdin(background_abilities)
         chosen_ability = two_point_ability[0]
         bonus_array[chosen_ability] = 2
 
-        one_point_ability = stdin(
-            "Choose which ability to apply a 1 point bonus.", background_abilities
-        )
+        print("Choose which ability to apply a 1 point bonus.")
+        one_point_ability = stdin(background_abilities)
         chosen_ability = one_point_ability[0]
         bonus_array[chosen_ability] = 1
 
@@ -145,27 +144,28 @@ def step2() -> None:
 
     oSheet.set("bonus", bonus_array)
 
-    feat = stdin(
-        "A background gives your character a specified Origin feat.",
-        oSRD.getFeatsByCategory("Origin"),
-    )
+    print("A background gives your character a specified Origin feat.")
+    feat = stdin(oSRD.getFeatsByCategory("Origin"))
     oSheet.set("feats", feat)
 
+    print("A background gives your character proficiency in two specified skills.")
     skills = stdin(
-        "A background gives your character proficiency in two specified skills.",
         oSRD.getSkillsByBackground(oPC.getMyBackground()),
         loop_count=2,
     )
     oSheet.set("skills", skills)
 
-    tool = stdin(
+    print(
         "Each background gives a character proficiency with one tool-either a "
-        "specific tool or one chosen from the Artisan's Tools category.",
+        "specific tool or one chosen from the Artisan's Tools category."
+    )
+    tool = stdin(
         oSRD.getToolsByBackground(oPC.getMyBackground()),
     )
     oSheet.set("tools", tool)
 
-    species = stdin("Choose a species for your character.", oSRD.getSpecies())[0]
+    print("Choose a species for your character.")
+    species = stdin(oSRD.getSpecies())[0]
     oSheet.set(
         {
             "size": oSRD.getSizeBySpecies(species),
@@ -175,8 +175,8 @@ def step2() -> None:
         }
     )
 
+    print("Your character knows at least three languages: Common plus two languages.")
     languages = stdin(
-        "Your character knows at least three languages: Common plus two languages.",
         oSRD.getStandardLanguages(),
         loop_count=2,
     )
@@ -197,7 +197,8 @@ def step3() -> None:
     results.sort(reverse=True)
     ability_names = list(ability_array.keys())
     for score in results:
-        ability = stdin(f"Assign {score} to which ability?", ability_names)
+        print(f"Assign {score} to which ability?")
+        ability = stdin(ability_names)
         ability_array[ability[0]] = {"score": score, "modifier": get_modifier(score)}
 
     # Apply background ability bonuses.
@@ -217,7 +218,8 @@ def step3() -> None:
 
 def step4() -> None:
     # Choose an alignment
-    alignment = stdin("Choose your alignment.", oSRD.getAlignments())[0]
+    print("Choose your alignment.")
+    alignment = stdin(oSRD.getAlignments())[0]
     oSheet.set("alignment", alignment)
 
 
@@ -232,6 +234,7 @@ def step5() -> None:
     # Spell Slots
     klass = oPC.getMyClasses()[0]
     skills = oSRD.getSkillsByClass(klass, oPC.getMySkills())
+    print("Choose a class skill.")
     if klass == "Rogue":
         allotted_skills = 4
     elif klass in ("Bard", "Ranger"):
@@ -240,22 +243,24 @@ def step5() -> None:
         allotted_skills = 2
     oSheet.set(
         "skills",
-        stdin("Choose a class skill.", skills, loop_count=allotted_skills),
+        stdin(skills, loop_count=allotted_skills),
     )
 
     ability_score_improvements = oSRD.getFeaturesByClass(
         klass, oPC.getTotalLevel()
     ).count("Ability Score Improvement")
+
+    print("Choose your feats.")
+    oSheet.set(
+        "feats", stdin(getSelectableFeats(), loop_count=ability_score_improvements)
+    )
+    print("What's your gender?")
+    oSheet.set("gender", stdin(["Female", "Male"])[0])
+
     oSheet.set(
         {
             "cantrips": oSRD.getCantripsByClass(klass, oPC.getTotalLevel()),
-            "feats": stdin(
-                "Choose your feats.",
-                getSelectableFeats(),
-                loop_count=ability_score_improvements,
-            ),
             "features": oSRD.getFeaturesByClass(klass, oPC.getClassLevel(klass)),
-            "gender": stdin("What's your gender?", ["Female", "Male"])[0],
             "hit_die": oSRD.getHitDieByClass(klass),
             "initiative": oPC.getAttributeModifier("Dexterity"),
             "prepared_spells": oSRD.getPreparedSpellsByClass(
@@ -267,19 +272,19 @@ def step5() -> None:
     )
 
     if klass == "Bard":
+        print("Choose your musical instrument tool proficiencies.")
         oSheet.set(
             "tools",
             stdin(
-                "Choose your musical instrument tool proficiencies.",
                 oSRD.getToolsByClass(klass),
                 loop_count=3,
             ),
         )
     elif klass == "Monk":
+        print("Choose your artisan tool or musical instrument tool proficiencies.")
         oSheet.set(
             "tools",
             stdin(
-                "Choose your artisan tool or musical instrument tool proficiencies.",
                 oSRD.getToolsByClass(klass),
             ),
         )
@@ -298,14 +303,14 @@ def main() -> None:
         name = None
         while name is None:
             name = input("What is your name? ")
-            oSheet.set("name", name)
+            oSheet.set("name", name.strip().replace(" ", "_"))
+
+        import toml
 
         cs = replace(
             oSheet,
             level=oPC.getTotalLevel(),
         )
-        import toml
-
         with Path(character_dir, f"{oPC.getMyName()}.toml").open("w") as record:
             toml.dump(asdict(cs), record)
             print(f"Character '{oPC.getMyName()}' created successfully.")
