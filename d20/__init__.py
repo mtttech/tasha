@@ -47,10 +47,10 @@ class SystemResourceDocument:
 
     def getCantripsByClass(self, klass: str, level: int) -> int:
         """Returns number of cantrips by class and level."""
-        cantrips_known = self.srd["classes"][klass]["cantrips"][level]
-        if len(cantrips_known) == 0:
+        try:
+            return int(self.srd["classes"][klass]["cantrips"][level])
+        except KeyError:
             return 0
-        return cantrips_known
 
     def getClassSpellList(
         self, klass: str, spell_level: int, subklass=None
@@ -168,6 +168,20 @@ class SystemResourceDocument:
         """Returns size type by species."""
         return self.srd["species"][species]["size"]
 
+    def getSkillAbility(self, skill: str) -> str:
+        """Returns the associated ability for a skill."""
+        try:
+            return self.srd["skills"][skill]["ability"]
+        except KeyError:
+            return ""
+
+    def getSkills(self, excl: Union[List[str], None] = None) -> List[str]:
+        """Returns a list of skills, excluding any specified exclusions."""
+        all_skills = list(self.srd["skills"].keys())
+        if isinstance(excl, list):
+            all_skills = [s for s in all_skills if s not in excl]
+        return all_skills
+        
     def getSkillsByBackground(self, background: str) -> List[str]:
         """Returns a list of skills by background."""
         return self.srd["backgrounds"][background]["skills"]
@@ -181,9 +195,21 @@ class SystemResourceDocument:
             return [s for s in class_skills if s not in excl]
         return class_skills
 
+    def getSpecies(self) -> List[str]:
+        """Returns a list of species."""
+        return list(self.srd["species"].keys())
+
     def getSpeedBySpecies(self, species: str) -> List[str]:
         """Returns speed (in feet) by species."""
         return self.srd["species"][species]["speed"]
+
+    def getSpellSlotsByClass(self, klass: str, level: int) -> List[int]:
+        """Returns spell slots by class and level."""
+        try:
+            spell_slots = self.srd["classes"][klass]["spell_slots"][level]
+            return [int(s) for s in spell_slots.split(",")]
+        except KeyError:
+            return [0,]
 
     def getStandardLanguages(self, excl: Union[List[str], None] = None) -> List[str]:
         """Returns all standard languages (minus exclusions, if applicable)."""
@@ -220,33 +246,6 @@ class SystemResourceDocument:
             return ()
 
         return tuple([k for k in self.getClasses() if is_selectable_class(k)])
-
-    def getSkillAbility(self, skill: str) -> str:
-        """Returns the associated ability for a skill."""
-        try:
-            return self.srd["skills"][skill]["ability"]
-        except KeyError:
-            return ""
-
-    def getSkills(self, excl: Union[List[str], None] = None) -> List[str]:
-        """Returns a list of skills, excluding any specified exclusions."""
-        all_skills = list(self.srd["skills"].keys())
-        if isinstance(excl, list):
-            all_skills = [s for s in all_skills if s not in excl]
-        return all_skills
-
-    def getSpecies(self) -> List[str]:
-        """Returns a list of species."""
-        return list(self.srd["species"].keys())
-
-    def getSpellSlotsByClass(self, klass: str, level: int) -> List[int]:
-        """Returns spell slots by class and level."""
-        spell_slots = self.srd["classes"][klass]["spell_slots"][level]
-        if len(spell_slots) == 0:
-            return [
-                0,
-            ]
-        return [int(s) for s in spell_slots.split(",")]
 
     def getListSpells(self, klass: str, subklass: str, level: int) -> List[str]:
         """Returns a list of spells by available spell slots."""
