@@ -14,7 +14,7 @@ oSRD = SystemResourceDocument()
 character_dir = Path.home() / ".config" / "tasha" / "characters"
 if not character_dir.exists():
     character_dir.mkdir(parents=True)
-    print("Created the character save directory.")
+    print("Created the character directory.")
 
 
 def getSelectableFeats() -> List[str]:
@@ -60,6 +60,7 @@ def hasFeatRequirements(feat: str) -> Union[Literal[False], Literal[True]]:
 
 
 def loadPC(character_name: str) -> PlayerCharacter:
+    """Loads character toml file to PlayerCharacter object."""
     import tomllib
 
     with Path(character_dir, f"{character_name}.toml").open("rb") as file:
@@ -246,14 +247,14 @@ def step5() -> None:
         stdin(skills, loop_count=allotted_skills),
     )
 
+    print("Choose your feats.")
     ability_score_improvements = oSRD.getFeaturesByClass(
         klass, oPC.getTotalLevel()
     ).count("Ability Score Improvement")
-
-    print("Choose your feats.")
     oSheet.set(
         "feats", stdin(getSelectableFeats(), loop_count=ability_score_improvements)
     )
+
     print("What's your gender?")
     oSheet.set("gender", stdin(["Female", "Male"])[0])
 
@@ -302,8 +303,11 @@ def main() -> None:
 
         name = None
         while name is None:
-            name = input("What is your name? ")
-            oSheet.set("name", name.strip().replace(" ", "_"))
+            name = input("What is your character's name? ").strip()
+            if name == "":
+                name = None
+            else:
+                oSheet.set("name", name.replace(" ", "_"))
 
         import toml
 
