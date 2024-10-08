@@ -146,8 +146,7 @@ def step2() -> None:
     oSheet.set("bonus", bonus_array)
 
     print("A background gives your character a specified Origin feat.")
-    feat = stdin(oSRD.getFeatsByCategory("Origin"))
-    oSheet.set("feats", feat)
+    oSheet.set("feats", stdin(oSRD.getFeatsByCategory("Origin")))
 
     print("A background gives your character proficiency in two specified skills.")
     skills = stdin(
@@ -161,7 +160,7 @@ def step2() -> None:
         "specific tool or one chosen from the Artisan's Tools category."
     )
     tool = stdin(
-        oSRD.getToolsByBackground(oPC.getMyBackground()),
+        oSRD.getToolProficienciesByBackground(oPC.getMyBackground()),
     )
     oSheet.set("tools", tool)
 
@@ -199,8 +198,10 @@ def step3() -> None:
     ability_names = list(ability_array.keys())
     for score in results:
         print(f"Assign {score} to which ability?")
-        ability = stdin(ability_names)
-        ability_array[ability[0]] = {"score": score, "modifier": get_modifier(score)}
+        ability_array[stdin(ability_names)[0]] = {
+            "score": score,
+            "modifier": get_modifier(score),
+        }
 
     # Apply background ability bonuses.
     for ability, bonus in oPC.getMyBonus().items():
@@ -220,8 +221,7 @@ def step3() -> None:
 def step4() -> None:
     # Choose an alignment
     print("Choose your alignment.")
-    alignment = stdin(oSRD.getAlignments())[0]
-    oSheet.set("alignment", alignment)
+    oSheet.set("alignment", stdin(oSRD.getAlignments())[0])
 
 
 def step5() -> None:
@@ -273,24 +273,24 @@ def step5() -> None:
     )
 
     if klass == "Bard":
-        print("Choose your musical instrument tool proficiencies.")
+        print("Choose your bardic musical instrument tool proficiencies.")
         oSheet.set(
             "tools",
             stdin(
-                oSRD.getToolsByClass(klass),
+                oSRD.getToolProficienciesByClass(klass),
                 loop_count=3,
             ),
         )
     elif klass == "Monk":
-        print("Choose your artisan tool or musical instrument tool proficiencies.")
+        print("Choose your monk artisan or musical instrument tool proficiency.")
         oSheet.set(
             "tools",
             stdin(
-                oSRD.getToolsByClass(klass),
+                oSRD.getToolProficienciesByClass(klass),
             ),
         )
     else:
-        oSheet.set("tools", oSRD.getToolsByClass(klass))
+        oSheet.set("tools", oSRD.getToolProficienciesByClass(klass))
 
 
 def main() -> None:

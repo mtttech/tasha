@@ -111,12 +111,9 @@ class SystemResourceDocument:
         """Returns a list of classes."""
         return list(self.srd["classes"].keys())
 
-    def getFeats(self, excl: Union[List[str], None] = None) -> List[str]:
-        """Returns a list of feats (excluding exceptions, if applicable)."""
-        feat_list = list(self.srd["feats"])
-        if isinstance(excl, list):
-            return [f for f in feat_list if f not in excl]
-        return feat_list
+    def getFeats(self) -> List[str]:
+        """Returns all feats."""
+        return list(self.srd["feats"])
 
     def getFeatsByCategory(self, category: str) -> List[str]:
         """Returns a list of feats by category."""
@@ -131,7 +128,7 @@ class SystemResourceDocument:
         return self.srd["feats"][feat]["features"]
 
     def getFeaturesByClass(self, klass: str, class_level: int) -> List[str]:
-        """Returns class features by class."""
+        """Returns class features by class and level."""
         class_features = list()
         for level, features in self.srd["classes"][klass]["features"].items():
             if class_level >= level:
@@ -175,13 +172,6 @@ class SystemResourceDocument:
         except KeyError:
             return ""
 
-    def getSkills(self, excl: Union[List[str], None] = None) -> List[str]:
-        """Returns a list of skills, excluding any specified exclusions."""
-        all_skills = list(self.srd["skills"].keys())
-        if isinstance(excl, list):
-            all_skills = [s for s in all_skills if s not in excl]
-        return all_skills
-        
     def getSkillsByBackground(self, background: str) -> List[str]:
         """Returns a list of skills by background."""
         return self.srd["backgrounds"][background]["skills"]
@@ -190,10 +180,7 @@ class SystemResourceDocument:
         self, klass: str, excl: Union[List[str], None] = None
     ) -> List[str]:
         """Returns all skills by class."""
-        class_skills = self.srd["classes"][klass]["skills"]
-        if isinstance(excl, list):
-            return [s for s in class_skills if s not in excl]
-        return class_skills
+        return self.srd["classes"][klass]["skills"]
 
     def getSpecies(self) -> List[str]:
         """Returns a list of species."""
@@ -209,7 +196,9 @@ class SystemResourceDocument:
             spell_slots = self.srd["classes"][klass]["spell_slots"][level]
             return [int(s) for s in spell_slots.split(",")]
         except KeyError:
-            return [0,]
+            return [
+                0,
+            ]
 
     def getStandardLanguages(self, excl: Union[List[str], None] = None) -> List[str]:
         """Returns all standard languages (minus exclusions, if applicable)."""
@@ -218,11 +207,11 @@ class SystemResourceDocument:
             return [l for l in language_list if l not in excl]
         return language_list
 
-    def getToolsByBackground(self, background: str) -> List[str]:
-        """Returns a list of all tool proficiencies by background."""
+    def getToolProficienciesByBackground(self, background: str) -> List[str]:
+        """Returns tool proficiencies by background."""
         return self.srd["backgrounds"][background]["tools"]
 
-    def getToolsByClass(self, klass: str) -> List[str]:
+    def getToolProficienciesByClass(self, klass: str) -> List[str]:
         """Returns a list of all tool proficiencies by class."""
         return self.srd["classes"][klass]["tools"]
 
@@ -263,21 +252,6 @@ class SystemResourceDocument:
     def getSubclassesByClass(self, klass: str) -> List[str]:
         """Returns a list of subclasses by class."""
         return list(self.srd["classes"][klass]["subclasses"])
-
-    def getToolProficiencies(
-        self,
-        excl: Union[List[str], None] = None,
-        startswith: Union[str, None] = None,
-    ) -> List[str]:
-        """Returns all tool proficiencies minus exclusions, if applicable."""
-        tool_proficiencies = self.srd["proficiencies"]["tools"]
-        if isinstance(excl, list):
-            tool_proficiencies = [t for t in tool_proficiencies if t not in excl]
-        if isinstance(startswith, str):
-            tool_proficiencies = [
-                t for t in tool_proficiencies if t.startswith(startswith)
-            ]
-        return tool_proficiencies
 
     def getTraitsBySpecies(self, species: str) -> List[str]:
         """Returns a list of traits by species."""
