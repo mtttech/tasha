@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Tuple, Union
+from typing import Any, Dict, List, Union
 
 from . import (
     alignments,
@@ -45,59 +45,17 @@ class SystemResourceDocument:
             )
         )
 
-    def getCantripsByClass(self, klass: str, level: int) -> int:
-        """Returns number of cantrips by class and level."""
-        try:
-            return int(self.srd["classes"][klass]["cantrips"][level])
-        except KeyError:
-            return 0
-
-    def getClassSpellList(
-        self, klass: str, spell_level: int, subklass=None
-    ) -> List[str]:
-        try:
-            if subklass in (
-                "Arcane Trickster",
-                "Eldritch Knight",
-            ):
-                spell_list_by_level = self.srd["spells"][subklass][spell_level]
-            else:
-                spell_list_by_level = self.srd["spells"][klass][spell_level]
-            if len(spell_list_by_level) == 0:
-                raise KeyError
-
-            return [f"{s} (lv. {spell_level})" for s in spell_list_by_level]
-        except KeyError:
-            return list()
-
-    def getEntryByMulticlass(self, klass: str) -> Dict[str, Any]:
-        """Returns SRD entries for multiclassing by the chosen class."""
-        try:
-            return self.srd["multiclasses"][klass]
-        except KeyError:
-            raise ValueError(f"Cannot find an entry for the '{klass}' multiclass.")
-
-    def getAbilityByBackground(self, background: str) -> List[str]:
+    def getAbilitiesByBackground(self, background: str) -> List[str]:
         """Returns a list of abilities by background."""
         return self.srd["backgrounds"][background]["ability"]
-
-    def getAlignments(self) -> List[str]:
-        """Returns a list of alignments."""
-        return self.srd["alignments"]
-
-    def getBackgrounds(self) -> List[str]:
-        """Returns a list of backgrounds."""
-        return list(self.srd["backgrounds"].keys())
-
-    def getListCantrips(
-        self, klass: str, subklass: Union[str, None] = None
-    ) -> List[str]:
-        """Returns a list of cantrips available by class/subclass."""
-        return self.getClassSpellList(klass, 0, subklass)
 
     def getAbilityRequirementsByFeat(self, feat: str) -> Dict[str, int]:
         """Returns ability score requirements by feat."""
         return self.srd["feats"][feat]["ability"]
+
+    def getAlignments(self) -> List[str]:
+        """Returns a list of alignments."""
+        return self.srd["alignments"]
 
     def getArmorProficienciesByClass(self, klass: str) -> List[str]:
         """Returns armor proficiencies by class."""
@@ -106,6 +64,23 @@ class SystemResourceDocument:
     def getArmorProficiencyRequirementByFeat(self, feat: str) -> List[str]:
         """Returns armor proficiency requirements by feat."""
         return self.srd["feats"][feat]["armors"]
+
+    def getBackgrounds(self) -> List[str]:
+        """Returns a list of backgrounds."""
+        return list(self.srd["backgrounds"].keys())
+
+    def getCantripsByClass(self, klass: str, level: int) -> int:
+        """Returns number of cantrips by class and level."""
+        try:
+            return int(self.srd["classes"][klass]["cantrips"][level])
+        except KeyError:
+            return 0
+            
+    def getListCantrips(
+        self, klass: str, subklass: Union[str, None] = None
+    ) -> List[str]:
+        """Returns a list of cantrips available by class/subclass."""
+        return self.getSpellListByClass(klass, 0, subklass)
 
     def getClasses(self) -> List[str]:
         """Returns a list of classes."""
@@ -190,6 +165,24 @@ class SystemResourceDocument:
         """Returns speed (in feet) by species."""
         return self.srd["species"][species]["speed"]
 
+    def getSpellListByClass(
+        self, klass: str, spell_level: int, subklass=None
+    ) -> List[str]:
+        try:
+            if subklass in (
+                "Arcane Trickster",
+                "Eldritch Knight",
+            ):
+                spell_list_by_level = self.srd["spells"][subklass][spell_level]
+            else:
+                spell_list_by_level = self.srd["spells"][klass][spell_level]
+            if len(spell_list_by_level) == 0:
+                raise KeyError
+
+            return [f"{s} (lv. {spell_level})" for s in spell_list_by_level]
+        except KeyError:
+            return list()
+            
     def getSpellSlotsByClass(self, klass: str, level: int) -> List[int]:
         """Returns spell slots by class and level."""
         try:
@@ -215,27 +208,6 @@ class SystemResourceDocument:
         """Returns a list of all tool proficiencies by class."""
         return self.srd["classes"][klass]["tools"]
 
-    def getListMulticlasses(
-        self,
-        klasses: Tuple[str, ...],
-        level: int,
-        attributes: Dict[str, Dict[str, int]],
-    ) -> Union[List[str], Tuple[str, ...]]:
-        """Returns a list of available classes for multiclassing."""
-
-        def is_selectable_class(klass: str) -> bool:
-            if klass not in klasses:
-                required_attributes = self.getEntryByMulticlass(klass)["requirements"]
-                for attribute in tuple(required_attributes.keys()):
-                    if attributes[attribute]["score"] < required_attributes[attribute]:
-                        return False
-            return True
-
-        if level == 20:
-            return ()
-
-        return tuple([k for k in self.getClasses() if is_selectable_class(k)])
-
     def getListSpells(self, klass: str, subklass: str, level: int) -> List[str]:
         """Returns a list of spells by available spell slots."""
         max_spell_level = self.srd["classes"][klass]["spell_slots"][level].split(",")
@@ -245,7 +217,7 @@ class SystemResourceDocument:
             if spell_level == 0:
                 continue
 
-            spell_list += self.getClassSpellList(klass, spell_level, subklass)
+            spell_list += self.getSpellListByClass(klass, spell_level, subklass)
 
         return spell_list
 

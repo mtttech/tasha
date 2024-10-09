@@ -115,10 +115,7 @@ def step2() -> None:
         "one by 2 and another one by 1, or increase all three by 1. None of "
         "these increases can raise a score above 20."
     )
-    ability_bonus_array = stdin(
-        ["Apply 2/1", "Apply 1/1/1"],
-    )
-    bonus_array = {
+    ability_bonus_array = {
         "Strength": 0,
         "Dexterity": 0,
         "Constitution": 0,
@@ -126,24 +123,27 @@ def step2() -> None:
         "Wisdom": 0,
         "Charisma": 0,
     }
-    if ability_bonus_array[0] == "Apply 2/1":
-        background_abilities = oSRD.getAbilityByBackground(oPC.getMyBackground())
+    bonus_array_selections = stdin(
+        ["Apply 2/1", "Apply 1/1/1"],
+    )
+    if bonus_array_selections[0] == "Apply 2/1":
+        background_abilities = oSRD.getAbilitiesByBackground(oPC.getMyBackground())
 
         print("Choose which ability to apply a 2 point bonus.")
         two_point_ability = stdin(background_abilities)
         chosen_ability = two_point_ability[0]
-        bonus_array[chosen_ability] = 2
+        ability_bonus_array[chosen_ability] = 2
 
         print("Choose which ability to apply a 1 point bonus.")
         one_point_ability = stdin(background_abilities)
         chosen_ability = one_point_ability[0]
-        bonus_array[chosen_ability] = 1
+        ability_bonus_array[chosen_ability] = 1
 
-    if ability_bonus_array[0] == "Apply 1/1/1":
-        for ability in oSRD.getAbilityByBackground(oPC.getMyBackground()):
-            bonus_array[ability] = 1
+    if bonus_array_selections[0] == "Apply 1/1/1":
+        for ability in oSRD.getAbilitiesByBackground(oPC.getMyBackground()):
+            ability_bonus_array[ability] = 1
 
-    oSheet.set("bonus", bonus_array)
+    oSheet.set("bonus", ability_bonus_array)
 
     print("A background gives your character a specified Origin feat.")
     oSheet.set("feats", stdin(oSRD.getFeatsByCategory("Origin")))
