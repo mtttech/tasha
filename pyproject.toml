@@ -39,5 +39,6 @@ classifiers = [
 tasha = "tasha.tasha:main"
 
 [project.urls]
-Home = "https://github.com/mtttech/tasha"
-Repository = "https://github.com/mtttech/tasha"
+homepage = "https://github.com/mtttech/tasha"
+documentation = "https://github.com/mtttech/tasha"
+repository = "https://github.com/mtttech/tasha"
