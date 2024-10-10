@@ -69,18 +69,18 @@ class SystemResourceDocument:
         """Returns a list of backgrounds."""
         return list(self.srd["backgrounds"].keys())
 
-    def getCantripsByClass(self, klass: str, level: int) -> int:
-        """Returns number of cantrips by class and level."""
-        try:
-            return int(self.srd["classes"][klass]["cantrips"][level])
-        except KeyError:
-            return 0
-            
-    def getListCantrips(
+    def getCantripsByClass(
         self, klass: str, subklass: Union[str, None] = None
     ) -> List[str]:
-        """Returns a list of cantrips available by class/subclass."""
+        """Returns cantrips by class/subclass."""
         return self.getSpellListByClass(klass, 0, subklass)
+        
+    def getCantripsKnownByClass(self, klass: str, level: int) -> int:
+        """Returns number of cantrips known by class and level."""
+        try:
+            return self.srd["classes"][klass]["cantrips"][level]
+        except KeyError:
+            return 0
 
     def getClasses(self) -> List[str]:
         """Returns a list of classes."""
@@ -182,16 +182,13 @@ class SystemResourceDocument:
             return [f"{s} (lv. {spell_level})" for s in spell_list_by_level]
         except KeyError:
             return list()
-            
+
     def getSpellSlotsByClass(self, klass: str, level: int) -> List[int]:
         """Returns spell slots by class and level."""
         try:
-            spell_slots = self.srd["classes"][klass]["spell_slots"][level]
-            return [int(s) for s in spell_slots.split(",")]
+            return self.srd["classes"][klass]["spell_slots"][level]
         except KeyError:
-            return [
-                0,
-            ]
+            return [0]
 
     def getStandardLanguages(self, excl: Union[List[str], None] = None) -> List[str]:
         """Returns all standard languages (minus exclusions, if applicable)."""
