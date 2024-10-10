@@ -260,7 +260,7 @@ def step5() -> None:
 
     oSheet.set(
         {
-            "cantrips": oSRD.getCantripsByClass(klass, oPC.getTotalLevel()),
+            "cantrips": oSRD.getCantripsKnownByClass(klass, oPC.getTotalLevel()),
             "features": oSRD.getFeaturesByClass(klass, oPC.getClassLevel(klass)),
             "hit_die": oSRD.getHitDieByClass(klass),
             "initiative": oPC.getAttributeModifier("Dexterity"),

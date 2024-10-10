@@ -24,75 +24,6 @@ def review_attributes() -> None:
         )
 
 
-def assignAsiUpgrades() -> None:
-    """Prompt assigns ability score improvements."""
-    allotted_asi = oPC.getAllottedAsi()
-    if allotted_asi == 0:
-        return
-
-    def assignAttributeUpgrade() -> None:
-        """Prompt assigns an attribute upgrade."""
-        bonus = int(
-            Scan(
-                message="How many points do you wish to apply?",
-                selections=["1", "2"],
-                completer=True,
-            ),
-        )
-        bonus_attributes = list()
-        if bonus == 1:
-            num_of_bonuses = 2
-        else:
-            num_of_bonuses = 1
-
-        for _ in range(0, num_of_bonuses):
-            attribute = Scan(
-                message="Which attribute do you wish to enhance?",
-                selections=[
-                    a
-                    for a in oPC.getUpgradeableAttributes(bonus)
-                    if a not in bonus_attributes
-                ],
-                completer=True,
-            )
-            bonus_attributes.append(attribute)
-            base = Attributes(oPC.getAttributes())
-            base.add(attribute, bonus)
-            oSheet.attributes = base.attributes
-
-    def assignFeatUpgrade() -> None:
-        """Prompt assigns a feat upgrade."""
-        excluded_feats = list()
-        while True:
-            feat = Scan(
-                message="Choose a feat.",
-                selections=oSRD.getFeats(oPC.getMyFeats() + excluded_feats),
-                completer=True,
-            )
-            if hasFeatRequirements(feat):
-                assignFeatEnhancements(feat)
-                break
-            else:
-                excluded_feats.append(feat)
-                print(f"You don't meet the requirements for '{feat}'.")
-
-    asi_counter = allotted_asi
-    for _ in range(0, allotted_asi):
-        option = Scan(
-            message=f"Would you like to select a feat or increase an ability? ({asi_counter})",
-            selections=[
-                "ability",
-                "feat",
-            ],
-            completer=True,
-        )
-        if option == "Ability":
-            assignAttributeUpgrade()
-        if option == "Feat":
-            assignFeatUpgrade()
-        asi_counter -= 1
-
-
 def assignCantrips(
     klass: str,
     cantrips_known: Union[int, None] = None,
@@ -103,7 +34,7 @@ def assignCantrips(
         subklass = oPC.getClassSubclass(klass)
 
     my_cantrip_list = list()
-    cantrip_pool = oSRD.getListCantrips(klass, subklass)
+    cantrip_pool = oSRD.getCantripsByClass(klass, subklass)
     if len(cantrip_pool) == 0:
         return my_cantrip_list
 
