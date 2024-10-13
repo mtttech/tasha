@@ -74,7 +74,7 @@ class SystemResourceDocument:
     ) -> List[str]:
         """Returns cantrips by class/subclass."""
         return self.getSpellListByClass(klass, 0, subklass)
-        
+
     def getCantripsKnownByClass(self, klass: str, level: int) -> int:
         """Returns number of cantrips known by class and level."""
         try:
