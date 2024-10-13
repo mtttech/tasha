@@ -185,6 +185,8 @@ def step2() -> None:
 
 def step3() -> None:
     # Generate/Assign ability scores
+    from random import randint
+
     ability_array = {
         "Strength": {"score": 0, "modifier": 0},
         "Dexterity": {"score": 0, "modifier": 0},
@@ -193,7 +195,7 @@ def step3() -> None:
         "Wisdom": {"score": 0, "modifier": 0},
         "Charisma": {"score": 0, "modifier": 0},
     }
-    results = generate_abilities(67)
+    results = generate_abilities(randint(65, 90))
     results.sort(reverse=True)
     ability_names = list(ability_array.keys())
     for score in results:
