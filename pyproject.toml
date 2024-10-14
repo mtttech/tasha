@@ -1,24 +1,10 @@
-[build-system]
-requires = ["setuptools >= 61.0"]
-build-backend = "setuptools.build_meta"
-
-[project]
+[tool.poetry]
 name = "tasha"
-description = "Creates Dungeons & Dragons (5.5e) characters."
 version = "0.6.3"
-dependencies = [
-    "dice",
-    "toml",
-]
-requires-python = ">=3.8"
-authors = [
-    {name = "Marcus T Taylor", email="mtaylor9754@hotmail.com"},
-]
-maintainers = [
-    {name = "Marcus T Taylor", email="mtaylor9754@hotmail.com"},
-]
+description = "Creates Dungeons & Dragons (5.5e) characters."
+authors = ["Marcus T Taylor <mtaylor9754@hotmail.com>"]
+license = "MIT"
 readme = "README.md"
-license = "GPL-3.0-only"
 classifiers = [
     "Development Status :: 4 - Beta",
     "Environment :: Console",
@@ -34,11 +20,17 @@ classifiers = [
     "Topic :: Games/Entertainment :: Role-Playing",
     "Topic :: Utilities",
 ]
+packages = [{include = "tasha"}]
 
-[project.scripts]
-tasha = "tasha.tasha:main"
+[tool.poetry.dependencies]
+python = "^3.9"
+dice = "^4.0.0"
+toml = "^0.10.2"
 
-[project.urls]
-homepage = "https://github.com/mtttech/tasha"
-documentation = "https://github.com/mtttech/tasha"
-repository = "https://github.com/mtttech/tasha"
+[tool.poetry.scripts]
+tasha-run='tasha.tasha:main'
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
