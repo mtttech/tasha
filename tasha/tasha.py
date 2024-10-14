@@ -2,10 +2,10 @@ from dataclasses import asdict, replace
 from pathlib import Path
 from typing import List, Literal, Union
 
-from actor import CharacterSheet, PlayerCharacter
-from attributes import generate_abilities, get_modifier
-from d20 import SystemResourceDocument
-from utils import stdin
+from tasha.actor import CharacterSheet, PlayerCharacter
+from tasha.attributes import generate_abilities, get_modifier
+from tasha.d20 import SystemResourceDocument
+from tasha.utils import stdin
 
 oSheet = CharacterSheet()
 oPC = PlayerCharacter(oSheet)
