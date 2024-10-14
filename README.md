@@ -22,10 +22,11 @@ git clone https://github.com/mtttech/Tasha.git
 # Change into the cloned repo. 
 cd tasha
 
-# Create your virtual environment and install the requirements (if necessary).
+# Use poetry to install.
+poetry install
 
 # Run the program
-python tasha
+poetry run tasha
 ```
 
 Characters created by Tasha are saved to your *HOME* directory within the *.config/tasha/characters* folder, which will be created if it doesn't already exist. Characters will be saved in the .TOML format. Below is an example of such a character.
