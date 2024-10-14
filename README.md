@@ -1,6 +1,6 @@
 # Tasha
 
-**Tasha** is a tool for creating 5e Dungeons & Dragons characters.
+**Tasha** is a tool for creating 5.5e Dungeons & Dragons characters.
 
 ### Supported rulebooks
 
