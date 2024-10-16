@@ -28,7 +28,7 @@ dice = "^4.0.0"
 toml = "^0.10.2"
 
 [tool.poetry.scripts]
-tasha-run='tasha.tasha:main'
+tasha='tasha.tasha:main'
 
 
 [build-system]
