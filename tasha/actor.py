@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from math import ceil
-from typing import Any, Dict, List, Literal, NoReturn, Tuple, Union
+from typing import Any, Dict, List, NoReturn, Tuple
 
 
 @dataclass
@@ -22,7 +22,7 @@ class CharacterSheet:
     languages: list = field(default_factory=list)
     level: int = field(default=1)
     name: str = field(default="")
-    prepared_spells: int = field(default=0)
+    prepared_spells: dict = field(default_factory=dict)
     proficiency_bonus: int = field(default=0)
     savingthrows: list = field(default_factory=list)
     size: str = field(default="Medium")
@@ -107,35 +107,15 @@ class CharacterSheet:
 class PlayerCharacter:
     character_sheet: CharacterSheet
 
-    def canSubclass(self, klass: str) -> Union[Literal[False], Literal[True]]:
-        """Returns False if character cannot select a subclass. True otherwise."""
-        if (
-            klass
-            in (
-                "Barbarian",
-                "Bard",
-                "Fighter",
-                "Monk",
-                "Paladin",
-                "Ranger",
-                "Rogue",
-            )
-            and self.getClassLevel(klass) < 3
-        ):
-            return False
-        if klass in ("Cleric", "Druid", "Wizard") and self.getClassLevel(klass) < 2:
-            return False
-        return True
-
     def getAttributes(self) -> Dict[str, Dict[str, Any]]:
         """Returns a dictionary of all attributes."""
         return self.character_sheet.attributes
 
-    def getAttributeModifier(self, attribute) -> int:
+    def getAttributeModifier(self, attribute: str) -> int:
         """Returns the modifier of a specified attribute."""
         return self.character_sheet.attributes[attribute]["modifier"]
 
-    def getAttributeScore(self, attribute) -> int:
+    def getAttributeScore(self, attribute: str) -> int:
         """Returns the score of a specified attribute."""
         return self.character_sheet.attributes[attribute]["score"]
 
@@ -156,7 +136,7 @@ class PlayerCharacter:
         ):
             return self.getAttributeScore("Charisma")
 
-        if klass in ("Artificer", "Wizard") or subklass in (
+        if klass == "Wizard" or subklass in (
             "Arcane Trickster",
             "Eldritch Knight",
         ):
@@ -212,6 +192,10 @@ class PlayerCharacter:
         """Returns the character's name."""
         return self.character_sheet.name
 
+    def getMyPreparedSpellCount(self):
+        """Returns the character's number of prepared spells."""
+        return self.character_sheet.prepared_spells
+
     def getMySpecies(self) -> str:
         """Returns the character's species."""
         return self.character_sheet.species
@@ -232,6 +216,10 @@ class PlayerCharacter:
         """Returns the character's speed."""
         return self.character_sheet.speed
 
+    def getMySpellSlots(self) -> List[int]:
+        """Returns the character's spell slots."""
+        return self.character_sheet.spell_slots
+
     def getMySubclasses(self) -> List[str]:
         """Returns all the character's selected subclasses."""
         return [v["subclass"] for v in tuple(self.character_sheet.classes.values())]
@@ -243,20 +231,6 @@ class PlayerCharacter:
     def getMyWeaponProficiencies(self) -> List[str]:
         """Returns the character's weapon proficiency list."""
         return self.character_sheet.weapons
-
-    def getSkillTotal(self) -> int:
-        """Returns the total number of allotted skills by class."""
-        klass = self.getMyClasses()[0]
-        if klass in (
-            "Bard",
-            "Ranger",
-        ):
-            skill_total = 3
-        elif klass in ("Rogue",):
-            skill_total = 4
-        else:
-            skill_total = 2
-        return skill_total
 
     def getTotalLevel(self) -> int:
         """Returns the total level for all character classes."""
