@@ -118,7 +118,7 @@ class SystemResourceDocument:
         """Returns level requirement by feat."""
         return self.srd["feats"][feat]["level"]
 
-    def getPreparedSpellsByClass(self, klass: str, level: int) -> int:
+    def getPreparedSpellCountByClass(self, klass: str, level: int) -> int:
         """Returns number of prepared spells by class and level."""
         try:
             return self.srd["classes"][klass]["prepared_spells"][level]
@@ -165,23 +165,15 @@ class SystemResourceDocument:
         """Returns speed (in feet) by species."""
         return self.srd["species"][species]["speed"]
 
-    def getSpellListByClass(
-        self, klass: str, spell_level: int, subklass=None
-    ) -> List[str]:
+    def getSpellListByClass(self, klass: str, spell_level: int) -> Dict[int, List[str]]:
         try:
-            if subklass in (
-                "Arcane Trickster",
-                "Eldritch Knight",
-            ):
-                spell_list_by_level = self.srd["spells"][subklass][spell_level]
-            else:
-                spell_list_by_level = self.srd["spells"][klass][spell_level]
-            if len(spell_list_by_level) == 0:
-                raise KeyError
-
-            return [f"{s} (lv. {spell_level})" for s in spell_list_by_level]
+            spell_list = dict()
+            for level, spells in self.srd["spells"][klass].items():
+                if level <= spell_level:
+                    spell_list[level] = spells
+            return spell_list
         except KeyError:
-            return list()
+            return dict()
 
     def getSpellSlotsByClass(self, klass: str, level: int) -> List[int]:
         """Returns spell slots by class and level."""
