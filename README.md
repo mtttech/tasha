@@ -33,65 +33,67 @@ Characters created by Tasha are saved to your *HOME* directory within the *.conf
 
 ```
 alignment = "Chaotic Neutral"
-armors = [ "Light",]
-background = "Noble"
-cantrips = "2"
-feats = [ "Musician",]
-features = [ "Bardic Inspiration", "Spellcasting", "Expertise", "Jack of All Trades", "Bard Subclass",]
+armors = [ "Light", "Medium", "Shield",]
+background = "Entertainer"
+cantrips = 4
+feats = [ "Magic Initiate", "Chef",]
+features = [ "Divine Order", "Spellcasting", "Channel Divinity", "Cleric Subclass", "Ability Score Improvement", "Sear Undead",]
 gender = "Female"
 gold = 0
 hit_die = 8
-hit_points = 21
-initiative = 1
-languages = [ "Common", "Elvish", "Draconic",]
-level = 3
-name = "Sierra"
-prepared_spells = 6
-proficiency_bonus = 2
-savingthrows = [ "Charisma", "Dexterity",]
+hit_points = 33
+initiative = 2
+languages = [ "Common", "Draconic", "Elvish",]
+level = 5
+name = "Bekha"
+proficiency_bonus = 3
+savingthrows = [ "Charisma", "Wisdom",]
 size = "Medium"
-skills = [ "History", "Persuasion", "Arcana", "Animal Handling", "Insight",]
+skills = [ "Acrobatics", "Performance", "History", "Religion",]
 species = "Elf"
 speed = 30
-spell_slots = [ 4, 2,]
-tools = [ "Gaming Set - Playing card Set", "Musical Instrument - Dulcimer", "Musical Instrument - Birdpipes", "Musical Instrument - Flute",]
+spell_slots = [ 4, 3, 2,]
+tools = [ "Musical Instrument - Dulcimer",]
 traits = [ "Darkvision", "Elven Lineage", "Fey Ancestry", "Keen Senses", "Trance",]
 weapons = [ "Simple",]
 
 [bonus]
-Strength = 1
+Strength = 2
 Dexterity = 0
 Constitution = 0
 Intelligence = 0
 Wisdom = 0
-Charisma = 2
+Charisma = 1
+
+[prepared_spells]
+Cleric = [ "Bestow Curse", "Continual Flame", "Create Food and Water", "Ceremony", "Blindness/Deafness", "Spirit Guardians", "Healing Word", "Cure Wounds", "Silence",]
 
 [attributes.Strength]
-score = 12
-modifier = 1
+score = 19
+modifier = 4
 
 [attributes.Dexterity]
-score = 13
-modifier = 1
+score = 14
+modifier = 2
 
 [attributes.Constitution]
 score = 13
 modifier = 1
 
 [attributes.Intelligence]
-score = 11
-modifier = 0
+score = 13
+modifier = 1
 
 [attributes.Wisdom]
-score = 9
-modifier = -1
-
-[attributes.Charisma]
 score = 18
 modifier = 4
 
-[classes.Bard]
-level = 3
+[attributes.Charisma]
+score = 11
+modifier = 0
+
+[classes.Cleric]
+level = 5
 hit_die = 8
-subclass = "College of Glamour"
+subclass = "Life Domain"
 ```
