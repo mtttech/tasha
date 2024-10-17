@@ -106,8 +106,7 @@ def step2() -> None:
     # Choose a species
     # Choose equipment
     print("Choose your character's background.")
-    background = stdin(oSRD.getBackgrounds())
-    oSheet.set("background", background[0])
+    oSheet.set("background", stdin(oSRD.getBackgrounds())[0])
 
     # Choose ability bonuses
     print(
@@ -266,9 +265,6 @@ def step5() -> None:
             "features": oSRD.getFeaturesByClass(klass, oPC.getClassLevel(klass)),
             "hit_die": oSRD.getHitDieByClass(klass),
             "initiative": oPC.getAttributeModifier("Dexterity"),
-            "prepared_spells": oSRD.getPreparedSpellsByClass(
-                klass, oPC.getTotalLevel()
-            ),
             "savingthrows": oSRD.getSavingThrowsByClass(klass),
             "spell_slots": oSRD.getSpellSlotsByClass(klass, oPC.getTotalLevel()),
         }
@@ -293,6 +289,32 @@ def step5() -> None:
         )
     else:
         oSheet.set("tools", oSRD.getToolProficienciesByClass(klass))
+
+    if oPC.isSpellcaster():
+        prepared_spells = list()
+        prepared_spell_count = oSRD.getPreparedSpellCountByClass(
+            klass, oPC.getTotalLevel()
+        )
+        spell_levels = [l + 1 for l, _ in enumerate(oPC.getMySpellSlots())]
+        while len(prepared_spells) < prepared_spell_count:
+            try:
+                spell_level = int(
+                    input(
+                        f"Choose a level of spells to select from {spell_levels[0]}-{spell_levels[-1]}. "
+                    )
+                )
+                if spell_level not in spell_levels:
+                    raise ValueError
+
+                print(f"Choose a level {spell_level} spell.")
+                chosen_spell = stdin(
+                    oSRD.getSpellListByClass(klass, spell_level)[spell_level]
+                )[0]
+                prepared_spells.append(chosen_spell)
+            except ValueError:
+                pass
+
+        oSheet.set("prepared_spells", {klass: prepared_spells})
 
 
 def main() -> None:
