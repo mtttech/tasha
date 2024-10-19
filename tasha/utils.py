@@ -1,3 +1,4 @@
+import time
 from typing import Dict, List
 
 
@@ -28,6 +29,8 @@ def stdin(options: List[str] | int, loop_count=1) -> List[str]:
         message += "\n>> "
 
         user_input = input(message)
+        time.sleep(1.0)
+        
         try:
             chosen_option = expanded_options[int(user_input)]
             # Hax to keep this feat selectable multiple times.
