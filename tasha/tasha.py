@@ -2,11 +2,14 @@ from dataclasses import asdict, replace
 from pathlib import Path
 from typing import List, Literal, Union
 
+from rich.console import Console
+
 from tasha.actor import CharacterSheet, PlayerCharacter
 from tasha.attributes import generate_abilities, get_modifier
 from tasha.d20 import SystemResourceDocument
 from tasha.utils import stdin
 
+console = Console(width=80)
 oSheet = CharacterSheet()
 oPC = PlayerCharacter(oSheet)
 oSRD = SystemResourceDocument()
@@ -24,12 +27,12 @@ def getSelectableFeats() -> List[str]:
 
 def hasFeatRequirements(feat: str) -> Union[Literal[False], Literal[True]]:
     """Returns True if character meets feat prerequisites, False otherwise."""
-    raw_ability_requirements = oSRD.getAbilityRequirementsByFeat(feat)
-    required_abilities = list(raw_ability_requirements.keys())
+    ability_requirements = oSRD.getAbilityRequirementsByFeat(feat)
+    required_abilities = list(ability_requirements.keys())
     if len(required_abilities) > 0:
         ability_chk_success = False
         for ability in required_abilities:
-            if oPC.getAttributeScore(ability) >= raw_ability_requirements[ability]:
+            if oPC.getAttributeScore(ability) >= ability_requirements[ability]:
                 ability_chk_success = True
                 break
 
@@ -72,13 +75,15 @@ def loadPC(character_name: str) -> PlayerCharacter:
 def step1() -> None:
     # Choose class/subclass
     # Select level
-    print("Choose a class.")
+    console.print("[bold green]Choose a class.[/bold green]")
     klass = stdin(oSRD.getClasses())[0]
-    print("What is your character's class level?")
+    console.print("[bold green]What is your character's class level?[/bold green]")
     level = int(stdin(20)[0])
     subclass = ""
     if level >= 3:
-        print("If you start at level 3 or higher, choose a subclass.")
+        console.print(
+            "[yellow]If you start at level 3 or higher, choose a subclass.[/yellow]"
+        )
         subklass = stdin(
             oSRD.getSubclassesByClass(klass),
         )
@@ -105,14 +110,14 @@ def step2() -> None:
     # Choose a background
     # Choose a species
     # Choose equipment
-    print("Choose your character's background.")
+    console.print("[bold green]Choose your character's background.[/bold green]")
     oSheet.set("background", stdin(oSRD.getBackgrounds())[0])
 
     # Choose ability bonuses
-    print(
-        "A background lists three of your character's ability scores. Increase "
+    console.print(
+        "[bold green]A background lists three of your character's ability scores. Increase "
         "one by 2 and another one by 1, or increase all three by 1. None of "
-        "these increases can raise a score above 20."
+        "these increases can raise a score above 20.[/bold green]"
     )
     ability_bonus_array = {
         "Strength": 0,
@@ -144,10 +149,14 @@ def step2() -> None:
 
     oSheet.set("bonus", ability_bonus_array)
 
-    print("A background gives your character a specified Origin feat.")
+    console.print(
+        "[bold green]A background gives your character a specified Origin feat.[/bold green]"
+    )
     oSheet.set("feats", stdin(oSRD.getFeatsByCategory("Origin")))
 
-    print("A background gives your character proficiency in two specified skills.")
+    console.print(
+        "[bold green]A background gives your character proficiency in two specified skills.[/bold green]"
+    )
     skills = stdin(
         oSRD.getSkillsByBackground(oPC.getMyBackground()),
         loop_count=2,
@@ -155,15 +164,15 @@ def step2() -> None:
     oSheet.set("skills", skills)
 
     print(
-        "Each background gives a character proficiency with one tool-either a "
-        "specific tool or one chosen from the Artisan's Tools category."
+        "[bold green]Each background gives a character proficiency with one tool-either a "
+        "specific tool or one chosen from the Artisan's Tools category.[/bold green]"
     )
     tool = stdin(
         oSRD.getToolProficienciesByBackground(oPC.getMyBackground()),
     )
     oSheet.set("tools", tool)
 
-    print("Choose a species for your character.")
+    console.print("[bold green]Choose a species for your character.[/bold green]")
     species = stdin(oSRD.getSpecies())[0]
     oSheet.set(
         {
@@ -174,7 +183,9 @@ def step2() -> None:
         }
     )
 
-    print("Your character knows at least three languages: Common plus two languages.")
+    console.print(
+        "[bold green]Your character knows at least three languages: Common plus two languages.[/bold green]"
+    )
     languages = stdin(
         oSRD.getStandardLanguages(),
         loop_count=2,
@@ -198,7 +209,7 @@ def step3() -> None:
     results.sort(reverse=True)
     ability_names = list(ability_array.keys())
     for score in results:
-        print(f"Assign {score} to which ability?")
+        console.print(f"[bold green]Assign {score} to which ability?[/bold green]")
         ability_array[stdin(ability_names)[0]] = {
             "score": score,
             "modifier": get_modifier(score),
@@ -221,7 +232,7 @@ def step3() -> None:
 
 def step4() -> None:
     # Choose an alignment
-    print("Choose your alignment.")
+    console.print("[bold green]Choose your alignment.[/bold green]")
     oSheet.set("alignment", stdin(oSRD.getAlignments())[0])
 
 
@@ -236,7 +247,7 @@ def step5() -> None:
     # Spell Slots
     klass = oPC.getMyClasses()[0]
     skills = oSRD.getSkillsByClass(klass, oPC.getMySkills())
-    print("Choose a class skill.")
+    console.print("[bold green]Choose a class skill.[/bold green]")
     if klass == "Rogue":
         allotted_skills = 4
     elif klass in ("Bard", "Ranger"):
@@ -248,7 +259,7 @@ def step5() -> None:
         stdin(skills, loop_count=allotted_skills),
     )
 
-    print("Choose your feats.")
+    console.print("[bold green]Choose your feats.[/bold green]")
     ability_score_improvements = oSRD.getFeaturesByClass(
         klass, oPC.getTotalLevel()
     ).count("Ability Score Improvement")
@@ -256,7 +267,7 @@ def step5() -> None:
         "feats", stdin(getSelectableFeats(), loop_count=ability_score_improvements)
     )
 
-    print("What's your gender?")
+    console.print("[bold green]What's your gender?[/bold green]")
     oSheet.set("gender", stdin(["Female", "Male"])[0])
 
     oSheet.set(
