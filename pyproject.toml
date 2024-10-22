@@ -25,6 +25,7 @@ packages = [{include = "tasha"}]
 [tool.poetry.dependencies]
 python = "^3.9"
 dice = "^4.0.0"
+rich = "^13.9.2"
 toml = "^0.10.2"
 
 [tool.poetry.scripts]
