@@ -11,6 +11,7 @@
 ### Dependencies
 
 * [dice](https://github.com/borntyping/python-dice)
+* [rich](https://github.com/Textualize/rich)
 * [toml](https://github.com/uiri/toml)
 
 ### Installation & Usage
