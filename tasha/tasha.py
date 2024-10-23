@@ -3,6 +3,7 @@ from pathlib import Path
 from typing import Dict, List, Literal, Union
 
 from rich.console import Console
+from rich.prompt import Prompt
 from rich.theme import Theme
 
 from tasha.actor import CharacterSheet, PlayerCharacter
@@ -13,7 +14,7 @@ console = Console(
     tab_size=2,
     theme=Theme(
         {
-            "basic.text": "green",
+            "basic.text": "dim green",
             "menu.index": "cyan",
             "menu.option": "bold magenta",
             "prompt.text": "bold yellow",
@@ -358,26 +359,22 @@ def step5() -> None:
         prepared_spell_count = oSRD.getPreparedSpellCountByClass(
             klass, oPC.getTotalLevel()
         )
-        spell_levels = [l + 1 for l, _ in enumerate(oPC.getMySpellSlots())]
+        spell_levels = [str(l + 1) for l, _ in enumerate(oPC.getMySpellSlots())]
         while len(prepared_spells) < prepared_spell_count:
-            try:
-                spell_level = int(
-                    input(
-                        f"Choose a level of spells to select from {spell_levels[0]}-{spell_levels[-1]}. "
-                    )
+            spell_level = int(
+                Prompt.ask(
+                    f"Choose a spell level to select from.",
+                    choices=spell_levels,
                 )
-                if spell_level not in spell_levels:
-                    raise ValueError
+            )
 
-                console.print(
-                    f"[basic.text]Choose a level {spell_level} spell.[/basic.text]"
-                )
-                chosen_spell = stdin(
-                    oSRD.getSpellListByClass(klass, spell_level)[spell_level]
-                )[0]
-                prepared_spells.append(chosen_spell)
-            except ValueError:
-                pass
+            console.print(
+                f"[basic.text]Choose a level {spell_level} spell.[/basic.text]"
+            )
+            chosen_spell = stdin(
+                oSRD.getSpellListByClass(klass, spell_level)[spell_level]
+            )[0]
+            prepared_spells.append(chosen_spell)
 
         oSheet.set("prepared_spells", {klass: prepared_spells})
 
@@ -390,13 +387,8 @@ def main() -> None:
         step4()
         step5()
 
-        name = None
-        while name is None:
-            name = input("What is your character's name? ").strip()
-            if name == "":
-                name = None
-            else:
-                oSheet.set("name", name.replace(" ", "_"))
+        name = Prompt.ask("What is your character's name?")
+        oSheet.set("name", name.replace(" ", "_"))
 
         import toml
 
@@ -404,10 +396,11 @@ def main() -> None:
             oSheet,
             level=oPC.getTotalLevel(),
         )
-        with console.status("Saving character...", spinner="bouncingBar"):
-            with Path(character_dir, f"{oPC.getMyName()}.toml").open("w") as record:
-                toml.dump(asdict(cs), record)
-                print(f"Character '{oPC.getMyName()}' created successfully.")
+        with Path(character_dir, f"{oPC.getMyName()}.toml").open("w") as record:
+            toml.dump(asdict(cs), record)
+            console.print(
+                f"[basic.text]Character '{oPC.getMyName()}' created successfully.[/basic.text]"
+                )
     except KeyboardInterrupt:
         print()
 
