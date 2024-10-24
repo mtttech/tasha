@@ -3,7 +3,8 @@ from pathlib import Path
 from typing import Dict, List, Literal, Union
 
 from rich.console import Console
-from rich.prompt import Prompt
+from rich.progress import track
+from rich.prompt import IntPrompt, Prompt
 from rich.theme import Theme
 
 from tasha.actor import CharacterSheet, PlayerCharacter
@@ -15,9 +16,10 @@ console = Console(
     theme=Theme(
         {
             "basic.text": "dim green",
+            "exit": "bold dim red",
             "menu.index": "cyan",
             "menu.option": "bold magenta",
-            "prompt.text": "bold yellow",
+            "prompt": "bold yellow",
         }
     ),
     width=80,
@@ -316,7 +318,7 @@ def step5() -> None:
         "feats", stdin(getSelectableFeats(), loop_count=ability_score_improvements)
     )
 
-    console.print("[bold green]What's your gender?[/bold green]")
+    console.print("[basic.text]What's your gender?[/basic.text]")
     oSheet.set("gender", stdin(["Female", "Male"])[0])
 
     oSheet.set(
@@ -361,11 +363,9 @@ def step5() -> None:
         )
         spell_levels = [str(l + 1) for l, _ in enumerate(oPC.getMySpellSlots())]
         while len(prepared_spells) < prepared_spell_count:
-            spell_level = int(
-                Prompt.ask(
-                    f"Choose a spell level to select from.",
-                    choices=spell_levels,
-                )
+            spell_level = IntPrompt.ask(
+                f"Choose a spell by level to create your prepared spell list.",
+                choices=spell_levels,
             )
 
             console.print(
@@ -396,13 +396,14 @@ def main() -> None:
             oSheet,
             level=oPC.getTotalLevel(),
         )
-        with Path(character_dir, f"{oPC.getMyName()}.toml").open("w") as record:
-            toml.dump(asdict(cs), record)
-            console.print(
-                f"[basic.text]Character '{oPC.getMyName()}' created successfully.[/basic.text]"
-                )
+        for _ in track(range(100), description="Saving character..."):
+            with Path(character_dir, f"{oPC.getMyName()}.toml").open("w") as record:
+                toml.dump(asdict(cs), record)
+        console.print(
+            f"[basic.text]Character '{oPC.getMyName()}' created successfully.[/basic.text]"
+        )
     except KeyboardInterrupt:
-        print()
+        console.print("\n[exit]Exited program.[/exit]")
 
 
 if __name__ == "__main__":
