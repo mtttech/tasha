@@ -39,8 +39,14 @@ def getSelectableFeats() -> List[str]:
     return [f for f in oSRD.getFeats() if hasFeatRequirements(f)]
 
 
-def hasFeatRequirements(feat: str) -> Union[Literal[False], Literal[True]]:
-    """Returns True if character meets feat prerequisites, False otherwise."""
+def hasFeatRequirements(feat: str) -> bool:
+    """Checks if character meets prerequisites for a feat.
+
+        Args:
+            feat (str): Name of the feat.
+
+        Returns:
+            bool: True if prerequisites met, False otherwise."""
     ability_requirements = oSRD.getAbilityRequirementsByFeat(feat)
     required_abilities = list(ability_requirements.keys())
     if len(required_abilities) > 0:
@@ -76,21 +82,28 @@ def hasFeatRequirements(feat: str) -> Union[Literal[False], Literal[True]]:
     return True
 
 
-def stdin(options: List[str] | int, loop_count=1) -> List[str]:
-    """Used to capture user input."""
+def stdin(choices: List[str] | int, loop_count=1) -> List[str]:
+    """Captures user input from the console.
 
-    def associate_option_indexes() -> Dict[int, str]:
+        Args:
+            choices (List[str]|int): List of choices or max value in a range of numbers.
+
+        Returns:
+            List[str]: A list of the user's responses."""
+
+    def associate_choice_indexes() -> Dict[int, str]:
+        """Assign an index to each choice."""
         indexed_options = dict()
-        for index, option in enumerate(options):  # pyright: ignore
+        for index, option in enumerate(choices):  # pyright: ignore
             indexed_options[index + 1] = option
         return indexed_options
 
-    if isinstance(options, int):
-        options = list(str(n + 1) for n in range(options))
+    if isinstance(choices, int):
+        choices = list(str(n + 1) for n in range(choices))
 
     selections = list()
     for _ in range(0, loop_count):
-        expanded_options = associate_option_indexes()
+        expanded_options = associate_choice_indexes()
         if len(expanded_options) == loop_count:
             return list(expanded_options.values())
 
@@ -112,9 +125,9 @@ def stdin(options: List[str] | int, loop_count=1) -> List[str]:
             # Hax to keep this feat selectable multiple times.
             if chosen_option != "Ability Score Improvement":
                 selections.append(chosen_option)
-                options.remove(chosen_option)
+                choices.remove(chosen_option)
         except (KeyError, TypeError, ValueError):
-            return stdin(options)
+            return stdin(choices)
 
     return selections
 
