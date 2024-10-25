@@ -29,7 +29,7 @@ rich = "^13.9.2"
 toml = "^0.10.2"
 
 [tool.poetry.scripts]
-tasha='tasha.tasha:main'
+tasha='tasha.tasha:tasha_main'
 
 
 [build-system]
