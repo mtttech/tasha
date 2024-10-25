@@ -1,4 +1,4 @@
-from tasha import main
+from tasha import tasha_main
 
 if __name__ == "__main__":
-    main()
+    tasha_main()
