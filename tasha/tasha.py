@@ -3,8 +3,10 @@ from pathlib import Path
 from typing import Dict, List
 
 from rich.console import Console
+from rich.panel import Panel
+from rich.pretty import Pretty
 from rich.progress import track
-from rich.prompt import IntPrompt, Prompt
+from rich.prompt import Confirm, IntPrompt, Prompt
 from rich.theme import Theme
 
 from tasha.actor import CharacterSheet, PlayerCharacter
@@ -17,9 +19,10 @@ console = Console(
         {
             "basic.text": "dim green",
             "exit": "bold dim red",
+            "info": "dim green",
             "menu.index": "cyan",
             "menu.option": "bold magenta",
-            "prompt": "bold yellow",
+            "prompt": "dim green",
         }
     ),
     width=80,
@@ -31,7 +34,7 @@ oSRD = SystemResourceDocument()
 character_dir = Path.home() / ".config" / "tasha" / "characters"
 if not character_dir.exists():
     character_dir.mkdir(parents=True)
-    console.print("[basic.text]Created the character directory.[/basic.text]")
+    console.print("Created the character directory.")
 
 
 def getSelectableFeats() -> List[str]:
@@ -42,11 +45,11 @@ def getSelectableFeats() -> List[str]:
 def hasFeatRequirements(feat: str) -> bool:
     """Checks if character meets prerequisites for a feat.
 
-        Args:
-            feat (str): Name of the feat.
+    Args:
+        feat (str): Name of the feat.
 
-        Returns:
-            bool: True if prerequisites met, False otherwise."""
+    Returns:
+        bool: True if prerequisites met, False otherwise."""
     ability_requirements = oSRD.getAbilityRequirementsByFeat(feat)
     required_abilities = list(ability_requirements.keys())
     if len(required_abilities) > 0:
@@ -85,11 +88,11 @@ def hasFeatRequirements(feat: str) -> bool:
 def stdin(choices: List[str] | int, loop_count=1) -> List[str]:
     """Captures user input from the console.
 
-        Args:
-            choices (List[str]|int): List of choices or max value in a range of numbers.
+    Args:
+        choices (List[str]|int): List of choices or max value in a range of numbers.
 
-        Returns:
-            List[str]: A list of the user's responses."""
+    Returns:
+        List[str]: A list of the user's responses."""
 
     def associate_choice_indexes() -> Dict[int, str]:
         """Assign an index to each choice."""
@@ -110,7 +113,7 @@ def stdin(choices: List[str] | int, loop_count=1) -> List[str]:
         option_keys = list(expanded_options.keys())
         first_option = option_keys[0]
         last_option = option_keys[-1]
-        message = f"[prompt.text]Make a selection {first_option}-{last_option}.[/prompt.text]\n\n"
+        message = f"[prompt]Make a selection {first_option}-{last_option}.[/prompt]\n\n"
         for index, option in expanded_options.items():
             message += f"\t[menu.index]{index}[/menu.index].) [menu.option]{option}[/menu.option]\n"
         console.print(message)
@@ -137,6 +140,12 @@ def step1() -> None:
     # Select level
     console.print("[basic.text]Choose a class.[/basic.text]")
     klass = stdin(oSRD.getClasses())[0]
+    oSheet.set(
+        {
+            "armors": oSRD.getArmorProficienciesByClass(klass),
+            "weapons": oSRD.getWeaponProficienciesByClass(klass),
+        }
+    )
     console.print("[basic.text]What is your character's class level?[/basic.text]")
     level = int(stdin(20)[0])
     subclass = ""
@@ -148,12 +157,6 @@ def step1() -> None:
             oSRD.getSubclassesByClass(klass),
         )
         subclass = subklass[0]
-    oSheet.set(
-        {
-            "armors": oSRD.getArmorProficienciesByClass(klass),
-            "weapons": oSRD.getWeaponProficienciesByClass(klass),
-        }
-    )
     oSheet.set(
         "classes",
         {
@@ -279,6 +282,14 @@ def step3() -> None:
             "modifier": get_modifier(score),
         }
 
+    console.print(
+        Panel(Pretty(ability_array, expand_all=True), title="Generated Ability Scores")
+    )
+    if not Confirm.ask(
+        "Are you satisfied with the assignment of your abilities?", console=console
+    ):
+        step3()
+
     # Apply background ability bonuses.
     for ability, bonus in oPC.getMyBonus().items():
         if bonus > 0:
@@ -379,6 +390,7 @@ def step5() -> None:
             spell_level = IntPrompt.ask(
                 f"Choose a spell by level to create your prepared spell list.",
                 choices=spell_levels,
+                console=console,
             )
 
             console.print(
@@ -392,7 +404,7 @@ def step5() -> None:
         oSheet.set("prepared_spells", {klass: prepared_spells})
 
 
-def main() -> None:
+def tasha_main() -> None:
     try:
         step1()
         step2()
@@ -400,24 +412,31 @@ def main() -> None:
         step4()
         step5()
 
-        name = Prompt.ask("What is your character's name?")
+        name = Prompt.ask("What is your character's name?", console=console)
         oSheet.set("name", name.replace(" ", "_"))
 
         import toml
 
-        cs = replace(
+        character_sheet = replace(
             oSheet,
             level=oPC.getTotalLevel(),
         )
-        for _ in track(range(100), description="Saving character..."):
-            with Path(character_dir, f"{oPC.getMyName()}.toml").open("w") as record:
-                toml.dump(asdict(cs), record)
         console.print(
-            f"[basic.text]Character '{oPC.getMyName()}' created successfully.[/basic.text]"
+            Panel(
+                Pretty(character_sheet, expand_all=True),
+                title=f"{oPC.getMyName()}'s Character Sheet",
+            )
         )
+        if Confirm.ask("Save this character?", console=console):
+            for _ in track(range(100), description="Saving..."):
+                with Path(character_dir, f"{oPC.getMyName()}.toml").open("w") as record:
+                    toml.dump(asdict(character_sheet), record)
+            console.print(
+                f"[basic.text]Character '{oPC.getMyName()}' created successfully.[/basic.text]"
+            )
     except KeyboardInterrupt:
         console.print("\n[exit]Exited program.[/exit]")
 
 
 if __name__ == "__main__":
-    main()
+    tasha_main()
