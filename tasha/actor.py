@@ -146,7 +146,10 @@ class PlayerCharacter:
 
     def getClassLevel(self, klass: str) -> int:
         """Returns the specified level by klass."""
-        return self.character_sheet.classes[klass]["level"]
+        try:
+            return self.character_sheet.classes[klass]["level"]
+        except KeyError:
+            return 0
 
     def getClassSubclass(self, klass: str) -> str:
         """Returns the specified subclass by klass."""

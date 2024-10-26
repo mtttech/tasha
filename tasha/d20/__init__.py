@@ -45,10 +45,6 @@ class SystemResourceDocument:
             )
         )
 
-    def getAbilitiesByBackground(self, background: str) -> List[str]:
-        """Returns a list of abilities by background."""
-        return self.srd["backgrounds"][background]["ability"]
-
     def getAbilityRequirementsByFeat(self, feat: str) -> Dict[str, int]:
         """Returns ability score requirements by feat."""
         return self.srd["feats"][feat]["ability"]
@@ -65,15 +61,21 @@ class SystemResourceDocument:
         """Returns armor proficiency requirements by feat."""
         return self.srd["feats"][feat]["armors"]
 
+    def getBackgroundAbilityScores(self, background: str) -> List[str]:
+        """Returns a list of abilities by background."""
+        return self.srd["backgrounds"][background]["ability"]
+
+    def getBackgroundSkills(self, background: str) -> List[str]:
+        """Returns a list of skills by background."""
+        return self.srd["backgrounds"][background]["skills"]
+
+    def getBackgroundToolProficiencies(self, background: str) -> List[str]:
+        """Returns tool proficiencies by background."""
+        return self.srd["backgrounds"][background]["tools"]
+
     def getBackgrounds(self) -> List[str]:
         """Returns a list of backgrounds."""
         return list(self.srd["backgrounds"].keys())
-
-    def getCantripsByClass(
-        self, klass: str, subklass: Union[str, None] = None
-    ) -> List[str]:
-        """Returns cantrips by class/subclass."""
-        return self.getSpellListByClass(klass, 0, subklass)
 
     def getCantripsKnownByClass(self, klass: str, level: int) -> int:
         """Returns number of cantrips known by class and level."""
@@ -147,10 +149,6 @@ class SystemResourceDocument:
         except KeyError:
             return ""
 
-    def getSkillsByBackground(self, background: str) -> List[str]:
-        """Returns a list of skills by background."""
-        return self.srd["backgrounds"][background]["skills"]
-
     def getSkillsByClass(
         self, klass: str, excl: Union[List[str], None] = None
     ) -> List[str]:
@@ -189,13 +187,14 @@ class SystemResourceDocument:
             return [l for l in language_list if l not in excl]
         return language_list
 
-    def getToolProficienciesByBackground(self, background: str) -> List[str]:
-        """Returns tool proficiencies by background."""
-        return self.srd["backgrounds"][background]["tools"]
-
-    def getToolProficienciesByClass(self, klass: str) -> List[str]:
+    def getToolProficienciesByClass(
+        self, klass: str, excl: Union[List[str], None] = None
+    ) -> List[str]:
         """Returns a list of all tool proficiencies by class."""
-        return self.srd["classes"][klass]["tools"]
+        tool_proficiencies = self.srd["classes"][klass]["tools"]
+        if isinstance(excl, list):
+            return [t for t in tool_proficiencies if t not in excl]
+        return tool_proficiencies
 
     def getListSpells(self, klass: str, subklass: str, level: int) -> List[str]:
         """Returns a list of spells by available spell slots."""
@@ -206,7 +205,7 @@ class SystemResourceDocument:
             if spell_level == 0:
                 continue
 
-            spell_list += self.getSpellListByClass(klass, spell_level, subklass)
+            spell_list += self.getSpellListByClass(klass, spell_level)
 
         return spell_list
 

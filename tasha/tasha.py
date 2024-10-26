@@ -194,7 +194,7 @@ def step2() -> None:
         ["Apply 2/1", "Apply 1/1/1"],
     )
     if bonus_array_selections[0] == "Apply 2/1":
-        background_abilities = oSRD.getAbilitiesByBackground(oPC.getMyBackground())
+        background_abilities = oSRD.getBackgroundAbilityScores(oPC.getMyBackground())
 
         console.print(
             "[basic.text]Choose which ability to apply a 2 point bonus.[/basic.text]"
@@ -211,7 +211,7 @@ def step2() -> None:
         ability_bonus_array[chosen_ability] = 1
 
     if bonus_array_selections[0] == "Apply 1/1/1":
-        for ability in oSRD.getAbilitiesByBackground(oPC.getMyBackground()):
+        for ability in oSRD.getBackgroundAbilityScores(oPC.getMyBackground()):
             ability_bonus_array[ability] = 1
 
     oSheet.set("bonus", ability_bonus_array)
@@ -225,7 +225,7 @@ def step2() -> None:
         "[basic.text]A background gives your character proficiency in two specified skills.[/basic.text]"
     )
     skills = stdin(
-        oSRD.getSkillsByBackground(oPC.getMyBackground()),
+        oSRD.getBackgroundSkills(oPC.getMyBackground()),
         loop_count=2,
     )
     oSheet.set("skills", skills)
@@ -235,7 +235,7 @@ def step2() -> None:
         "specific tool or one chosen from the Artisan's Tools category.[/basic.text]"
     )
     tool = stdin(
-        oSRD.getToolProficienciesByBackground(oPC.getMyBackground()),
+        oSRD.getBackgroundToolProficiencies(oPC.getMyBackground()),
     )
     oSheet.set("tools", tool)
 
@@ -363,7 +363,7 @@ def step5() -> None:
         oSheet.set(
             "tools",
             stdin(
-                oSRD.getToolProficienciesByClass(klass),
+                oSRD.getToolProficienciesByClass(klass, oPC.getMyToolProficiencies()),
                 loop_count=3,
             ),
         )
@@ -374,7 +374,7 @@ def step5() -> None:
         oSheet.set(
             "tools",
             stdin(
-                oSRD.getToolProficienciesByClass(klass),
+                oSRD.getToolProficienciesByClass(klass, oPC.getMyToolProficiencies()),
             ),
         )
     else:

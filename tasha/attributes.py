@@ -9,7 +9,12 @@ def generate_abilities(threshold: int) -> List[int]:
     1. attributes total less than the specified threshold
     2. or smallest attribute < 8
     3. or largest attribute < 15
-    """
+
+    Args:
+        threshold (int): Threshold for ability score total.
+
+    Returns:
+        List[int]: Returns six randomly generated integers in a list."""
     import dice
 
     while True:
