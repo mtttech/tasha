@@ -78,11 +78,35 @@ class SystemResourceDocument:
         return list(self.srd["backgrounds"].keys())
 
     def getCantripsKnownByClass(self, klass: str, level: int) -> int:
-        """Returns number of cantrips known by class and level."""
+        """Returns the total number of cantrips known by class and level."""
         try:
             return self.srd["classes"][klass]["cantrips"][level]
         except KeyError:
             return 0
+
+    def getClassFeatures(self, klass: str, class_level: int) -> List[str]:
+        """Returns features by class and level."""
+        class_features = list()
+        for level, features in self.srd["classes"][klass]["features"].items():
+            if class_level >= level:
+                class_features = class_features + features
+        return class_features
+
+    def getClassSkills(
+        self, klass: str, excl: Union[List[str], None] = None
+    ) -> List[str]:
+        """Returns skills by class, minus exclusions (if applicable)."""
+        class_skills = self.srd["classes"][klass]["skills"]
+        if isinstance(excl, list):
+            return [s for s in class_skills if s not in excl]
+        return class_skills
+
+    def getClassSpellSlots(self, klass: str, level: int) -> List[int]:
+        """Returns spell slots by class and level."""
+        try:
+            return self.srd["classes"][klass]["spell_slots"][level]
+        except KeyError:
+            return [0]
 
     def getClasses(self) -> List[str]:
         """Returns a list of classes."""
@@ -103,14 +127,6 @@ class SystemResourceDocument:
     def getFeatureRequirementsByFeat(self, feat: str) -> List[str]:
         """Returns feature requirements by feat."""
         return self.srd["feats"][feat]["features"]
-
-    def getFeaturesByClass(self, klass: str, class_level: int) -> List[str]:
-        """Returns class features by class and level."""
-        class_features = list()
-        for level, features in self.srd["classes"][klass]["features"].items():
-            if class_level >= level:
-                class_features = class_features + features
-        return class_features
 
     def getHitDieByClass(self, klass: str) -> int:
         """Returns hit die type by class."""
@@ -149,12 +165,6 @@ class SystemResourceDocument:
         except KeyError:
             return ""
 
-    def getSkillsByClass(
-        self, klass: str, excl: Union[List[str], None] = None
-    ) -> List[str]:
-        """Returns all skills by class."""
-        return self.srd["classes"][klass]["skills"]
-
     def getSpecies(self) -> List[str]:
         """Returns a list of species."""
         return list(self.srd["species"].keys())
@@ -172,13 +182,6 @@ class SystemResourceDocument:
             return spell_list
         except KeyError:
             return dict()
-
-    def getSpellSlotsByClass(self, klass: str, level: int) -> List[int]:
-        """Returns spell slots by class and level."""
-        try:
-            return self.srd["classes"][klass]["spell_slots"][level]
-        except KeyError:
-            return [0]
 
     def getStandardLanguages(self, excl: Union[List[str], None] = None) -> List[str]:
         """Returns all standard languages (minus exclusions, if applicable)."""
