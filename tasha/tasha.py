@@ -17,12 +17,11 @@ console = Console(
     tab_size=2,
     theme=Theme(
         {
-            "basic.text": "dim green",
+            "default": "bold green",
             "exit": "bold dim red",
-            "info": "dim green",
             "menu.index": "cyan",
             "menu.option": "bold magenta",
-            "prompt": "dim green",
+            "prompt": "bold dim green",
         }
     ),
     width=80,
@@ -125,7 +124,7 @@ def stdin(choices: List[str] | int, loop_count=1) -> List[str]:
 
         try:
             chosen_option = expanded_options[int(user_input)]
-            # Hax to keep this feat selectable multiple times.
+            # Hax to keep the 'Ability Score Improvement' feat selectable multiple times.
             if chosen_option != "Ability Score Improvement":
                 selections.append(chosen_option)
                 choices.remove(chosen_option)
@@ -138,7 +137,7 @@ def stdin(choices: List[str] | int, loop_count=1) -> List[str]:
 def step1() -> None:
     # Choose class/subclass
     # Select level
-    console.print("[basic.text]Choose a class.[/basic.text]")
+    console.print("Choose a class.", style="default")
     klass = stdin(oSRD.getClasses())[0]
     oSheet.set(
         {
@@ -146,12 +145,12 @@ def step1() -> None:
             "weapons": oSRD.getWeaponProficienciesByClass(klass),
         }
     )
-    console.print("[basic.text]What is your character's class level?[/basic.text]")
+    console.print("What is your class level?", style="default")
     level = int(stdin(20)[0])
     subclass = ""
     if level >= 3:
         console.print(
-            "[basic.text]If you start at level 3 or higher, choose a subclass.[/basic.text]"
+            "If you start at level 3 or higher, choose a subclass.", style="default"
         )
         subklass = stdin(
             oSRD.getSubclassesByClass(klass),
@@ -173,14 +172,15 @@ def step2() -> None:
     # Choose a background
     # Choose a species
     # Choose equipment
-    console.print("[basic.text]Choose your character's background.[/basic.text]")
+    console.print("Choose your character's background.", style="default")
     oSheet.set("background", stdin(oSRD.getBackgrounds())[0])
 
     # Choose ability bonuses
     console.print(
-        "[basic.text]A background lists three of your character's ability scores. Increase "
+        "A background lists three of your character's ability scores. Increase "
         "one by 2 and another one by 1, or increase all three by 1. None of "
-        "these increases can raise a score above 20.[/basic.text]"
+        "these increases can raise a score above 20.",
+        style="default",
     )
     ability_bonus_array = {
         "Strength": 0,
@@ -196,19 +196,13 @@ def step2() -> None:
     if bonus_array_selections[0] == "Apply 2/1":
         background_abilities = oSRD.getBackgroundAbilityScores(oPC.getMyBackground())
 
-        console.print(
-            "[basic.text]Choose which ability to apply a 2 point bonus.[/basic.text]"
-        )
-        two_point_ability = stdin(background_abilities)
-        chosen_ability = two_point_ability[0]
-        ability_bonus_array[chosen_ability] = 2
+        console.print("Choose which ability to apply a 2 point bonus", style="default")
+        two_point_ability = stdin(background_abilities)[0]
+        ability_bonus_array[two_point_ability] = 2
 
-        console.print(
-            "[basic.text]Choose which ability to apply a 1 point bonus.[/basic.text]"
-        )
-        one_point_ability = stdin(background_abilities)
-        chosen_ability = one_point_ability[0]
-        ability_bonus_array[chosen_ability] = 1
+        console.print("Choose which ability to apply a 1 point bonus.", style="default")
+        one_point_ability = stdin(background_abilities)[0]
+        ability_bonus_array[one_point_ability] = 1
 
     if bonus_array_selections[0] == "Apply 1/1/1":
         for ability in oSRD.getBackgroundAbilityScores(oPC.getMyBackground()):
@@ -217,12 +211,13 @@ def step2() -> None:
     oSheet.set("bonus", ability_bonus_array)
 
     console.print(
-        "[basic.text]A background gives your character a specified Origin feat.[/basic.text]"
+        "A background gives your character a specified Origin feat.", style="default"
     )
     oSheet.set("feats", stdin(oSRD.getFeatsByCategory("Origin")))
 
     console.print(
-        "[basic.text]A background gives your character proficiency in two specified skills.[/basic.text]"
+        "A background gives your character proficiency in two specified skills.",
+        style="default",
     )
     skills = stdin(
         oSRD.getBackgroundSkills(oPC.getMyBackground()),
@@ -231,15 +226,16 @@ def step2() -> None:
     oSheet.set("skills", skills)
 
     console.print(
-        "[basic.text]Each background gives a character proficiency with one tool-either a "
-        "specific tool or one chosen from the Artisan's Tools category.[/basic.text]"
+        "Each background gives a character proficiency with one tool-either a "
+        "specific tool or one chosen from the Artisan's Tools category.",
+        style="default",
     )
     tool = stdin(
         oSRD.getBackgroundToolProficiencies(oPC.getMyBackground()),
     )
     oSheet.set("tools", tool)
 
-    console.print("[basic.text]Choose a species for your character.[/basic.text]")
+    console.print("Choose a species for your character.", style="default")
     species = stdin(oSRD.getSpecies())[0]
     oSheet.set(
         {
@@ -251,7 +247,8 @@ def step2() -> None:
     )
 
     console.print(
-        "[basic.text]Your character knows at least three languages: Common plus two languages.[basic.text]"
+        "Your character knows at least three languages: Common plus two languages.",
+        style="default",
     )
     languages = stdin(
         oSRD.getStandardLanguages(),
@@ -276,19 +273,11 @@ def step3() -> None:
     results.sort(reverse=True)
     ability_names = list(ability_array.keys())
     for score in results:
-        console.print(f"[basic.text]Assign {score} to which ability?[/basic.text]")
+        console.print(f"Assign {score} to which ability?", style="default")
         ability_array[stdin(ability_names)[0]] = {
             "score": score,
             "modifier": get_modifier(score),
         }
-
-    console.print(
-        Panel(Pretty(ability_array, expand_all=True), title="Generated Ability Scores")
-    )
-    if not Confirm.ask(
-        "Are you satisfied with the assignment of your abilities?", console=console
-    ):
-        step3()
 
     # Apply background ability bonuses.
     for ability, bonus in oPC.getMyBonus().items():
@@ -302,12 +291,23 @@ def step3() -> None:
                 "modifier": get_modifier(new_score),
             }
 
+    console.print(
+        Panel(
+            Pretty(ability_array, expand_all=True),
+            title="Generated Ability Scores (Background bonuses applied)",
+        )
+    )
+    if not Confirm.ask(
+        "Are you satisfied with these ability scores?", console=console
+    ):
+        step3()
+
     oSheet.set("attributes", ability_array)
 
 
 def step4() -> None:
     # Choose an alignment
-    console.print("[basic.text]Choose your alignment.[/basic.text]")
+    console.print("Choose your alignment.", style="default")
     oSheet.set("alignment", stdin(oSRD.getAlignments())[0])
 
 
@@ -321,8 +321,8 @@ def step5() -> None:
     # Prepared Spells
     # Spell Slots
     klass = oPC.getMyClasses()[0]
-    skills = oSRD.getSkillsByClass(klass, oPC.getMySkills())
-    console.print("[basic.text]Choose a class skill.[/basic.text]")
+    skills = oSRD.getClassSkills(klass, oPC.getMySkills())
+    console.print("Choose a class skill.", style="default")
     if klass == "Rogue":
         allotted_skills = 4
     elif klass in ("Bard", "Ranger"):
@@ -334,31 +334,31 @@ def step5() -> None:
         stdin(skills, loop_count=allotted_skills),
     )
 
-    console.print("[basic.text]Choose your feats.[/basic.text]")
-    ability_score_improvements = oSRD.getFeaturesByClass(
+    console.print("Choose your feats.", style="default")
+    ability_score_improvements = oSRD.getClassFeatures(
         klass, oPC.getTotalLevel()
     ).count("Ability Score Improvement")
     oSheet.set(
         "feats", stdin(getSelectableFeats(), loop_count=ability_score_improvements)
     )
 
-    console.print("[basic.text]What's your gender?[/basic.text]")
+    console.print("What's your gender?", style="default")
     oSheet.set("gender", stdin(["Female", "Male"])[0])
 
     oSheet.set(
         {
             "cantrips": oSRD.getCantripsKnownByClass(klass, oPC.getTotalLevel()),
-            "features": oSRD.getFeaturesByClass(klass, oPC.getClassLevel(klass)),
+            "features": oSRD.getClassFeatures(klass, oPC.getClassLevel(klass)),
             "hit_die": oSRD.getHitDieByClass(klass),
             "initiative": oPC.getAttributeModifier("Dexterity"),
             "savingthrows": oSRD.getSavingThrowsByClass(klass),
-            "spell_slots": oSRD.getSpellSlotsByClass(klass, oPC.getTotalLevel()),
+            "spell_slots": oSRD.getClassSpellSlots(klass, oPC.getTotalLevel()),
         }
     )
 
     if klass == "Bard":
         console.print(
-            "[basic.text]Choose your bardic musical instrument tool proficiencies.[/basic.text]"
+            "Choose your bardic musical instrument tool proficiencies.", style="default"
         )
         oSheet.set(
             "tools",
@@ -369,7 +369,8 @@ def step5() -> None:
         )
     elif klass == "Monk":
         console.print(
-            "[basic.text]Choose your monk artisan/musical instrument tool proficiency.[/basic.text]"
+            "Choose your monk artisan/musical instrument tool proficiency.",
+            style="default",
         )
         oSheet.set(
             "tools",
@@ -393,9 +394,7 @@ def step5() -> None:
                 console=console,
             )
 
-            console.print(
-                f"[basic.text]Choose a level {spell_level} spell.[/basic.text]"
-            )
+            console.print(f"Choose a level {spell_level} spell.", style="default")
             chosen_spell = stdin(
                 oSRD.getSpellListByClass(klass, spell_level)[spell_level]
             )[0]
@@ -432,10 +431,10 @@ def tasha_main() -> None:
                 with Path(character_dir, f"{oPC.getMyName()}.toml").open("w") as record:
                     toml.dump(asdict(character_sheet), record)
             console.print(
-                f"[basic.text]Character '{oPC.getMyName()}' created successfully.[/basic.text]"
+                f"Character '{oPC.getMyName()}' created successfully.", style="default"
             )
     except KeyboardInterrupt:
-        console.print("\n[exit]Exited program.[/exit]")
+        console.print("\nExited program.", style="exit")
 
 
 if __name__ == "__main__":
