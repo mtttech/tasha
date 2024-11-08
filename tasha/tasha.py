@@ -110,9 +110,10 @@ def stdin(choices: List[str] | int, loop_count=1) -> List[str]:
             return list(expanded_options.values())
 
         option_keys = list(expanded_options.keys())
-        first_option = option_keys[0]
-        last_option = option_keys[-1]
-        message = f"[prompt]Make a selection {first_option}-{last_option}.[/prompt]\n\n"
+        first_option_index = option_keys[0]
+        last_option_index = option_keys[-1]
+        
+        message = f"[prompt]Make a selection {first_option_index}-{last_option_index}.[/prompt]\n\n"
         for index, option in expanded_options.items():
             message += f"\t[menu.index]{index}[/menu.index].) [menu.option]{option}[/menu.option]\n"
         console.print(message)
@@ -190,10 +191,10 @@ def step2() -> None:
         "Wisdom": 0,
         "Charisma": 0,
     }
-    bonus_array_selections = stdin(
+    array_selection = stdin(
         ["Apply 2/1", "Apply 1/1/1"],
-    )
-    if bonus_array_selections[0] == "Apply 2/1":
+    )[0]
+    if array_selection == "Apply 2/1":
         background_abilities = oSRD.getBackgroundAbilityScores(oPC.getMyBackground())
 
         console.print("Choose which ability to apply a 2 point bonus", style="default")
@@ -204,7 +205,7 @@ def step2() -> None:
         one_point_ability = stdin(background_abilities)[0]
         ability_bonus_array[one_point_ability] = 1
 
-    if bonus_array_selections[0] == "Apply 1/1/1":
+    if array_selection == "Apply 1/1/1":
         for ability in oSRD.getBackgroundAbilityScores(oPC.getMyBackground()):
             ability_bonus_array[ability] = 1
 
@@ -297,9 +298,7 @@ def step3() -> None:
             title="Generated Ability Scores (Background bonuses applied)",
         )
     )
-    if not Confirm.ask(
-        "Are you satisfied with these ability scores?", console=console
-    ):
+    if not Confirm.ask("Are you satisfied with these ability scores?", console=console):
         step3()
 
     oSheet.set("attributes", ability_array)
