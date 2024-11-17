@@ -10,7 +10,6 @@ from rich.prompt import Confirm, IntPrompt, Prompt
 from rich.theme import Theme
 
 from tasha.actor import CharacterSheet, PlayerCharacter
-from tasha.attributes import generate_abilities, get_modifier
 from tasha.d20 import SystemResourceDocument
 
 console = Console(
@@ -19,7 +18,7 @@ console = Console(
         {
             "default": "bold green",
             "exit": "bold dim red",
-            "menu.index": "cyan",
+            "menu.index": "bold italic cyan",
             "menu.option": "bold magenta",
             "prompt": "bold dim green",
         }
@@ -36,8 +35,53 @@ if not character_dir.exists():
     console.print("Created the character directory.")
 
 
+def calcModifier(score: int) -> int:
+    """Calculates the modifier for the specified score.
+
+    Args:
+        score (int): Score to calculate the modifier for.
+
+    Returns:
+        int: Returns result of the modifier calculation."""
+    from math import floor
+
+    return floor((score - 10) / 2)
+
+
+def generateAbilityArray(threshold: int) -> List[int]:
+    """Generates the character's six abilities.
+
+    Continuously rerolls attributes if one of the following is true:
+
+    1. attributes total less than the specified threshold
+    2. or smallest attribute < 8
+    3. or largest attribute < 15
+
+    Args:
+        threshold (int): Threshold for ability score total.
+
+    Returns:
+        List[int]: Returns six randomly generated integers in a list."""
+    import dice  # pyright: ignore
+
+    while True:
+        dice_rolls = [sum(dice.roll("4d6^3")) for _ in range(6)]  # pyright: ignore
+        if sum(dice_rolls) < threshold:
+            continue
+        if min(dice_rolls) < 8:
+            continue
+        if max(dice_rolls) < 15:
+            continue
+        break
+
+    return dice_rolls
+
+
 def getSelectableFeats() -> List[str]:
-    """Returns a list of selectable feats."""
+    """Returns a list of selectable feats.
+
+    Returns:
+        List[str]: List of all relevant feats."""
     return [f for f in oSRD.getFeats() if hasFeatRequirements(f)]
 
 
@@ -112,7 +156,7 @@ def stdin(choices: List[str] | int, loop_count=1) -> List[str]:
         option_keys = list(expanded_options.keys())
         first_option_index = option_keys[0]
         last_option_index = option_keys[-1]
-        
+
         message = f"[prompt]Make a selection {first_option_index}-{last_option_index}.[/prompt]\n\n"
         for index, option in expanded_options.items():
             message += f"\t[menu.index]{index}[/menu.index].) [menu.option]{option}[/menu.option]\n"
@@ -270,14 +314,14 @@ def step3() -> None:
         "Wisdom": {"score": 0, "modifier": 0},
         "Charisma": {"score": 0, "modifier": 0},
     }
-    results = generate_abilities(randint(65, 90))
+    results = generateAbilityArray(randint(65, 90))
     results.sort(reverse=True)
     ability_names = list(ability_array.keys())
     for score in results:
         console.print(f"Assign {score} to which ability?", style="default")
         ability_array[stdin(ability_names)[0]] = {
             "score": score,
-            "modifier": get_modifier(score),
+            "modifier": calcModifier(score),
         }
 
     # Apply background ability bonuses.
@@ -289,7 +333,7 @@ def step3() -> None:
                 new_score = 20
             ability_array[ability] = {
                 "score": new_score,
-                "modifier": get_modifier(new_score),
+                "modifier": calcModifier(new_score),
             }
 
     console.print(
