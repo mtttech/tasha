@@ -20,7 +20,7 @@ classifiers = [
     "Topic :: Games/Entertainment :: Role-Playing",
     "Topic :: Utilities",
 ]
-packages = [{include = "tasha"}]
+packages = [{include = "src/tasha"}]
 
 [tool.poetry.dependencies]
 python = "^3.9"
@@ -29,7 +29,7 @@ rich = "^13.9.2"
 toml = "^0.10.2"
 
 [tool.poetry.scripts]
-tasha='tasha.tasha:tasha_main'
+tasha='src.tasha.tasha:tasha_main'
 
 
 [build-system]
