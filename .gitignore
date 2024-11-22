@@ -138,6 +138,3 @@ dmypy.json
 
 # Testing file
 test.py
-
-# poetry
-poetry.lock
