@@ -8,31 +8,43 @@ from rich.pretty import Pretty
 from rich.progress import track
 from rich.prompt import Confirm, IntPrompt, Prompt
 from rich.theme import Theme
+import toml
 
 from tasha.actor import CharacterSheet, PlayerCharacter
 from tasha.d20 import SystemResourceDocument
+from tasha.themes import ThemeLoader
 
 console = Console(
     tab_size=2,
-    theme=Theme(
-        {
-            "default": "bold green",
-            "exit": "bold dim red",
-            "menu.index": "bold italic cyan",
-            "menu.option": "bold magenta",
-            "prompt": "bold dim green",
-        }
-    ),
+    theme=Theme(ThemeLoader.loadTheme()),
     width=80,
 )
 oSheet = CharacterSheet()
 oPC = PlayerCharacter(oSheet)
 oSRD = SystemResourceDocument()
+config_dir = Path.home() / ".config" / "tasha"
 
-character_dir = Path.home() / ".config" / "tasha" / "characters"
+character_dir = config_dir / "characters"
 if not character_dir.exists():
     character_dir.mkdir(parents=True)
     console.print("Created the character directory.")
+
+themes_dir = config_dir / "themes"
+if not themes_dir.exists():
+    themes_dir.mkdir(parents=True)
+    console.print("Created the theme directory.")
+
+    with Path(themes_dir, "default.toml").open("w") as default_theme:
+        toml.dump(
+            {
+                "default": "bold green",
+                "exit": "bold dim red",
+                "menu.index": "bold italic cyan",
+                "menu.option": "bold magenta",
+                "prompt": "bold dim green",
+            },
+            default_theme,
+        )
 
 
 def calcModifier(score: int) -> int:
@@ -456,8 +468,6 @@ def tasha_main() -> None:
 
         name = Prompt.ask("What is your character's name?", console=console)
         oSheet.set("name", name.replace(" ", "_"))
-
-        import toml
 
         character_sheet = replace(
             oSheet,
