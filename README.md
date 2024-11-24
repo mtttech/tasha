@@ -18,7 +18,7 @@
 
 ```
 # Clone the repository.
-git clone https://github.com/mtttech/Tasha.git
+git clone https://github.com/mtttech/tasha
 
 # Change into the cloned repo. 
 cd tasha
