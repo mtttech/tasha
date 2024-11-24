@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "tasha"
-version = "0.6.12"
+version = "0.6.13"
 description = "Creates Dungeons & Dragons (5.5e) characters."
 authors = ["Marcus T Taylor <mtaylor9754@hotmail.com>"]
 license = "MIT"
