@@ -14,7 +14,7 @@ from tasha.themes import ThemeLoader
 
 console = Console(
     tab_size=2,
-    theme=Theme(ThemeLoader.loadTheme()),
+    theme=Theme(ThemeLoader().loadTheme()),
     width=80,
 )
 oSheet = CharacterSheet()
