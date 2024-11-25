@@ -1,5 +1,4 @@
 from dataclasses import asdict, replace
-from pathlib import Path
 from typing import Dict, List
 
 from rich.console import Console
@@ -8,7 +7,6 @@ from rich.pretty import Pretty
 from rich.progress import track
 from rich.prompt import Confirm, IntPrompt, Prompt
 from rich.theme import Theme
-import toml
 
 from tasha.actor import CharacterSheet, PlayerCharacter
 from tasha.d20 import SystemResourceDocument
@@ -22,33 +20,10 @@ console = Console(
 oSheet = CharacterSheet()
 oPC = PlayerCharacter(oSheet)
 oSRD = SystemResourceDocument()
-config_dir = Path.home() / ".config" / "tasha"
-
-character_dir = config_dir / "characters"
-if not character_dir.exists():
-    character_dir.mkdir(parents=True)
-    console.print("Created the character directory.")
-
-themes_dir = config_dir / "themes"
-if not themes_dir.exists():
-    themes_dir.mkdir(parents=True)
-    console.print("Created the theme directory.")
-
-    with Path(themes_dir, "default.toml").open("w") as default_theme:
-        toml.dump(
-            {
-                "default": "bold green",
-                "exit": "bold dim red",
-                "menu.index": "bold italic cyan",
-                "menu.option": "bold magenta",
-                "prompt": "bold dim green",
-            },
-            default_theme,
-        )
 
 
-def calcModifier(score: int) -> int:
-    """Calculates the modifier for the specified score.
+def calculateModifier(score: int) -> int:
+    """Calculates the modifier value of the specified score.
 
     Args:
         score (int): Score to calculate the modifier for.
@@ -333,7 +308,7 @@ def step3() -> None:
         console.print(f"Assign {score} to which ability?", style="default")
         ability_array[stdin(ability_names)[0]] = {
             "score": score,
-            "modifier": calcModifier(score),
+            "modifier": calculateModifier(score),
         }
 
     # Apply background ability bonuses.
@@ -345,7 +320,7 @@ def step3() -> None:
                 new_score = 20
             ability_array[ability] = {
                 "score": new_score,
-                "modifier": calcModifier(new_score),
+                "modifier": calculateModifier(new_score),
             }
 
     console.print(
@@ -479,7 +454,12 @@ def tasha_main() -> None:
                 title=f"{oPC.getMyName()}'s Character Sheet",
             )
         )
+
+        from pathlib import Path
+        import toml
+
         if Confirm.ask("Save this character?", console=console):
+            character_dir = Path.home() / ".config" / "tasha" / "characters"
             for _ in track(range(100), description="Saving..."):
                 with Path(character_dir, f"{oPC.getMyName()}.toml").open("w") as record:
                     toml.dump(asdict(character_sheet), record)
