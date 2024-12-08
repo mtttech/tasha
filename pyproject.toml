@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "tasha"
-version = "0.6.13"
+version = "0.6.14"
 description = "Creates Dungeons & Dragons (5.5e) characters."
 authors = ["Marcus T Taylor <mtaylor9754@hotmail.com>"]
 license = "MIT"
@@ -29,7 +29,7 @@ rich = "^13.9.2"
 toml = "^0.10.2"
 
 [tool.poetry.scripts]
-tasha='src.tasha.tasha:tasha_main'
+tasha='tasha.tasha:tasha_main'
 
 
 [build-system]
