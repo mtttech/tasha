@@ -24,7 +24,7 @@ oPC = PlayerCharacter(oSheet)
 oSRD = SystemResourceDocument()
 
 
-def calculateModifier(score: int) -> int:
+def calculate_ability_modifier(score: int) -> int:
     """Calculates the modifier value of the specified score.
 
     Args:
@@ -37,7 +37,7 @@ def calculateModifier(score: int) -> int:
     return floor((score - 10) / 2)
 
 
-def generateAbilityArray(threshold: int) -> List[int]:
+def generate_ability_array(threshold: int) -> List[int]:
     """Generates the character's six abilities.
 
     Continuously rerolls attributes if one of the following is true:
@@ -66,15 +66,15 @@ def generateAbilityArray(threshold: int) -> List[int]:
     return dice_rolls
 
 
-def getSelectableFeats() -> List[str]:
+def get_selectable_feats() -> List[str]:
     """Returns a list of selectable feats.
 
     Returns:
         List[str]: List of all relevant feats."""
-    return [f for f in oSRD.getFeats() if hasFeatRequirements(f)]
+    return [f for f in oSRD.getFeats() if has_feat_requirements(f)]
 
 
-def hasFeatRequirements(feat: str) -> bool:
+def has_feat_requirements(feat: str) -> bool:
     """Checks if character meets prerequisites for a feat.
 
     Args:
@@ -303,14 +303,14 @@ def step3() -> None:
         "Wisdom": {"score": 0, "modifier": 0},
         "Charisma": {"score": 0, "modifier": 0},
     }
-    results = generateAbilityArray(randint(65, 90))
+    results = generate_ability_array(randint(65, 90))
     results.sort(reverse=True)
     ability_names = list(ability_array.keys())
     for score in results:
         console.print(f"Assign {score} to which ability?", style="default")
         ability_array[stdin(ability_names)[0]] = {
             "score": score,
-            "modifier": calculateModifier(score),
+            "modifier": calculate_ability_modifier(score),
         }
 
     # Apply background ability bonuses.
@@ -322,7 +322,7 @@ def step3() -> None:
                 new_score = 20
             ability_array[ability] = {
                 "score": new_score,
-                "modifier": calculateModifier(new_score),
+                "modifier": calculate_ability_modifier(new_score),
             }
 
     console.print(
@@ -371,7 +371,7 @@ def step5() -> None:
         klass, oPC.getTotalLevel()
     ).count("Ability Score Improvement")
     oSheet.set(
-        "feats", stdin(getSelectableFeats(), loop_count=ability_score_improvements)
+        "feats", stdin(get_selectable_feats(), loop_count=ability_score_improvements)
     )
 
     console.print("What's your gender?", style="default")
