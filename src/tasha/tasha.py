@@ -10,11 +10,13 @@ from rich.theme import Theme
 
 from tasha.actor import CharacterSheet, PlayerCharacter
 from tasha.d20 import SystemResourceDocument
+from tasha.settings import SettingsLoader
 from tasha.themes import ThemeLoader
 
+settings = SettingsLoader()
 console = Console(
     tab_size=2,
-    theme=Theme(ThemeLoader().loadTheme()),
+    theme=Theme(ThemeLoader(settings.default_theme).loadTheme()),
     width=80,
 )
 oSheet = CharacterSheet()

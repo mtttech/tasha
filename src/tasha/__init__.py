@@ -30,5 +30,18 @@ def init() -> None:
             )
             # print("Created the default theme TOML file.")
 
+    settings_dir = config_dir / "settings"
+    if not settings_dir.exists():
+        settings_dir.mkdir(parents=True)
+        # print("Created the settings directory.")
+
+        with Path(settings_dir, "default.toml").open("w") as default_settings:
+            toml.dump(
+                {
+                    "default_theme": "default",
+                },
+                default_settings,
+            )
+
 
 init()
