@@ -1,4 +1,7 @@
+from pathlib import Path
 from typing import Dict
+
+import toml
 
 
 class ThemeLoader:
@@ -8,8 +11,6 @@ class ThemeLoader:
 
         Args:
             theme_file (str): Theme file to load."""
-        from pathlib import Path
-
         theme_dir = Path.home() / ".config" / "tasha" / "themes"
         self.current_theme_path = theme_dir / "default.toml"
 
@@ -23,7 +24,5 @@ class ThemeLoader:
 
         Returns:
             Dict[str, str]: Toml theme file loaded in dict format."""
-        import toml
-
         with self.current_theme_path.open() as loaded_theme:
             return toml.loads(loaded_theme.read())
