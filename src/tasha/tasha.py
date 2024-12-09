@@ -1,12 +1,16 @@
 from dataclasses import asdict, replace
+from math import floor
+from pathlib import Path
 from typing import Dict, List
 
+import dice  # pyright: ignore
 from rich.console import Console
 from rich.panel import Panel
 from rich.pretty import Pretty
 from rich.progress import track
 from rich.prompt import Confirm, IntPrompt, Prompt
 from rich.theme import Theme
+import toml
 
 from tasha.actor import CharacterSheet, PlayerCharacter
 from tasha.d20 import SystemResourceDocument
@@ -32,8 +36,6 @@ def calculate_ability_modifier(score: int) -> int:
 
     Returns:
         int: Returns result of the modifier calculation."""
-    from math import floor
-
     return floor((score - 10) / 2)
 
 
@@ -51,8 +53,6 @@ def generate_ability_array(threshold: int) -> List[int]:
 
     Returns:
         List[int]: Returns six randomly generated integers in a list."""
-    import dice  # pyright: ignore
-
     while True:
         dice_rolls = [sum(dice.roll("4d6^3")) for _ in range(6)]  # pyright: ignore
         if sum(dice_rolls) < threshold:
@@ -136,6 +136,7 @@ def stdin(choices: List[str] | int, loop_count=1) -> List[str]:
     if isinstance(choices, int):
         choices = list(str(n + 1) for n in range(choices))
 
+        from pathlib import Path
     selections = list()
     for _ in range(0, loop_count):
         expanded_options = associate_choice_indexes()
@@ -456,9 +457,6 @@ def tasha_main() -> None:
                 title=f"{oPC.getMyName()}'s Character Sheet",
             )
         )
-
-        from pathlib import Path
-        import toml
 
         if Confirm.ask("Save this character?", console=console):
             character_dir = Path.home() / ".config" / "tasha" / "characters"
