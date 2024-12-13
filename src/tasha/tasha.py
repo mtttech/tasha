@@ -20,7 +20,7 @@ from tasha.themes import ThemeLoader
 settings = SettingsLoader()
 console = Console(
     tab_size=2,
-    theme=Theme(ThemeLoader(settings.default_theme).loadTheme()),
+    theme=Theme(ThemeLoader(settings.default_theme).load()),
     width=80,
 )
 oSheet = CharacterSheet()
