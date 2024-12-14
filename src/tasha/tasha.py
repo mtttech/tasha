@@ -444,8 +444,8 @@ def tasha_main() -> None:
         step4()
         step5()
 
-        name = Prompt.ask("What is your character's name?", console=console)
-        oSheet.set("name", name.replace(" ", "_"))
+        name = Prompt.ask("What is your character's name?", console=console).strip()
+        oSheet.set("name", name)
 
         character_sheet = replace(
             oSheet,
@@ -461,7 +461,7 @@ def tasha_main() -> None:
         if Confirm.ask("Save this character?", console=console):
             character_dir = Path.home() / ".config" / "tasha" / "characters"
             for _ in track(range(100), description="Saving..."):
-                with Path(character_dir, f"{oPC.getMyName()}.toml").open("w") as record:
+                with Path(character_dir, f"{name.replace(" ", "_")}.toml").open("w") as record:
                     toml.dump(asdict(character_sheet), record)
             console.print(
                 f"Character '{oPC.getMyName()}' created successfully.", style="default"
