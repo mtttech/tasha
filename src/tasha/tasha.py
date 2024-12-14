@@ -458,16 +458,19 @@ def tasha_main() -> None:
             )
         )
 
-        if Confirm.ask("Save this character?", console=console):
+        if not Confirm.ask("Save this character?", console=console):
+            console.print(f"Save aborted for '{oPC.getMyName()}'.", style="exit")
+        else:
             character_dir = Path.home() / ".config" / "tasha" / "characters"
             for _ in track(range(100), description="Saving..."):
                 with Path(character_dir, f"{name.replace(" ", "_")}.toml").open("w") as record:
                     toml.dump(asdict(character_sheet), record)
             console.print(
-                f"Character '{oPC.getMyName()}' created successfully.", style="default"
+                f"Character '{oPC.getMyName()}' saved!", style="default"
             )
     except KeyboardInterrupt:
-        console.print("\nExited program.", style="exit")
+        print("\n")
+        console.print("Exited program.", style="exit")
 
 
 if __name__ == "__main__":
