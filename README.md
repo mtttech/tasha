@@ -1,6 +1,6 @@
 # Tasha
 
-**Tasha** is a tool for creating 5.5e Dungeons & Dragons characters.
+**Tasha** is a character generator for Dungeons & Dragons (5.5e) characters.
 
 ### Supported rulebooks
 
@@ -14,20 +14,28 @@
 * [rich](https://github.com/Textualize/rich)
 * [toml](https://github.com/uiri/toml)
 
-### Installation & Usage
+### Installation
+
+*Tasha* can be installed by cloning the repo, building a wheel file with poetry, and installing it through pip.
 
 ```
-# Clone the repository.
 git clone https://github.com/mtttech/tasha
 
-# Change into the cloned repo. 
 cd tasha
 
-# Use poetry to install.
-poetry install
+poetry build
 
-# Run the program
-poetry run tasha
+cd dist
+
+pipx install tasha-0.*.*-py3-none-any.whl
+```
+
+### Usage
+
+Run *Tasha* by typing the following command.
+
+```
+tasha
 ```
 
 Characters created by Tasha are saved to your *HOME* directory within the *.config/tasha/characters* folder, which will be created if it doesn't already exist. Characters will be saved in the .TOML format. Below is an example of such a character.
