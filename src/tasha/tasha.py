@@ -28,7 +28,7 @@ oPC = PlayerCharacter(oSheet)
 oSRD = SystemResourceDocument()
 
 
-def calculate_ability_modifier(score: int) -> int:
+def calculate_modifier(score: int) -> int:
     """Calculates the modifier value of the specified score.
 
     Args:
@@ -39,29 +39,20 @@ def calculate_ability_modifier(score: int) -> int:
     return floor((score - 10) / 2)
 
 
-def generate_ability_array(threshold: int) -> List[int]:
-    """Generates the character's six abilities.
+def generate_scores() -> List[int]:
+    """Randomly generates six values.
 
-    Continuously rerolls attributes if one of the following is true:
+    Continuously rerolls if one of the following is true:
 
-    1. attributes total less than the specified threshold
-    2. or smallest attribute < 8
-    3. or largest attribute < 15
-
-    Args:
-        threshold (int): Threshold for ability score total.
+    1. smallest attribute < 8
+    2. or largest attribute < 15
 
     Returns:
-        List[int]: Returns six randomly generated integers in a list."""
+        List[int]: Returns a list of six integers."""
     while True:
         dice_rolls = [sum(dice.roll("4d6^3")) for _ in range(6)]  # pyright: ignore
-        if sum(dice_rolls) < threshold:
-            continue
-        if min(dice_rolls) < 8:
-            continue
-        if max(dice_rolls) < 15:
-            continue
-        break
+        if min(dice_rolls) >= 8 and max(dice_rolls) >= 15:
+            break
 
     return dice_rolls
 
@@ -136,7 +127,6 @@ def stdin(choices: List[str] | int, loop_count=1) -> List[str]:
     if isinstance(choices, int):
         choices = list(str(n + 1) for n in range(choices))
 
-        from pathlib import Path
     selections = list()
     for _ in range(0, loop_count):
         expanded_options = associate_choice_indexes()
@@ -304,14 +294,14 @@ def step3() -> None:
         "Wisdom": {"score": 0, "modifier": 0},
         "Charisma": {"score": 0, "modifier": 0},
     }
-    results = generate_ability_array(randint(65, 90))
+    results = generate_scores()
     results.sort(reverse=True)
     ability_names = list(ability_array.keys())
     for score in results:
         console.print(f"Assign {score} to which ability?", style="default")
         ability_array[stdin(ability_names)[0]] = {
             "score": score,
-            "modifier": calculate_ability_modifier(score),
+            "modifier": calculate_modifier(score),
         }
 
     # Apply background ability bonuses.
@@ -323,7 +313,7 @@ def step3() -> None:
                 new_score = 20
             ability_array[ability] = {
                 "score": new_score,
-                "modifier": calculate_ability_modifier(new_score),
+                "modifier": calculate_modifier(new_score),
             }
 
     console.print(
@@ -463,11 +453,11 @@ def tasha_main() -> None:
         else:
             character_dir = Path.home() / ".config" / "tasha" / "characters"
             for _ in track(range(100), description="Saving..."):
-                with Path(character_dir, f"{name.replace(" ", "_")}.toml").open("w") as record:
+                with Path(character_dir, f"{name.replace(" ", "_")}.toml").open(
+                    "w"
+                ) as record:
                     toml.dump(asdict(character_sheet), record)
-            console.print(
-                f"Character '{oPC.getMyName()}' saved!", style="default"
-            )
+            console.print(f"Character '{oPC.getMyName()}' saved!", style="default")
     except KeyboardInterrupt:
         print("\n")
         console.print("Exited program.", style="exit")
