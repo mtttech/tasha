@@ -284,8 +284,6 @@ def step2() -> None:
 
 def step3() -> None:
     # Generate/Assign ability scores
-    from random import randint
-
     ability_array = {
         "Strength": {"score": 0, "modifier": 0},
         "Dexterity": {"score": 0, "modifier": 0},
