@@ -1,6 +1,6 @@
 # Tasha
 
-**Tasha** is a character generator for Dungeons & Dragons (5.5e) characters.
+**Tasha** is a tool for creating characters for Dungeons & Dragons 5th edition (2024).
 
 ### Supported rulebooks
 
