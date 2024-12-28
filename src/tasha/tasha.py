@@ -28,6 +28,53 @@ oPC = PlayerCharacter(oSheet)
 oSRD = SystemResourceDocument()
 
 
+def assign_abilities() -> Dict[str, Dict[str, int]]:
+    """Assigns a set of randomly generated ability scores.
+
+    Returns:
+        Dict[str, Dict[str, int]]: Returns dict of abilities -> scores/modifiers."""
+    ability_array = {
+        "Strength": {"score": 0, "modifier": 0},
+        "Dexterity": {"score": 0, "modifier": 0},
+        "Constitution": {"score": 0, "modifier": 0},
+        "Intelligence": {"score": 0, "modifier": 0},
+        "Wisdom": {"score": 0, "modifier": 0},
+        "Charisma": {"score": 0, "modifier": 0},
+    }
+    results = generate_scores()
+    results.sort(reverse=True)
+    ability_names = list(ability_array.keys())
+    for score in results:
+        console.print(f"Assign {score} to which ability?", style="default")
+        ability_array[stdin(ability_names)[0]] = {
+            "score": score,
+            "modifier": calculate_modifier(score),
+        }
+
+    # Apply background ability bonuses.
+    for ability, bonus in oPC.getMyBonus().items():
+        if bonus > 0:
+            old_score = ability_array[ability]["score"]
+            new_score = old_score + bonus
+            if new_score > 20:
+                new_score = 20
+            ability_array[ability] = {
+                "score": new_score,
+                "modifier": calculate_modifier(new_score),
+            }
+
+    console.print(
+        Panel(
+            Pretty(ability_array, expand_all=True),
+            title="Generated Ability Scores (Background bonuses applied)",
+        )
+    )
+    if not Confirm.ask("Are you satisfied with these ability scores?", console=console):
+        assign_abilities()
+
+    return ability_array
+
+
 def calculate_modifier(score: int) -> int:
     """Calculates the modifier value of the specified score.
 
@@ -57,16 +104,16 @@ def generate_scores() -> List[int]:
     return dice_rolls
 
 
-def get_selectable_feats() -> List[str]:
+def get_feats() -> List[str]:
     """Returns a list of selectable feats.
 
     Returns:
         List[str]: List of all relevant feats."""
-    return [f for f in oSRD.getFeats() if has_feat_requirements(f)]
+    return [f for f in oSRD.getFeats() if has_requirements(f)]
 
 
-def has_feat_requirements(feat: str) -> bool:
-    """Checks if character meets prerequisites for a feat.
+def has_requirements(feat: str) -> bool:
+    """Checks if the prerequisites for a specified feat are met.
 
     Args:
         feat (str): Name of the feat.
@@ -159,7 +206,7 @@ def stdin(choices: List[str] | int, loop_count=1) -> List[str]:
     return selections
 
 
-def step1() -> None:
+def main() -> None:
     # Choose class/subclass
     # Select level
     console.print("Choose a class.", style="default")
@@ -192,8 +239,6 @@ def step1() -> None:
         },
     )
 
-
-def step2() -> None:
     # Choose a background
     # Choose a species
     # Choose equipment
@@ -280,59 +325,14 @@ def step2() -> None:
         loop_count=2,
     )
     oSheet.set("languages", ["Common"] + languages)
-
-
-def step3() -> None:
+    
     # Generate/Assign ability scores
-    ability_array = {
-        "Strength": {"score": 0, "modifier": 0},
-        "Dexterity": {"score": 0, "modifier": 0},
-        "Constitution": {"score": 0, "modifier": 0},
-        "Intelligence": {"score": 0, "modifier": 0},
-        "Wisdom": {"score": 0, "modifier": 0},
-        "Charisma": {"score": 0, "modifier": 0},
-    }
-    results = generate_scores()
-    results.sort(reverse=True)
-    ability_names = list(ability_array.keys())
-    for score in results:
-        console.print(f"Assign {score} to which ability?", style="default")
-        ability_array[stdin(ability_names)[0]] = {
-            "score": score,
-            "modifier": calculate_modifier(score),
-        }
+    oSheet.set("attributes", assign_abilities())
 
-    # Apply background ability bonuses.
-    for ability, bonus in oPC.getMyBonus().items():
-        if bonus > 0:
-            old_score = ability_array[ability]["score"]
-            new_score = old_score + bonus
-            if new_score > 20:
-                new_score = 20
-            ability_array[ability] = {
-                "score": new_score,
-                "modifier": calculate_modifier(new_score),
-            }
-
-    console.print(
-        Panel(
-            Pretty(ability_array, expand_all=True),
-            title="Generated Ability Scores (Background bonuses applied)",
-        )
-    )
-    if not Confirm.ask("Are you satisfied with these ability scores?", console=console):
-        step3()
-
-    oSheet.set("attributes", ability_array)
-
-
-def step4() -> None:
     # Choose an alignment
     console.print("Choose your alignment.", style="default")
     oSheet.set("alignment", stdin(oSRD.getAlignments())[0])
 
-
-def step5() -> None:
     # Saving Throws
     # Skills
     # Passive Perception
@@ -360,7 +360,7 @@ def step5() -> None:
         klass, oPC.getTotalLevel()
     ).count("Ability Score Improvement")
     oSheet.set(
-        "feats", stdin(get_selectable_feats(), loop_count=ability_score_improvements)
+        "feats", stdin(get_feats(), loop_count=ability_score_improvements)
     )
 
     console.print("What's your gender?", style="default")
@@ -423,39 +423,35 @@ def step5() -> None:
 
         oSheet.set("prepared_spells", {klass: prepared_spells})
 
+    name = Prompt.ask("What is your character's name?", console=console).strip()
+    oSheet.set("name", name)
+
+    character_sheet = replace(
+        oSheet,
+        level=oPC.getTotalLevel(),
+    )
+    console.print(
+        Panel(
+            Pretty(character_sheet, expand_all=True),
+            title=f"{oPC.getMyName()}'s Character Sheet",
+        )
+    )
+
+    if not Confirm.ask("Save this character?", console=console):
+        console.print(f"Save aborted for '{oPC.getMyName()}'.", style="exit")
+    else:
+        character_dir = Path.home() / ".config" / "tasha" / "characters"
+        for _ in track(range(100), description="Saving..."):
+            with Path(character_dir, f"{name.replace(" ", "_")}.toml").open(
+                "w"
+            ) as record:
+                toml.dump(asdict(character_sheet), record)
+        console.print(f"Character '{oPC.getMyName()}' saved!", style="default")
+
 
 def tasha_main() -> None:
     try:
-        step1()
-        step2()
-        step3()
-        step4()
-        step5()
-
-        name = Prompt.ask("What is your character's name?", console=console).strip()
-        oSheet.set("name", name)
-
-        character_sheet = replace(
-            oSheet,
-            level=oPC.getTotalLevel(),
-        )
-        console.print(
-            Panel(
-                Pretty(character_sheet, expand_all=True),
-                title=f"{oPC.getMyName()}'s Character Sheet",
-            )
-        )
-
-        if not Confirm.ask("Save this character?", console=console):
-            console.print(f"Save aborted for '{oPC.getMyName()}'.", style="exit")
-        else:
-            character_dir = Path.home() / ".config" / "tasha" / "characters"
-            for _ in track(range(100), description="Saving..."):
-                with Path(character_dir, f"{name.replace(" ", "_")}.toml").open(
-                    "w"
-                ) as record:
-                    toml.dump(asdict(character_sheet), record)
-            console.print(f"Character '{oPC.getMyName()}' saved!", style="default")
+        main()
     except KeyboardInterrupt:
         print("\n")
         console.print("Exited program.", style="exit")
