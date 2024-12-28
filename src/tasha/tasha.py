@@ -70,7 +70,7 @@ def assign_abilities() -> Dict[str, Dict[str, int]]:
         )
     )
     if not Confirm.ask("Are you satisfied with these ability scores?", console=console):
-        assign_abilities()
+        return assign_abilities()
 
     return ability_array
 
@@ -325,7 +325,7 @@ def main() -> None:
         loop_count=2,
     )
     oSheet.set("languages", ["Common"] + languages)
-    
+
     # Generate/Assign ability scores
     oSheet.set("attributes", assign_abilities())
 
@@ -359,9 +359,7 @@ def main() -> None:
     ability_score_improvements = oSRD.getClassFeatures(
         klass, oPC.getTotalLevel()
     ).count("Ability Score Improvement")
-    oSheet.set(
-        "feats", stdin(get_feats(), loop_count=ability_score_improvements)
-    )
+    oSheet.set("feats", stdin(get_feats(), loop_count=ability_score_improvements))
 
     console.print("What's your gender?", style="default")
     oSheet.set("gender", stdin(["Female", "Male"])[0])
