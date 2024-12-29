@@ -32,7 +32,7 @@ def assign_abilities() -> Dict[str, Dict[str, int]]:
     """Assigns a set of randomly generated ability scores.
 
     Returns:
-        Dict[str, Dict[str, int]]: Returns dict of abilities -> scores/modifiers."""
+        Dict[str, Dict[str, int]]: Returns dict of abilities, scores, modifiers."""
     ability_array = {
         "Strength": {"score": 0, "modifier": 0},
         "Dexterity": {"score": 0, "modifier": 0},
@@ -46,7 +46,7 @@ def assign_abilities() -> Dict[str, Dict[str, int]]:
     ability_names = list(ability_array.keys())
     for score in results:
         console.print(f"Assign {score} to which ability?", style="default")
-        ability_array[stdin(ability_names)[0]] = {
+        ability_array[tashio(ability_names)[0]] = {
             "score": score,
             "modifier": calculate_modifier(score),
         }
@@ -91,8 +91,8 @@ def generate_scores() -> List[int]:
 
     Continuously rerolls if one of the following is true:
 
-    1. smallest attribute < 8
-    2. or largest attribute < 15
+    1. smallest score < 8
+    2. or largest score < 15
 
     Returns:
         List[int]: Returns a list of six integers."""
@@ -155,53 +155,48 @@ def has_requirements(feat: str) -> bool:
     return True
 
 
-def stdin(choices: List[str] | int, loop_count=1) -> List[str]:
+def tashio(choices: List[str] | int, loop_count=1) -> List[str]:
     """Captures user input from the console.
 
     Args:
         choices (List[str]|int): List of choices or max value in a range of numbers.
+        loop_count (int): Number of times to prompt the user. Default 1 prompt.
 
     Returns:
         List[str]: A list of the user's responses."""
 
-    def associate_choice_indexes() -> Dict[int, str]:
-        """Assign an index to each choice."""
-        indexed_options = dict()
-        for index, option in enumerate(choices):  # pyright: ignore
-            indexed_options[index + 1] = option
-        return indexed_options
-
+    # If using numbers, create a range, starting from 1.
     if isinstance(choices, int):
         choices = list(str(n + 1) for n in range(choices))
 
     selections = list()
     for _ in range(0, loop_count):
-        expanded_options = associate_choice_indexes()
-        if len(expanded_options) == loop_count:
-            return list(expanded_options.values())
+        # Map out menu selections
+        indexed_choices = dict()
+        for index, option in enumerate(choices):  # pyright: ignore
+            indexed_choices[index + 1] = option
 
-        option_keys = list(expanded_options.keys())
-        first_option_index = option_keys[0]
-        last_option_index = option_keys[-1]
+        # Automatically select the last option.
+        if len(indexed_choices) == loop_count:
+            return list(indexed_choices.values())
 
-        message = f"[prompt]Make a selection {first_option_index}-{last_option_index}.[/prompt]\n\n"
-        for index, option in expanded_options.items():
+        indexes = list(indexed_choices.keys())
+        first_index = indexes[0]
+        last_index = indexes[-1]
+        message = f"[prompt]Make a selection {first_index}-{last_index}.[/prompt]\n\n"
+        for index, option in indexed_choices.items():
             message += f"\t[menu.index]{index}[/menu.index].) [menu.option]{option}[/menu.option]\n"
         console.print(message)
 
-        user_input = input(">> ")
-        import time
-
-        time.sleep(1.0)
-
+        user_input = int(input(">> "))
         try:
-            chosen_option = expanded_options[int(user_input)]
-            # Hax to keep the 'Ability Score Improvement' feat selectable multiple times.
+            chosen_option = indexed_choices[user_input]
+            # Hax to keep the 'Ability Score Improvement' feat selectable.
             if chosen_option != "Ability Score Improvement":
                 selections.append(chosen_option)
                 choices.remove(chosen_option)
         except (KeyError, TypeError, ValueError):
-            return stdin(choices)
+            return tashio(choices)
 
     return selections
 
@@ -210,7 +205,7 @@ def main() -> None:
     # Choose class/subclass
     # Select level
     console.print("Choose a class.", style="default")
-    klass = stdin(oSRD.getClasses())[0]
+    klass = tashio(oSRD.getClasses())[0]
     oSheet.set(
         {
             "armors": oSRD.getArmorProficienciesByClass(klass),
@@ -218,13 +213,13 @@ def main() -> None:
         }
     )
     console.print("What is your class level?", style="default")
-    level = int(stdin(20)[0])
+    level = int(tashio(20)[0])
     subclass = ""
     if level >= 3:
         console.print(
             "If you start at level 3 or higher, choose a subclass.", style="default"
         )
-        subklass = stdin(
+        subklass = tashio(
             oSRD.getSubclassesByClass(klass),
         )
         subclass = subklass[0]
@@ -243,7 +238,7 @@ def main() -> None:
     # Choose a species
     # Choose equipment
     console.print("Choose your character's background.", style="default")
-    oSheet.set("background", stdin(oSRD.getBackgrounds())[0])
+    oSheet.set("background", tashio(oSRD.getBackgrounds())[0])
 
     # Choose ability bonuses
     console.print(
@@ -260,18 +255,18 @@ def main() -> None:
         "Wisdom": 0,
         "Charisma": 0,
     }
-    array_selection = stdin(
+    array_selection = tashio(
         ["Apply 2/1", "Apply 1/1/1"],
     )[0]
     if array_selection == "Apply 2/1":
         background_abilities = oSRD.getBackgroundAbilityScores(oPC.getMyBackground())
 
         console.print("Choose which ability to apply a 2 point bonus", style="default")
-        two_point_ability = stdin(background_abilities)[0]
+        two_point_ability = tashio(background_abilities)[0]
         ability_bonus_array[two_point_ability] = 2
 
         console.print("Choose which ability to apply a 1 point bonus.", style="default")
-        one_point_ability = stdin(background_abilities)[0]
+        one_point_ability = tashio(background_abilities)[0]
         ability_bonus_array[one_point_ability] = 1
 
     if array_selection == "Apply 1/1/1":
@@ -283,13 +278,13 @@ def main() -> None:
     console.print(
         "A background gives your character a specified Origin feat.", style="default"
     )
-    oSheet.set("feats", stdin(oSRD.getFeatsByCategory("Origin")))
+    oSheet.set("feats", tashio(oSRD.getFeatsByCategory("Origin")))
 
     console.print(
         "A background gives your character proficiency in two specified skills.",
         style="default",
     )
-    skills = stdin(
+    skills = tashio(
         oSRD.getBackgroundSkills(oPC.getMyBackground()),
         loop_count=2,
     )
@@ -300,13 +295,13 @@ def main() -> None:
         "specific tool or one chosen from the Artisan's Tools category.",
         style="default",
     )
-    tool = stdin(
+    tool = tashio(
         oSRD.getBackgroundToolProficiencies(oPC.getMyBackground()),
     )
     oSheet.set("tools", tool)
 
     console.print("Choose a species for your character.", style="default")
-    species = stdin(oSRD.getSpecies())[0]
+    species = tashio(oSRD.getSpecies())[0]
     oSheet.set(
         {
             "size": oSRD.getSizeBySpecies(species),
@@ -320,7 +315,7 @@ def main() -> None:
         "Your character knows at least three languages: Common plus two languages.",
         style="default",
     )
-    languages = stdin(
+    languages = tashio(
         oSRD.getStandardLanguages(),
         loop_count=2,
     )
@@ -331,7 +326,7 @@ def main() -> None:
 
     # Choose an alignment
     console.print("Choose your alignment.", style="default")
-    oSheet.set("alignment", stdin(oSRD.getAlignments())[0])
+    oSheet.set("alignment", tashio(oSRD.getAlignments())[0])
 
     # Saving Throws
     # Skills
@@ -352,17 +347,17 @@ def main() -> None:
         allotted_skills = 2
     oSheet.set(
         "skills",
-        stdin(skills, loop_count=allotted_skills),
+        tashio(skills, loop_count=allotted_skills),
     )
 
     console.print("Choose your feats.", style="default")
     ability_score_improvements = oSRD.getClassFeatures(
         klass, oPC.getTotalLevel()
     ).count("Ability Score Improvement")
-    oSheet.set("feats", stdin(get_feats(), loop_count=ability_score_improvements))
+    oSheet.set("feats", tashio(get_feats(), loop_count=ability_score_improvements))
 
     console.print("What's your gender?", style="default")
-    oSheet.set("gender", stdin(["Female", "Male"])[0])
+    oSheet.set("gender", tashio(["Female", "Male"])[0])
 
     oSheet.set(
         {
@@ -381,7 +376,7 @@ def main() -> None:
         )
         oSheet.set(
             "tools",
-            stdin(
+            tashio(
                 oSRD.getToolProficienciesByClass(klass, oPC.getMyToolProficiencies()),
                 loop_count=3,
             ),
@@ -393,7 +388,7 @@ def main() -> None:
         )
         oSheet.set(
             "tools",
-            stdin(
+            tashio(
                 oSRD.getToolProficienciesByClass(klass, oPC.getMyToolProficiencies()),
             ),
         )
@@ -414,7 +409,7 @@ def main() -> None:
             )
 
             console.print(f"Choose a level {spell_level} spell.", style="default")
-            chosen_spell = stdin(
+            chosen_spell = tashio(
                 oSRD.getSpellListByClass(klass, spell_level)[spell_level]
             )[0]
             prepared_spells.append(chosen_spell)
