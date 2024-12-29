@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List, Optional
 
 from . import (
     alignments,
@@ -46,7 +46,13 @@ class SystemResourceDocument:
         )
 
     def getAbilityRequirementsByFeat(self, feat: str) -> Dict[str, int]:
-        """Returns ability score requirements by feat."""
+        """Returns ability score requirements by feat.
+
+        Args:
+            feat (str): Name of the feat to get requirements for.
+
+        Returns:
+            Dict[str, int]: Returns dict of ability requirements."""
         return self.srd["feats"][feat]["ability"]
 
     def getAlignments(self) -> List[str]:
@@ -54,11 +60,23 @@ class SystemResourceDocument:
         return self.srd["alignments"]
 
     def getArmorProficienciesByClass(self, klass: str) -> List[str]:
-        """Returns armor proficiencies by class."""
+        """Returns armor proficiencies by class.
+
+        Args:
+            klass (str): Name of the class to get armor proficiencies for.
+
+        Returns:
+            List[str]: Returns list of armor proficiencies by klass."""
         return self.srd["classes"][klass]["armors"]
 
     def getArmorProficiencyRequirementByFeat(self, feat: str) -> List[str]:
-        """Returns armor proficiency requirements by feat."""
+        """Returns armor proficiency requirements by feat.
+
+        Args:
+            feat (str): Name of the feat to get requirements for.
+
+        Returns:
+            List[str]: Returns a list of armor proficiency requirements."""
         return self.srd["feats"][feat]["armors"]
 
     def getBackgroundAbilityScores(self, background: str) -> List[str]:
@@ -92,9 +110,7 @@ class SystemResourceDocument:
                 class_features = class_features + features
         return class_features
 
-    def getClassSkills(
-        self, klass: str, excl: Union[List[str], None] = None
-    ) -> List[str]:
+    def getClassSkills(self, klass: str, excl: Optional[List[str]] = None) -> List[str]:
         """Returns skills by class, minus exclusions (if applicable)."""
         class_skills = self.srd["classes"][klass]["skills"]
         if isinstance(excl, list):
@@ -143,7 +159,7 @@ class SystemResourceDocument:
         except KeyError:
             return 0
 
-    def getRareLanguages(self, excl: Union[List[str], None] = None) -> List[str]:
+    def getRareLanguages(self, excl: Optional[List[str]] = None) -> List[str]:
         """Returns all rare languages (minus exclusions, if applicable)."""
         language_list = self.srd["languages"]["rare"]
         if isinstance(excl, list):
@@ -183,7 +199,7 @@ class SystemResourceDocument:
         except KeyError:
             return dict()
 
-    def getStandardLanguages(self, excl: Union[List[str], None] = None) -> List[str]:
+    def getStandardLanguages(self, excl: Optional[List[str]] = None) -> List[str]:
         """Returns all standard languages (minus exclusions, if applicable)."""
         language_list = self.srd["languages"]["standard"]
         if isinstance(excl, list):
@@ -191,7 +207,7 @@ class SystemResourceDocument:
         return language_list
 
     def getToolProficienciesByClass(
-        self, klass: str, excl: Union[List[str], None] = None
+        self, klass: str, excl: Optional[List[str]] = None
     ) -> List[str]:
         """Returns a list of all tool proficiencies by class."""
         tool_proficiencies = self.srd["classes"][klass]["tools"]
@@ -199,7 +215,7 @@ class SystemResourceDocument:
             return [t for t in tool_proficiencies if t not in excl]
         return tool_proficiencies
 
-    def getListSpells(self, klass: str, subklass: str, level: int) -> List[str]:
+    def getListSpells(self, klass: str, level: int) -> List[str]:
         """Returns a list of spells by available spell slots."""
         max_spell_level = self.srd["classes"][klass]["spell_slots"][level].split(",")
         spell_list = []
