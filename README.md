@@ -48,7 +48,6 @@ cantrips = 4
 feats = [ "Magic Initiate", "Chef",]
 features = [ "Divine Order", "Spellcasting", "Channel Divinity", "Cleric Subclass", "Ability Score Improvement", "Sear Undead",]
 gender = "Female"
-gold = 0
 hit_die = 8
 hit_points = 33
 initiative = 2
