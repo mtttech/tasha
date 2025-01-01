@@ -46,7 +46,7 @@ def assign_abilities() -> Dict[str, Dict[str, int]]:
     ability_names = list(ability_array.keys())
     for score in results:
         console.print(f"Assign {score} to which ability?", style="default")
-        ability_array[tashio(ability_names)[0]] = {
+        ability_array[io(ability_names)[0]] = {
             "score": score,
             "modifier": calculate_modifier(score),
         }
@@ -155,7 +155,7 @@ def has_requirements(feat: str) -> bool:
     return True
 
 
-def tashio(choices: List[str] | int, loop_count=1) -> List[str]:
+def io(choices: List[str] | int, loop_count: int = 1) -> List[str]:
     """Captures user input from the console.
 
     Args:
@@ -196,7 +196,7 @@ def tashio(choices: List[str] | int, loop_count=1) -> List[str]:
                 selections.append(chosen_option)
                 choices.remove(chosen_option)
         except (KeyError, TypeError, ValueError):
-            return tashio(choices)
+            return io(choices)
 
     return selections
 
@@ -205,7 +205,7 @@ def main() -> None:
     # Choose class/subclass
     # Select level
     console.print("Choose a class.", style="default")
-    klass = tashio(oSRD.getClasses())[0]
+    klass = io(oSRD.getClasses())[0]
     oSheet.set(
         {
             "armors": oSRD.getArmorProficienciesByClass(klass),
@@ -213,13 +213,13 @@ def main() -> None:
         }
     )
     console.print("What is your class level?", style="default")
-    level = int(tashio(20)[0])
+    level = int(io(20)[0])
     subclass = ""
     if level >= 3:
         console.print(
             "If you start at level 3 or higher, choose a subclass.", style="default"
         )
-        subklass = tashio(
+        subklass = io(
             oSRD.getSubclassesByClass(klass),
         )
         subclass = subklass[0]
@@ -238,7 +238,7 @@ def main() -> None:
     # Choose a species
     # Choose equipment
     console.print("Choose your character's background.", style="default")
-    oSheet.set("background", tashio(oSRD.getBackgrounds())[0])
+    oSheet.set("background", io(oSRD.getBackgrounds())[0])
 
     # Choose ability bonuses
     console.print(
@@ -255,18 +255,18 @@ def main() -> None:
         "Wisdom": 0,
         "Charisma": 0,
     }
-    array_selection = tashio(
+    array_selection = io(
         ["Apply 2/1", "Apply 1/1/1"],
     )[0]
     if array_selection == "Apply 2/1":
         background_abilities = oSRD.getBackgroundAbilityScores(oPC.getMyBackground())
 
         console.print("Choose which ability to apply a 2 point bonus", style="default")
-        two_point_ability = tashio(background_abilities)[0]
+        two_point_ability = io(background_abilities)[0]
         ability_bonus_array[two_point_ability] = 2
 
         console.print("Choose which ability to apply a 1 point bonus.", style="default")
-        one_point_ability = tashio(background_abilities)[0]
+        one_point_ability = io(background_abilities)[0]
         ability_bonus_array[one_point_ability] = 1
 
     if array_selection == "Apply 1/1/1":
@@ -278,13 +278,13 @@ def main() -> None:
     console.print(
         "A background gives your character a specified Origin feat.", style="default"
     )
-    oSheet.set("feats", tashio(oSRD.getFeatsByCategory("Origin")))
+    oSheet.set("feats", io(oSRD.getFeatsByCategory("Origin")))
 
     console.print(
         "A background gives your character proficiency in two specified skills.",
         style="default",
     )
-    skills = tashio(
+    skills = io(
         oSRD.getBackgroundSkills(oPC.getMyBackground()),
         loop_count=2,
     )
@@ -295,13 +295,13 @@ def main() -> None:
         "specific tool or one chosen from the Artisan's Tools category.",
         style="default",
     )
-    tool = tashio(
+    tool = io(
         oSRD.getBackgroundToolProficiencies(oPC.getMyBackground()),
     )
     oSheet.set("tools", tool)
 
     console.print("Choose a species for your character.", style="default")
-    species = tashio(oSRD.getSpecies())[0]
+    species = io(oSRD.getSpecies())[0]
     oSheet.set(
         {
             "size": oSRD.getSizeBySpecies(species),
@@ -315,7 +315,7 @@ def main() -> None:
         "Your character knows at least three languages: Common plus two languages.",
         style="default",
     )
-    languages = tashio(
+    languages = io(
         oSRD.getStandardLanguages(),
         loop_count=2,
     )
@@ -326,7 +326,7 @@ def main() -> None:
 
     # Choose an alignment
     console.print("Choose your alignment.", style="default")
-    oSheet.set("alignment", tashio(oSRD.getAlignments())[0])
+    oSheet.set("alignment", io(oSRD.getAlignments())[0])
 
     # Saving Throws
     # Skills
@@ -347,17 +347,17 @@ def main() -> None:
         allotted_skills = 2
     oSheet.set(
         "skills",
-        tashio(skills, loop_count=allotted_skills),
+        io(skills, loop_count=allotted_skills),
     )
 
     console.print("Choose your feats.", style="default")
     ability_score_improvements = oSRD.getClassFeatures(
         klass, oPC.getTotalLevel()
     ).count("Ability Score Improvement")
-    oSheet.set("feats", tashio(get_feats(), loop_count=ability_score_improvements))
+    oSheet.set("feats", io(get_feats(), loop_count=ability_score_improvements))
 
     console.print("What's your gender?", style="default")
-    oSheet.set("gender", tashio(["Female", "Male"])[0])
+    oSheet.set("gender", io(["Female", "Male"])[0])
 
     oSheet.set(
         {
@@ -376,7 +376,7 @@ def main() -> None:
         )
         oSheet.set(
             "tools",
-            tashio(
+            io(
                 oSRD.getToolProficienciesByClass(klass, oPC.getMyToolProficiencies()),
                 loop_count=3,
             ),
@@ -388,7 +388,7 @@ def main() -> None:
         )
         oSheet.set(
             "tools",
-            tashio(
+            io(
                 oSRD.getToolProficienciesByClass(klass, oPC.getMyToolProficiencies()),
             ),
         )
@@ -409,7 +409,7 @@ def main() -> None:
             )
 
             console.print(f"Choose a level {spell_level} spell.", style="default")
-            chosen_spell = tashio(
+            chosen_spell = io(
                 oSRD.getSpellListByClass(klass, spell_level)[spell_level]
             )[0]
             prepared_spells.append(chosen_spell)
