@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from math import ceil
-from typing import Any, Dict, List, NoReturn, Tuple
+from typing import Any, Dict, List, Tuple
 
 
 @dataclass
@@ -15,7 +15,6 @@ class CharacterSheet:
     feats: list = field(default_factory=list)
     features: list = field(default_factory=list)
     gender: str = field(default="")
-    gold: int = field(default=0)
     hit_die: int = field(default=0)
     hit_points: int = field(init=False)
     initiative: int = field(default=0)
@@ -105,139 +104,129 @@ class CharacterSheet:
 
 @dataclass
 class PlayerCharacter:
-    character_sheet: CharacterSheet
+    chst: CharacterSheet
 
     def getAttributes(self) -> Dict[str, Dict[str, Any]]:
-        """Returns a dictionary of all attributes."""
-        return self.character_sheet.attributes
+        """Returns a dictionary of all attributes.
+
+        Returns:
+            Dict[str, Dict[str, Any]]: Returns character abilities/scores/modifiers."""
+        return self.chst.attributes
 
     def getAttributeModifier(self, attribute: str) -> int:
-        """Returns the modifier of a specified attribute."""
-        return self.character_sheet.attributes[attribute]["modifier"]
+        """Returns the modifier of a specified attribute.
+
+        Args:
+            attribute (str): Name of the attribute to get the modifier for.
+
+        Returns:
+            int: Returns the modifier."""
+        return self.chst.attributes[attribute]["modifier"]
 
     def getAttributeScore(self, attribute: str) -> int:
-        """Returns the score of a specified attribute."""
-        return self.character_sheet.attributes[attribute]["score"]
+        """Returns the score of a specified attribute.
 
-    def getCasterAttribute(self, klass: str, subklass: str) -> int | NoReturn:
-        """Returns caster's primary attribute score by class/subclass."""
-        if klass in (
-            "Cleric",
-            "Druid",
-            "Ranger",
-        ):
-            return self.getAttributeScore("Wisdom")
+        Args:
+            attribute (str): Name of the attribute to get the score for.
 
-        if klass in (
-            "Bard",
-            "Paladin",
-            "Sorcerer",
-            "Warlock",
-        ):
-            return self.getAttributeScore("Charisma")
-
-        if klass == "Wizard" or subklass in (
-            "Arcane Trickster",
-            "Eldritch Knight",
-        ):
-            return self.getAttributeScore("Intelligence")
-
-        raise ValueError("Invalid spellcaster class specified.")
+        Returns:
+            int: Returns the score."""
+        return self.chst.attributes[attribute]["score"]
 
     def getClassLevel(self, klass: str) -> int:
         """Returns the specified level by klass."""
         try:
-            return self.character_sheet.classes[klass]["level"]
+            return self.chst.classes[klass]["level"]
         except KeyError:
             return 0
 
     def getClassSubclass(self, klass: str) -> str:
         """Returns the specified subclass by klass."""
-        return self.character_sheet.classes[klass]["subclass"]
+        return self.chst.classes[klass]["subclass"]
 
     def getMyArmorProficiencies(self) -> List[str]:
         """Returns the character's armor proficiency list."""
-        return self.character_sheet.armors
+        return self.chst.armors
 
     def getMyAlignment(self) -> str:
         """Returns the character's alignment."""
-        return self.character_sheet.alignment
+        return self.chst.alignment
 
     def getMyBackground(self):
         """Returns the character's background."""
-        return self.character_sheet.background
+        return self.chst.background
 
     def getMyBonus(self):
         """Returns the character's bonus."""
-        return self.character_sheet.bonus
+        return self.chst.bonus
 
     def getMyClasses(self) -> Tuple[str, ...]:
         """Returns all the character's class names."""
-        return tuple(self.character_sheet.classes.keys())
+        return tuple(self.chst.classes.keys())
 
     def getMyFeats(self) -> List[str]:
         """Returns the character's feat list."""
-        return self.character_sheet.feats
+        return self.chst.feats
 
     def getMyFeatures(self) -> List[str]:
         """Returns the character's class features."""
-        return self.character_sheet.features
+        return self.chst.features
 
     def getMyGender(self) -> str:
         """Returns the character's gender."""
-        return self.character_sheet.gender
+        return self.chst.gender
 
     def getMyLanguages(self):
         """Returns the character's languages."""
-        return self.character_sheet.languages
+        return self.chst.languages
 
     def getMyName(self) -> str:
         """Returns the character's name."""
-        return self.character_sheet.name
+        return self.chst.name
 
     def getMyPreparedSpellCount(self):
         """Returns the character's number of prepared spells."""
-        return self.character_sheet.prepared_spells
+        return self.chst.prepared_spells
 
     def getMySpecies(self) -> str:
         """Returns the character's species."""
-        return self.character_sheet.species
+        return self.chst.species
 
     def getMyRawClasses(self) -> Dict[str, Dict[str, Any]]:
         """Returns all the character's class info."""
-        return self.character_sheet.classes
+        return self.chst.classes
 
     def getMySavingThrows(self) -> List[str]:
         """Returns the character's saving throw list."""
-        return self.character_sheet.savingthrows
+        return self.chst.savingthrows
 
     def getMySkills(self) -> List[str]:
         """Returns the character's skill list."""
-        return self.character_sheet.skills
+        return self.chst.skills
 
     def getMySpeed(self) -> int:
         """Returns the character's speed."""
-        return self.character_sheet.speed
+        return self.chst.speed
 
     def getMySpellSlots(self) -> List[int]:
         """Returns the character's spell slots."""
-        return self.character_sheet.spell_slots
+        return self.chst.spell_slots
 
     def getMySubclasses(self) -> List[str]:
         """Returns all the character's selected subclasses."""
-        return [v["subclass"] for v in tuple(self.character_sheet.classes.values())]
+        return [v["subclass"] for v in tuple(self.chst.classes.values())]
 
     def getMyToolProficiencies(self) -> List[str]:
         """Returns the character's tool proficiency list."""
-        return self.character_sheet.tools
+        return self.chst.tools
 
     def getMyWeaponProficiencies(self) -> List[str]:
         """Returns the character's weapon proficiency list."""
-        return self.character_sheet.weapons
+        return self.chst.weapons
 
     def getTotalLevel(self) -> int:
         """Returns the total level for all character classes."""
-        return sum([v["level"] for v in tuple(self.character_sheet.classes.values())])
+        return sum([v["level"] for v in tuple(self.chst.classes.values())])
 
     def getUpgradeableAttributes(self, bonus: int) -> List[str]:
         """Returns a list of all upgradeable attributes."""
@@ -248,10 +237,6 @@ class PlayerCharacter:
             upgradeable_attributes.append(attribute)
         return upgradeable_attributes
 
-    def hasAttributes(self) -> bool:
-        """Returns True if attributes have been set. False otherwise."""
-        return len(self.getAttributes()) > 0
-
     def hasClass(self, klass: str) -> bool:
         """Returns True if character is a member of klass. False otherwise."""
         return klass in self.getMyClasses()
@@ -259,10 +244,6 @@ class PlayerCharacter:
     def hasClasses(self) -> bool:
         """Returns True if character has classes set. False otherwise."""
         return len(self.getMyClasses()) > 0
-
-    def hasSpecies(self) -> bool:
-        """Returns True if character has a set race. False otherwise."""
-        return self.getMySpecies() != ""
 
     def isSpellcaster(self) -> bool:
         """Returns True if the character is a spellcaster. False otherwise."""
