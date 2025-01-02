@@ -152,12 +152,18 @@ class PlayerCharacter:
         """Returns the character's alignment."""
         return self.chst.alignment
 
-    def getMyBackground(self):
-        """Returns the character's background."""
+    def getMyBackground(self) -> str:
+        """Returns the character's background.
+
+        Returns:
+            str: Returns the character's background."""
         return self.chst.background
 
-    def getMyBonus(self):
-        """Returns the character's bonus."""
+    def getMyBonus(self) -> Dict[str, int]:
+        """Returns the character's bonus.
+
+        Returns:
+            Dict[str, int]: Returns a dict of applicable ability score bonuses."""
         return self.chst.bonus
 
     def getMyClasses(self) -> Tuple[str, ...]:
@@ -165,15 +171,24 @@ class PlayerCharacter:
         return tuple(self.chst.classes.keys())
 
     def getMyFeats(self) -> List[str]:
-        """Returns the character's feat list."""
+        """Returns the character's feat list.
+
+        Returns:
+            List[str]: Returns a list of all possessed feats."""
         return self.chst.feats
 
     def getMyFeatures(self) -> List[str]:
-        """Returns the character's class features."""
+        """Returns the character's class features.
+
+        Returns:
+            List[str]: Returns a list of all possessed features."""
         return self.chst.features
 
     def getMyGender(self) -> str:
-        """Returns the character's gender."""
+        """Returns the character's gender.
+
+        Returns:
+            str: Returns the character's gender."""
         return self.chst.gender
 
     def getMyLanguages(self):
@@ -181,7 +196,10 @@ class PlayerCharacter:
         return self.chst.languages
 
     def getMyName(self) -> str:
-        """Returns the character's name."""
+        """Returns the character's name.
+
+        Returns:
+            str: Returns the character's name."""
         return self.chst.name
 
     def getMyPreparedSpellCount(self):
@@ -189,7 +207,10 @@ class PlayerCharacter:
         return self.chst.prepared_spells
 
     def getMySpecies(self) -> str:
-        """Returns the character's species."""
+        """Returns the character's species.
+
+        Returns:
+            str: Returns the character's species."""
         return self.chst.species
 
     def getMyRawClasses(self) -> Dict[str, Dict[str, Any]]:
@@ -246,7 +267,10 @@ class PlayerCharacter:
         return len(self.getMyClasses()) > 0
 
     def isSpellcaster(self) -> bool:
-        """Returns True if the character is a spellcaster. False otherwise."""
+        """Determines if character is of a spellcasting class.
+
+        Returns:
+            bool: Returns True if spellcaster or False otherwise."""
         if any(
             klass in self.getMyClasses()
             for klass in (

@@ -56,7 +56,10 @@ class SystemResourceDocument:
         return self.srd["feats"][feat]["ability"]
 
     def getAlignments(self) -> List[str]:
-        """Returns a list of alignments."""
+        """Returns a list of alignments.
+
+        Returns:
+            List[str]: Returns a list of all applicable DnD alignments."""
         return self.srd["alignments"]
 
     def getArmorProficienciesByClass(self, klass: str) -> List[str]:
@@ -103,7 +106,14 @@ class SystemResourceDocument:
             return 0
 
     def getClassFeatures(self, klass: str, class_level: int) -> List[str]:
-        """Returns features by class and level."""
+        """Returns all features based on the specified class and level.
+
+        Args:
+            attribute (str): Name of the class to get class features for.
+            class_level (int): Level of the class to get class features for.
+
+        Returns:
+            List[str]: Returns the applicable class features."""
         class_features = list()
         for level, features in self.srd["classes"][klass]["features"].items():
             if class_level >= level:
@@ -133,7 +143,13 @@ class SystemResourceDocument:
         return list(self.srd["feats"])
 
     def getFeatsByCategory(self, category: str) -> List[str]:
-        """Returns a list of feats by category."""
+        """Returns a list of feats by category.
+
+        Args:
+            category (str): Category of the feats requested: General, Epic Boon, Fighting Style, or Origin.
+
+        Returns:
+            List[str]: Returns a list of feats for the specified category."""
         feats_by_category = list()
         for feat, params in self.srd["feats"].items():
             if params["category"] == category:
@@ -145,7 +161,13 @@ class SystemResourceDocument:
         return self.srd["feats"][feat]["features"]
 
     def getHitDieByClass(self, klass: str) -> int:
-        """Returns hit die type by class."""
+        """Returns hit die type by class.
+
+        Args:
+            klass (str): Name of the class to get hit die type of.
+
+        Returns:
+            int: Returns the class' hit die value."""
         return self.srd["classes"][klass]["hit_die"]
 
     def getLevelRequirementByFeat(self, feat: str) -> int:
@@ -182,7 +204,10 @@ class SystemResourceDocument:
             return ""
 
     def getSpecies(self) -> List[str]:
-        """Returns a list of species."""
+        """Returns a list of species.
+
+        Returns:
+            List[str]: Returns a list of all applicable DnD species."""
         return list(self.srd["species"].keys())
 
     def getSpeedBySpecies(self, species: str) -> List[str]:
