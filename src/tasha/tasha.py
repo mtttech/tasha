@@ -125,7 +125,7 @@ def has_requirements(feat: str) -> bool:
     if len(required_abilities) > 0:
         ability_chk_success = False
         for ability in required_abilities:
-            if oPC.getAttributeScore(ability) >= ability_requirements[ability]:
+            if oPC.getScoreByAbility(ability) >= ability_requirements[ability]:
                 ability_chk_success = True
                 break
 
@@ -362,9 +362,9 @@ def main() -> None:
     oSheet.set(
         {
             "cantrips": oSRD.getCantripsKnownByClass(klass, oPC.getTotalLevel()),
-            "features": oSRD.getClassFeatures(klass, oPC.getClassLevel(klass)),
+            "features": oSRD.getClassFeatures(klass, oPC.getLevelByClass(klass)),
             "hit_die": oSRD.getHitDieByClass(klass),
-            "initiative": oPC.getAttributeModifier("Dexterity"),
+            "initiative": oPC.getModifierByAbility("Dexterity"),
             "savingthrows": oSRD.getSavingThrowsByClass(klass),
             "spell_slots": oSRD.getClassSpellSlots(klass, oPC.getTotalLevel()),
         }
