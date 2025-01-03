@@ -25,9 +25,7 @@ cd tasha
 
 poetry build
 
-cd dist
-
-pipx install tasha-0.*.*-py3-none-any.whl
+pipx install dist/tasha-0.*.*-py3-none-any.whl
 ```
 
 ### Usage
@@ -38,7 +36,11 @@ Run *Tasha* by typing the following command.
 tasha
 ```
 
-Characters created by Tasha are saved to your *HOME* directory within the *.config/tasha/characters* folder, which will be created if it doesn't already exist. Characters will be saved in the .TOML format. Below is an example of such a character.
+Once run, *Tasha* will send a series of prompts that will be used to generate your character.
+
+Once complete, your character will be saved as a TOML file within your *HOME* directory *~/.config/tasha/characters*. This folder will be created if it doesn't already exist.
+
+Below is an example of such a character.
 
 ```
 alignment = "Chaotic Neutral"
