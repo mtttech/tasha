@@ -45,6 +45,16 @@ class SystemResourceDocument:
             )
         )
 
+    def getAbilitiesByBackground(self, background: str) -> List[str]:
+        """Returns a list of abilities by background.
+
+        Args:
+            background (str): Background to get the abilities for.
+
+        Returns:
+            List[str]: Returns a list of background abilities."""
+        return self.srd["backgrounds"][background]["ability"]
+
     def getAbilityRequirementsByFeat(self, feat: str) -> Dict[str, int]:
         """Returns ability score requirements by feat.
 
@@ -72,7 +82,7 @@ class SystemResourceDocument:
             List[str]: Returns list of armor proficiencies by klass."""
         return self.srd["classes"][klass]["armors"]
 
-    def getArmorProficiencyRequirementByFeat(self, feat: str) -> List[str]:
+    def getArmorRequirementsByFeat(self, feat: str) -> List[str]:
         """Returns armor proficiency requirements by feat.
 
         Args:
@@ -81,18 +91,6 @@ class SystemResourceDocument:
         Returns:
             List[str]: Returns a list of armor proficiency requirements."""
         return self.srd["feats"][feat]["armors"]
-
-    def getBackgroundAbilityScores(self, background: str) -> List[str]:
-        """Returns a list of abilities by background."""
-        return self.srd["backgrounds"][background]["ability"]
-
-    def getBackgroundSkills(self, background: str) -> List[str]:
-        """Returns a list of skills by background."""
-        return self.srd["backgrounds"][background]["skills"]
-
-    def getBackgroundToolProficiencies(self, background: str) -> List[str]:
-        """Returns tool proficiencies by background."""
-        return self.srd["backgrounds"][background]["tools"]
 
     def getBackgrounds(self) -> List[str]:
         """Returns a list of backgrounds."""
@@ -235,6 +233,16 @@ class SystemResourceDocument:
         except KeyError:
             return ""
 
+    def getSkillsByBackground(self, background: str) -> List[str]:
+        """Returns a list of skills by background.
+
+        Args:
+            background (str): Background to get the skills for.
+
+        Returns:
+            List[str]: Returns a list of background skills."""
+        return self.srd["backgrounds"][background]["skills"]
+
     def getSpecies(self) -> List[str]:
         """Returns a list of species.
 
@@ -263,6 +271,16 @@ class SystemResourceDocument:
             return [l for l in language_list if l not in excl]
         return language_list
 
+    def getToolProficienciesByBackground(self, background: str) -> List[str]:
+        """Returns tool proficiencies by background.
+
+        Args:
+            background (str): Background to get tool proficiencies for.
+
+        Returns:
+            List[str]: Returns a list of background tool proficiencies."""
+        return self.srd["backgrounds"][background]["tools"]
+
     def getToolProficienciesByClass(
         self, klass: str, excl: Optional[List[str]] = None
     ) -> List[str]:
@@ -271,19 +289,6 @@ class SystemResourceDocument:
         if isinstance(excl, list):
             return [t for t in tool_proficiencies if t not in excl]
         return tool_proficiencies
-
-    def getListSpells(self, klass: str, level: int) -> List[str]:
-        """Returns a list of spells by available spell slots."""
-        max_spell_level = self.srd["classes"][klass]["spell_slots"][level].split(",")
-        spell_list = []
-
-        for spell_level in range(0, len(max_spell_level)):
-            if spell_level == 0:
-                continue
-
-            spell_list += self.getSpellListByClass(klass, spell_level)
-
-        return spell_list
 
     def getSubclassesByClass(self, klass: str) -> List[str]:
         """Returns a list of subclasses by class."""
@@ -296,10 +301,3 @@ class SystemResourceDocument:
     def getWeaponProficienciesByClass(self, klass: str) -> List[str]:
         """Returns weapon proficiencies by class."""
         return self.srd["classes"][klass]["weapons"]
-
-    @staticmethod
-    def isPreparedCaster(klass: str) -> bool:
-        """Returns True if caster is a member of a prepared spells class."""
-        if klass in ("Artificer", "Cleric", "Druid", "Paladin", "Wizard"):
-            return True
-        return False
