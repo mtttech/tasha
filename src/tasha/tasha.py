@@ -132,7 +132,7 @@ def has_requirements(feat: str) -> bool:
         if not ability_chk_success:
             return ability_chk_success
 
-    armor_requirements = oSRD.getArmorProficiencyRequirementByFeat(feat)
+    armor_requirements = oSRD.getArmorRequirementsByFeat(feat)
     if len(armor_requirements) > 0:
         for armor in armor_requirements:
             if armor not in oPC.getMyArmorProficiencies():
@@ -259,7 +259,7 @@ def main() -> None:
         ["Apply 2/1", "Apply 1/1/1"],
     )[0]
     if array_selection == "Apply 2/1":
-        background_abilities = oSRD.getBackgroundAbilityScores(oPC.getMyBackground())
+        background_abilities = oSRD.getAbilitiesByBackground(oPC.getMyBackground())
 
         console.print("Choose which ability to apply a 2 point bonus", style="default")
         two_point_ability = io(background_abilities)[0]
@@ -270,7 +270,7 @@ def main() -> None:
         ability_bonus_array[one_point_ability] = 1
 
     if array_selection == "Apply 1/1/1":
-        for ability in oSRD.getBackgroundAbilityScores(oPC.getMyBackground()):
+        for ability in oSRD.getAbilitiesByBackground(oPC.getMyBackground()):
             ability_bonus_array[ability] = 1
 
     oSheet.set("bonus", ability_bonus_array)
@@ -285,7 +285,7 @@ def main() -> None:
         style="default",
     )
     skills = io(
-        oSRD.getBackgroundSkills(oPC.getMyBackground()),
+        oSRD.getSkillsByBackground(oPC.getMyBackground()),
         loop_count=2,
     )
     oSheet.set("skills", skills)
@@ -296,7 +296,7 @@ def main() -> None:
         style="default",
     )
     tool = io(
-        oSRD.getBackgroundToolProficiencies(oPC.getMyBackground()),
+        oSRD.getToolProficienciesByBackground(oPC.getMyBackground()),
     )
     oSheet.set("tools", tool)
 
