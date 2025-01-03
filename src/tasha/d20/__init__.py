@@ -128,18 +128,31 @@ class SystemResourceDocument:
         return class_skills
 
     def getClassSpellSlots(self, klass: str, level: int) -> List[int]:
-        """Returns spell slots by class and level."""
+        """Returns spell slots by class and level.
+
+        Args:
+            klass (str): Class to get spell slots for.
+            level (int):  Level to get spell slots for.
+
+        Returns:
+            List[str]: Returns a list of spell slots."""
         try:
             return self.srd["classes"][klass]["spell_slots"][level]
         except KeyError:
             return [0]
 
     def getClasses(self) -> List[str]:
-        """Returns a list of classes."""
+        """Returns a list of classes.
+
+        Returns:
+            List[str]: Returns a list of classes."""
         return list(self.srd["classes"].keys())
 
     def getFeats(self) -> List[str]:
-        """Returns all feats."""
+        """Returns all feats.
+
+        Returns:
+            List[str]: Returns a list of feats."""
         return list(self.srd["feats"])
 
     def getFeatsByCategory(self, category: str) -> List[str]:
@@ -157,7 +170,13 @@ class SystemResourceDocument:
         return feats_by_category
 
     def getFeatureRequirementsByFeat(self, feat: str) -> List[str]:
-        """Returns feature requirements by feat."""
+        """Returns feature requirements by feat.
+
+        Args:
+            feat (str): Name of feat to get feature requirements for.
+
+        Returns:
+            List[str]: Returns a list of feature requirements."""
         return self.srd["feats"][feat]["features"]
 
     def getHitDieByClass(self, klass: str) -> int:
@@ -171,11 +190,24 @@ class SystemResourceDocument:
         return self.srd["classes"][klass]["hit_die"]
 
     def getLevelRequirementByFeat(self, feat: str) -> int:
-        """Returns level requirement by feat."""
+        """Returns level requirement by feat.
+
+        Args:
+            feat (str): Name of the feat to get level requirements for.
+
+        Returns:
+            int: Returns the level requirement of the feat."""
         return self.srd["feats"][feat]["level"]
 
     def getPreparedSpellCountByClass(self, klass: str, level: int) -> int:
-        """Returns number of prepared spells by class and level."""
+        """Returns number of prepared spells by class and level.
+
+        Args:
+            klass (str): Name of the class to get the prepared spell count for.
+            level (int): Level of the class to get the prepared spell count for.
+
+        Returns:
+            int: Returns the applicable number of prepared spells."""
         try:
             return self.srd["classes"][klass]["prepared_spells"][level]
         except KeyError:

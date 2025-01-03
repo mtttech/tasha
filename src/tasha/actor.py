@@ -42,7 +42,10 @@ class CharacterSheet:
             self.initiative = 0
 
     def roll_hit_points(self) -> int:
-        """Calculates the character's total hit points."""
+        """Calculates the character's total hit points.
+
+        Returns:
+            int: Returns the calculated hit point total."""
         try:
             modifier = self.attributes["Constitution"]["modifier"]
         except KeyError:
@@ -113,7 +116,20 @@ class PlayerCharacter:
             Dict[str, Dict[str, Any]]: Returns character abilities/scores/modifiers."""
         return self.chst.attributes
 
-    def getAttributeModifier(self, attribute: str) -> int:
+    def getLevelByClass(self, klass: str) -> int:
+        """Returns the specified level by klass.
+
+        Args:
+            klass (str): Class to get the level for.
+
+        Returns:
+            int: Returns the level of the specified class."""
+        try:
+            return self.chst.classes[klass]["level"]
+        except KeyError:
+            return 0
+
+    def getModifierByAbility(self, attribute: str) -> int:
         """Returns the modifier of a specified attribute.
 
         Args:
@@ -122,27 +138,6 @@ class PlayerCharacter:
         Returns:
             int: Returns the modifier."""
         return self.chst.attributes[attribute]["modifier"]
-
-    def getAttributeScore(self, attribute: str) -> int:
-        """Returns the score of a specified attribute.
-
-        Args:
-            attribute (str): Name of the attribute to get the score for.
-
-        Returns:
-            int: Returns the score."""
-        return self.chst.attributes[attribute]["score"]
-
-    def getClassLevel(self, klass: str) -> int:
-        """Returns the specified level by klass."""
-        try:
-            return self.chst.classes[klass]["level"]
-        except KeyError:
-            return 0
-
-    def getClassSubclass(self, klass: str) -> str:
-        """Returns the specified subclass by klass."""
-        return self.chst.classes[klass]["subclass"]
 
     def getMyArmorProficiencies(self) -> List[str]:
         """Returns the character's armor proficiency list."""
@@ -244,6 +239,26 @@ class PlayerCharacter:
     def getMyWeaponProficiencies(self) -> List[str]:
         """Returns the character's weapon proficiency list."""
         return self.chst.weapons
+
+    def getScoreByAbility(self, attribute: str) -> int:
+        """Returns the score of a specified attribute.
+
+        Args:
+            attribute (str): Name of the attribute to get the score for.
+
+        Returns:
+            int: Returns the score."""
+        return self.chst.attributes[attribute]["score"]
+
+    def getSubclassByClass(self, klass: str) -> str:
+        """Returns the specified subclass by klass.
+
+        Args:
+            klass (str): Class to get the subclass for.
+
+        Returns:
+            str: Returns the subclass of the specified class."""
+        return self.chst.classes[klass]["subclass"]
 
     def getTotalLevel(self) -> int:
         """Returns the total level for all character classes."""
