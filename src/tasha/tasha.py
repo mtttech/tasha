@@ -29,7 +29,7 @@ oSRD = SystemResourceDocument()
 
 
 def assign_abilities() -> Dict[str, Dict[str, int]]:
-    """Assigns a set of randomly generated ability scores.
+    """Prompt to assign a score to each of the six abilities.
 
     Returns:
         Dict[str, Dict[str, int]]: Returns dict of abilities, scores, modifiers."""
@@ -76,13 +76,13 @@ def assign_abilities() -> Dict[str, Dict[str, int]]:
 
 
 def calculate_modifier(score: int) -> int:
-    """Calculates the modifier value of the specified score.
+    """Calculates the modifier of the specified score.
 
     Args:
         score (int): Score to calculate the modifier for.
 
     Returns:
-        int: Returns result of the modifier calculation."""
+        int: Returns the calculated modifier of the specified score."""
     return floor((score - 10) / 2)
 
 
@@ -107,13 +107,19 @@ def generate_scores() -> List[int]:
 def get_feats() -> List[str]:
     """Returns a list of selectable feats.
 
+    1. feats the character doesn't already have
+    2. and feats the character meets the requirements for
+
     Returns:
         List[str]: List of all relevant feats."""
     return [f for f in oSRD.getFeats() if has_requirements(f)]
 
 
 def has_requirements(feat: str) -> bool:
-    """Checks if the prerequisites for a specified feat are met.
+    """Determines if a character meets the prerequisites for the specified feat.
+
+    1. feats the character doesn't already have
+    2. and feats the character meets the requirements for
 
     Args:
         feat (str): Name of the feat.
@@ -337,7 +343,7 @@ def main() -> None:
     # Prepared Spells
     # Spell Slots
     klass = oPC.getMyClasses()[0]
-    skills = oSRD.getClassSkills(klass, oPC.getMySkills())
+    skills = oSRD.getSkillsByClass(klass, oPC.getMySkills())
     console.print("Choose a class skill.", style="default")
     if klass == "Rogue":
         allotted_skills = 4
@@ -351,7 +357,7 @@ def main() -> None:
     )
 
     console.print("Choose your feats.", style="default")
-    ability_score_improvements = oSRD.getClassFeatures(
+    ability_score_improvements = oSRD.getFeaturesByClass(
         klass, oPC.getTotalLevel()
     ).count("Ability Score Improvement")
     oSheet.set("feats", io(get_feats(), loop_count=ability_score_improvements))
@@ -362,11 +368,11 @@ def main() -> None:
     oSheet.set(
         {
             "cantrips": oSRD.getCantripsKnownByClass(klass, oPC.getTotalLevel()),
-            "features": oSRD.getClassFeatures(klass, oPC.getLevelByClass(klass)),
+            "features": oSRD.getFeaturesByClass(klass, oPC.getLevelByClass(klass)),
             "hit_die": oSRD.getHitDieByClass(klass),
             "initiative": oPC.getModifierByAbility("Dexterity"),
             "savingthrows": oSRD.getSavingThrowsByClass(klass),
-            "spell_slots": oSRD.getClassSpellSlots(klass, oPC.getTotalLevel()),
+            "spell_slots": oSRD.getSpellslotsByClass(klass, oPC.getTotalLevel()),
         }
     )
 
@@ -409,9 +415,7 @@ def main() -> None:
             )
 
             console.print(f"Choose a level {spell_level} spell.", style="default")
-            chosen_spell = io(
-                oSRD.getSpellListByClass(klass, spell_level)[spell_level]
-            )[0]
+            chosen_spell = io(oSRD.getSpellsByLevel(spell_level, klass)[spell_level])[0]
             prepared_spells.append(chosen_spell)
 
         oSheet.set("prepared_spells", {klass: prepared_spells})
