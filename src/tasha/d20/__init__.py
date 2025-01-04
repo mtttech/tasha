@@ -267,7 +267,8 @@ class SystemResourceDocument:
             klass (str): Class to get spell list for.
 
         Returns:
-            Dict[int, List[str]]: Returns a dict of level with spells for the specified level."""
+            Dict[int, List[str]]: Returns a dict of level with spells for the specified level.
+        """
         try:
             spell_list = dict()
             for level, spells in self.srd["spells"][klass].items():
