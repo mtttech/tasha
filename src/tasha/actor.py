@@ -5,6 +5,8 @@ from typing import Any, Dict, List, Tuple
 
 @dataclass
 class CharacterSheet:
+    """Stores character information."""
+
     alignment: str = field(default="")
     armors: list = field(default_factory=list)
     attributes: dict = field(default_factory=dict)
@@ -107,6 +109,8 @@ class CharacterSheet:
 
 @dataclass
 class PlayerCharacter:
+    """Retrieves information from a character sheet."""
+
     chst: CharacterSheet
 
     def getAttributes(self) -> Dict[str, Dict[str, Any]]:
