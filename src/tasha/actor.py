@@ -224,7 +224,7 @@ class PlayerCharacter:
         """Returns the character's speed."""
         return self.chst.speed
 
-    def getMySpellSlots(self) -> List[int]:
+    def getMySpellslots(self) -> List[int]:
         """Returns the character's spell slots."""
         return self.chst.spell_slots
 
@@ -263,15 +263,6 @@ class PlayerCharacter:
     def getTotalLevel(self) -> int:
         """Returns the total level for all character classes."""
         return sum([v["level"] for v in tuple(self.chst.classes.values())])
-
-    def getUpgradeableAttributes(self, bonus: int) -> List[str]:
-        """Returns a list of all upgradeable attributes."""
-        upgradeable_attributes = list()
-        for attribute, values in self.getAttributes().items():
-            if (values["score"] + bonus) > 20:
-                continue
-            upgradeable_attributes.append(attribute)
-        return upgradeable_attributes
 
     def hasClass(self, klass: str) -> bool:
         """Returns True if character is a member of klass. False otherwise."""

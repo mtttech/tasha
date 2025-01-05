@@ -406,7 +406,7 @@ def main() -> None:
         prepared_spell_count = oSRD.getPreparedSpellCountByClass(
             klass, oPC.getTotalLevel()
         )
-        spell_levels = [str(l + 1) for l, _ in enumerate(oPC.getMySpellSlots())]
+        spell_levels = [str(l + 1) for l, _ in enumerate(oPC.getMySpellslots())]
         while len(prepared_spells) < prepared_spell_count:
             spell_level = IntPrompt.ask(
                 f"Choose a spell by level to create your prepared spell list.",
