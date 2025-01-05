@@ -62,7 +62,7 @@ class SystemResourceDocument:
             feat (str): Name of the feat to get requirements for.
 
         Returns:
-            Dict[str, int]: Returns dict of ability requirements."""
+            Dict[str, int]: Returns a dict of ability requirements."""
         return self.srd["feats"][feat]["ability"]
 
     def getAlignments(self) -> List[str]:
@@ -79,7 +79,7 @@ class SystemResourceDocument:
             klass (str): Name of the class to get armor proficiencies for.
 
         Returns:
-            List[str]: Returns list of armor proficiencies by klass."""
+            List[str]: Returns a list of armor proficiencies by klass."""
         return self.srd["classes"][klass]["armors"]
 
     def getArmorRequirementsByFeat(self, feat: str) -> List[str]:
@@ -96,7 +96,7 @@ class SystemResourceDocument:
         """Returns a list of backgrounds.
 
         Returns:
-            List[str]: Returns a list of backgrounds."""
+            List[str]: Returns a list of applicable backgrounds."""
         return list(self.srd["backgrounds"].keys())
 
     def getCantripsKnownByClass(self, klass: str, level: int) -> int:
@@ -107,7 +107,7 @@ class SystemResourceDocument:
             level (int): Level of the class to get the number of cantrips known for.
 
         Returns:
-            List[str]: Returns a list of spell slots."""
+            int: Returns a count of cantrips spells known."""
         try:
             return self.srd["classes"][klass]["cantrips"][level]
         except KeyError:
@@ -117,14 +117,14 @@ class SystemResourceDocument:
         """Returns a list of classes.
 
         Returns:
-            List[str]: Returns a list of classes."""
+            List[str]: Returns a list of applicable classes."""
         return list(self.srd["classes"].keys())
 
     def getFeats(self) -> List[str]:
         """Returns all feats.
 
         Returns:
-            List[str]: Returns a list of feats."""
+            List[str]: Returns a list of applicable feats."""
         return list(self.srd["feats"])
 
     def getFeatsByCategory(self, category: str) -> List[str]:
@@ -159,7 +159,7 @@ class SystemResourceDocument:
             class_level (int): Level of the class to get features for.
 
         Returns:
-            List[str]: Returns the applicable class features."""
+            List[str]: Returns a list of features by class."""
         class_features = list()
         for level, features in self.srd["classes"][klass]["features"].items():
             if class_level >= level:
@@ -201,18 +201,36 @@ class SystemResourceDocument:
             return 0
 
     def getRareLanguages(self, excl: Optional[List[str]] = None) -> List[str]:
-        """Returns all rare languages (minus exclusions, if applicable)."""
+        """Returns all rare languages (minus exclusions, if applicable).
+
+        Args:
+            excl Optional[List[str]]: List of languages to exclude, if applicable.
+
+        Returns:
+            List[str]: Returns a list of applicable languages."""
         language_list = self.srd["languages"]["rare"]
         if isinstance(excl, list):
             return [l for l in language_list if l not in excl]
         return language_list
 
     def getSavingThrowsByClass(self, klass: str) -> List[str]:
-        """Returns saving throw proficiencies by class."""
+        """Returns saving throw proficiencies by class.
+
+        Args:
+            klass (str): Name of the class to get saving throws for.
+
+        Returns:
+            List[str]: Returns a list applicable saving throws."""
         return self.srd["classes"][klass]["savingthrows"]
 
-    def getSizeBySpecies(self, species: str) -> List[str]:
-        """Returns size type by species."""
+    def getSizeBySpecies(self, species: str) -> str:
+        """Returns size by species.
+
+        Args:
+            species (str): Name of the species to get the size for.
+
+        Returns:
+            str: Returns the size type of the species."""
         return self.srd["species"][species]["size"]
 
     def getSkillAbility(self, skill: str) -> str:
