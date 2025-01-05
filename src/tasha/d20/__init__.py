@@ -273,8 +273,14 @@ class SystemResourceDocument:
             List[str]: Returns a list of all applicable DnD species."""
         return list(self.srd["species"].keys())
 
-    def getSpeedBySpecies(self, species: str) -> List[str]:
-        """Returns speed (in feet) by species."""
+    def getSpeedBySpecies(self, species: str) -> int:
+        """Returns speed (in feet) by species.
+
+        Args:
+            species (str): Name of the species to get the speed for.
+
+        Returns:
+            int: Returns the base speed value of the species."""
         return self.srd["species"][species]["speed"]
 
     def getSpellsByLevel(self, spell_level: int, klass: str) -> Dict[int, List[str]]:
