@@ -15,6 +15,8 @@ from . import (
 
 
 class SystemResourceDocument:
+    """Class to reference d20 rule guidelines."""
+
     def __init__(self) -> None:
         srd5e: Dict[str, Any] = dict()
         srd5e.update(alignments.alignments)

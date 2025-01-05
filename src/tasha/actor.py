@@ -1,11 +1,11 @@
 from dataclasses import dataclass, field
 from math import ceil
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List
 
 
 @dataclass
 class CharacterSheet:
-    """Stores character information."""
+    """Class to store character information."""
 
     alignment: str = field(default="")
     armors: list = field(default_factory=list)
@@ -109,7 +109,7 @@ class CharacterSheet:
 
 @dataclass
 class PlayerCharacter:
-    """Retrieves information from a character sheet."""
+    """Class to retrieve data from a character sheet."""
 
     chst: CharacterSheet
 
@@ -144,11 +144,17 @@ class PlayerCharacter:
         return self.chst.attributes[attribute]["modifier"]
 
     def getMyArmorProficiencies(self) -> List[str]:
-        """Returns the character's armor proficiency list."""
+        """Returns the character's armor proficiency list.
+
+        Returns:
+            List[str]: Returns a list of the character's armor proficiencies."""
         return self.chst.armors
 
     def getMyAlignment(self) -> str:
-        """Returns the character's alignment."""
+        """Returns the character's alignment.
+
+        Returns:
+            str: Returns the character's alignment."""
         return self.chst.alignment
 
     def getMyBackground(self) -> str:
@@ -162,25 +168,28 @@ class PlayerCharacter:
         """Returns the character's bonus.
 
         Returns:
-            Dict[str, int]: Returns a dict of applicable ability score bonuses."""
+            Dict[str, int]: Returns the character's ability score bonuses."""
         return self.chst.bonus
 
-    def getMyClasses(self) -> Tuple[str, ...]:
-        """Returns all the character's class names."""
-        return tuple(self.chst.classes.keys())
-
-    def getMyFeats(self) -> List[str]:
-        """Returns the character's feat list.
+    def getMyClasses(self) -> List[str]:
+        """Returns the character's classes.
 
         Returns:
-            List[str]: Returns a list of all possessed feats."""
+            List[str]: Returns a list of all the character's classes."""
+        return list(self.chst.classes.keys())
+
+    def getMyFeats(self) -> List[str]:
+        """Returns the character's feats.
+
+        Returns:
+            List[str]: Returns a list of all the character's feats."""
         return self.chst.feats
 
     def getMyFeatures(self) -> List[str]:
         """Returns the character's class features.
 
         Returns:
-            List[str]: Returns a list of all possessed features."""
+            List[str]: Returns a list of all the character's class features."""
         return self.chst.features
 
     def getMyGender(self) -> str:
@@ -190,8 +199,11 @@ class PlayerCharacter:
             str: Returns the character's gender."""
         return self.chst.gender
 
-    def getMyLanguages(self):
-        """Returns the character's languages."""
+    def getMyLanguages(self) -> List[str]:
+        """Returns the character's languages.
+
+        Returns:
+            List[str]: Returns a list of the character's languages."""
         return self.chst.languages
 
     def getMyName(self) -> str:
@@ -229,7 +241,10 @@ class PlayerCharacter:
         return self.chst.speed
 
     def getMySpellslots(self) -> List[int]:
-        """Returns the character's spell slots."""
+        """Returns the character's spell slots.
+
+        Returns:
+            List[int]: Returns a list of the character's spell slots."""
         return self.chst.spell_slots
 
     def getMySubclasses(self) -> List[str]:
