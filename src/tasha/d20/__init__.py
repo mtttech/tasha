@@ -206,7 +206,7 @@ class SystemResourceDocument:
         """Returns all rare languages (minus exclusions, if applicable).
 
         Args:
-            excl Optional[List[str]]: List of languages to exclude, if applicable.
+            excl (Optional[List[str]]): List of languages to exclude, if applicable.
 
         Returns:
             List[str]: Returns a list of applicable languages."""
@@ -259,7 +259,7 @@ class SystemResourceDocument:
 
         Args:
             klass (str): Name of the class to get skills for.
-            exec (Optional[List[str]]): List of skills to exclude from listing.
+            excl (Optional[List[str]]): List of skills to exclude.
 
         Returns:
             List[str]: Returns the list of applicable skills."""
@@ -319,7 +319,13 @@ class SystemResourceDocument:
             return [0]
 
     def getStandardLanguages(self, excl: Optional[List[str]] = None) -> List[str]:
-        """Returns all standard languages (minus exclusions, if applicable)."""
+        """Returns all standard languages (minus exclusions, if applicable).
+
+        Args:
+            excl (Optional[List[str]]): List of languages to exclude.
+
+        Returns:
+            List[str]: Returns a list of applicable languages."""
         language_list = self.srd["languages"]["standard"]
         if isinstance(excl, list):
             return [l for l in language_list if l not in excl]
@@ -332,7 +338,7 @@ class SystemResourceDocument:
             background (str): Background to get tool proficiencies for.
 
         Returns:
-            List[str]: Returns a list of background tool proficiencies."""
+            List[str]: Returns a list of tool proficiencies."""
         return self.srd["backgrounds"][background]["tools"]
 
     def getToolProficienciesByClass(

@@ -8,32 +8,32 @@ class CharacterSheet:
     """Class to store character information."""
 
     alignment: str = field(default="")
-    armors: list = field(default_factory=list)
-    attributes: dict = field(default_factory=dict)
+    armors: List[str] = field(default_factory=list)
+    attributes: Dict[str, Dict[str, int]] = field(default_factory=dict)
     background: str = field(default="")
-    bonus: dict = field(default_factory=dict)
+    bonus: Dict[str, int] = field(default_factory=dict)
     cantrips: int = field(default=0)
-    classes: dict = field(default_factory=dict)
-    feats: list = field(default_factory=list)
-    features: list = field(default_factory=list)
+    classes: Dict[str, Dict[str, Any]] = field(default_factory=dict)
+    feats: List[str] = field(default_factory=list)
+    features: List[str] = field(default_factory=list)
     gender: str = field(default="")
     hit_die: int = field(default=0)
     hit_points: int = field(init=False)
     initiative: int = field(default=0)
-    languages: list = field(default_factory=list)
+    languages: List[str] = field(default_factory=list)
     level: int = field(default=1)
     name: str = field(default="")
-    prepared_spells: dict = field(default_factory=dict)
+    prepared_spells: Dict[str, str] = field(default_factory=dict)
     proficiency_bonus: int = field(default=0)
-    savingthrows: list = field(default_factory=list)
+    savingthrows: List[str] = field(default_factory=list)
     size: str = field(default="Medium")
-    skills: list = field(default_factory=list)
+    skills: List[str] = field(default_factory=list)
     species: str = field(default="")
     speed: int = field(default=30)
-    spell_slots: list = field(default_factory=list)
-    tools: list = field(default_factory=list)
-    traits: list = field(default_factory=list)
-    weapons: list = field(default_factory=list)
+    spell_slots: List[int] = field(default_factory=list)
+    tools: List[str] = field(default_factory=list)
+    traits: List[str] = field(default_factory=list)
+    weapons: List[str] = field(default_factory=list)
 
     def __post_init__(self) -> None:
         self.hit_points = self.roll_hit_points()
@@ -109,7 +109,10 @@ class CharacterSheet:
 
 @dataclass
 class PlayerCharacter:
-    """Class to retrieve data from a character sheet."""
+    """Class to retrieve data from a character sheet.
+
+        Args:
+            chst (CharacterSheet): CharacterSheet object to read."""
 
     chst: CharacterSheet
 
@@ -233,7 +236,10 @@ class PlayerCharacter:
         return self.chst.savingthrows
 
     def getMySkills(self) -> List[str]:
-        """Returns the character's skill list."""
+        """Returns the character's skill list.
+
+        Returns:
+            List[str]: Returns a list of the character's skills."""
         return self.chst.skills
 
     def getMySpeed(self) -> int:
