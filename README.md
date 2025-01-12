@@ -16,7 +16,7 @@
 
 ### Installation
 
-*Tasha* can be installed by cloning the repo, building a wheel file with poetry, and installing it through pip.
+*Tasha* can be installed by cloning the repo, building a wheel file with [poetry](https://github.com/python-poetry/poetry), and installing it through [pipx](https://github.com/pypa/pipx).
 
 ```
 git clone https://github.com/mtttech/tasha
