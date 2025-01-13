@@ -344,7 +344,14 @@ class SystemResourceDocument:
     def getToolProficienciesByClass(
         self, klass: str, excl: Optional[List[str]] = None
     ) -> List[str]:
-        """Returns a list of all tool proficiencies by class."""
+        """Returns a list of all tool proficiencies by class.
+
+        Args:
+            klass (str): Class to get tool proficiencies for.
+            excl (Optional[List[str]]): List of tool proficiencies to exclude.
+
+        Returns:
+            List[str]: Returns a list of applicable tool proficiencies."""
         tool_proficiencies = self.srd["classes"][klass]["tools"]
         if isinstance(excl, list):
             return [t for t in tool_proficiencies if t not in excl]

@@ -111,8 +111,8 @@ class CharacterSheet:
 class PlayerCharacter:
     """Class to retrieve data from a character sheet.
 
-        Args:
-            chst (CharacterSheet): CharacterSheet object to read."""
+    Args:
+        chst (CharacterSheet): CharacterSheet object to read."""
 
     chst: CharacterSheet
 
@@ -243,7 +243,10 @@ class PlayerCharacter:
         return self.chst.skills
 
     def getMySpeed(self) -> int:
-        """Returns the character's speed."""
+        """Returns the character's speed.
+
+        Returns:
+            int: Returns the character's speed value."""
         return self.chst.speed
 
     def getMySpellslots(self) -> List[int]:
@@ -290,11 +293,17 @@ class PlayerCharacter:
         return sum([v["level"] for v in tuple(self.chst.classes.values())])
 
     def hasClass(self, klass: str) -> bool:
-        """Returns True if character is a member of klass. False otherwise."""
+        """Determines if character is a member of the specified class.
+
+        Returns:
+            bool: Returns True if character is a member of klass or False otherwise."""
         return klass in self.getMyClasses()
 
     def hasClasses(self) -> bool:
-        """Returns True if character has classes set. False otherwise."""
+        """Determines if character is a member of at least one class.
+
+        Returns:
+            bool: Returns True if the character has classes or False otherwise."""
         return len(self.getMyClasses()) > 0
 
     def isSpellcaster(self) -> bool:
