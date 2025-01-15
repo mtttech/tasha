@@ -255,11 +255,13 @@ def main() -> None:
     # Choose class/subclass
     # Select level
     console.print("Choose a primary class.", style="default")
-    apply_class(io(oSRD.getClasses())[0])
+    apply_class(io(oSRD.getClasses())[0], True)
 
+    """
     if Confirm.ask("Would you like to multiclass?", console=console):
         console.print("Choose a secondary class.", style="default")
-        apply_class(io(get_multiclasses())[0])
+        apply_class(io(get_multiclasses())[0], False)
+    """
 
     # Choose a background
     # Choose a species

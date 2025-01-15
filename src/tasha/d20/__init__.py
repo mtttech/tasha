@@ -368,3 +368,28 @@ class SystemResourceDocument:
     def getWeaponProficienciesByClass(self, klass: str) -> List[str]:
         """Returns weapon proficiencies by class."""
         return self.srd["classes"][klass]["weapons"]
+
+    def hasAbilityRequirementsByClass(
+        self, klass: str, attributes: Dict[str, Dict[str, Any]]
+    ) -> bool:
+        """Determines if character meets ability requirements to multiclass.
+
+        Args:
+            klass (str): Name of the class to check ability requirements for.
+            attributes (Dict[str, Dict[str, Any]]): Attributes to use in the requirements check.
+
+        Returns:
+            bool: Returns True if character meets ability requirements or False otherwise.
+        """
+        if klass != "Fighter":
+            for ability in self.srd["multiclasses"][klass]["ability"]:
+                if attributes[ability]["score"] < 13:
+                    return False
+        else:
+            if (
+                attributes["Strength"]["score"] < 13
+                and attributes["Dexterity"]["score"] < 13
+            ):
+                return False
+
+        return True
