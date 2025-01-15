@@ -1,15 +1,21 @@
 multiclasses = {
     "multiclasses": {
         "Barbarian": {
-            "requirements": {"Strength": 13},
+            "ability": [
+                "Strength",
+            ],
             "armors": ["Shield"],
+            "features": ["Rage", "Unarmored Defense", "Weapon Mastery"],
             "tools": [],
             "skills": [],
             "weapons": ["Martial"],
         },
         "Bard": {
-            "requirements": {"Charisma": 13},
+            "ability": [
+                "Charisma",
+            ],
             "armors": ["Light"],
+            "features": ["Bardic Inspiration", "Spellcasting"],
             "skills": [
                 "Acrobatics",
                 "Animal Handling",
@@ -29,7 +35,7 @@ multiclasses = {
                 "Sleight of Hand",
                 "Stealth",
                 "Survival",
-            ],
+            ],  # Choose 1 skill
             "tools": [
                 "Musical Instrument - Bagpipes",
                 "Musical Instrument - Birdpipes",
@@ -52,47 +58,60 @@ multiclasses = {
                 "Musical Instrument - Wargong",
                 "Musical Instrument - Yarting",
                 "Musical Instrument - Zulkoon",
-            ],
+            ],  # 1 musical instrument
             "weapons": [],
         },
         "Cleric": {
-            "requirements": {"Wisdom": 13},
+            "ability": [
+                "Wisdom",
+            ],
             "armors": ["Light", "Medium", "Shield"],
+            "features": ["Divine Order", "Spellcasting"],
             "skills": [],
             "tools": [],
             "weapons": [],
         },
         "Druid": {
-            "requirements": {"Wisdom": 13},
+            "ability": [
+                "Wisdom",
+            ],
             "armors": ["Light", "Shield"],
+            "features": ["Druidic", "Primal Order", "Spellcasting"],
             "skills": [],
             "tools": [],
             "weapons": [],
         },
         "Fighter": {
-            "requirements": {"Dexterity": 13, "Strength": 13},
+            "ability": ["Dexterity", "Strength"],  # either or
             "armors": ["Light", "Medium", "Shield"],
+            "features": ["Fighting Style", "Second Wind", "Weapon Mastery"],
             "skills": [],
             "tools": [],
             "weapons": ["Martial"],
         },
         "Monk": {
-            "requirements": {"Dexterity": 13, "Wisdom": 13},
+            "ability": ["Dexterity", "Wisdom"],
             "armors": [],
+            "features": ["Martial Arts", "Unarmored Defense"],
             "skills": [],
             "tools": [],
             "weapons": [],
         },
         "Paladin": {
-            "requirements": {"Strength": 13, "Charisma": 13},
+            "ability": ["Strength", "Charisma"],
             "armors": ["Light", "Medium", "Shield"],
+            "features": ["Lay on Hands", "Spellcasting", "Weapon Mastery"],
             "skills": [],
             "tools": [],
             "weapons": ["Martial"],
         },
         "Ranger": {
-            "requirements": {"Dexterity": 13, "Wisdom": 13},
+            "ability": [
+                "Dexterity",
+                "Wisdom",
+            ],
             "armors": ["Light", "Medium", "Shield"],
+            "features": ["Favored Enemy", "Spellcasting", "Weapon Mastery"],
             "skills": [
                 "Animal Handling",
                 "Athletics",
@@ -103,13 +122,21 @@ multiclasses = {
                 "Sleight of Hand",
                 "Stealth",
                 "Survival",
-            ],
+            ],  # Choose 1 skill
             "tools": [],
             "weapons": ["Martial"],
         },
         "Rogue": {
-            "requirements": {"Dexterity": 13},
+            "ability": [
+                "Dexterity",
+            ],
             "armors": ["Light"],
+            "features": [
+                "Expertise",
+                "Sneak Attack",
+                "Thieves' Cant",
+                "Weapon Mastery",
+            ],
             "skills": [
                 "Acrobatics",
                 "Athletics",
@@ -122,27 +149,36 @@ multiclasses = {
                 "Persuasion",
                 "Sleight of Hand",
                 "Stealth",
-            ],
+            ],  # Choose 4 skills
             "tools": ["Thieves' Tools"],
-            "weapons": [],
+            "weapons": ["Simple"],  # Martial weapons with Finesse or Light properties
         },
         "Sorcerer": {
-            "requirements": {"Charisma": 13},
+            "ability": [
+                "Charisma",
+            ],
             "armors": [],
+            "features": ["Innate Sorcery", "Spellcasting"],
             "skills": [],
             "tools": [],
             "weapons": [],
         },
         "Warlock": {
-            "requirements": {"Charisma": 13},
+            "ability": [
+                "Charisma",
+            ],
             "armors": ["Light"],
+            "features": ["Eldritch Invocations", "Pact Magic"],
             "skills": [],
             "tools": [],
             "weapons": ["Simple"],
         },
         "Wizard": {
-            "requirements": {"Intelligence": 13},
+            "ability": [
+                "Intelligence",
+            ],
             "armors": [],
+            "features": ["Arcane Recovery", "Ritual Adept", "Spellcasting"],
             "skills": [],
             "tools": [],
             "weapons": [],
