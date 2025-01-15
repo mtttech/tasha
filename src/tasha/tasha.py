@@ -28,6 +28,37 @@ oPC = PlayerCharacter(oSheet)
 oSRD = SystemResourceDocument()
 
 
+def apply_class(klass: str, primary_class: bool = False) -> None:
+    """Applies class features to character."""
+    console.print("What is your class level?", style="default")
+    level = int(io(20)[0])
+    subclass = ""
+    oSheet.set(
+        {
+            "armors": oSRD.getArmorProficienciesByClass(klass),
+            "weapons": oSRD.getWeaponProficienciesByClass(klass),
+        }
+    )
+    if level >= 3:
+        console.print(
+            "If you start at level 3 or higher, choose a subclass.", style="default"
+        )
+        subklass = io(
+            oSRD.getSubclassesByClass(klass),
+        )
+        subclass = subklass[0]
+    oSheet.set(
+        "classes",
+        {
+            klass: {
+                "level": level,
+                "hit_die": oSRD.getHitDieByClass(klass),
+                "subclass": subclass,
+            }
+        },
+    )
+
+
 def assign_abilities() -> Dict[str, Dict[str, int]]:
     """Prompt to assign a score to each of the six abilities.
 
@@ -113,6 +144,19 @@ def get_feats() -> List[str]:
     Returns:
         List[str]: List of all relevant feats."""
     return [f for f in oSRD.getFeats() if has_requirements(f)]
+
+
+def get_multiclasses() -> List[str]:
+    """Retrieves a list of valid multiclasses.
+
+    Returns:
+        List[str]: Returns a list of allowable character multiclasses."""
+    multiclasses = list()
+    for klass in oSRD.getClasses():
+        if klass not in oPC.getMyClasses():
+            multiclasses.append(klass)
+
+    return multiclasses
 
 
 def has_requirements(feat: str) -> bool:
@@ -210,35 +254,12 @@ def io(choices: List[str] | int, loop_count: int = 1) -> List[str]:
 def main() -> None:
     # Choose class/subclass
     # Select level
-    console.print("Choose a class.", style="default")
-    klass = io(oSRD.getClasses())[0]
-    oSheet.set(
-        {
-            "armors": oSRD.getArmorProficienciesByClass(klass),
-            "weapons": oSRD.getWeaponProficienciesByClass(klass),
-        }
-    )
-    console.print("What is your class level?", style="default")
-    level = int(io(20)[0])
-    subclass = ""
-    if level >= 3:
-        console.print(
-            "If you start at level 3 or higher, choose a subclass.", style="default"
-        )
-        subklass = io(
-            oSRD.getSubclassesByClass(klass),
-        )
-        subclass = subklass[0]
-    oSheet.set(
-        "classes",
-        {
-            klass: {
-                "level": level,
-                "hit_die": oSRD.getHitDieByClass(klass),
-                "subclass": subclass,
-            }
-        },
-    )
+    console.print("Choose a primary class.", style="default")
+    apply_class(io(oSRD.getClasses())[0])
+
+    if Confirm.ask("Would you like to multiclass?", console=console):
+        console.print("Choose a secondary class.", style="default")
+        apply_class(io(get_multiclasses())[0])
 
     # Choose a background
     # Choose a species
