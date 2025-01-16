@@ -74,7 +74,9 @@ class SystemResourceDocument:
             List[str]: Returns a list of all applicable DnD alignments."""
         return self.srd["alignments"]
 
-    def getArmorProficienciesByClass(self, klass: str) -> List[str]:
+    def getArmorProficienciesByClass(
+        self, klass: str, primary_class: bool
+    ) -> List[str]:
         """Returns armor proficiencies by class.
 
         Args:
@@ -82,7 +84,10 @@ class SystemResourceDocument:
 
         Returns:
             List[str]: Returns a list of armor proficiencies by klass."""
-        return self.srd["classes"][klass]["armors"]
+        if primary_class:
+            return self.srd["classes"][klass]["armors"]
+
+        return self.srd["multiclasses"][klass]["armors"]
 
     def getArmorRequirementsByFeat(self, feat: str) -> List[str]:
         """Returns armor proficiency requirements by feat.
@@ -365,9 +370,14 @@ class SystemResourceDocument:
         """Returns a list of traits by species."""
         return list(self.srd["species"][species]["traits"])
 
-    def getWeaponProficienciesByClass(self, klass: str) -> List[str]:
+    def getWeaponProficienciesByClass(
+        self, klass: str, primary_class: bool
+    ) -> List[str]:
         """Returns weapon proficiencies by class."""
-        return self.srd["classes"][klass]["weapons"]
+        if primary_class:
+            return self.srd["classes"][klass]["weapons"]
+
+        return self.srd["multiclasses"][klass]["weapons"]
 
     def hasAbilityRequirementsByClass(
         self, klass: str, attributes: Dict[str, Dict[str, Any]]

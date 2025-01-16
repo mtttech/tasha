@@ -28,34 +28,41 @@ oPC = PlayerCharacter(oSheet)
 oSRD = SystemResourceDocument()
 
 
-def apply_class(klass: str, primary_class: bool = False) -> None:
-    """Applies class features to character."""
-    console.print("What is your class level?", style="default")
+def apply_class(klass: str, primary_class: bool) -> None:
+    """Applies class features.
+
+    Args:
+        klass (str): Name of the class to apply class features for.
+        primary_class (bool): Attributes to use in the requirements check.
+
+    Returns:
+        None."""
+    console.print(f"What is your '{klass}' class level?", style="default")
     level = int(io(20)[0])
+
     subclass = ""
-    oSheet.set(
-        {
-            "armors": oSRD.getArmorProficienciesByClass(klass),
-            "weapons": oSRD.getWeaponProficienciesByClass(klass),
-        }
-    )
     if level >= 3:
         console.print(
-            "If you start at level 3 or higher, choose a subclass.", style="default"
+            f"If you start at level 3 or higher, choose a {klass} subclass.",
+            style="default",
         )
-        subklass = io(
+        subclass = io(
             oSRD.getSubclassesByClass(klass),
-        )
-        subclass = subklass[0]
+        )[0]
+
     oSheet.set(
-        "classes",
         {
-            klass: {
-                "level": level,
-                "hit_die": oSRD.getHitDieByClass(klass),
-                "subclass": subclass,
-            }
-        },
+            "classes": {
+                klass: {
+                    "level": level,
+                    "hit_die": oSRD.getHitDieByClass(klass),
+                    "subclass": subclass,
+                }
+            },
+            "armors": oSRD.getArmorProficienciesByClass(klass, primary_class),
+            "features": oSRD.getFeaturesByClass(klass, oPC.getLevelByClass(klass)),
+            "weapons": oSRD.getWeaponProficienciesByClass(klass, primary_class),
+        }
     )
 
 
@@ -391,7 +398,6 @@ def main() -> None:
     oSheet.set(
         {
             "cantrips": oSRD.getCantripsKnownByClass(klass, oPC.getTotalLevel()),
-            "features": oSRD.getFeaturesByClass(klass, oPC.getLevelByClass(klass)),
             "hit_die": oSRD.getHitDieByClass(klass),
             "initiative": oPC.getModifierByAbility("Dexterity"),
             "savingthrows": oSRD.getSavingThrowsByClass(klass),

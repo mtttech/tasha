@@ -5,7 +5,6 @@ multiclasses = {
                 "Strength",
             ],
             "armors": ["Shield"],
-            "features": ["Rage", "Unarmored Defense", "Weapon Mastery"],
             "tools": [],
             "skills": [],
             "weapons": ["Martial"],
@@ -15,7 +14,6 @@ multiclasses = {
                 "Charisma",
             ],
             "armors": ["Light"],
-            "features": ["Bardic Inspiration", "Spellcasting"],
             "skills": [
                 "Acrobatics",
                 "Animal Handling",
@@ -66,7 +64,6 @@ multiclasses = {
                 "Wisdom",
             ],
             "armors": ["Light", "Medium", "Shield"],
-            "features": ["Divine Order", "Spellcasting"],
             "skills": [],
             "tools": [],
             "weapons": [],
@@ -76,7 +73,6 @@ multiclasses = {
                 "Wisdom",
             ],
             "armors": ["Light", "Shield"],
-            "features": ["Druidic", "Primal Order", "Spellcasting"],
             "skills": [],
             "tools": [],
             "weapons": [],
@@ -84,7 +80,6 @@ multiclasses = {
         "Fighter": {
             "ability": ["Dexterity", "Strength"],  # either or
             "armors": ["Light", "Medium", "Shield"],
-            "features": ["Fighting Style", "Second Wind", "Weapon Mastery"],
             "skills": [],
             "tools": [],
             "weapons": ["Martial"],
@@ -92,7 +87,6 @@ multiclasses = {
         "Monk": {
             "ability": ["Dexterity", "Wisdom"],
             "armors": [],
-            "features": ["Martial Arts", "Unarmored Defense"],
             "skills": [],
             "tools": [],
             "weapons": [],
@@ -100,7 +94,6 @@ multiclasses = {
         "Paladin": {
             "ability": ["Strength", "Charisma"],
             "armors": ["Light", "Medium", "Shield"],
-            "features": ["Lay on Hands", "Spellcasting", "Weapon Mastery"],
             "skills": [],
             "tools": [],
             "weapons": ["Martial"],
@@ -111,7 +104,6 @@ multiclasses = {
                 "Wisdom",
             ],
             "armors": ["Light", "Medium", "Shield"],
-            "features": ["Favored Enemy", "Spellcasting", "Weapon Mastery"],
             "skills": [
                 "Animal Handling",
                 "Athletics",
@@ -131,12 +123,6 @@ multiclasses = {
                 "Dexterity",
             ],
             "armors": ["Light"],
-            "features": [
-                "Expertise",
-                "Sneak Attack",
-                "Thieves' Cant",
-                "Weapon Mastery",
-            ],
             "skills": [
                 "Acrobatics",
                 "Athletics",
@@ -158,7 +144,6 @@ multiclasses = {
                 "Charisma",
             ],
             "armors": [],
-            "features": ["Innate Sorcery", "Spellcasting"],
             "skills": [],
             "tools": [],
             "weapons": [],
@@ -168,7 +153,6 @@ multiclasses = {
                 "Charisma",
             ],
             "armors": ["Light"],
-            "features": ["Eldritch Invocations", "Pact Magic"],
             "skills": [],
             "tools": [],
             "weapons": ["Simple"],
@@ -178,7 +162,6 @@ multiclasses = {
                 "Intelligence",
             ],
             "armors": [],
-            "features": ["Arcane Recovery", "Ritual Adept", "Spellcasting"],
             "skills": [],
             "tools": [],
             "weapons": [],
