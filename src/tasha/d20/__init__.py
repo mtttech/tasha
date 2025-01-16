@@ -300,6 +300,9 @@ class SystemResourceDocument:
         Returns:
             Dict[int, List[str]]: Returns a dict of level with spells for the specified level.
         """
+        if klass in ("Fighter", "Rogue"):
+            klass = "Wizard"
+
         try:
             spell_list = dict()
             for level, spells in self.srd["spells"][klass].items():
