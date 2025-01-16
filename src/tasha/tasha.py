@@ -52,6 +52,7 @@ def apply_class(klass: str, primary_class: bool) -> None:
 
     oSheet.set(
         {
+            "armors": oSRD.getArmorProficienciesByClass(klass, primary_class),
             "classes": {
                 klass: {
                     "level": level,
@@ -59,11 +60,40 @@ def apply_class(klass: str, primary_class: bool) -> None:
                     "subclass": subclass,
                 }
             },
-            "armors": oSRD.getArmorProficienciesByClass(klass, primary_class),
-            "features": oSRD.getFeaturesByClass(klass, oPC.getLevelByClass(klass)),
             "weapons": oSRD.getWeaponProficienciesByClass(klass, primary_class),
         }
     )
+
+    if primary_class:
+        if klass == "Bard":
+            console.print(
+                "Choose your bardic musical instrument tool proficiencies.",
+                style="default",
+            )
+            oSheet.set(
+                "tools",
+                io(
+                    oSRD.getToolProficienciesByClass(
+                        klass, oPC.getMyToolProficiencies()
+                    ),
+                    loop_count=3,
+                ),
+            )
+        elif klass == "Monk":
+            console.print(
+                "Choose your monk artisan/musical instrument tool proficiency.",
+                style="default",
+            )
+            oSheet.set(
+                "tools",
+                io(
+                    oSRD.getToolProficienciesByClass(
+                        klass, oPC.getMyToolProficiencies()
+                    ),
+                ),
+            )
+        else:
+            oSheet.set("tools", oSRD.getToolProficienciesByClass(klass))
 
 
 def assign_abilities() -> Dict[str, Dict[str, int]]:
@@ -405,30 +435,15 @@ def main() -> None:
         }
     )
 
-    if klass == "Bard":
-        console.print(
-            "Choose your bardic musical instrument tool proficiencies.", style="default"
-        )
+    # Set class features
+    for _class in oPC.getMyClasses():
         oSheet.set(
-            "tools",
-            io(
-                oSRD.getToolProficienciesByClass(klass, oPC.getMyToolProficiencies()),
-                loop_count=3,
-            ),
+            {
+                "features": oSRD.getFeaturesByClass(
+                    _class, oPC.getLevelByClass(_class)
+                ),
+            }
         )
-    elif klass == "Monk":
-        console.print(
-            "Choose your monk artisan/musical instrument tool proficiency.",
-            style="default",
-        )
-        oSheet.set(
-            "tools",
-            io(
-                oSRD.getToolProficienciesByClass(klass, oPC.getMyToolProficiencies()),
-            ),
-        )
-    else:
-        oSheet.set("tools", oSRD.getToolProficienciesByClass(klass))
 
     if oPC.isSpellcaster():
         prepared_spells = list()
