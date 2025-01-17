@@ -207,6 +207,19 @@ class SystemResourceDocument:
         except KeyError:
             return 0
 
+    def getPropertiesByWeapon(self, weapon: str) -> List[str]:
+        """Returns properties by weapon.
+
+        Args:
+            weapon (str): Name of the weapon to get properties for.
+
+        Returns:
+            List[str]: Returns a list of weapon properties."""
+        try:
+            return self.srd["proficiencies"]["weapons"]["Simple"][weapon]["properties"]
+        except KeyError:
+            return self.srd["proficiencies"]["weapons"]["Martial"][weapon]["properties"]
+
     def getRareLanguages(self, excl: Optional[List[str]] = None) -> List[str]:
         """Returns all rare languages (minus exclusions, if applicable).
 
