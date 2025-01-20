@@ -1,7 +1,7 @@
 from dataclasses import asdict, replace
 from math import floor
 from pathlib import Path
-from typing import Dict, List
+from typing import Any, Dict, List
 
 import dice  # pyright: ignore
 from rich.console import Console
@@ -29,7 +29,7 @@ oSRD = SystemResourceDocument()
 
 
 def apply_class(klass: str, primary_class: bool) -> None:
-    """Applies class features.
+    """Applies primary/secondary class features.
 
     Args:
         klass (str): Name of the class to apply class features for.
@@ -64,36 +64,56 @@ def apply_class(klass: str, primary_class: bool) -> None:
         }
     )
 
-    if primary_class:
-        if klass == "Bard":
-            console.print(
-                "Choose your bardic musical instrument tool proficiencies.",
-                style="default",
-            )
-            oSheet.set(
-                "tools",
-                io(
-                    oSRD.getToolProficienciesByClass(
-                        klass, oPC.getMyToolProficiencies()
-                    ),
-                    loop_count=3,
-                ),
-            )
-        elif klass == "Monk":
-            console.print(
-                "Choose your monk artisan/musical instrument tool proficiency.",
-                style="default",
-            )
-            oSheet.set(
-                "tools",
-                io(
-                    oSRD.getToolProficienciesByClass(
-                        klass, oPC.getMyToolProficiencies()
-                    ),
-                ),
-            )
+    # Skill allocations.
+    skills = oSRD.getSkillsByClass(klass, oPC.getMySkills())
+    console.print("Choose a class skill.", style="default")
+    if not primary_class:
+        if klass == "Rogue":
+            allotted_skills = 4
+        elif klass in ("Bard", "Ranger"):
+            allotted_skills = 1
+        oSheet.set(
+            "skills",
+            io(skills, loop_count=allotted_skills),  # pyright: ignore
+        )
+    else:
+        if klass == "Rogue":
+            allotted_skills = 4
+        elif klass in ("Bard", "Ranger"):
+            allotted_skills = 3
         else:
-            oSheet.set("tools", oSRD.getToolProficienciesByClass(klass))
+            allotted_skills = 2
+        oSheet.set(
+            "skills",
+            io(skills, loop_count=allotted_skills),
+        )
+
+    # Handle tool proficiency allocations.
+    if klass == "Bard":
+        console.print(
+            "Choose your bardic musical instrument tool proficiencies.",
+            style="default",
+        )
+        oSheet.set(
+            "tools",
+            io(
+                oSRD.getToolProficienciesByClass(klass, oPC.getMyToolProficiencies()),
+                loop_count=3 if primary_class else 1,
+            ),
+        )
+    elif primary_class and klass == "Monk":
+        console.print(
+            "Choose your monk artisan/musical instrument tool proficiency.",
+            style="default",
+        )
+        oSheet.set(
+            "tools",
+            io(
+                oSRD.getToolProficienciesByClass(klass, oPC.getMyToolProficiencies()),
+            ),
+        )
+    else:
+        oSheet.set("tools", oSRD.getToolProficienciesByClass(klass))
 
 
 def assign_abilities() -> Dict[str, Dict[str, int]]:
@@ -183,14 +203,24 @@ def get_feats() -> List[str]:
     return [f for f in oSRD.getFeats() if has_requirements(f)]
 
 
-def get_multiclasses() -> List[str]:
-    """Retrieves a list of valid multiclasses.
+def get_multiclasses(
+    primary_class: str, attributes: Dict[str, Dict[str, Any]]
+) -> List[str]:
+    """Retrieves a list of valid multiclassing options.
 
     Returns:
         List[str]: Returns a list of allowable character multiclasses."""
     multiclasses = list()
+
+    # If the primary class ability score(s) are under 13.
+    if not oSRD.hasAbilityRequirementsByClass(primary_class, attributes):
+        return multiclasses
+
+    # if the secondary class abiity score(s) are under 13
     for klass in oSRD.getClasses():
-        if klass not in oPC.getMyClasses():
+        if klass not in oPC.getMyClasses() and oSRD.hasAbilityRequirementsByClass(
+            klass, attributes
+        ):
             multiclasses.append(klass)
 
     return multiclasses
@@ -294,12 +324,6 @@ def main() -> None:
     console.print("Choose a primary class.", style="default")
     apply_class(io(oSRD.getClasses())[0], True)
 
-    """
-    if Confirm.ask("Would you like to multiclass?", console=console):
-        console.print("Choose a secondary class.", style="default")
-        apply_class(io(get_multiclasses())[0], False)
-    """
-
     # Choose a background
     # Choose a species
     # Choose equipment
@@ -390,32 +414,23 @@ def main() -> None:
     # Generate/Assign ability scores
     oSheet.set("attributes", assign_abilities())
 
+    # Multiclass
+    klass = oPC.getMyClasses()[0]
+    if Confirm.ask("Would you like to multiclass?", console=console):
+        console.print("Choose a secondary class.", style="default")
+        apply_class(io(get_multiclasses(klass, oPC.getAttributes()))[0], False)
+
     # Choose an alignment
     console.print("Choose your alignment.", style="default")
     oSheet.set("alignment", io(oSRD.getAlignments())[0])
 
     # Saving Throws
-    # Skills
     # Passive Perception
     # Hit Point Dice
     # Initiative
     # Cantrips
     # Prepared Spells
     # Spell Slots
-    klass = oPC.getMyClasses()[0]
-    skills = oSRD.getSkillsByClass(klass, oPC.getMySkills())
-    console.print("Choose a class skill.", style="default")
-    if klass == "Rogue":
-        allotted_skills = 4
-    elif klass in ("Bard", "Ranger"):
-        allotted_skills = 3
-    else:
-        allotted_skills = 2
-    oSheet.set(
-        "skills",
-        io(skills, loop_count=allotted_skills),
-    )
-
     console.print("Choose your feats.", style="default")
     ability_score_improvements = oSRD.getFeaturesByClass(
         klass, oPC.getTotalLevel()
@@ -428,7 +443,6 @@ def main() -> None:
     oSheet.set(
         {
             "cantrips": oSRD.getCantripsKnownByClass(klass, oPC.getTotalLevel()),
-            "hit_die": oSRD.getHitDieByClass(klass),
             "initiative": oPC.getModifierByAbility("Dexterity"),
             "savingthrows": oSRD.getSavingThrowsByClass(klass),
             "spell_slots": oSRD.getSpellslotsByClass(klass, oPC.getTotalLevel()),
