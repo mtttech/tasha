@@ -35,12 +35,33 @@ class CharacterSheet:
     weapons: List[str] = field(default_factory=list)
 
     def __post_init__(self) -> None:
-        self.hit_points = self.roll_hit_points()
+        self.hit_points = self._rollHitPoints()
         self.proficiency_bonus = ceil(self.level / 4) + 1
         try:
             self.initiative = self.attributes["Dexterity"]["modifier"]
         except KeyError:
             self.initiative = 0
+
+    def getMyAttributes(self) -> Dict[str, Dict[str, Any]]:
+        """Returns a dictionary of all attributes.
+
+        Returns:
+            Dict[str, Dict[str, Any]]: Returns character abilities/scores/modifiers."""
+        return self.attributes
+
+    def getMyBackground(self) -> str:
+        """Returns the character's background.
+
+        Returns:
+            str: Returns the character's background."""
+        return self.background
+
+    def getMyClasses(self) -> List[str]:
+        """Returns the character's classes.
+
+        Returns:
+            List[str]: Returns a list of all the character's classes."""
+        return list(self.classes.keys())
 
     def getMySkills(self) -> List[str]:
         """Returns the character's skill list.
@@ -49,7 +70,52 @@ class CharacterSheet:
             List[str]: Returns a list of the character's skills."""
         return self.skills
 
-    def roll_hit_points(self) -> int:
+    def getMySubclasses(self) -> List[str]:
+        """Returns all the character's selected subclasses."""
+        return [v["subclass"] for v in tuple(self.classes.values())]
+
+    def hasClass(self, klass: str) -> bool:
+        """Determines if character is a member of the specified class.
+
+        Returns:
+            bool: Returns True if character is a member of klass or False otherwise."""
+        return klass in self.getMyClasses()
+
+    def hasClasses(self) -> bool:
+        """Determines if character is a member of at least one class.
+
+        Returns:
+            bool: Returns True if the character has classes or False otherwise."""
+        return len(self.getMyClasses()) > 0
+
+    def isSpellcaster(self) -> bool:
+        """Determines if character is of a spellcasting class.
+
+        Returns:
+            bool: Returns True if spellcaster or False otherwise."""
+        if any(
+            klass in self.getMyClasses()
+            for klass in (
+                "Bard",
+                "Cleric",
+                "Druid",
+                "Paladin",
+                "Sorcerer",
+                "Ranger",
+                "Warlock",
+                "Wizard",
+            )
+        ) or any(
+            subklass in self.getMySubclasses()
+            for subklass in (
+                "Arcane Trickster",
+                "Eldritch Knight",
+            )
+        ):
+            return True
+        return False
+
+    def _rollHitPoints(self) -> int:
         """Calculates the character's total hit points.
 
         Returns:
@@ -122,13 +188,6 @@ class PlayerCharacter:
 
     chst: CharacterSheet
 
-    def getAttributes(self) -> Dict[str, Dict[str, Any]]:
-        """Returns a dictionary of all attributes.
-
-        Returns:
-            Dict[str, Dict[str, Any]]: Returns character abilities/scores/modifiers."""
-        return self.chst.attributes
-
     def getLevelByClass(self, klass: str) -> int:
         """Returns the specified level by klass.
 
@@ -159,33 +218,12 @@ class PlayerCharacter:
             List[str]: Returns a list of the character's armor proficiencies."""
         return self.chst.armors
 
-    def getMyAlignment(self) -> str:
-        """Returns the character's alignment.
-
-        Returns:
-            str: Returns the character's alignment."""
-        return self.chst.alignment
-
-    def getMyBackground(self) -> str:
-        """Returns the character's background.
-
-        Returns:
-            str: Returns the character's background."""
-        return self.chst.background
-
     def getMyBonus(self) -> Dict[str, int]:
         """Returns the character's bonus.
 
         Returns:
             Dict[str, int]: Returns the character's ability score bonuses."""
         return self.chst.bonus
-
-    def getMyClasses(self) -> List[str]:
-        """Returns the character's classes.
-
-        Returns:
-            List[str]: Returns a list of all the character's classes."""
-        return list(self.chst.classes.keys())
 
     def getMyFeats(self) -> List[str]:
         """Returns the character's feats.
@@ -234,13 +272,6 @@ class PlayerCharacter:
         """Returns the character's saving throw list."""
         return self.chst.savingthrows
 
-    def getMySkills(self) -> List[str]:
-        """Returns the character's skill list.
-
-        Returns:
-            List[str]: Returns a list of the character's skills."""
-        return self.chst.skills
-        
     def getMySpecies(self) -> str:
         """Returns the character's species.
 
@@ -261,10 +292,6 @@ class PlayerCharacter:
         Returns:
             List[int]: Returns a list of the character's spell slots."""
         return self.chst.spell_slots
-
-    def getMySubclasses(self) -> List[str]:
-        """Returns all the character's selected subclasses."""
-        return [v["subclass"] for v in tuple(self.chst.classes.values())]
 
     def getMyToolProficiencies(self) -> List[str]:
         """Returns the character's tool proficiency list."""
@@ -298,43 +325,3 @@ class PlayerCharacter:
         """Returns the total level for all character classes."""
         return sum([v["level"] for v in tuple(self.chst.classes.values())])
 
-    def hasClass(self, klass: str) -> bool:
-        """Determines if character is a member of the specified class.
-
-        Returns:
-            bool: Returns True if character is a member of klass or False otherwise."""
-        return klass in self.getMyClasses()
-
-    def hasClasses(self) -> bool:
-        """Determines if character is a member of at least one class.
-
-        Returns:
-            bool: Returns True if the character has classes or False otherwise."""
-        return len(self.getMyClasses()) > 0
-
-    def isSpellcaster(self) -> bool:
-        """Determines if character is of a spellcasting class.
-
-        Returns:
-            bool: Returns True if spellcaster or False otherwise."""
-        if any(
-            klass in self.getMyClasses()
-            for klass in (
-                "Bard",
-                "Cleric",
-                "Druid",
-                "Paladin",
-                "Sorcerer",
-                "Ranger",
-                "Warlock",
-                "Wizard",
-            )
-        ) or any(
-            subklass in self.getMySubclasses()
-            for subklass in (
-                "Arcane Trickster",
-                "Eldritch Knight",
-            )
-        ):
-            return True
-        return False

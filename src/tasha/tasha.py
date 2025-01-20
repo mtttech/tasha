@@ -218,7 +218,7 @@ def get_multiclasses(
 
     # if the secondary class abiity score(s) are under 13
     for klass in oSRD.getClasses():
-        if klass not in oPC.getMyClasses() and oSRD.hasAbilityRequirementsByClass(
+        if klass not in oSheet.getMyClasses() and oSRD.hasAbilityRequirementsByClass(
             klass, attributes
         ):
             multiclasses.append(klass)
@@ -349,7 +349,7 @@ def main() -> None:
         ["Apply 2/1", "Apply 1/1/1"],
     )[0]
     if array_selection == "Apply 2/1":
-        background_abilities = oSRD.getAbilitiesByBackground(oPC.getMyBackground())
+        background_abilities = oSRD.getAbilitiesByBackground(oSheet.getMyBackground())
 
         console.print("Choose which ability to apply a 2 point bonus", style="default")
         two_point_ability = io(background_abilities)[0]
@@ -360,7 +360,7 @@ def main() -> None:
         ability_bonus_array[one_point_ability] = 1
 
     if array_selection == "Apply 1/1/1":
-        for ability in oSRD.getAbilitiesByBackground(oPC.getMyBackground()):
+        for ability in oSRD.getAbilitiesByBackground(oSheet.getMyBackground()):
             ability_bonus_array[ability] = 1
 
     oSheet.set("bonus", ability_bonus_array)
@@ -375,7 +375,7 @@ def main() -> None:
         style="default",
     )
     background_skills = list()
-    for skill in oSRD.getSkillsByBackground(oPC.getMyBackground()):
+    for skill in oSRD.getSkillsByBackground(oSheet.getMyBackground()):
         if skill not in oSheet.getMySkills():
             background_skills.append(skill)
     skills = io(
@@ -390,7 +390,7 @@ def main() -> None:
         style="default",
     )
     tool = io(
-        oSRD.getToolProficienciesByBackground(oPC.getMyBackground()),
+        oSRD.getToolProficienciesByBackground(oSheet.getMyBackground()),
     )
     oSheet.set("tools", tool)
 
@@ -419,10 +419,10 @@ def main() -> None:
     oSheet.set("attributes", assign_abilities())
 
     # Multiclass
-    klass = oPC.getMyClasses()[0]
+    klass = oSheet.getMyClasses()[0]
     if Confirm.ask("Would you like to multiclass?", console=console):
         console.print("Choose a secondary class.", style="default")
-        apply_class(io(get_multiclasses(klass, oPC.getAttributes()))[0], False)
+        apply_class(io(get_multiclasses(klass, oSheet.getMyAttributes()))[0], False)
 
     # Choose an alignment
     console.print("Choose your alignment.", style="default")
@@ -454,7 +454,7 @@ def main() -> None:
     )
 
     # Set class features
-    for _class in oPC.getMyClasses():
+    for _class in oSheet.getMyClasses():
         oSheet.set(
             {
                 "features": oSRD.getFeaturesByClass(
@@ -463,7 +463,7 @@ def main() -> None:
             }
         )
 
-    if oPC.isSpellcaster():
+    if oSheet.isSpellcaster():
         prepared_spells = list()
         prepared_spell_count = oSRD.getPreparedSpellCountByClass(
             klass, oPC.getTotalLevel()
