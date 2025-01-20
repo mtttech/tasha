@@ -1,7 +1,7 @@
 from dataclasses import asdict, replace
 from math import floor
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Dict, List
 
 import dice  # pyright: ignore
 from rich.console import Console
@@ -202,9 +202,7 @@ def get_feats() -> List[str]:
     return [f for f in oSRD.getFeats() if has_requirements(f)]
 
 
-def get_multiclasses(
-    primary_class: str, attributes: Dict[str, Dict[str, Any]]
-) -> List[str]:
+def get_multiclasses() -> List[str]:
     """Retrieves a list of valid multiclassing options.
 
     Returns:
@@ -212,13 +210,13 @@ def get_multiclasses(
     multiclasses = list()
 
     # If the primary class ability score(s) are under 13.
-    if not oSRD.hasAbilityRequirementsByClass(primary_class, attributes):
+    if not oSRD.hasAbilityRequirementsByClass(oPC.getMyClasses()[0], oPC.attributes):
         return multiclasses
 
     # if the secondary class abiity score(s) are under 13
     for klass in oSRD.getClasses():
         if klass not in oPC.getMyClasses() and oSRD.hasAbilityRequirementsByClass(
-            klass, attributes
+            klass, oPC.attributes
         ):
             multiclasses.append(klass)
 
@@ -421,7 +419,7 @@ def main() -> None:
     klass = oPC.getMyClasses()[0]
     if Confirm.ask("Would you like to multiclass?", console=console):
         console.print("Choose a secondary class.", style="default")
-        apply_class(io(get_multiclasses(klass, oPC.getMyAttributes()))[0], False)
+        apply_class(io(get_multiclasses())[0], False)
 
     # Choose an alignment
     console.print("Choose your alignment.", style="default")
