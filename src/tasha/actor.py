@@ -61,7 +61,39 @@ class CharacterSheet:
                 exec(f'self.{name} = "{value}"')
             else:
                 exec(f"self.{name} = {value}")
-                
+
+    def _rollHitPoints(self) -> int:
+        """Calculates the character's total hit points.
+
+        Returns:
+            int: Returns the calculated hit point total."""
+        try:
+            modifier = self.attributes["Constitution"]["modifier"]
+        except KeyError:
+            modifier = 0
+
+        total_hit_points = 0
+        for class_slot, klass in enumerate(tuple(self.classes.keys())):
+            max_hit_die = self.classes[klass]["hit_die"]
+            avg_hit_die = ceil(max_hit_die / 2) + 1
+            if class_slot == 0:
+                total_hit_points = max_hit_die + modifier
+            else:
+                total_hit_points += avg_hit_die + modifier
+
+            if self.classes[klass]["level"] > 1:
+                total_hit_points += sum(
+                    [
+                        avg_hit_die + modifier
+                        for _ in range(1, self.classes[klass]["level"])
+                    ]
+                )
+
+        try:
+            return total_hit_points
+        except UnboundLocalError:
+            return 0
+
     def getMyAttributes(self) -> Dict[str, Dict[str, Any]]:
         """Returns a dictionary of all attributes.
 
@@ -135,38 +167,6 @@ class CharacterSheet:
             return True
         return False
 
-    def _rollHitPoints(self) -> int:
-        """Calculates the character's total hit points.
-
-        Returns:
-            int: Returns the calculated hit point total."""
-        try:
-            modifier = self.attributes["Constitution"]["modifier"]
-        except KeyError:
-            modifier = 0
-
-        total_hit_points = 0
-        for class_slot, klass in enumerate(tuple(self.classes.keys())):
-            max_hit_die = self.classes[klass]["hit_die"]
-            avg_hit_die = ceil(max_hit_die / 2) + 1
-            if class_slot == 0:
-                total_hit_points = max_hit_die + modifier
-            else:
-                total_hit_points += avg_hit_die + modifier
-
-            if self.classes[klass]["level"] > 1:
-                total_hit_points += sum(
-                    [
-                        avg_hit_die + modifier
-                        for _ in range(1, self.classes[klass]["level"])
-                    ]
-                )
-
-        try:
-            return total_hit_points
-        except UnboundLocalError:
-            return 0
-
     def set(self, *args) -> None:
         num_of_args = len(args)
         if num_of_args == 1 and isinstance(args[0], dict):
@@ -239,13 +239,6 @@ class PlayerCharacter:
             List[str]: Returns a list of all the character's class features."""
         return self.chst.features
 
-    def getMyGender(self) -> str:
-        """Returns the character's gender.
-
-        Returns:
-            str: Returns the character's gender."""
-        return self.chst.gender
-
     def getMyLanguages(self) -> List[str]:
         """Returns the character's languages.
 
@@ -263,10 +256,6 @@ class PlayerCharacter:
     def getMyPreparedSpellCount(self):
         """Returns the character's number of prepared spells."""
         return self.chst.prepared_spells
-
-    def getMyRawClasses(self) -> Dict[str, Dict[str, Any]]:
-        """Returns all the character's class info."""
-        return self.chst.classes
 
     def getMySavingThrows(self) -> List[str]:
         """Returns the character's saving throw list."""
@@ -324,4 +313,3 @@ class PlayerCharacter:
     def getTotalLevel(self) -> int:
         """Returns the total level for all character classes."""
         return sum([v["level"] for v in tuple(self.chst.classes.values())])
-
