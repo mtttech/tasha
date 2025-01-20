@@ -42,6 +42,13 @@ class CharacterSheet:
         except KeyError:
             self.initiative = 0
 
+    def getMySkills(self) -> List[str]:
+        """Returns the character's skill list.
+
+        Returns:
+            List[str]: Returns a list of the character's skills."""
+        return self.skills
+
     def roll_hit_points(self) -> int:
         """Calculates the character's total hit points.
 
@@ -219,13 +226,6 @@ class PlayerCharacter:
         """Returns the character's number of prepared spells."""
         return self.chst.prepared_spells
 
-    def getMySpecies(self) -> str:
-        """Returns the character's species.
-
-        Returns:
-            str: Returns the character's species."""
-        return self.chst.species
-
     def getMyRawClasses(self) -> Dict[str, Dict[str, Any]]:
         """Returns all the character's class info."""
         return self.chst.classes
@@ -240,6 +240,13 @@ class PlayerCharacter:
         Returns:
             List[str]: Returns a list of the character's skills."""
         return self.chst.skills
+        
+    def getMySpecies(self) -> str:
+        """Returns the character's species.
+
+        Returns:
+            str: Returns the character's species."""
+        return self.chst.species
 
     def getMySpeed(self) -> int:
         """Returns the character's speed.
