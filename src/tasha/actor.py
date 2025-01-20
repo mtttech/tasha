@@ -4,8 +4,8 @@ from typing import Any, Dict, List
 
 
 @dataclass
-class CharacterSheet:
-    """Class to store character information."""
+class PlayerCharacter:
+    """Class to store/retreive character information."""
 
     alignment: str = field(default="")
     armors: List[str] = field(default_factory=list)
@@ -94,6 +94,36 @@ class CharacterSheet:
         except UnboundLocalError:
             return 0
 
+    def getLevelByClass(self, klass: str) -> int:
+        """Returns the specified level by klass.
+
+        Args:
+            klass (str): Class to get the level for.
+
+        Returns:
+            int: Returns the level of the specified class."""
+        try:
+            return self.classes[klass]["level"]
+        except KeyError:
+            return 0
+
+    def getModifierByAbility(self, attribute: str) -> int:
+        """Returns the modifier of a specified attribute.
+
+        Args:
+            attribute (str): Name of the attribute to get the modifier for.
+
+        Returns:
+            int: Returns the modifier."""
+        return self.attributes[attribute]["modifier"]
+
+    def getMyArmorProficiencies(self) -> List[str]:
+        """Returns the character's armor proficiency list.
+
+        Returns:
+            List[str]: Returns a list of the character's armor proficiencies."""
+        return self.armors
+
     def getMyAttributes(self) -> Dict[str, Dict[str, Any]]:
         """Returns a dictionary of all attributes.
 
@@ -108,12 +138,55 @@ class CharacterSheet:
             str: Returns the character's background."""
         return self.background
 
+    def getMyBonus(self) -> Dict[str, int]:
+        """Returns the character's bonus.
+
+        Returns:
+            Dict[str, int]: Returns the character's ability score bonuses."""
+        return self.bonus
+
     def getMyClasses(self) -> List[str]:
         """Returns the character's classes.
 
         Returns:
             List[str]: Returns a list of all the character's classes."""
         return list(self.classes.keys())
+
+    def getMyFeats(self) -> List[str]:
+        """Returns the character's feats.
+
+        Returns:
+            List[str]: Returns a list of all the character's feats."""
+        return self.feats
+
+    def getMyFeatures(self) -> List[str]:
+        """Returns the character's class features.
+
+        Returns:
+            List[str]: Returns a list of all the character's class features."""
+        return self.features
+
+    def getMyLanguages(self) -> List[str]:
+        """Returns the character's languages.
+
+        Returns:
+            List[str]: Returns a list of the character's languages."""
+        return self.languages
+
+    def getMyName(self) -> str:
+        """Returns the character's name.
+
+        Returns:
+            str: Returns the character's name."""
+        return self.name
+
+    def getMyPreparedSpellCount(self):
+        """Returns the character's number of prepared spells."""
+        return self.prepared_spells
+
+    def getMySavingThrows(self) -> List[str]:
+        """Returns the character's saving throw list."""
+        return self.savingthrows
 
     def getMySkills(self) -> List[str]:
         """Returns the character's skill list.
@@ -122,9 +195,62 @@ class CharacterSheet:
             List[str]: Returns a list of the character's skills."""
         return self.skills
 
+    def getMySpecies(self) -> str:
+        """Returns the character's species.
+
+        Returns:
+            str: Returns the character's species."""
+        return self.species
+
+    def getMySpeed(self) -> int:
+        """Returns the character's speed.
+
+        Returns:
+            int: Returns the character's speed value."""
+        return self.speed
+
+    def getMySpellslots(self) -> List[int]:
+        """Returns the character's spell slots.
+
+        Returns:
+            List[int]: Returns a list of the character's spell slots."""
+        return self.spell_slots
+
     def getMySubclasses(self) -> List[str]:
         """Returns all the character's selected subclasses."""
         return [v["subclass"] for v in tuple(self.classes.values())]
+
+    def getMyToolProficiencies(self) -> List[str]:
+        """Returns the character's tool proficiency list."""
+        return self.tools
+
+    def getMyWeaponProficiencies(self) -> List[str]:
+        """Returns the character's weapon proficiency list."""
+        return self.weapons
+
+    def getScoreByAbility(self, attribute: str) -> int:
+        """Returns the score of a specified attribute.
+
+        Args:
+            attribute (str): Name of the attribute to get the score for.
+
+        Returns:
+            int: Returns the score."""
+        return self.attributes[attribute]["score"]
+
+    def getSubclassByClass(self, klass: str) -> str:
+        """Returns the specified subclass by klass.
+
+        Args:
+            klass (str): Class to get the subclass for.
+
+        Returns:
+            str: Returns the subclass of the specified class."""
+        return self.classes[klass]["subclass"]
+
+    def getTotalLevel(self) -> int:
+        """Returns the total level for all character classes."""
+        return sum([v["level"] for v in tuple(self.classes.values())])
 
     def hasClass(self, klass: str) -> bool:
         """Determines if character is a member of the specified class.
@@ -177,139 +303,3 @@ class CharacterSheet:
             self.__setitem__(key, value)
         else:
             raise ValueError(f"Accepts 1-2 arguments. {num_of_args} given.")
-
-
-@dataclass
-class PlayerCharacter:
-    """Class to retrieve data from a character sheet.
-
-    Args:
-        chst (CharacterSheet): CharacterSheet object to read."""
-
-    chst: CharacterSheet
-
-    def getLevelByClass(self, klass: str) -> int:
-        """Returns the specified level by klass.
-
-        Args:
-            klass (str): Class to get the level for.
-
-        Returns:
-            int: Returns the level of the specified class."""
-        try:
-            return self.chst.classes[klass]["level"]
-        except KeyError:
-            return 0
-
-    def getModifierByAbility(self, attribute: str) -> int:
-        """Returns the modifier of a specified attribute.
-
-        Args:
-            attribute (str): Name of the attribute to get the modifier for.
-
-        Returns:
-            int: Returns the modifier."""
-        return self.chst.attributes[attribute]["modifier"]
-
-    def getMyArmorProficiencies(self) -> List[str]:
-        """Returns the character's armor proficiency list.
-
-        Returns:
-            List[str]: Returns a list of the character's armor proficiencies."""
-        return self.chst.armors
-
-    def getMyBonus(self) -> Dict[str, int]:
-        """Returns the character's bonus.
-
-        Returns:
-            Dict[str, int]: Returns the character's ability score bonuses."""
-        return self.chst.bonus
-
-    def getMyFeats(self) -> List[str]:
-        """Returns the character's feats.
-
-        Returns:
-            List[str]: Returns a list of all the character's feats."""
-        return self.chst.feats
-
-    def getMyFeatures(self) -> List[str]:
-        """Returns the character's class features.
-
-        Returns:
-            List[str]: Returns a list of all the character's class features."""
-        return self.chst.features
-
-    def getMyLanguages(self) -> List[str]:
-        """Returns the character's languages.
-
-        Returns:
-            List[str]: Returns a list of the character's languages."""
-        return self.chst.languages
-
-    def getMyName(self) -> str:
-        """Returns the character's name.
-
-        Returns:
-            str: Returns the character's name."""
-        return self.chst.name
-
-    def getMyPreparedSpellCount(self):
-        """Returns the character's number of prepared spells."""
-        return self.chst.prepared_spells
-
-    def getMySavingThrows(self) -> List[str]:
-        """Returns the character's saving throw list."""
-        return self.chst.savingthrows
-
-    def getMySpecies(self) -> str:
-        """Returns the character's species.
-
-        Returns:
-            str: Returns the character's species."""
-        return self.chst.species
-
-    def getMySpeed(self) -> int:
-        """Returns the character's speed.
-
-        Returns:
-            int: Returns the character's speed value."""
-        return self.chst.speed
-
-    def getMySpellslots(self) -> List[int]:
-        """Returns the character's spell slots.
-
-        Returns:
-            List[int]: Returns a list of the character's spell slots."""
-        return self.chst.spell_slots
-
-    def getMyToolProficiencies(self) -> List[str]:
-        """Returns the character's tool proficiency list."""
-        return self.chst.tools
-
-    def getMyWeaponProficiencies(self) -> List[str]:
-        """Returns the character's weapon proficiency list."""
-        return self.chst.weapons
-
-    def getScoreByAbility(self, attribute: str) -> int:
-        """Returns the score of a specified attribute.
-
-        Args:
-            attribute (str): Name of the attribute to get the score for.
-
-        Returns:
-            int: Returns the score."""
-        return self.chst.attributes[attribute]["score"]
-
-    def getSubclassByClass(self, klass: str) -> str:
-        """Returns the specified subclass by klass.
-
-        Args:
-            klass (str): Class to get the subclass for.
-
-        Returns:
-            str: Returns the subclass of the specified class."""
-        return self.chst.classes[klass]["subclass"]
-
-    def getTotalLevel(self) -> int:
-        """Returns the total level for all character classes."""
-        return sum([v["level"] for v in tuple(self.chst.classes.values())])

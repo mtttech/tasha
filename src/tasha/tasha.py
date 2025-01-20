@@ -12,7 +12,7 @@ from rich.prompt import Confirm, IntPrompt, Prompt
 from rich.theme import Theme
 import toml
 
-from tasha.actor import CharacterSheet, PlayerCharacter
+from tasha.actor import PlayerCharacter
 from tasha.d20 import SystemResourceDocument
 from tasha.settings import SettingsLoader
 from tasha.themes import ThemeLoader
@@ -23,8 +23,7 @@ console = Console(
     theme=Theme(ThemeLoader(settings.default_theme).load()),
     width=80,
 )
-oSheet = CharacterSheet()
-oPC = PlayerCharacter(oSheet)
+oPC = PlayerCharacter()
 oSRD = SystemResourceDocument()
 
 
@@ -50,7 +49,7 @@ def apply_class(klass: str, primary_class: bool) -> None:
             oSRD.getSubclassesByClass(klass),
         )[0]
 
-    oSheet.set(
+    oPC.set(
         {
             "armors": oSRD.getArmorProficienciesByClass(klass, primary_class),
             "classes": {
@@ -65,14 +64,14 @@ def apply_class(klass: str, primary_class: bool) -> None:
     )
 
     # Skill allocations.
-    skills = oSRD.getSkillsByClass(klass, oSheet.getMySkills())
+    skills = oSRD.getSkillsByClass(klass, oPC.getMySkills())
     console.print("Choose a class skill.", style="default")
     if not primary_class:
         if klass == "Rogue":
             allotted_skills = 4
         elif klass in ("Bard", "Ranger"):
             allotted_skills = 1
-        oSheet.set(
+        oPC.set(
             "skills",
             io(skills, loop_count=allotted_skills),  # pyright: ignore
         )
@@ -83,7 +82,7 @@ def apply_class(klass: str, primary_class: bool) -> None:
             allotted_skills = 3
         else:
             allotted_skills = 2
-        oSheet.set(
+        oPC.set(
             "skills",
             io(skills, loop_count=allotted_skills),
         )
@@ -94,7 +93,7 @@ def apply_class(klass: str, primary_class: bool) -> None:
             "Choose your bardic musical instrument tool proficiencies.",
             style="default",
         )
-        oSheet.set(
+        oPC.set(
             "tools",
             io(
                 oSRD.getToolProficienciesByClass(klass, oPC.getMyToolProficiencies()),
@@ -106,14 +105,14 @@ def apply_class(klass: str, primary_class: bool) -> None:
             "Choose your monk artisan/musical instrument tool proficiency.",
             style="default",
         )
-        oSheet.set(
+        oPC.set(
             "tools",
             io(
                 oSRD.getToolProficienciesByClass(klass, oPC.getMyToolProficiencies()),
             ),
         )
     else:
-        oSheet.set("tools", oSRD.getToolProficienciesByClass(klass))
+        oPC.set("tools", oSRD.getToolProficienciesByClass(klass))
 
 
 def assign_abilities() -> Dict[str, Dict[str, int]]:
@@ -218,7 +217,7 @@ def get_multiclasses(
 
     # if the secondary class abiity score(s) are under 13
     for klass in oSRD.getClasses():
-        if klass not in oSheet.getMyClasses() and oSRD.hasAbilityRequirementsByClass(
+        if klass not in oPC.getMyClasses() and oSRD.hasAbilityRequirementsByClass(
             klass, attributes
         ):
             multiclasses.append(klass)
@@ -328,7 +327,7 @@ def main() -> None:
     # Choose a species
     # Choose equipment
     console.print("Choose your character's background.", style="default")
-    oSheet.set("background", io(oSRD.getBackgrounds())[0])
+    oPC.set("background", io(oSRD.getBackgrounds())[0])
 
     # Choose ability bonuses
     console.print(
@@ -349,7 +348,7 @@ def main() -> None:
         ["Apply 2/1", "Apply 1/1/1"],
     )[0]
     if array_selection == "Apply 2/1":
-        background_abilities = oSRD.getAbilitiesByBackground(oSheet.getMyBackground())
+        background_abilities = oSRD.getAbilitiesByBackground(oPC.getMyBackground())
 
         console.print("Choose which ability to apply a 2 point bonus", style="default")
         two_point_ability = io(background_abilities)[0]
@@ -360,29 +359,29 @@ def main() -> None:
         ability_bonus_array[one_point_ability] = 1
 
     if array_selection == "Apply 1/1/1":
-        for ability in oSRD.getAbilitiesByBackground(oSheet.getMyBackground()):
+        for ability in oSRD.getAbilitiesByBackground(oPC.getMyBackground()):
             ability_bonus_array[ability] = 1
 
-    oSheet.set("bonus", ability_bonus_array)
+    oPC.set("bonus", ability_bonus_array)
 
     console.print(
         "A background gives your character a specified Origin feat.", style="default"
     )
-    oSheet.set("feats", io(oSRD.getFeatsByCategory("Origin")))
+    oPC.set("feats", io(oSRD.getFeatsByCategory("Origin")))
 
     console.print(
         "A background gives your character proficiency in two specified skills.",
         style="default",
     )
     background_skills = list()
-    for skill in oSRD.getSkillsByBackground(oSheet.getMyBackground()):
-        if skill not in oSheet.getMySkills():
+    for skill in oSRD.getSkillsByBackground(oPC.getMyBackground()):
+        if skill not in oPC.getMySkills():
             background_skills.append(skill)
     skills = io(
         background_skills,
         loop_count=len(background_skills),
     )
-    oSheet.set("skills", skills)
+    oPC.set("skills", skills)
 
     console.print(
         "Each background gives a character proficiency with one tool-either a "
@@ -390,13 +389,13 @@ def main() -> None:
         style="default",
     )
     tool = io(
-        oSRD.getToolProficienciesByBackground(oSheet.getMyBackground()),
+        oSRD.getToolProficienciesByBackground(oPC.getMyBackground()),
     )
-    oSheet.set("tools", tool)
+    oPC.set("tools", tool)
 
     console.print("Choose a species for your character.", style="default")
     species = io(oSRD.getSpecies())[0]
-    oSheet.set(
+    oPC.set(
         {
             "size": oSRD.getSizeBySpecies(species),
             "species": species,
@@ -413,20 +412,20 @@ def main() -> None:
         oSRD.getStandardLanguages(),
         loop_count=2,
     )
-    oSheet.set("languages", ["Common"] + languages)
+    oPC.set("languages", ["Common"] + languages)
 
     # Generate/Assign ability scores
-    oSheet.set("attributes", assign_abilities())
+    oPC.set("attributes", assign_abilities())
 
     # Multiclass
-    klass = oSheet.getMyClasses()[0]
+    klass = oPC.getMyClasses()[0]
     if Confirm.ask("Would you like to multiclass?", console=console):
         console.print("Choose a secondary class.", style="default")
-        apply_class(io(get_multiclasses(klass, oSheet.getMyAttributes()))[0], False)
+        apply_class(io(get_multiclasses(klass, oPC.getMyAttributes()))[0], False)
 
     # Choose an alignment
     console.print("Choose your alignment.", style="default")
-    oSheet.set("alignment", io(oSRD.getAlignments())[0])
+    oPC.set("alignment", io(oSRD.getAlignments())[0])
 
     # Saving Throws
     # Passive Perception
@@ -439,12 +438,12 @@ def main() -> None:
     ability_score_improvements = oSRD.getFeaturesByClass(
         klass, oPC.getTotalLevel()
     ).count("Ability Score Improvement")
-    oSheet.set("feats", io(get_feats(), loop_count=ability_score_improvements))
+    oPC.set("feats", io(get_feats(), loop_count=ability_score_improvements))
 
     console.print("What's your gender?", style="default")
-    oSheet.set("gender", io(["Female", "Male"])[0])
+    oPC.set("gender", io(["Female", "Male"])[0])
 
-    oSheet.set(
+    oPC.set(
         {
             "cantrips": oSRD.getCantripsKnownByClass(klass, oPC.getTotalLevel()),
             "initiative": oPC.getModifierByAbility("Dexterity"),
@@ -454,8 +453,8 @@ def main() -> None:
     )
 
     # Set class features
-    for _class in oSheet.getMyClasses():
-        oSheet.set(
+    for _class in oPC.getMyClasses():
+        oPC.set(
             {
                 "features": oSRD.getFeaturesByClass(
                     _class, oPC.getLevelByClass(_class)
@@ -463,7 +462,7 @@ def main() -> None:
             }
         )
 
-    if oSheet.isSpellcaster():
+    if oPC.isSpellcaster():
         prepared_spells = list()
         prepared_spell_count = oSRD.getPreparedSpellCountByClass(
             klass, oPC.getTotalLevel()
@@ -480,13 +479,13 @@ def main() -> None:
             chosen_spell = io(oSRD.getSpellsByLevel(spell_level, klass)[spell_level])[0]
             prepared_spells.append(chosen_spell)
 
-        oSheet.set("prepared_spells", {klass: prepared_spells})
+        oPC.set("prepared_spells", {klass: prepared_spells})
 
     name = Prompt.ask("What is your character's name?", console=console).strip()
-    oSheet.set("name", name)
+    oPC.set("name", name)
 
     character_sheet = replace(
-        oSheet,
+        oPC,
         level=oPC.getTotalLevel(),
     )
     console.print(
