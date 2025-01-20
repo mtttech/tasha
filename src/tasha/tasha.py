@@ -114,6 +114,13 @@ def apply_class(klass: str, primary_class: bool) -> None:
     else:
         oPC.set("tools", oSRD.getToolProficienciesByClass(klass))
 
+    # Set class features
+    oPC.set(
+        {
+            "features": oSRD.getFeaturesByClass(klass, oPC.getLevelByClass(klass)),
+        }
+    )
+
 
 def assign_abilities() -> Dict[str, Dict[str, int]]:
     """Prompt to assign a score to each of the six abilities.
@@ -427,7 +434,6 @@ def main() -> None:
 
     # Saving Throws
     # Passive Perception
-    # Hit Point Dice
     # Initiative
     # Cantrips
     # Prepared Spells
@@ -449,16 +455,6 @@ def main() -> None:
             "spell_slots": oSRD.getSpellslotsByClass(klass, oPC.getTotalLevel()),
         }
     )
-
-    # Set class features
-    for _class in oPC.getMyClasses():
-        oPC.set(
-            {
-                "features": oSRD.getFeaturesByClass(
-                    _class, oPC.getLevelByClass(_class)
-                ),
-            }
-        )
 
     if oPC.isSpellcaster():
         prepared_spells = list()
