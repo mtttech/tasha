@@ -65,7 +65,7 @@ def apply_class(klass: str, primary_class: bool) -> None:
     )
 
     # Skill allocations.
-    skills = oSRD.getSkillsByClass(klass, oPC.getMySkills())
+    skills = oSRD.getSkillsByClass(klass, oSheet.getMySkills())
     console.print("Choose a class skill.", style="default")
     if not primary_class:
         if klass == "Rogue":
@@ -374,9 +374,13 @@ def main() -> None:
         "A background gives your character proficiency in two specified skills.",
         style="default",
     )
+    background_skills = list()
+    for skill in oSRD.getSkillsByBackground(oPC.getMyBackground()):
+        if skill not in oSheet.getMySkills():
+            background_skills.append(skill)
     skills = io(
-        oSRD.getSkillsByBackground(oPC.getMyBackground()),
-        loop_count=2,
+        background_skills,
+        loop_count=len(background_skills),
     )
     oSheet.set("skills", skills)
 
