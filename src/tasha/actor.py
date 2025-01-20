@@ -42,6 +42,26 @@ class CharacterSheet:
         except KeyError:
             self.initiative = 0
 
+    def __setitem__(self, name: str, value: Any) -> None:
+        key_value = eval(f"self.{name}")
+        # Append dictionary value to existing dictionary value.
+        if isinstance(key_value, dict) and isinstance(value, dict):
+            exec(f"self.{name}.update({value})")
+        # Append new attribute, assign value of 1. TODO: Investigate usage further
+        elif isinstance(key_value, dict) and isinstance(value, str):
+            exec(f"self.{name} = 1")
+        # Append list value to an existing list value.
+        elif isinstance(key_value, list) and isinstance(value, list):
+            exec(f"self.{name} = self.{name} + {value}")
+        # Append str value to an existing list value.
+        elif isinstance(key_value, list) and isinstance(value, str):
+            exec(f'self.{name}.append("{value}")')
+        else:
+            if isinstance(value, str):
+                exec(f'self.{name} = "{value}"')
+            else:
+                exec(f"self.{name} = {value}")
+                
     def getMyAttributes(self) -> Dict[str, Dict[str, Any]]:
         """Returns a dictionary of all attributes.
 
@@ -146,26 +166,6 @@ class CharacterSheet:
             return total_hit_points
         except UnboundLocalError:
             return 0
-
-    def __setitem__(self, name: str, value: Any) -> None:
-        key_value = eval(f"self.{name}")
-        # Append dictionary value to existing dictionary value.
-        if isinstance(key_value, dict) and isinstance(value, dict):
-            exec(f"self.{name}.update({value})")
-        # Append new attribute, assign value of 1. TODO: Investigate usage further
-        elif isinstance(key_value, dict) and isinstance(value, str):
-            exec(f"self.{name} = 1")
-        # Append list value to an existing list value.
-        elif isinstance(key_value, list) and isinstance(value, list):
-            exec(f"self.{name} = self.{name} + {value}")
-        # Append str value to an existing list value.
-        elif isinstance(key_value, list) and isinstance(value, str):
-            exec(f'self.{name}.append("{value}")')
-        else:
-            if isinstance(value, str):
-                exec(f'self.{name} = "{value}"')
-            else:
-                exec(f"self.{name} = {value}")
 
     def set(self, *args) -> None:
         num_of_args = len(args)
