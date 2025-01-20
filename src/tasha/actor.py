@@ -17,7 +17,6 @@ class CharacterSheet:
     feats: List[str] = field(default_factory=list)
     features: List[str] = field(default_factory=list)
     gender: str = field(default="")
-    hit_die: int = field(default=0)
     hit_points: int = field(init=False)
     initiative: int = field(default=0)
     languages: List[str] = field(default_factory=list)
