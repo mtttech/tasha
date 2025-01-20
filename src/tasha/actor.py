@@ -38,7 +38,7 @@ class PlayerCharacter:
         self.hit_points = self._rollHitPoints()
         self.proficiency_bonus = ceil(self.level / 4) + 1
         try:
-            self.initiative = self.attributes["Dexterity"]["modifier"]
+            self.initiative = self.getModifierByAbility("Dexterity")
         except KeyError:
             self.initiative = 0
 
@@ -68,7 +68,7 @@ class PlayerCharacter:
         Returns:
             int: Returns the calculated hit point total."""
         try:
-            modifier = self.attributes["Constitution"]["modifier"]
+            modifier = self.getModifierByAbility("Constitution")
         except KeyError:
             modifier = 0
 
@@ -85,7 +85,7 @@ class PlayerCharacter:
                 total_hit_points += sum(
                     [
                         avg_hit_die + modifier
-                        for _ in range(1, self.classes[klass]["level"])
+                        for _ in range(1, self.getLevelByClass(klass))
                     ]
                 )
 
@@ -217,15 +217,24 @@ class PlayerCharacter:
         return self.spell_slots
 
     def getMySubclasses(self) -> List[str]:
-        """Returns all the character's selected subclasses."""
+        """Returns all the character's selected subclasses.
+
+        Returns:
+            List[str]: Returns a list of the character's subclasses."""
         return [v["subclass"] for v in tuple(self.classes.values())]
 
     def getMyToolProficiencies(self) -> List[str]:
-        """Returns the character's tool proficiency list."""
+        """Returns the character's tool proficiency list.
+
+        Returns:
+            List[str]: Returns a list of the character's tool proficiencies."""
         return self.tools
 
     def getMyWeaponProficiencies(self) -> List[str]:
-        """Returns the character's weapon proficiency list."""
+        """Returns the character's weapon proficiency list.
+
+        Returns:
+            List[str]: Returns a list of the character's weapon proficiencies."""
         return self.weapons
 
     def getScoreByAbility(self, attribute: str) -> int:
@@ -249,7 +258,10 @@ class PlayerCharacter:
         return self.classes[klass]["subclass"]
 
     def getTotalLevel(self) -> int:
-        """Returns the total level for all character classes."""
+        """Returns the total level for all character classes.
+
+        Returns:
+            int: Returns the total level of all applicable classes."""
         return sum([v["level"] for v in tuple(self.classes.values())])
 
     def hasClass(self, klass: str) -> bool:
