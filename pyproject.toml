@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "tasha"
-version = "0.7.2"
+version = "0.7.3"
 description = "Tasha is a tool for creating characters for Dungeons & Dragons 5th edition (2024)."
 authors = ["Marcus T Taylor <mtaylor9754@hotmail.com>"]
 license = "MIT"
