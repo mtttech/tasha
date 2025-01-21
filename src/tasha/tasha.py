@@ -71,9 +71,11 @@ def apply_class(klass: str, primary_class: bool) -> None:
             allotted_skills = 4
         elif klass in ("Bard", "Ranger"):
             allotted_skills = 1
+        else:
+            allotted_skills = 0
         oPC.set(
             "skills",
-            io(skills, loop_count=allotted_skills),  # pyright: ignore
+            io(skills, loop_count=allotted_skills),
         )
     else:
         if klass == "Rogue":
