@@ -22,7 +22,7 @@ class PlayerCharacter:
     languages: List[str] = field(default_factory=list)
     level: int = field(default=1)
     name: str = field(default="")
-    prepared_spells: Dict[str, str] = field(default_factory=dict)
+    prepared_spells: Dict[str, List[str]] = field(default_factory=dict)
     proficiency_bonus: int = field(default=0)
     savingthrows: List[str] = field(default_factory=list)
     size: str = field(default="Medium")
@@ -35,6 +35,11 @@ class PlayerCharacter:
     weapons: List[str] = field(default_factory=list)
 
     def __post_init__(self) -> None:
+        # Make sure no duplicates.
+        self.armors = list(set(self.armors))
+        self.tools = list(set(self.tools))
+        self.weapons = list(set(self.weapons))
+
         self.hit_points = self._rollHitPoints()
         self.proficiency_bonus = ceil(self.level / 4) + 1
         try:
@@ -44,18 +49,19 @@ class PlayerCharacter:
 
     def __setitem__(self, name: str, value: Any) -> None:
         key_value = eval(f"self.{name}")
-        # Append dictionary value to existing dictionary value.
+        # Dict: Append dictionary value to existing dictionary value.
         if isinstance(key_value, dict) and isinstance(value, dict):
             exec(f"self.{name}.update({value})")
-        # Append new attribute, assign value of 1. TODO: Investigate usage further
+        # Dict: Append new attribute, assign value of 1. TODO: Investigate usage further
         elif isinstance(key_value, dict) and isinstance(value, str):
             exec(f"self.{name} = 1")
-        # Append list value to an existing list value.
+        # List: Append list value to an existing list value.
         elif isinstance(key_value, list) and isinstance(value, list):
             exec(f"self.{name} = self.{name} + {value}")
-        # Append str value to an existing list value.
+        # List: Append str value to an existing list value.
         elif isinstance(key_value, list) and isinstance(value, str):
             exec(f'self.{name}.append("{value}")')
+        # Str, Int: Literal values.
         else:
             if isinstance(value, str):
                 exec(f'self.{name} = "{value}"')
