@@ -89,7 +89,7 @@ def apply_class(klass: str, primary_class: bool) -> None:
             io(skills, loop_count=allotted_skills),
         )
 
-    # Handle tool proficiency allocations.
+    # Handle class tool proficiency allocations.
     if klass == "Bard":
         console.print(
             "Choose your bardic musical instrument tool proficiencies.",
@@ -119,7 +119,9 @@ def apply_class(klass: str, primary_class: bool) -> None:
     # Set class features
     oPC.set(
         {
-            "features": oSRD.getFeaturesByClass(klass, oPC.getLevelByClass(klass)),
+            "features": {
+                klass: oSRD.getFeaturesByClass(klass, oPC.getLevelByClass(klass))
+            },
         }
     )
 
@@ -452,7 +454,6 @@ def main() -> None:
     oPC.set(
         {
             "cantrips": oSRD.getCantripsKnownByClass(klass, oPC.getTotalLevel()),
-            "initiative": oPC.getModifierByAbility("Dexterity"),
             "savingthrows": oSRD.getSavingThrowsByClass(klass),
             "spell_slots": oSRD.getSpellslotsByClass(klass, oPC.getTotalLevel()),
         }
