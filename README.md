@@ -53,10 +53,8 @@ armors = [ "Light", "Medium", "Shield",]
 background = "Entertainer"
 cantrips = 4
 feats = [ "Magic Initiate", "Chef",]
-features = [ "Divine Order", "Spellcasting", "Channel Divinity", "Cleric Subclass", "Ability Score Improvement", "Sear Undead",]
 gender = "Female"
 hit_points = 33
-initiative = 2
 languages = [ "Common", "Draconic", "Elvish",]
 level = 5
 name = "Khrista"
@@ -78,6 +76,9 @@ Constitution = 0
 Intelligence = 0
 Wisdom = 0
 Charisma = 1
+
+[features]
+Cleric = [ "Divine Order", "Spellcasting", "Channel Divinity", "Cleric Subclass", "Ability Score Improvement", "Sear Undead",]
 
 [prepared_spells]
 Cleric = [ "Bestow Curse", "Continual Flame", "Create Food and Water", "Ceremony", "Blindness/Deafness", "Spirit Guardians", "Healing Word", "Cure Wounds", "Silence",]
