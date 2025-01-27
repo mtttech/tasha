@@ -5,7 +5,7 @@ from typing import Any, Dict, List
 
 @dataclass
 class PlayerCharacter:
-    """Class to store/retreive character information."""
+    """Stores/retrieves player character information."""
 
     alignment: str = field(default="")
     armors: List[str] = field(default_factory=list)
@@ -15,10 +15,9 @@ class PlayerCharacter:
     cantrips: int = field(default=0)
     classes: Dict[str, Dict[str, Any]] = field(default_factory=dict)
     feats: List[str] = field(default_factory=list)
-    features: List[str] = field(default_factory=list)
+    features: Dict[str, List[str]] = field(default_factory=dict)
     gender: str = field(default="")
     hit_points: int = field(init=False)
-    initiative: int = field(default=0)
     languages: List[str] = field(default_factory=list)
     level: int = field(default=1)
     name: str = field(default="")
@@ -35,29 +34,19 @@ class PlayerCharacter:
     weapons: List[str] = field(default_factory=list)
 
     def __post_init__(self) -> None:
-        # Make sure no duplicates.
-        self.armors = list(set(self.armors))
-        self.tools = list(set(self.tools))
-        self.weapons = list(set(self.weapons))
-
+        # Calculate hit points/proficiency bonus.
         self.hit_points = self._rollHitPoints()
         self.proficiency_bonus = ceil(self.level / 4) + 1
-        try:
-            self.initiative = self.getModifierByAbility("Dexterity")
-        except KeyError:
-            self.initiative = 0
 
     def __setitem__(self, name: str, value: Any) -> None:
         key_value = eval(f"self.{name}")
         # Dict: Append dictionary value to existing dictionary value.
         if isinstance(key_value, dict) and isinstance(value, dict):
             exec(f"self.{name}.update({value})")
-        # Dict: Append new attribute, assign value of 1. TODO: Investigate usage further
-        elif isinstance(key_value, dict) and isinstance(value, str):
-            exec(f"self.{name} = 1")
         # List: Append list value to an existing list value.
         elif isinstance(key_value, list) and isinstance(value, list):
             exec(f"self.{name} = self.{name} + {value}")
+            exec(f"self.{name} = list(set(self.{name}))")
         # List: Append str value to an existing list value.
         elif isinstance(key_value, list) and isinstance(value, str):
             exec(f'self.{name}.append("{value}")')
@@ -73,11 +62,7 @@ class PlayerCharacter:
 
         Returns:
             int: Returns the calculated hit point total."""
-        try:
-            modifier = self.getModifierByAbility("Constitution")
-        except KeyError:
-            modifier = 0
-
+        modifier = self.getModifierByAbility("Constitution")
         total_hit_points = 0
         for class_slot, klass in enumerate(tuple(self.classes.keys())):
             max_hit_die = self.classes[klass]["hit_die"]
@@ -121,7 +106,10 @@ class PlayerCharacter:
 
         Returns:
             int: Returns the modifier."""
-        return self.attributes[attribute]["modifier"]
+        try:
+            return self.attributes[attribute]["modifier"]
+        except KeyError:
+            return 0
 
     def getMyArmorProficiencies(self) -> List[str]:
         """Returns the character's armor proficiency list.
@@ -165,7 +153,7 @@ class PlayerCharacter:
             List[str]: Returns a list of all the character's feats."""
         return self.feats
 
-    def getMyFeatures(self) -> List[str]:
+    def getMyFeatures(self) -> Dict[str, List[str]]:
         """Returns the character's class features.
 
         Returns:
@@ -186,8 +174,8 @@ class PlayerCharacter:
             str: Returns the character's name."""
         return self.name
 
-    def getMyPreparedSpellCount(self):
-        """Returns the character's number of prepared spells."""
+    def getMyPreparedSpellCount(self) -> Dict[str, List[str]]:
+        """Returns the character's prepared spells."""
         return self.prepared_spells
 
     def getMySavingThrows(self) -> List[str]:
