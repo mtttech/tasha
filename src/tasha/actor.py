@@ -143,7 +143,7 @@ class PlayerCharacter:
         """Returns the character's classes.
 
         Returns:
-            List[str]: Returns a list of all the character's classes."""
+            List[str]: Returns a list of the character's classes."""
         return list(self.classes.keys())
 
     def getMyFeats(self) -> List[str]:
@@ -173,10 +173,6 @@ class PlayerCharacter:
         Returns:
             str: Returns the character's name."""
         return self.name
-
-    def getMyPreparedSpellCount(self) -> Dict[str, List[str]]:
-        """Returns the character's prepared spells."""
-        return self.prepared_spells
 
     def getMySavingThrows(self) -> List[str]:
         """Returns the character's saving throw list."""
