@@ -27,110 +27,11 @@ oPC = PlayerCharacter()
 oSRD = SystemResourceDocument()
 
 
-def apply_class(klass: str, primary_class: bool) -> None:
-    """Applies primary/secondary class features.
-
-    Args:
-        klass (str): Name of the class to apply class features for.
-        primary_class (bool): Attributes to use in the requirements check.
-
-    Returns:
-        None."""
-    console.print(f"What is your '{klass}' class level?", style="default")
-    level = int(io(20)[0])
-
-    subclass = ""
-    if level >= 3:
-        console.print(
-            f"If you start at level 3 or higher, choose a {klass} subclass.",
-            style="default",
-        )
-        subclass = io(
-            oSRD.getSubclassesByClass(klass),
-        )[0]
-
-    oPC.set(
-        {
-            "armors": oSRD.getArmorProficienciesByClass(klass, primary_class),
-            "classes": {
-                klass: {
-                    "level": level,
-                    "hit_die": oSRD.getHitDieByClass(klass),
-                    "subclass": subclass,
-                }
-            },
-            "weapons": oSRD.getWeaponProficienciesByClass(klass, primary_class),
-        }
-    )
-
-    # Skill allocations.
-    skills = oSRD.getSkillsByClass(klass, oPC.getMySkills())
-    console.print("Choose a class skill.", style="default")
-    if not primary_class:
-        if klass == "Rogue":
-            allotted_skills = 4
-        elif klass in ("Bard", "Ranger"):
-            allotted_skills = 1
-        else:
-            allotted_skills = 0
-        oPC.set(
-            "skills",
-            io(skills, loop_count=allotted_skills),
-        )
-    else:
-        if klass == "Rogue":
-            allotted_skills = 4
-        elif klass in ("Bard", "Ranger"):
-            allotted_skills = 3
-        else:
-            allotted_skills = 2
-        oPC.set(
-            "skills",
-            io(skills, loop_count=allotted_skills),
-        )
-
-    # Handle class tool proficiency allocations.
-    if klass == "Bard":
-        console.print(
-            "Choose your bardic musical instrument tool proficiencies.",
-            style="default",
-        )
-        oPC.set(
-            "tools",
-            io(
-                oSRD.getToolProficienciesByClass(klass, oPC.getMyToolProficiencies()),
-                loop_count=3 if primary_class else 1,
-            ),
-        )
-    elif primary_class and klass == "Monk":
-        console.print(
-            "Choose your monk artisan/musical instrument tool proficiency.",
-            style="default",
-        )
-        oPC.set(
-            "tools",
-            io(
-                oSRD.getToolProficienciesByClass(klass, oPC.getMyToolProficiencies()),
-            ),
-        )
-    else:
-        oPC.set("tools", oSRD.getToolProficienciesByClass(klass))
-
-    # Set class features
-    oPC.set(
-        {
-            "features": {
-                klass: oSRD.getFeaturesByClass(klass, oPC.getLevelByClass(klass))
-            },
-        }
-    )
-
-
-def assign_abilities() -> Dict[str, Dict[str, int]]:
+def assign_ability_scores() -> Dict[str, Dict[str, int]]:
     """Prompt to assign a score to each of the six abilities.
 
     Returns:
-        Dict[str, Dict[str, int]]: Returns dict of abilities, scores, modifiers."""
+        Dict[str, Dict[str, int]]: Returns dict of abilities."""
     ability_array = {
         "Strength": {"score": 0, "modifier": 0},
         "Dexterity": {"score": 0, "modifier": 0},
@@ -139,10 +40,10 @@ def assign_abilities() -> Dict[str, Dict[str, int]]:
         "Wisdom": {"score": 0, "modifier": 0},
         "Charisma": {"score": 0, "modifier": 0},
     }
-    results = generate_scores()
-    results.sort(reverse=True)
+    generated_scores = generate_scores()
+    generated_scores.sort(reverse=True)
     ability_names = list(ability_array.keys())
-    for score in results:
+    for score in generated_scores:
         console.print(f"Assign {score} to which ability?", style="default")
         ability_array[io(ability_names)[0]] = {
             "score": score,
@@ -152,10 +53,7 @@ def assign_abilities() -> Dict[str, Dict[str, int]]:
     # Apply background ability bonuses.
     for ability, bonus in oPC.getMyBonus().items():
         if bonus > 0:
-            old_score = ability_array[ability]["score"]
-            new_score = old_score + bonus
-            if new_score > 20:
-                new_score = 20
+            new_score = ability_array[ability]["score"] + bonus
             ability_array[ability] = {
                 "score": new_score,
                 "modifier": calculate_modifier(new_score),
@@ -168,7 +66,7 @@ def assign_abilities() -> Dict[str, Dict[str, int]]:
         )
     )
     if not Confirm.ask("Are you satisfied with these ability scores?", console=console):
-        return assign_abilities()
+        return assign_ability_scores()
 
     return ability_array
 
@@ -185,7 +83,7 @@ def calculate_modifier(score: int) -> int:
 
 
 def generate_scores() -> List[int]:
-    """Randomly generates six values.
+    """Randomly generates six scores.
 
     Continuously rerolls if one of the following is true:
 
@@ -202,7 +100,7 @@ def generate_scores() -> List[int]:
     return dice_rolls
 
 
-def get_feats() -> List[str]:
+def get_allowed_feats() -> List[str]:
     """Returns a list of selectable feats.
 
     1. feats the character doesn't already have
@@ -213,7 +111,7 @@ def get_feats() -> List[str]:
     return [f for f in oSRD.getFeats() if has_requirements(f)]
 
 
-def get_multiclasses() -> List[str]:
+def get_allowed_multiclasses() -> List[str]:
     """Retrieves a list of valid multiclassing options.
 
     Returns:
@@ -326,11 +224,106 @@ def io(choices: List[str] | int, loop_count: int = 1) -> List[str]:
     return selections
 
 
+def set_class_features(klass: str, primary_class: bool) -> None:
+    """Applies primary/secondary class features.
+
+    Args:
+        klass (str): Name of the class to apply class features for.
+        primary_class (bool): Determines if primary class or not.
+
+    Returns:
+        None."""
+    console.print(f"What is your '{klass}' class level?", style="default")
+    level = int(io(20)[0])
+
+    subclass = ""
+    if level >= 3:
+        console.print(
+            f"If you start at level 3 or higher, choose a {klass} subclass.",
+            style="default",
+        )
+        subclass = io(
+            oSRD.getSubclassesByClass(klass),
+        )[0]
+
+    oPC.set(
+        {
+            "armors": oSRD.getArmorProficienciesByClass(klass, primary_class),
+            "classes": {
+                klass: {
+                    "level": level,
+                    "hit_die": oSRD.getHitDieByClass(klass),
+                    "subclass": subclass,
+                }
+            },
+            "weapons": oSRD.getWeaponProficienciesByClass(klass, primary_class),
+        }
+    )
+
+    # Skill allocations.
+    skills = oSRD.getSkillsByClass(klass, oPC.getMySkills())
+    console.print("Choose a class skill.", style="default")
+    if not primary_class:
+        if klass == "Rogue":
+            allotted_skills = 4
+        elif klass in ("Bard", "Ranger"):
+            allotted_skills = 1
+        else:
+            allotted_skills = 0
+    else:
+        if klass == "Rogue":
+            allotted_skills = 4
+        elif klass in ("Bard", "Ranger"):
+            allotted_skills = 3
+        else:
+            allotted_skills = 2
+    oPC.set(
+        "skills",
+        io(skills, loop_count=allotted_skills),
+    )
+
+    # Handle class tool proficiency allocations.
+    if klass == "Bard":
+        console.print(
+            "Choose your bardic musical instrument tool proficiencies.",
+            style="default",
+        )
+        oPC.set(
+            "tools",
+            io(
+                oSRD.getToolProficienciesByClass(klass, oPC.getMyToolProficiencies()),
+                loop_count=3 if primary_class else 1,
+            ),
+        )
+    elif primary_class and klass == "Monk":
+        console.print(
+            "Choose your monk artisan/musical instrument tool proficiency.",
+            style="default",
+        )
+        oPC.set(
+            "tools",
+            io(
+                oSRD.getToolProficienciesByClass(klass, oPC.getMyToolProficiencies()),
+            ),
+        )
+    else:
+        oPC.set("tools", oSRD.getToolProficienciesByClass(klass))
+
+    # Set class features
+    oPC.set(
+        {
+            "features": {
+                klass: oSRD.getFeaturesByClass(klass, oPC.getLevelByClass(klass))
+            },
+        }
+    )
+
+
 def main() -> None:
     # Choose class/subclass
     # Select level
     console.print("Choose a primary class.", style="default")
-    apply_class(io(oSRD.getClasses())[0], True)
+    set_class_features(io(oSRD.getClasses())[0], True)
 
     # Choose a background
     # Choose a species
@@ -424,13 +417,13 @@ def main() -> None:
     oPC.set("languages", ["Common"] + languages)
 
     # Generate/Assign ability scores
-    oPC.set("attributes", assign_abilities())
+    oPC.set("attributes", assign_ability_scores())
 
     # Multiclass
     klass = oPC.getMyClasses()[0]
     if Confirm.ask("Would you like to multiclass?", console=console):
         console.print("Choose a secondary class.", style="default")
-        apply_class(io(get_multiclasses())[0], False)
+        set_class_features(io(get_allowed_multiclasses())[0], False)
 
     # Choose an alignment
     console.print("Choose your alignment.", style="default")
@@ -446,7 +439,7 @@ def main() -> None:
     ability_score_improvements = oSRD.getFeaturesByClass(
         klass, oPC.getTotalLevel()
     ).count("Ability Score Improvement")
-    oPC.set("feats", io(get_feats(), loop_count=ability_score_improvements))
+    oPC.set("feats", io(get_allowed_feats(), loop_count=ability_score_improvements))
 
     console.print("What's your gender?", style="default")
     oPC.set("gender", io(["Female", "Male"])[0])
