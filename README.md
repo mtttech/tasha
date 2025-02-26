@@ -49,66 +49,65 @@ Below is an example of such a character.
 
 ```
 alignment = "Chaotic Good"
-armors = [ "Light", "Medium", "Shield",]
-background = "Entertainer"
-cantrips = 4
-feats = [ "Magic Initiate", "Chef",]
+armors = [ "Heavy", "Medium", "Light", "Shield",]
+background = "Farmer"
+cantrips = 0
+feats = [ "Savage Attacker",]
 gender = "Female"
-hit_points = 33
-languages = [ "Common", "Draconic", "Elvish",]
-level = 5
-name = "Khrista"
-proficiency_bonus = 3
-savingthrows = [ "Charisma", "Wisdom",]
+hit_points = 20
+languages = [ "Dwarvish", "Common", "Elvish",]
+level = 2
+name = "Khalia"
+proficiency_bonus = 2
+savingthrows = [ "Strength", "Constitution",]
 size = "Medium"
-skills = [ "Acrobatics", "Performance", "History", "Religion",]
+skills = [ "Acrobatics", "Animal Handling", "Athletics", "Nature",]
 species = "Elf"
 speed = 30
-spell_slots = [ 4, 3, 2,]
-tools = [ "Musical Instrument - Dulcimer",]
-traits = [ "Darkvision", "Elven Lineage", "Fey Ancestry", "Keen Senses", "Trance",]
-weapons = [ "Simple",]
+spell_slots = [ 0,]
+tools = [ "Artisan's Tools - Carpenter's Tools",]
+traits = [ "Keen Senses", "Elven Lineage", "Trance", "Darkvision", "Fey Ancestry",]
+weapons = [ "Martial", "Simple",]
 
 [bonus]
-Strength = 2
+Strength = 1
 Dexterity = 0
-Constitution = 0
+Constitution = 1
 Intelligence = 0
-Wisdom = 0
-Charisma = 1
+Wisdom = 1
+Charisma = 0
 
 [features]
-Cleric = [ "Divine Order", "Spellcasting", "Channel Divinity", "Cleric Subclass", "Ability Score Improvement", "Sear Undead",]
+Fighter = [ "Fighting Style", "Second Wind", "Weapon Mastery", "Action Surge (one use)", "Tactical Mind",]
 
 [prepared_spells]
-Cleric = [ "Bestow Curse", "Continual Flame", "Create Food and Water", "Ceremony", "Blindness/Deafness", "Spirit Guardians", "Healing Word", "Cure Wounds", "Silence",]
 
 [attributes.Strength]
-score = 19
-modifier = 4
+score = 16
+modifier = 3
 
 [attributes.Dexterity]
+score = 13
+modifier = 1
+
+[attributes.Constitution]
 score = 14
 modifier = 2
 
-[attributes.Constitution]
-score = 13
-modifier = 1
-
 [attributes.Intelligence]
-score = 13
-modifier = 1
-
-[attributes.Wisdom]
-score = 18
-modifier = 4
-
-[attributes.Charisma]
 score = 11
 modifier = 0
 
-[classes.Cleric]
-level = 5
-hit_die = 8
-subclass = "Life Domain"
+[attributes.Wisdom]
+score = 12
+modifier = 1
+
+[attributes.Charisma]
+score = 10
+modifier = 0
+
+[classes.Fighter]
+level = 2
+hit_die = 10
+subclass = ""
 ```
