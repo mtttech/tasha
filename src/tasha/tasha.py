@@ -14,13 +14,18 @@ import toml
 
 from tasha.actor import PlayerCharacter
 from tasha.d20 import SystemResourceDocument
-from tasha.settings import SettingsLoader
-from tasha.themes import ThemeLoader
 
-settings = SettingsLoader()
 console = Console(
     tab_size=2,
-    theme=Theme(ThemeLoader(settings.default_theme).load()),
+    theme=Theme(
+        {
+            "default": "bold green",
+            "exit": "bold dim red",
+            "menu.index": "bold italic cyan",
+            "menu.option": "bold magenta",
+            "prompt": "bold dim green",
+        }
+    ),
     width=80,
 )
 oPC = PlayerCharacter()
