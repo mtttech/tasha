@@ -21,6 +21,10 @@ classifiers = [
     "Topic :: Utilities",
 ]
 
+
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/mtttech/tasha/issues"
+
 [tool.poetry.dependencies]
 python = "^3.9"
 dice = "^4.0.0"
