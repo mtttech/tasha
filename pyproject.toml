@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "tasha"
-version = "0.7.6"
+version = "0.7.7"
 description = "Tasha is a tool for creating characters for Dungeons & Dragons 5th edition (2024)."
 authors = ["Marcus T Taylor <mtaylor9754@hotmail.com>"]
 license = "MIT"
@@ -10,11 +10,6 @@ classifiers = [
     "Environment :: Console",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
-    "Programming Language :: Python",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Topic :: Games/Entertainment",
     "Topic :: Games/Entertainment :: Role-Playing",
@@ -34,6 +29,12 @@ toml = "^0.10.2"
 [tool.poetry.scripts]
 tasha='tasha.tasha:tasha_main'
 
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.5"
+
+[tool.pytest.ini_options]
+pythonpath = "src"
 
 [build-system]
 requires = ["poetry-core"]
