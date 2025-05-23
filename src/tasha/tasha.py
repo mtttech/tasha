@@ -3,7 +3,6 @@ from math import floor
 from pathlib import Path
 from typing import Dict, List
 
-import dice  # pyright: ignore
 from rich.console import Console
 from rich.panel import Panel
 from rich.pretty import Pretty
@@ -37,6 +36,27 @@ def assign_ability_scores() -> Dict[str, Dict[str, int]]:
 
     Returns:
         Dict[str, Dict[str, int]]: Returns dict of abilities."""
+
+    def generate_scores() -> List[int]:
+        """Randomly generates six scores.
+
+        Continuously rerolls if one of the following is true:
+
+        1. smallest score < 8
+        2. or largest score < 15
+
+        Returns:
+            List[int]: Returns a list of six integers."""
+        import dice  # pyright: ignore
+
+        while True:
+            dice_rolls = [sum(dice.roll("4d6^3")) for _ in range(6)]  # pyright: ignore
+            if min(dice_rolls) >= 8 and max(dice_rolls) >= 15:
+                break
+
+        dice_rolls.sort(reverse=True)
+        return dice_rolls
+
     ability_array = {
         "Strength": {"score": 0, "modifier": 0},
         "Dexterity": {"score": 0, "modifier": 0},
@@ -46,7 +66,6 @@ def assign_ability_scores() -> Dict[str, Dict[str, int]]:
         "Charisma": {"score": 0, "modifier": 0},
     }
     generated_scores = generate_scores()
-    generated_scores.sort(reverse=True)
     ability_names = list(ability_array.keys())
     for score in generated_scores:
         console.print(f"Assign {score} to which ability?", style="default")
@@ -64,15 +83,6 @@ def assign_ability_scores() -> Dict[str, Dict[str, int]]:
                 "modifier": calculate_modifier(new_score),
             }
 
-    console.print(
-        Panel(
-            Pretty(ability_array, expand_all=True),
-            title="Generated Ability Scores (Background bonuses applied)",
-        )
-    )
-    if not Confirm.ask("Are you satisfied with these ability scores?", console=console):
-        return assign_ability_scores()
-
     return ability_array
 
 
@@ -85,24 +95,6 @@ def calculate_modifier(score: int) -> int:
     Returns:
         int: Returns the calculated modifier of the specified score."""
     return floor((score - 10) / 2)
-
-
-def generate_scores() -> List[int]:
-    """Randomly generates six scores.
-
-    Continuously rerolls if one of the following is true:
-
-    1. smallest score < 8
-    2. or largest score < 15
-
-    Returns:
-        List[int]: Returns a list of six integers."""
-    while True:
-        dice_rolls = [sum(dice.roll("4d6^3")) for _ in range(6)]  # pyright: ignore
-        if min(dice_rolls) >= 8 and max(dice_rolls) >= 15:
-            break
-
-    return dice_rolls
 
 
 def get_allowed_feats() -> List[str]:
@@ -422,7 +414,20 @@ def main() -> None:
     oPC.set("languages", ["Common"] + languages)
 
     # Generate/Assign ability scores
-    oPC.set("attributes", assign_ability_scores())
+    ability_array = {}
+    while len(ability_array) == 0:
+        ability_array = assign_ability_scores()
+        console.print(
+            Panel(
+                Pretty(ability_array, expand_all=True),
+                title="Generated Ability Scores (Background bonuses applied)",
+            )
+        )
+        if not Confirm.ask(
+            "Are you satisfied with these ability scores?", console=console
+        ):
+            ability_array = {}
+    oPC.set("attributes", ability_array)
 
     # Multiclass
     klass = oPC.getMyClasses()[0]
