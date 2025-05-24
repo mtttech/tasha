@@ -113,7 +113,7 @@ def get_allowed_multiclasses() -> List[str]:
 
     Returns:
         List[str]: Returns a list of allowable character multiclasses."""
-    multiclasses = list()
+    multiclasses = []
 
     # If the primary class ability score(s) are under 13.
     if not oSRD.hasAbilityRequirementsByClass(oPC.getMyClasses()[0], oPC.attributes):
@@ -142,6 +142,7 @@ def has_requirements(feat: str) -> bool:
         bool: True if prerequisites met, False otherwise."""
     ability_requirements = oSRD.getAbilityRequirementsByFeat(feat)
     required_abilities = list(ability_requirements.keys())
+
     if len(required_abilities) > 0:
         ability_chk_success = False
         for ability in required_abilities:
@@ -153,12 +154,14 @@ def has_requirements(feat: str) -> bool:
             return ability_chk_success
 
     armor_requirements = oSRD.getArmorRequirementsByFeat(feat)
+
     if len(armor_requirements) > 0:
         for armor in armor_requirements:
             if armor not in oPC.getMyArmorProficiencies():
                 return False
 
     features_requirements = oSRD.getFeatureRequirementsByFeat(feat)
+
     if len(features_requirements) > 0:
         features_chk_success = False
         for feature in features_requirements:
@@ -413,21 +416,21 @@ def main() -> None:
     )
     oPC.set("languages", ["Common"] + languages)
 
-    # Generate/Assign ability scores
-    ability_array = {}
-    while len(ability_array) == 0:
-        ability_array = assign_ability_scores()
+    # Generate/Assign attributes
+    attributes_array = {}
+    while len(attributes_array) == 0:
+        attributes_array = assign_ability_scores()
         console.print(
             Panel(
-                Pretty(ability_array, expand_all=True),
+                Pretty(attributes_array, expand_all=True),
                 title="Generated Ability Scores (Background bonuses applied)",
             )
         )
         if not Confirm.ask(
             "Are you satisfied with these ability scores?", console=console
         ):
-            ability_array = {}
-    oPC.set("attributes", ability_array)
+            attributes_array = {}
+    oPC.set("attributes", attributes_array)
 
     # Multiclass
     klass = oPC.getMyClasses()[0]
