@@ -1,4 +1,8 @@
-from tasha.tasha import calculate_modifier
+from tasha.tasha import assign_ability_scores, calculate_modifier
+
+
+def test_assign_ability_scores():
+    assert assign_ability_scores()
 
 
 def test_calculate_modifier():
