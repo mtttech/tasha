@@ -33,7 +33,9 @@ tasha='tasha.tasha:tasha_main'
 pytest = "^8.3.5"
 
 [tool.pytest.ini_options]
-pythonpath = "src"
+pythonpath = [
+    ".", "src"
+]
 
 [build-system]
 requires = ["poetry-core"]
