@@ -1,4 +1,4 @@
-stylesheet = {
+css = {
     "default": "bold green",
     "exit": "bold dim red",
     "menu.index": "bold italic cyan",

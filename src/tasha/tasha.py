@@ -12,12 +12,12 @@ from rich.theme import Theme
 import toml
 
 from tasha.actor import PlayerCharacter
-from tasha.css import stylesheet
 from tasha.d20 import SystemResourceDocument
+from tasha.stylesheet import css
 
 console = Console(
     tab_size=2,
-    theme=Theme(stylesheet),
+    theme=Theme(css),
     width=80,
 )
 oPC = PlayerCharacter()
