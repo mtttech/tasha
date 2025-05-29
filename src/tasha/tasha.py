@@ -12,19 +12,12 @@ from rich.theme import Theme
 import toml
 
 from tasha.actor import PlayerCharacter
+from tasha.css import stylesheet
 from tasha.d20 import SystemResourceDocument
 
 console = Console(
     tab_size=2,
-    theme=Theme(
-        {
-            "default": "bold green",
-            "exit": "bold dim red",
-            "menu.index": "bold italic cyan",
-            "menu.option": "bold magenta",
-            "prompt": "bold dim green",
-        }
-    ),
+    theme=Theme(stylesheet),
     width=80,
 )
 oPC = PlayerCharacter()
@@ -211,8 +204,8 @@ def io(choices: List[str] | int, loop_count: int = 1) -> List[str]:
             message += f"\t[menu.index]{index}[/menu.index].) [menu.option]{option}[/menu.option]\n"
         console.print(message)
 
-        user_input = int(input(">> "))
         try:
+            user_input = int(input(">> "))
             chosen_option = indexed_choices[user_input]
             # Hax to keep the 'Ability Score Improvement' feat selectable.
             if chosen_option != "Ability Score Improvement":
