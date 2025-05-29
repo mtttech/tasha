@@ -1,7 +1,7 @@
 css = {
-    "default": "bold green",
-    "exit": "bold dim red",
-    "menu.index": "bold italic cyan",
+    "default": "yellow",
+    "exit": "bold red",
+    "menu.index": "italic cyan",
     "menu.option": "bold magenta",
-    "prompt": "bold dim green",
+    "prompt": "italic green",
 }
