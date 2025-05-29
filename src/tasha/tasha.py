@@ -326,9 +326,9 @@ def main() -> None:
 
     # Choose ability bonuses
     console.print(
-        "A background lists three of your character's ability scores. Increase "
-        "one by 2 and another one by 1, or increase all three by 1. None of "
-        "these increases can raise a score above 20.",
+        "A background provides a bonus to up to three of your character's "
+        "ability scores. Increase one ability by 2 and another ability by 1, "
+        "or increase all abilities by 1. No score can be raised above 20.",
         style="default",
     )
     ability_bonus_array = {
@@ -345,11 +345,15 @@ def main() -> None:
     if array_selection == "Apply 2/1":
         background_abilities = oSRD.getAbilitiesByBackground(oPC.getMyBackground())
 
-        console.print("Choose which ability to apply a 2 point bonus", style="default")
+        console.print(
+            "Choose which ability score to apply a 2 point bonus.", style="default"
+        )
         two_point_ability = io(background_abilities)[0]
         ability_bonus_array[two_point_ability] = 2
 
-        console.print("Choose which ability to apply a 1 point bonus.", style="default")
+        console.print(
+            "Choose which ability score to apply a 1 point bonus.", style="default"
+        )
         one_point_ability = io(background_abilities)[0]
         ability_bonus_array[one_point_ability] = 1
 
@@ -369,13 +373,19 @@ def main() -> None:
         style="default",
     )
     background_skills = list()
+    # Loop through background skills.
     for skill in oSRD.getSkillsByBackground(oPC.getMyBackground()):
+        # If the skill is not known, add to the filtered background skill list.
         if skill not in oPC.getMySkills():
             background_skills.append(skill)
     skills = io(
         background_skills,
         loop_count=len(background_skills),
     )
+    for skill in background_skills:
+        console.print(
+            f"You learned the skill '{skill}' from your background.", style="default"
+        )
     oPC.set("skills", skills)
 
     console.print(
