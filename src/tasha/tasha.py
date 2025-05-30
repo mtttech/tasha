@@ -199,9 +199,9 @@ def io(choices: List[str] | int, loop_count: int = 1) -> List[str]:
         indexes = list(indexed_choices.keys())
         first_index = indexes[0]
         last_index = indexes[-1]
-        message = f"[prompt]Make a selection {first_index}-{last_index}.[/prompt]\n\n"
+        message = f"\n[prompt]Make a selection <{first_index}-{last_index}>.[/prompt]\n\n"
         for index, option in indexed_choices.items():
-            message += f"\t[menu.index]{index}[/menu.index].) [menu.option]{option}[/menu.option]\n"
+            message += f"\t{index}.) [prompt.choices]{option}[/prompt.choices]\n"
         console.print(message)
 
         try:
