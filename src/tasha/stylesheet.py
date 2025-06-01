@@ -4,4 +4,6 @@ css = {
     "menu.index": "italic cyan",
     "prompt": "italic green",
     "prompt.choices": "italic magenta",
+    "table.title": "bold yellow",
+    "table.caption": "italic",
 }

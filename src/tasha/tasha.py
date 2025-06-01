@@ -8,6 +8,7 @@ from rich.panel import Panel
 from rich.pretty import Pretty
 from rich.progress import track
 from rich.prompt import Confirm, IntPrompt, Prompt
+from rich.table import Table
 from rich.theme import Theme
 import toml
 
@@ -199,7 +200,9 @@ def io(choices: List[str] | int, loop_count: int = 1) -> List[str]:
         indexes = list(indexed_choices.keys())
         first_index = indexes[0]
         last_index = indexes[-1]
-        message = f"\n[prompt]Make a selection <{first_index}-{last_index}>.[/prompt]\n\n"
+        message = (
+            f"\n[prompt]Make a selection <{first_index}-{last_index}>.[/prompt]\n\n"
+        )
         for index, option in indexed_choices.items():
             message += f"\t{index}.) [prompt.choices]{option}[/prompt.choices]\n"
         console.print(message)
@@ -423,12 +426,21 @@ def main() -> None:
     attributes_array = {}
     while len(attributes_array) == 0:
         attributes_array = assign_ability_scores()
-        console.print(
-            Panel(
-                Pretty(attributes_array, expand_all=True),
-                title="Generated Ability Scores (Background bonuses applied)",
-            )
+        table = Table(
+            title="Generated Ability Scores", caption="*Background bonuses applied"
         )
+
+        table.add_column("")
+        table.add_column("Score")
+        table.add_column("Modifier")
+
+        for attribute_name, attribute_pair in attributes_array.items():
+            score, modifier = tuple(attribute_pair.values())
+            table.add_row(attribute_name, str(score), str(modifier))
+
+        console.print("\n")
+        console.print(table)
+        console.print("\n")
         if not Confirm.ask(
             "Are you satisfied with these ability scores?", console=console
         ):
