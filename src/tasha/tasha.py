@@ -431,8 +431,8 @@ def main() -> None:
         )
 
         table.add_column("")
-        table.add_column("Score")
-        table.add_column("Modifier")
+        table.add_column("Score", justify="center")
+        table.add_column("Modifier", justify="center")
 
         for attribute_name, attribute_pair in attributes_array.items():
             score, modifier = tuple(attribute_pair.values())
