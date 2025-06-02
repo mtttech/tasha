@@ -136,6 +136,8 @@ def has_requirements(feat: str) -> bool:
         bool: True if prerequisites met, False otherwise."""
     ability_requirements = oSRD.getAbilityRequirementsByFeat(feat)
     required_abilities = list(ability_requirements.keys())
+    armor_requirements = oSRD.getArmorRequirementsByFeat(feat)
+    features_requirements = oSRD.getFeatureRequirementsByFeat(feat)
 
     if len(required_abilities) > 0:
         ability_chk_success = False
@@ -147,14 +149,10 @@ def has_requirements(feat: str) -> bool:
         if not ability_chk_success:
             return ability_chk_success
 
-    armor_requirements = oSRD.getArmorRequirementsByFeat(feat)
-
     if len(armor_requirements) > 0:
         for armor in armor_requirements:
             if armor not in oPC.getMyArmorProficiencies():
                 return False
-
-    features_requirements = oSRD.getFeatureRequirementsByFeat(feat)
 
     if len(features_requirements) > 0:
         features_chk_success = False
