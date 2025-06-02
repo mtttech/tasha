@@ -17,6 +17,7 @@ from tasha.d20 import SystemResourceDocument
 from tasha.stylesheet import css
 
 console = Console(
+    style="default",
     tab_size=2,
     theme=Theme(css),
     width=80,
@@ -62,7 +63,7 @@ def assign_ability_scores() -> Dict[str, Dict[str, int]]:
     generated_scores = generate_scores()
     ability_names = list(ability_array.keys())
     for score in generated_scores:
-        console.print(f"Assign {score} to which ability?", style="default")
+        console.print(f"Assign {score} to which ability?")
         ability_array[io(ability_names)[0]] = {
             "score": score,
             "modifier": calculate_modifier(score),
@@ -227,14 +228,13 @@ def set_class_features(klass: str, primary_class: bool) -> None:
 
     Returns:
         None."""
-    console.print(f"What is your '{klass}' class level?", style="default")
+    console.print(f"What is your '{klass}' class level?")
     level = int(io(20)[0])
 
     subclass = ""
     if level >= 3:
         console.print(
-            f"If you start at level 3 or higher, choose a '{klass}' subclass.",
-            style="default",
+            f"If you start at level 3 or higher, choose a '{klass}' subclass."
         )
         subclass = io(
             oSRD.getSubclassesByClass(klass),
@@ -256,7 +256,7 @@ def set_class_features(klass: str, primary_class: bool) -> None:
 
     # Skill allocations.
     skills = oSRD.getSkillsByClass(klass, oPC.getMySkills())
-    console.print("Choose a class skill.", style="default")
+    console.print("Choose a class skill.")
     if not primary_class:
         if klass == "Rogue":
             allotted_skills = 4
@@ -278,10 +278,7 @@ def set_class_features(klass: str, primary_class: bool) -> None:
 
     # Handle class tool proficiency allocations.
     if klass == "Bard":
-        console.print(
-            "Choose your bardic musical instrument tool proficiencies.",
-            style="default",
-        )
+        console.print("Choose your bardic musical instrument tool proficiencies.")
         oPC.set(
             "tools",
             io(
@@ -290,10 +287,7 @@ def set_class_features(klass: str, primary_class: bool) -> None:
             ),
         )
     elif primary_class and klass == "Monk":
-        console.print(
-            "Choose your monk artisan/musical instrument tool proficiency.",
-            style="default",
-        )
+        console.print("Choose your monk artisan/musical instrument tool proficiency.")
         oPC.set(
             "tools",
             io(
@@ -316,13 +310,13 @@ def set_class_features(klass: str, primary_class: bool) -> None:
 def main() -> None:
     # Choose class/subclass
     # Select level
-    console.print("Choose a primary class.", style="default")
+    console.print("Choose a primary class.")
     set_class_features(io(oSRD.getClasses())[0], True)
 
     # Choose a background
     # Choose a species
     # Choose equipment
-    console.print("Choose your character's background.", style="default")
+    console.print("Choose your character's background.")
     oPC.set("background", io(oSRD.getBackgrounds())[0])
 
     # Choose ability bonuses
@@ -330,7 +324,6 @@ def main() -> None:
         "A background provides a bonus to up to three of your character's "
         "ability scores. Increase one ability by 2 and another ability by 1, "
         "or increase all abilities by 1. No score can be raised above 20.",
-        style="default",
     )
     ability_bonus_array = {
         "Strength": 0,
@@ -346,15 +339,11 @@ def main() -> None:
     if array_selection == "Apply 2/1":
         background_abilities = oSRD.getAbilitiesByBackground(oPC.getMyBackground())
 
-        console.print(
-            "Choose which ability score to apply a 2 point bonus.", style="default"
-        )
+        console.print("Choose which ability score to apply a 2 point bonus.")
         two_point_ability = io(background_abilities)[0]
         ability_bonus_array[two_point_ability] = 2
 
-        console.print(
-            "Choose which ability score to apply a 1 point bonus.", style="default"
-        )
+        console.print("Choose which ability score to apply a 1 point bonus.")
         one_point_ability = io(background_abilities)[0]
         ability_bonus_array[one_point_ability] = 1
 
@@ -364,14 +353,11 @@ def main() -> None:
 
     oPC.set("bonus", ability_bonus_array)
 
-    console.print(
-        "A background gives your character a specified Origin feat.", style="default"
-    )
+    console.print("A background gives your character a specified Origin feat.")
     oPC.set("feats", io(oSRD.getFeatsByCategory("Origin")))
 
     console.print(
-        "A background gives your character proficiency in two specified skills.",
-        style="default",
+        "A background gives your character proficiency in two specified skills."
     )
     background_skills = list()
     # Loop through background skills.
@@ -379,30 +365,27 @@ def main() -> None:
         # If the skill is not known, add to the filtered background skill list.
         if skill not in oPC.getMySkills():
             background_skills.append(skill)
-            
+
     skills = io(
         background_skills,
         loop_count=len(background_skills),
     )
 
     for skill in background_skills:
-        console.print(
-            f"You learned the skill '{skill}' from your background.", style="default"
-        )
+        console.print(f"You learned the skill '{skill}' from your background.")
 
     oPC.set("skills", skills)
 
     console.print(
         "Each background gives a character proficiency with one tool-either a "
-        "specific tool or one chosen from the Artisan's Tools category.",
-        style="default",
+        "specific tool or one chosen from the Artisan's Tools category."
     )
     tool = io(
         oSRD.getToolProficienciesByBackground(oPC.getMyBackground()),
     )
     oPC.set("tools", tool)
 
-    console.print("Choose a species for your character.", style="default")
+    console.print("Choose a species for your character.")
     species = io(oSRD.getSpecies())[0]
     oPC.set(
         {
@@ -414,8 +397,7 @@ def main() -> None:
     )
 
     console.print(
-        "Your character knows at least three languages: Common plus two languages.",
-        style="default",
+        "Your character knows at least three languages: Common plus two languages."
     )
     languages = io(
         oSRD.getStandardLanguages(),
@@ -453,11 +435,11 @@ def main() -> None:
     # Multiclass
     klass = oPC.getMyClasses()[0]
     if Confirm.ask("Would you like to multiclass?", console=console):
-        console.print("Choose a secondary class.", style="default")
+        console.print("Choose a secondary class.")
         set_class_features(io(get_allowed_multiclasses())[0], False)
 
     # Choose an alignment
-    console.print("Choose your alignment.", style="default")
+    console.print("Choose your alignment.")
     oPC.set("alignment", io(oSRD.getAlignments())[0])
 
     # Saving Throws
@@ -466,13 +448,13 @@ def main() -> None:
     # Cantrips
     # Prepared Spells
     # Spell Slots
-    console.print("Choose your feats.", style="default")
+    console.print("Choose your feats.")
     ability_score_improvements = oSRD.getFeaturesByClass(
         klass, oPC.getTotalLevel()
     ).count("Ability Score Improvement")
     oPC.set("feats", io(get_allowed_feats(), loop_count=ability_score_improvements))
 
-    console.print("What's your gender?", style="default")
+    console.print("What's your gender?")
     oPC.set("gender", io(["Female", "Male"])[0])
 
     oPC.set(
@@ -496,7 +478,7 @@ def main() -> None:
                 console=console,
             )
 
-            console.print(f"Choose a level {spell_level} spell.", style="default")
+            console.print(f"Choose a level {spell_level} spell.")
             chosen_spell = io(oSRD.getSpellsByLevel(spell_level, klass)[spell_level])[0]
             prepared_spells.append(chosen_spell)
 
@@ -525,7 +507,7 @@ def main() -> None:
                 "w"
             ) as record:
                 toml.dump(asdict(character_sheet), record)
-        console.print(f"Character '{oPC.getMyName()}' saved!", style="default")
+        console.print(f"Character '{oPC.getMyName()}' saved!")
 
 
 def tasha_main() -> None:
