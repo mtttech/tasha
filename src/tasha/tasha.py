@@ -235,7 +235,7 @@ def set_class_features(klass: str, primary_class: bool) -> None:
     subclass = ""
     if level >= 3:
         console.print(
-            f"If you start at level 3 or higher, choose a {klass} subclass.",
+            f"If you start at level 3 or higher, choose a '{klass}' subclass.",
             style="default",
         )
         subclass = io(
@@ -381,14 +381,17 @@ def main() -> None:
         # If the skill is not known, add to the filtered background skill list.
         if skill not in oPC.getMySkills():
             background_skills.append(skill)
+            
     skills = io(
         background_skills,
         loop_count=len(background_skills),
     )
+
     for skill in background_skills:
         console.print(
             f"You learned the skill '{skill}' from your background.", style="default"
         )
+
     oPC.set("skills", skills)
 
     console.print(
@@ -438,13 +441,15 @@ def main() -> None:
             score, modifier = tuple(attribute_pair.values())
             table.add_row(attribute_name, str(score), str(modifier))
 
-        console.print("\n")
+        print("\n")
         console.print(table)
-        console.print("\n")
+        print("\n")
+
         if not Confirm.ask(
             "Are you satisfied with these ability scores?", console=console
         ):
             attributes_array = {}
+
     oPC.set("attributes", attributes_array)
 
     # Multiclass
