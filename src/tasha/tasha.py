@@ -52,7 +52,7 @@ def assign_ability_scores() -> Dict[str, Dict[str, int]]:
         dice_rolls.sort(reverse=True)
         return dice_rolls
 
-    ability_array = {
+    ability_score_array = {
         "Strength": {"score": 0, "modifier": 0},
         "Dexterity": {"score": 0, "modifier": 0},
         "Constitution": {"score": 0, "modifier": 0},
@@ -60,11 +60,10 @@ def assign_ability_scores() -> Dict[str, Dict[str, int]]:
         "Wisdom": {"score": 0, "modifier": 0},
         "Charisma": {"score": 0, "modifier": 0},
     }
-    generated_scores = generate_scores()
-    ability_names = list(ability_array.keys())
-    for score in generated_scores:
-        console.print(f"Assign {score} to which ability?")
-        ability_array[io(ability_names)[0]] = {
+    ability_names = list(ability_score_array.keys())
+    for score in generate_scores():
+        console.print(f"Assign an {score} to which ability?")
+        ability_score_array[io(ability_names)[0]] = {
             "score": score,
             "modifier": calculate_modifier(score),
         }
@@ -72,13 +71,13 @@ def assign_ability_scores() -> Dict[str, Dict[str, int]]:
     # Apply background ability bonuses.
     for ability, bonus in oPC.getMyBonus().items():
         if bonus > 0:
-            new_score = ability_array[ability]["score"] + bonus
-            ability_array[ability] = {
+            new_score = ability_score_array[ability]["score"] + bonus
+            ability_score_array[ability] = {
                 "score": new_score,
                 "modifier": calculate_modifier(new_score),
             }
 
-    return ability_array
+    return ability_score_array
 
 
 def calculate_modifier(score: int) -> int:
@@ -137,9 +136,6 @@ def has_requirements(feat: str) -> bool:
         bool: True if prerequisites met, False otherwise."""
     ability_requirements = oSRD.getAbilityRequirementsByFeat(feat)
     required_abilities = list(ability_requirements.keys())
-    armor_requirements = oSRD.getArmorRequirementsByFeat(feat)
-    features_requirements = oSRD.getFeatureRequirementsByFeat(feat)
-
     if len(required_abilities) > 0:
         ability_chk_success = False
         for ability in required_abilities:
@@ -150,11 +146,13 @@ def has_requirements(feat: str) -> bool:
         if not ability_chk_success:
             return ability_chk_success
 
+    armor_requirements = oSRD.getArmorRequirementsByFeat(feat)
     if len(armor_requirements) > 0:
         for armor in armor_requirements:
             if armor not in oPC.getMyArmorProficiencies():
                 return False
 
+    features_requirements = oSRD.getFeatureRequirementsByFeat(feat)
     if len(features_requirements) > 0:
         features_chk_success = False
         for feature in features_requirements:
@@ -185,10 +183,10 @@ def io(choices: List[str] | int, loop_count: int = 1) -> List[str]:
     if isinstance(choices, int):
         choices = list(str(n + 1) for n in range(choices))
 
-    selections = list()
+    selections = []
     for _ in range(0, loop_count):
         # Map out menu selections
-        indexed_choices = dict()
+        indexed_choices = {}
         for index, option in enumerate(choices):  # pyright: ignore
             indexed_choices[index + 1] = option
 
@@ -359,7 +357,7 @@ def main() -> None:
     console.print(
         "A background gives your character proficiency in two specified skills."
     )
-    background_skills = list()
+    background_skills = []
     # Loop through background skills.
     for skill in oSRD.getSkillsByBackground(oPC.getMyBackground()):
         # If the skill is not known, add to the filtered background skill list.
