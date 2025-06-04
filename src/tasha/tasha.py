@@ -154,14 +154,14 @@ def has_requirements(feat: str) -> bool:
 
     features_requirements = oSRD.getFeatureRequirementsByFeat(feat)
     if len(features_requirements) > 0:
-        features_chk_success = False
+        features_check = False
         for feature in features_requirements:
             if feature in oPC.getMyFeatures():
-                features_chk_success = True
+                features_check = True
                 break
 
-        if not features_chk_success:
-            return features_chk_success
+        if not features_check:
+            return features_check
 
     if oPC.getTotalLevel() < oSRD.getLevelRequirementByFeat(feat):
         return False
@@ -253,22 +253,15 @@ def set_class_features(klass: str, primary_class: bool) -> None:
     )
 
     # Skill allocations.
-    skills = oSRD.getSkillsByClass(klass, oPC.getMySkills())
-    console.print("Choose a class skill.")
-    if not primary_class:
-        if klass == "Rogue":
-            allotted_skills = 4
-        elif klass in ("Bard", "Ranger"):
-            allotted_skills = 1
-        else:
-            allotted_skills = 0
+    console.print(f"Choose a '{klass}' class skill.")
+    if klass == "Rogue":
+        allotted_skills = 4
+    elif klass in ("Bard", "Ranger"):
+        allotted_skills = 1 if not primary_class else 3
     else:
-        if klass == "Rogue":
-            allotted_skills = 4
-        elif klass in ("Bard", "Ranger"):
-            allotted_skills = 3
-        else:
-            allotted_skills = 2
+        allotted_skills = 0 if not primary_class else 2
+
+    skills = oSRD.getSkillsByClass(klass, oPC.getMySkills())
     oPC.set(
         "skills",
         io(skills, loop_count=allotted_skills),

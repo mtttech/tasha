@@ -142,7 +142,7 @@ class SystemResourceDocument:
 
         Returns:
             List[str]: Returns a list of feats for the specified category."""
-        feats_by_category = list()
+        feats_by_category = []
         for feat, params in self.srd["feats"].items():
             if params["category"] == category:
                 feats_by_category.append(feat)
@@ -152,10 +152,10 @@ class SystemResourceDocument:
         """Returns feature requirements by feat.
 
         Args:
-            feat (str): Name of feat to get feature requirements for.
+            feat (str): Name of feat to get the feature requirements for.
 
         Returns:
-            List[str]: Returns a list of feature requirements."""
+            List[str]: Returns a list of class feature requirements."""
         return self.srd["feats"][feat]["features"]
 
     def getFeaturesByClass(self, klass: str, class_level: int) -> List[str]:
@@ -167,7 +167,7 @@ class SystemResourceDocument:
 
         Returns:
             List[str]: Returns a list of features by class."""
-        class_features = list()
+        class_features = []
         for level, features in self.srd["classes"][klass]["features"].items():
             if class_level >= level:
                 class_features = class_features + features
@@ -316,14 +316,14 @@ class SystemResourceDocument:
         if klass in ("Fighter", "Rogue"):
             klass = "Wizard"
 
+        spell_list = {}
         try:
-            spell_list = dict()
             for level, spells in self.srd["spells"][klass].items():
                 if level <= spell_level:
                     spell_list[level] = spells
             return spell_list
         except KeyError:
-            return dict()
+            return spell_list
 
     def getSpellslotsByClass(self, klass: str, level: int) -> List[int]:
         """Returns spell slots by class and level.
