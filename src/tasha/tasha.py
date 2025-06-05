@@ -18,9 +18,7 @@ from tasha.stylesheet import css
 
 console = Console(
     style="default",
-    tab_size=2,
     theme=Theme(css),
-    width=80,
 )
 oPC = PlayerCharacter()
 oSRD = SystemResourceDocument()
@@ -261,10 +259,9 @@ def set_class_features(klass: str, primary_class: bool) -> None:
     else:
         allotted_skills = 0 if not primary_class else 2
 
-    skills = oSRD.getSkillsByClass(klass, oPC.getMySkills())
     oPC.set(
         "skills",
-        io(skills, loop_count=allotted_skills),
+        io(oSRD.getSkillsByClass(klass, oPC.getMySkills()), loop_count=allotted_skills),
     )
 
     # Handle class tool proficiency allocations.
@@ -387,9 +384,7 @@ def main() -> None:
         }
     )
 
-    console.print(
-        "Your character knows at least three languages: Common plus two languages."
-    )
+    console.print("You know at least three languages: Common plus two languages.")
     languages = io(
         oSRD.getStandardLanguages(),
         loop_count=2,
@@ -498,7 +493,7 @@ def main() -> None:
                 "w"
             ) as record:
                 toml.dump(asdict(character_sheet), record)
-        console.print(f"Character '{oPC.getMyName()}' saved!")
+        console.print(f":floppy_disk: Character '{oPC.getMyName()}' saved successfully!")
 
 
 def tasha_main() -> None:
@@ -506,7 +501,7 @@ def tasha_main() -> None:
         main()
     except KeyboardInterrupt:
         print("\n")
-        console.print("Exited program.", style="exit")
+        console.print(":broken_heart::dagger:  Exited program.", style="exit")
 
 
 if __name__ == "__main__":
