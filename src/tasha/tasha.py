@@ -4,8 +4,6 @@ from pathlib import Path
 from typing import Dict, List
 
 from rich.console import Console
-from rich.panel import Panel
-from rich.pretty import Pretty
 from rich.progress import track
 from rich.prompt import Confirm, IntPrompt, Prompt
 from rich.table import Table
@@ -360,7 +358,7 @@ def main() -> None:
     )
 
     for skill in background_skills:
-        console.print(f"You learned the skill '{skill}' from your background.")
+        console.print(f":book: You learned the skill '{skill}' from your background.")
 
     oPC.set("skills", skills)
 
@@ -473,27 +471,20 @@ def main() -> None:
     name = Prompt.ask("What is your character's name?", console=console).strip()
     oPC.set("name", name)
 
-    character_sheet = replace(
-        oPC,
-        level=oPC.getTotalLevel(),
-    )
-    console.print(
-        Panel(
-            Pretty(character_sheet, expand_all=True),
-            title=f"{oPC.getMyName()}'s Character Sheet",
-        )
-    )
-
     if not Confirm.ask("Save this character?", console=console):
-        console.print(f"Save aborted for '{oPC.getMyName()}'.", style="exit")
+        console.print(f":floppy_disk: :red_circle: Character '{oPC.getMyName()}' save was aborted.")
     else:
+        character_sheet = replace(
+            oPC,
+            level=oPC.getTotalLevel(),
+        )
         character_dir = Path.home() / ".config" / "tasha" / "characters"
         for _ in track(range(100), description="Saving..."):
             with Path(character_dir, f"{name.replace(" ", "_")}.toml").open(
                 "w"
             ) as record:
                 toml.dump(asdict(character_sheet), record)
-        console.print(f":floppy_disk: Character '{oPC.getMyName()}' saved successfully!")
+        console.print(f":floppy_disk: :green_circle: Character '{oPC.getMyName()}' save was successful!")
 
 
 def tasha_main() -> None:
@@ -501,7 +492,7 @@ def tasha_main() -> None:
         main()
     except KeyboardInterrupt:
         print("\n")
-        console.print(":broken_heart::dagger:  Exited program.", style="exit")
+        console.print(":dagger:  Exited program.", style="exit")
 
 
 if __name__ == "__main__":
