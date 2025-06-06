@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "tasha"
 version = "0.7.10"
-description = "Tasha is a tool for creating characters for Dungeons & Dragons 5th edition (2024)."
+description = "Create characters for Dungeons & Dragons 5th edition (2024)."
 authors = ["Marcus T Taylor <mtaylor9754@hotmail.com>"]
 license = "MIT"
 readme = "README.md"
@@ -10,9 +10,8 @@ classifiers = [
     "Environment :: Console",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3",
     "Topic :: Games/Entertainment :: Role-Playing",
-    "Topic :: Utilities",
 ]
 
 
