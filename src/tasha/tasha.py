@@ -472,19 +472,23 @@ def main() -> None:
     oPC.set("name", name)
 
     if not Confirm.ask("Save this character?", console=console):
-        console.print(f":floppy_disk: :red_circle: Character '{oPC.getMyName()}' save was aborted.")
+        console.print(
+            f":floppy_disk: :red_circle: Character '{oPC.getMyName()}' save was aborted."
+        )
     else:
         character_sheet = replace(
             oPC,
             level=oPC.getTotalLevel(),
         )
-        character_dir = Path.home() / ".config" / "tasha" / "characters"
+        character_dir = Path.cwd()
         for _ in track(range(100), description="Saving..."):
             with Path(character_dir, f"{name.replace(" ", "_")}.toml").open(
                 "w"
             ) as record:
                 toml.dump(asdict(character_sheet), record)
-        console.print(f":floppy_disk: :green_circle: Character '{oPC.getMyName()}' save was successful!")
+        console.print(
+            f":floppy_disk: :green_circle: Character '{oPC.getMyName()}' save was successful!"
+        )
 
 
 def tasha_main() -> None:
