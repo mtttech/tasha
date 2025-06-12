@@ -43,7 +43,7 @@ tasha
 
 The program will send a series of prompts that will be used to generate your character.
 
-Saved characters are saved as a TOML file within your *HOME* directory *~/.config/tasha/characters*.
+Finished characters will be saved within the same directory in the TOML file format.
 
 Below is an example of such a character.
 
