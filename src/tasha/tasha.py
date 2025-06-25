@@ -6,7 +6,7 @@ from typing import Dict, List
 import click
 from rich.console import Console
 from rich.progress import track
-from rich.prompt import Confirm, IntPrompt, Prompt
+from rich.prompt import Confirm, IntPrompt
 from rich.table import Table
 from rich.theme import Theme
 import toml
