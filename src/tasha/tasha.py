@@ -3,6 +3,7 @@ from math import floor
 from pathlib import Path
 from typing import Dict, List
 
+import click
 from rich.console import Console
 from rich.progress import track
 from rich.prompt import Confirm, IntPrompt, Prompt
@@ -293,7 +294,7 @@ def set_class_features(klass: str, primary_class: bool) -> None:
     )
 
 
-def main() -> None:
+def main(name: str) -> None:
     # Choose class/subclass
     # Select level
     console.print("Choose a primary class.")
@@ -468,8 +469,7 @@ def main() -> None:
 
         oPC.set("prepared_spells", {klass: prepared_spells})
 
-    name = Prompt.ask("What is your character's name?", console=console).strip()
-    oPC.set("name", name)
+    oPC.set("name", name.strip())
 
     if not Confirm.ask("Save this character?", console=console):
         console.print(
@@ -491,13 +491,12 @@ def main() -> None:
         )
 
 
-def tasha_main() -> None:
+@click.version_option()
+@click.command()
+@click.option("--new", help="Generates a new player character.")
+def cli(new):
     try:
-        main()
+        main(new)
     except KeyboardInterrupt:
         print("\n")
-        console.print(":dagger:  Exited program.", style="exit")
-
-
-if __name__ == "__main__":
-    tasha_main()
+        console.print(":dagger:  [exit]Exited program.[/exit]")
