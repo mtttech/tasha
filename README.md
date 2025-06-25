@@ -13,6 +13,7 @@ Below is a list of rulebooks incorporated into the program (more may be added as
 
 The following dependencies are required.
 
+* [click](https://github.com/pallets/click)
 * [dice](https://github.com/borntyping/python-dice)
 * [rich](https://github.com/Textualize/rich)
 * [toml](https://github.com/uiri/toml)
@@ -38,12 +39,22 @@ pipx install dist/tasha-0.*.*-py3-none-any.whl
 Run **Tasha** by typing the following command.
 
 ```
-tasha
+tasha --help
+Usage: tasha [OPTIONS]
+
+Options:
+  --new TEXT  Generates a new player character.
+  --version   Show the version and exit.
+  --help      Show this message and exit.
+```
+
+```
+tasha --new 'My Character'
 ```
 
 The program will send a series of prompts that will be used to generate your character.
 
-Finished characters will be saved within the same directory in the TOML file format.
+Finished characters will be saved within the same directory.
 
 Below is an example of such a character.
 
