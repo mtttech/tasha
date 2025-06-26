@@ -214,7 +214,9 @@ def io(choices: List[str] | int, loop_count: int = 1) -> List[str]:
     return selections
 
 
-def set_class_features(klass: str, primary_class: bool) -> None:
+def set_class_features(
+    klass: str, primary_class: bool, level: int, subclass: str = ""
+) -> None:
     """Applies primary/secondary class features.
 
     Args:
@@ -223,18 +225,6 @@ def set_class_features(klass: str, primary_class: bool) -> None:
 
     Returns:
         None."""
-    console.print(f"What is your '{klass}' class level?")
-    level = int(io(20)[0])
-
-    subclass = ""
-    if level >= 3:
-        console.print(
-            f"If you start at level 3 or higher, choose a '{klass}' subclass."
-        )
-        subclass = io(
-            oSRD.getSubclassesByClass(klass),
-        )[0]
-
     oPC.set(
         {
             "armors": oSRD.getArmorProficienciesByClass(klass, primary_class),
@@ -247,20 +237,6 @@ def set_class_features(klass: str, primary_class: bool) -> None:
             },
             "weapons": oSRD.getWeaponProficienciesByClass(klass, primary_class),
         }
-    )
-
-    # Skill allocations.
-    console.print(f"Choose a '{klass}' class skill.")
-    if klass == "Rogue":
-        allotted_skills = 4
-    elif klass in ("Bard", "Ranger"):
-        allotted_skills = 1 if not primary_class else 3
-    else:
-        allotted_skills = 0 if not primary_class else 2
-
-    oPC.set(
-        "skills",
-        io(oSRD.getSkillsByClass(klass, oPC.getMySkills()), loop_count=allotted_skills),
     )
 
     # Handle class tool proficiency allocations.
@@ -294,11 +270,55 @@ def set_class_features(klass: str, primary_class: bool) -> None:
     )
 
 
+def set_class_skills(klass: str, primary_class: bool):
+    """Applies primary/secondary class skills.
+
+    Args:
+        klass (str): Name of the class to apply class skills for.
+        primary_class (bool): Determines if primary class or not.
+
+    Returns:
+        None."""
+    if klass == "Rogue":
+        allotted_skills = 4
+    elif klass in ("Bard", "Ranger"):
+        allotted_skills = 1 if not primary_class else 3
+    else:
+        allotted_skills = 0 if not primary_class else 2
+
+    oPC.set(
+        "skills",
+        io(oSRD.getSkillsByClass(klass, oPC.getMySkills()), loop_count=allotted_skills),
+    )
+
+
+def set_class_subclass(klass: str, level: int) -> str:
+    subclass = ""
+    if level >= 3:
+        subclass = io(
+            oSRD.getSubclassesByClass(klass),
+        )[0]
+    return subclass
+
+
 def main(name: str) -> None:
     # Choose class/subclass
     # Select level
     console.print("Choose a primary class.")
-    set_class_features(io(oSRD.getClasses())[0], True)
+    first_class = io(oSRD.getClasses())[0]
+
+    console.print(f"What is your primary class' '{first_class}' level?")
+    level = int(io(20)[0])
+    if level >= 3:
+        console.print(
+            f"If you start at level 3 or higher, choose a '{first_class}' subclass."
+        )
+
+    subclass = set_class_subclass(first_class, level)
+    set_class_features(first_class, True, level, subclass)
+
+    console.print(f"Choose your primary class' '{first_class}' skill(s).")
+    set_class_skills(first_class, True)
 
     # Choose a background
     # Choose a species
@@ -421,7 +441,20 @@ def main(name: str) -> None:
     klass = oPC.getMyClasses()[0]
     if Confirm.ask("Would you like to multiclass?", console=console):
         console.print("Choose a secondary class.")
-        set_class_features(io(get_allowed_multiclasses())[0], False)
+        second_class = io(get_allowed_multiclasses())[0]
+
+        console.print(f"What is your secondary class' '{second_class}' level?")
+        level = int(io(20)[0])
+        if level >= 3:
+            console.print(
+                f"If you start at level 3 or higher, choose a '{second_class}' subclass."
+            )
+
+        subclass = set_class_subclass(second_class, level)
+        set_class_features(second_class, False, level, subclass)
+
+        console.print(f"Choose your secondary class' '{second_class}' skill(s).")
+        set_class_skills(second_class, False)
 
     # Choose an alignment
     console.print("Choose your alignment.")
