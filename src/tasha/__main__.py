@@ -1,4 +1,4 @@
-from tasha import tasha_main
+from cli import cli
 
 if __name__ == "__main__":
-    tasha_main()
+    cli()
