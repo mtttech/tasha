@@ -1,5 +1,4 @@
 from dataclasses import asdict, replace
-from math import floor
 from pathlib import Path
 from typing import Dict, List
 
@@ -77,6 +76,23 @@ def assign_ability_scores() -> Dict[str, Dict[str, int]]:
     return ability_score_array
 
 
+def assign_subclass(klass: str, level: int) -> str:
+    """Prompt to choose a primary/secondary class subclass.
+
+    Args:
+        klass (str): Name of the class to apply class skills for.
+        primary_class (bool): Determines if primary class or not.
+
+    Returns:
+        str: The selected subclass."""
+    subclass = ""
+    if level >= 3:
+        subclass = io(
+            oSRD.getSubclassesByClass(klass),
+        )[0]
+    return subclass
+
+
 def calculate_modifier(score: int) -> int:
     """Calculates the modifier of the specified score.
 
@@ -85,6 +101,8 @@ def calculate_modifier(score: int) -> int:
 
     Returns:
         int: Returns the calculated modifier of the specified score."""
+    from math import floor
+
     return floor((score - 10) / 2)
 
 
@@ -270,7 +288,7 @@ def set_class_features(
     )
 
 
-def set_class_skills(klass: str, primary_class: bool):
+def set_class_skills(klass: str, primary_class: bool) -> None:
     """Applies primary/secondary class skills.
 
     Args:
@@ -292,15 +310,6 @@ def set_class_skills(klass: str, primary_class: bool):
     )
 
 
-def set_class_subclass(klass: str, level: int) -> str:
-    subclass = ""
-    if level >= 3:
-        subclass = io(
-            oSRD.getSubclassesByClass(klass),
-        )[0]
-    return subclass
-
-
 def main(name: str) -> None:
     # Choose class/subclass
     # Select level
@@ -314,7 +323,7 @@ def main(name: str) -> None:
             f"If you start at level 3 or higher, choose a '{first_class}' subclass."
         )
 
-    subclass = set_class_subclass(first_class, level)
+    subclass = assign_subclass(first_class, level)
     set_class_features(first_class, True, level, subclass)
 
     console.print(f"Choose your primary class' '{first_class}' skill(s).")
@@ -450,7 +459,7 @@ def main(name: str) -> None:
                 f"If you start at level 3 or higher, choose a '{second_class}' subclass."
             )
 
-        subclass = set_class_subclass(second_class, level)
+        subclass = assign_subclass(second_class, level)
         set_class_features(second_class, False, level, subclass)
 
         console.print(f"Choose your secondary class' '{second_class}' skill(s).")
