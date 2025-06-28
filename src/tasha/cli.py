@@ -14,6 +14,8 @@ from tasha.actor import PlayerCharacter
 from tasha.d20 import SystemResourceDocument
 from tasha.stylesheet import css
 
+AbilityScoreArray = Dict[str, Dict[str, int]]
+
 console = Console(
     style="default",
     theme=Theme(css),
@@ -22,7 +24,7 @@ oPC = PlayerCharacter()
 oSRD = SystemResourceDocument()
 
 
-def assign_ability_scores() -> Dict[str, Dict[str, int]]:
+def assign_ability_scores() -> AbilityScoreArray:
     """Prompt to assign a score to each of the six abilities.
 
     Returns:
@@ -423,14 +425,13 @@ def main(name: str) -> None:
     attributes_array = {}
     while len(attributes_array) == 0:
         attributes_array = assign_ability_scores()
+
         table = Table(
             title="Generated Ability Scores", caption="*Background bonuses applied"
         )
-
         table.add_column("")
         table.add_column("Score", justify="center")
         table.add_column("Modifier", justify="center")
-
         for attribute_name, attribute_pair in attributes_array.items():
             score, modifier = tuple(attribute_pair.values())
             table.add_row(attribute_name, str(score), str(modifier))
@@ -447,7 +448,7 @@ def main(name: str) -> None:
     oPC.set("attributes", attributes_array)
 
     # Multiclass
-    klass = oPC.getMyClasses()[0]
+    primary_class = oPC.getMyClasses()[0]
     if Confirm.ask("Would you like to multiclass?", console=console):
         console.print("Choose a secondary class.")
         second_class = io(get_allowed_multiclasses())[0]
@@ -477,25 +478,31 @@ def main(name: str) -> None:
     # Spell Slots
     console.print("Choose your feats.")
     ability_score_improvements = oSRD.getFeaturesByClass(
-        klass, oPC.getTotalLevel()
+        primary_class, oPC.getTotalLevel()
     ).count("Ability Score Improvement")
     oPC.set("feats", io(get_allowed_feats(), loop_count=ability_score_improvements))
 
     console.print("What's your gender?")
     oPC.set("gender", io(["Female", "Male"])[0])
 
+    oPC.set("savingthrows", oSRD.getSavingThrowsByClass(primary_class))
+
+    # TODO: Work out spell selection function.
     oPC.set(
         {
-            "cantrips": oSRD.getCantripsKnownByClass(klass, oPC.getTotalLevel()),
-            "savingthrows": oSRD.getSavingThrowsByClass(klass),
-            "spell_slots": oSRD.getSpellslotsByClass(klass, oPC.getTotalLevel()),
+            "cantrips": oSRD.getCantripsKnownByClass(
+                primary_class, oPC.getTotalLevel()
+            ),
+            "spell_slots": oSRD.getSpellslotsByClass(
+                primary_class, oPC.getTotalLevel()
+            ),
         }
     )
 
     if oPC.isSpellcaster():
         prepared_spells = list()
         prepared_spell_count = oSRD.getPreparedSpellCountByClass(
-            klass, oPC.getTotalLevel()
+            primary_class, oPC.getTotalLevel()
         )
         spell_levels = [str(l + 1) for l, _ in enumerate(oPC.getMySpellslots())]
         while len(prepared_spells) < prepared_spell_count:
@@ -506,10 +513,13 @@ def main(name: str) -> None:
             )
 
             console.print(f"Choose a level {spell_level} spell.")
-            chosen_spell = io(oSRD.getSpellsByLevel(spell_level, klass)[spell_level])[0]
+            chosen_spell = io(
+                oSRD.getSpellsByLevel(spell_level, primary_class)[spell_level]
+            )[0]
             prepared_spells.append(chosen_spell)
 
-        oPC.set("prepared_spells", {klass: prepared_spells})
+        oPC.set("prepared_spells", {primary_class: prepared_spells})
+    # END TODO
 
     oPC.set("name", name.strip())
 
