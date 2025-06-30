@@ -112,7 +112,7 @@ def assign_spells(klass: str) -> None:
 
         console.print(f"Choose a level {spell_level} spell.")
         chosen_spell = io(oSRD.getSpellsByLevel(spell_level, klass)[spell_level])[0]
-        console.print(f":book: You learned the spell '{chosen_spell}'.")
+        console.print(f":book: You learned the spell {chosen_spell}.")
         prepared_spells.append(chosen_spell)
 
     oPC.set("prepared_spells", {klass: prepared_spells})
