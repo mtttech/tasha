@@ -1,6 +1,5 @@
 from dataclasses import asdict, replace
 from pathlib import Path
-from typing import Dict, List
 
 import click
 from rich.console import Console
@@ -14,8 +13,6 @@ from tasha.actor import PlayerCharacter
 from tasha.d20 import SystemResourceDocument
 from tasha.stylesheet import css
 
-AbilityScoreArray = Dict[str, Dict[str, int]]
-
 console = Console(
     style="default",
     theme=Theme(css),
@@ -24,13 +21,13 @@ oPC = PlayerCharacter()
 oSRD = SystemResourceDocument()
 
 
-def assign_ability_scores() -> AbilityScoreArray:
+def assign_ability_scores() -> dict[str, dict[str, int]]:
     """Prompt to assign a score to each of the six abilities.
 
     Returns:
-        Dict[str, Dict[str, int]]: Returns dict of abilities."""
+        dict[str, dict[str, int]]: Returns dict of abilities."""
 
-    def generate_scores() -> List[int]:
+    def generate_scores() -> list[int]:
         """Randomly generates six scores.
 
         Continuously rerolls if one of the following is true:
@@ -39,7 +36,7 @@ def assign_ability_scores() -> AbilityScoreArray:
         2. or largest score < 15
 
         Returns:
-            List[int]: Returns a list of six integers."""
+            list[int]: Returns a list of six integers."""
         import dice  # pyright: ignore
 
         while True:
@@ -78,6 +75,41 @@ def assign_ability_scores() -> AbilityScoreArray:
     return ability_score_array
 
 
+def assign_spells(klass: str) -> None:
+    """Prompt to choose spell lists by class.
+
+    Args:
+        klass (str): Name of the class to choose spells for.
+
+    Returns:
+        None"""
+    if not oPC.isSpellcastingClass(klass):
+        return
+
+    oPC.set(
+        {
+            "cantrips": oSRD.getCantripsKnownByClass(klass, oPC.getTotalLevel()),
+            "spell_slots": oSRD.getSpellslotsByClass(klass, oPC.getTotalLevel()),
+        }
+    )
+
+    prepared_spells = list()
+    prepared_spell_count = oSRD.getPreparedSpellCountByClass(klass, oPC.getTotalLevel())
+    spell_levels = [str(l + 1) for l, _ in enumerate(oPC.getMySpellslots())]
+    while len(prepared_spells) < prepared_spell_count:
+        spell_level = IntPrompt.ask(
+            f"Choose a spell by level to create your prepared spell list.",
+            choices=spell_levels,
+            console=console,
+        )
+
+        console.print(f"Choose a level {spell_level} spell.")
+        chosen_spell = io(oSRD.getSpellsByLevel(spell_level, klass)[spell_level])[0]
+        prepared_spells.append(chosen_spell)
+
+    oPC.set("prepared_spells", {klass: prepared_spells})
+
+
 def assign_subclass(klass: str, level: int) -> str:
     """Prompt to choose a primary/secondary class subclass.
 
@@ -108,22 +140,22 @@ def calculate_modifier(score: int) -> int:
     return floor((score - 10) / 2)
 
 
-def get_allowed_feats() -> List[str]:
+def get_allowed_feats() -> list[str]:
     """Returns a list of selectable feats.
 
     1. feats the character doesn't already have
     2. and feats the character meets the requirements for
 
     Returns:
-        List[str]: List of all relevant feats."""
+        list[str]: List of all relevant feats."""
     return [f for f in oSRD.getFeats() if has_requirements(f)]
 
 
-def get_allowed_multiclasses() -> List[str]:
+def get_allowed_multiclasses() -> list[str]:
     """Retrieves a list of valid multiclassing options.
 
     Returns:
-        List[str]: Returns a list of allowable character multiclasses."""
+        list[str]: Returns a list of allowable character multiclasses."""
     multiclasses = []
 
     # If the primary class ability score(s) are under 13.
@@ -186,7 +218,7 @@ def has_requirements(feat: str) -> bool:
     return True
 
 
-def io(choices: List[str] | int, loop_count: int = 1) -> List[str]:
+def io(choices: list[str] | int, loop_count: int = 1) -> list[str]:
     """Captures user input from the console.
 
     Args:
@@ -194,7 +226,7 @@ def io(choices: List[str] | int, loop_count: int = 1) -> List[str]:
         loop_count (int): Number of times to prompt the user. Default 1 prompt.
 
     Returns:
-        List[str]: A list of the user's responses."""
+        list[str]: A list of the user's responses."""
 
     # If using numbers, create a range, starting from 1.
     if isinstance(choices, int):
@@ -499,7 +531,7 @@ def main(name: str) -> None:
         }
     )
 
-    if oPC.isSpellcaster():
+    if oPC.isSpellcastingClass():
         prepared_spells = list()
         prepared_spell_count = oSRD.getPreparedSpellCountByClass(
             primary_class, oPC.getTotalLevel()
