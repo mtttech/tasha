@@ -98,18 +98,18 @@ def assign_spells(klass: str) -> None:
         }
     )
 
-    prepared_spells = list()
     prepared_spell_count = oSRD.getPreparedSpellCountByClass(
         klass, effective_spellcasting_level
     )
-    spell_levels = [str(l + 1) for l, _ in enumerate(oPC.getMySpellslots())]
+    console.print(f"You can select ({prepared_spell_count}) prepared spells.")
+    prepared_spells = list()
+    spell_level_options = [str(l + 1) for l, _ in enumerate(oPC.getMySpellslots())]
     while len(prepared_spells) < prepared_spell_count:
         spell_level = IntPrompt.ask(
-            f"Choose a spell by level to create your prepared spell list.",
-            choices=spell_levels,
+            "Choose a level to select spells from.",
+            choices=spell_level_options,
             console=console,
         )
-
         console.print(f"Choose a level {spell_level} spell.")
         chosen_spell = io(oSRD.getSpellsByLevel(spell_level, klass)[spell_level])[0]
         console.print(f":book: You learned the spell {chosen_spell}.")
