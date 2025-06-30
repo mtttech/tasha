@@ -361,17 +361,17 @@ def main(name: str) -> None:
     console.print("Choose a primary class.")
     first_class = io(oSRD.getClasses())[0]
 
-    console.print(f"What is your primary class' '{first_class}' level?")
+    console.print(f"What is your primary class' {first_class} level?")
     level = int(io(20)[0])
     if level >= 3:
         console.print(
-            f"If you start at level 3 or higher, choose a '{first_class}' subclass."
+            f"If you start at level 3 or higher, choose a {first_class} subclass."
         )
 
     subclass = assign_subclass(first_class, level)
     set_class_features(first_class, True, level, subclass)
 
-    console.print(f"Choose your primary class' '{first_class}' skill(s).")
+    console.print(f"Choose your primary class' {first_class} skill(s).")
     set_class_skills(first_class, True)
 
     # Choose a background
@@ -433,7 +433,7 @@ def main(name: str) -> None:
     )
 
     for skill in background_skills:
-        console.print(f":book: You learned the skill '{skill}' from your background.")
+        console.print(f":book: You learned the skill {skill} from your background.")
 
     oPC.set("skills", skills)
 
@@ -496,17 +496,17 @@ def main(name: str) -> None:
         console.print("Choose a secondary class.")
         second_class = io(get_allowed_multiclasses())[0]
 
-        console.print(f"What is your secondary class' '{second_class}' level?")
+        console.print(f"What is your secondary class' {second_class} level?")
         level = int(io(20)[0])
         if level >= 3:
             console.print(
-                f"If you start at level 3 or higher, choose a '{second_class}' subclass."
+                f"If you start at level 3 or higher, choose a {second_class} subclass."
             )
 
         subclass = assign_subclass(second_class, level)
         set_class_features(second_class, False, level, subclass)
 
-        console.print(f"Choose your secondary class' '{second_class}' skill(s).")
+        console.print(f"Choose your secondary class' {second_class} skill(s).")
         set_class_skills(second_class, False)
 
     # Choose an alignment
@@ -537,7 +537,7 @@ def main(name: str) -> None:
     # Finalize character save.
     if not Confirm.ask("Save this character?", console=console):
         console.print(
-            f":floppy_disk: :red_circle: Character '{oPC.getMyName()}' save was aborted."
+            f":floppy_disk: :red_circle: Character {oPC.getMyName()} save was aborted."
         )
     else:
         character_sheet = replace(
@@ -551,7 +551,7 @@ def main(name: str) -> None:
             ) as record:
                 toml.dump(asdict(character_sheet), record)
         console.print(
-            f":floppy_disk: :green_circle: Character '{oPC.getMyName()}' save was successful!"
+            f":floppy_disk: :green_circle: Character {oPC.getMyName()} save was successful!"
         )
 
 
