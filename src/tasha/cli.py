@@ -86,15 +86,22 @@ def assign_spells(klass: str) -> None:
     if not oPC.isSpellcastingClass(klass):
         return
 
+    effective_spellcasting_level = oPC.getSpellcastingLevel(klass)
     oPC.set(
         {
-            "cantrips": oSRD.getCantripsKnownByClass(klass, oPC.getTotalLevel()),
-            "spell_slots": oSRD.getSpellslotsByClass(klass, oPC.getTotalLevel()),
+            "cantrips": oSRD.getCantripsKnownByClass(
+                klass, effective_spellcasting_level
+            ),
+            "spell_slots": oSRD.getSpellslotsByClass(
+                klass, effective_spellcasting_level
+            ),
         }
     )
 
     prepared_spells = list()
-    prepared_spell_count = oSRD.getPreparedSpellCountByClass(klass, oPC.getTotalLevel())
+    prepared_spell_count = oSRD.getPreparedSpellCountByClass(
+        klass, effective_spellcasting_level
+    )
     spell_levels = [str(l + 1) for l, _ in enumerate(oPC.getMySpellslots())]
     while len(prepared_spells) < prepared_spell_count:
         spell_level = IntPrompt.ask(
@@ -345,6 +352,9 @@ def set_class_skills(klass: str, primary_class: bool) -> None:
 
 
 def main(name: str) -> None:
+    # Register the character's name
+    oPC.set("name", name.strip())
+
     # Choose class/subclass
     # Select level
     console.print("Choose a primary class.")
@@ -519,42 +529,11 @@ def main(name: str) -> None:
 
     oPC.set("savingthrows", oSRD.getSavingThrowsByClass(primary_class))
 
-    # TODO: Work out spell selection function.
-    oPC.set(
-        {
-            "cantrips": oSRD.getCantripsKnownByClass(
-                primary_class, oPC.getTotalLevel()
-            ),
-            "spell_slots": oSRD.getSpellslotsByClass(
-                primary_class, oPC.getTotalLevel()
-            ),
-        }
-    )
+    # Select spells.
+    for klass in oPC.getMyClasses():
+        assign_spells(klass)
 
-    if oPC.isSpellcastingClass():
-        prepared_spells = list()
-        prepared_spell_count = oSRD.getPreparedSpellCountByClass(
-            primary_class, oPC.getTotalLevel()
-        )
-        spell_levels = [str(l + 1) for l, _ in enumerate(oPC.getMySpellslots())]
-        while len(prepared_spells) < prepared_spell_count:
-            spell_level = IntPrompt.ask(
-                f"Choose a spell by level to create your prepared spell list.",
-                choices=spell_levels,
-                console=console,
-            )
-
-            console.print(f"Choose a level {spell_level} spell.")
-            chosen_spell = io(
-                oSRD.getSpellsByLevel(spell_level, primary_class)[spell_level]
-            )[0]
-            prepared_spells.append(chosen_spell)
-
-        oPC.set("prepared_spells", {primary_class: prepared_spells})
-    # END TODO
-
-    oPC.set("name", name.strip())
-
+    # Finalize character save.
     if not Confirm.ask("Save this character?", console=console):
         console.print(
             f":floppy_disk: :red_circle: Character '{oPC.getMyName()}' save was aborted."
