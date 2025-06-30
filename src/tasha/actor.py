@@ -254,7 +254,10 @@ class PlayerCharacter:
                     level += self.getLevelByClass(klass)
                 elif klass in ("Paladin", "Ranger"):
                     level += ceil(self.getLevelByClass(klass) / 2)
-                elif self.getMySubclassByClass(klass) in ("Arcane Trickster", "Eldritch Knight"):
+                elif self.getMySubclassByClass(klass) in (
+                    "Arcane Trickster",
+                    "Eldritch Knight",
+                ):
                     level += ceil(self.getLevelByClass(klass) / 3)
             return level
 
