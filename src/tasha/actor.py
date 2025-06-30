@@ -206,12 +206,12 @@ class PlayerCharacter:
             List[int]: Returns a list of the character's spell slots."""
         return self.spell_slots
 
-    def getMySubclasses(self) -> List[str]:
-        """Returns all the character's selected subclasses.
+    def getMySubclassByClass(self, klass: str) -> str:
+        """Returns the character's subclass by class.
 
         Returns:
-            List[str]: Returns a list of the character's subclasses."""
-        return [v["subclass"] for v in tuple(self.classes.values())]
+            str: Returns a list of the character's subclasses."""
+        return self.classes[klass]["subclass"]
 
     def getMyToolProficiencies(self) -> List[str]:
         """Returns the character's tool proficiency list.
@@ -236,6 +236,27 @@ class PlayerCharacter:
         Returns:
             int: Returns the score."""
         return self.attributes[attribute]["score"]
+
+    def getSpellcastingLevel(self, klass: str) -> int:
+        """Returns spell slots by class and level.
+
+        Args:
+            klass (str): Class to get the spellcasting level for.
+
+        Returns:
+            int: Returns the spellcasting level for the specified class."""
+        if not self.isMulticlassSpellcaster():
+            return self.getLevelByClass(klass)
+        else:
+            level = 0
+            for klass in self.getMyClasses():
+                if klass in ("Bard", "Cleric", "Druid", "Sorcerer", "Wizard"):
+                    level += self.getLevelByClass(klass)
+                elif klass in ("Paladin", "Ranger"):
+                    level += ceil(self.getLevelByClass(klass) / 2)
+                elif self.getMySubclassByClass(klass) in ("Arcane Trickster", "Eldritch Knight"):
+                    level += ceil(self.getLevelByClass(klass) / 3)
+            return level
 
     def getSubclassByClass(self, klass: str) -> str:
         """Returns the specified subclass by klass.
@@ -268,29 +289,34 @@ class PlayerCharacter:
             bool: Returns True if the character has classes or False otherwise."""
         return len(self.getMyClasses()) > 0
 
-    def isSpellcaster(self) -> bool:
+    def isMulticlassSpellcaster(self) -> bool:
+        """Determines if character has more than one spellcasting class.
+
+        Returns:
+            bool: Returns True if character has more than one spellcasting class."""
+        for klass in self.getMyClasses():
+            if not self.isSpellcastingClass(klass):
+                return False
+
+        return True
+
+    def isSpellcastingClass(self, klass: str) -> bool:
         """Determines if character is of a spellcasting class.
 
         Returns:
             bool: Returns True if spellcaster or False otherwise."""
-        if any(
-            klass in self.getMyClasses()
-            for klass in (
-                "Bard",
-                "Cleric",
-                "Druid",
-                "Paladin",
-                "Sorcerer",
-                "Ranger",
-                "Warlock",
-                "Wizard",
-            )
-        ) or any(
-            subklass in self.getMySubclasses()
-            for subklass in (
-                "Arcane Trickster",
-                "Eldritch Knight",
-            )
+        if klass in (
+            "Bard",
+            "Cleric",
+            "Druid",
+            "Paladin",
+            "Sorcerer",
+            "Ranger",
+            "Warlock",
+            "Wizard",
+        ) or self.getMySubclassByClass(klass) in (
+            "Arcane Trickster",
+            "Eldritch Knight",
         ):
             return True
         return False
