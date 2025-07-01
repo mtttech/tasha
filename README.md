@@ -60,65 +60,68 @@ Below is an example of such a character.
 
 ```
 alignment = "Chaotic Good"
-armors = [ "Heavy", "Medium", "Light", "Shield",]
-background = "Farmer"
-cantrips = 0
-feats = [ "Savage Attacker",]
+armors = [ "Light", "Shield", "Heavy", "Medium",]
+background = "Soldier"
+feats = [ "Magic Initiate",]
 gender = "Female"
-hit_points = 20
-languages = [ "Dwarvish", "Common", "Elvish",]
-level = 2
-name = "Khalia"
+hit_points = 22
+languages = [ "Common", "Elvish", "Dwarvish",]
+level = 3
+name = "Rowena"
 proficiency_bonus = 2
 savingthrows = [ "Strength", "Constitution",]
 size = "Medium"
-skills = [ "Acrobatics", "Animal Handling", "Athletics", "Nature",]
+skills = [ "Athletics", "Acrobatics", "Intimidation",]
 species = "Elf"
 speed = 30
 spell_slots = [ 0,]
-tools = [ "Artisan's Tools - Carpenter's Tools",]
-traits = [ "Keen Senses", "Elven Lineage", "Trance", "Darkvision", "Fey Ancestry",]
+tools = [ "Artisan's Tools - Cartographer's Supplies",]
+traits = [ "Fey Ancestry", "Darkvision", "Elven Lineage", "Trance", "Keen Senses",]
 weapons = [ "Martial", "Simple",]
 
 [bonus]
-Strength = 1
-Dexterity = 0
-Constitution = 1
+Strength = 2
+Dexterity = 1
+Constitution = 0
 Intelligence = 0
-Wisdom = 1
+Wisdom = 0
 Charisma = 0
 
+[cantrips]
+Fighter = 0
+
 [features]
-Fighter = [ "Fighting Style", "Second Wind", "Weapon Mastery", "Action Surge (one use)", "Tactical Mind",]
+Fighter = [ "Fighting Style", "Second Wind", "Weapon Mastery", "Action Surge (one use)", "Tactical Mind", "Fighter Subclass",]
 
 [prepared_spells]
+Fighter = [ "Sleep", "Shield", "Magic Missile",]
 
 [attributes.Strength]
-score = 16
+score = 17
 modifier = 3
 
 [attributes.Dexterity]
-score = 13
-modifier = 1
-
-[attributes.Constitution]
 score = 14
 modifier = 2
 
-[attributes.Intelligence]
+[attributes.Constitution]
 score = 11
 modifier = 0
 
-[attributes.Wisdom]
-score = 12
+[attributes.Intelligence]
+score = 13
 modifier = 1
 
+[attributes.Wisdom]
+score = 9
+modifier = -1
+
 [attributes.Charisma]
-score = 10
-modifier = 0
+score = 13
+modifier = 1
 
 [classes.Fighter]
-level = 2
+level = 3
 hit_die = 10
-subclass = ""
+subclass = "Eldritch Knight"
 ```
