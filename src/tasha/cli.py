@@ -22,7 +22,7 @@ oSRD = SystemResourceDocument()
 
 
 def assign_ability_scores() -> dict[str, dict[str, int]]:
-    """Prompt to assign a score to each of the six abilities.
+    """Prompt to assign the character's ability scores.
 
     Returns:
         dict[str, dict[str, int]]: Returns dict of abilities."""
@@ -75,31 +75,31 @@ def assign_ability_scores() -> dict[str, dict[str, int]]:
     return ability_score_array
 
 
-def assign_spells(klass: str) -> None:
-    """Prompt to choose spell lists by class.
+def assign_prepared_spells(klass: str) -> None:
+    """Prompt to choose your character's prepared spells.
 
     Args:
         klass (str): Name of the class to choose spells for.
 
     Returns:
-        None"""
+        None."""
     if not oPC.isSpellcastingClass(klass):
         return
 
-    effective_spellcasting_level = oPC.getSpellcastingLevel(klass)
+    effective_spellcaster_level = oPC.getSpellcastingLevel(klass)
     oPC.set(
         {
             "cantrips": {
-                klass: oSRD.getCantripsKnownByClass(klass, effective_spellcasting_level)
+                klass: oSRD.getCantripsKnownByClass(klass, effective_spellcaster_level)
             },
             "spell_slots": oSRD.getSpellslotsByClass(
-                klass, effective_spellcasting_level
+                klass, effective_spellcaster_level
             ),
         }
     )
 
     prepared_spell_count = oSRD.getPreparedSpellCountByClass(
-        klass, effective_spellcasting_level
+        klass, effective_spellcaster_level
     )
     console.print(f"You can select ({prepared_spell_count}) prepared spells.")
     prepared_spells = list()
@@ -282,6 +282,8 @@ def set_class_features(
     Args:
         klass (str): Name of the class to apply class features for.
         primary_class (bool): Determines if primary class or not.
+        level (int): Level of the class to apply class features for.
+        subclass (str): Name of the class' subclass.
 
     Returns:
         None."""
@@ -335,7 +337,7 @@ def set_class_skills(klass: str, primary_class: bool) -> None:
 
     Args:
         klass (str): Name of the class to apply class skills for.
-        primary_class (bool): Determines if primary class or not.
+        primary_class (bool): Determines if the class is the primary class.
 
     Returns:
         None."""
@@ -530,9 +532,9 @@ def main(name: str) -> None:
 
     oPC.set("savingthrows", oSRD.getSavingThrowsByClass(primary_class))
 
-    # Select spells.
+    # Select prepared spells.
     for klass in oPC.getMyClasses():
-        assign_spells(klass)
+        assign_prepared_spells(klass)
 
     # Finalize character save.
     if not Confirm.ask("Save this character?", console=console):
