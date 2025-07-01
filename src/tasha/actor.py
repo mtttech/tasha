@@ -12,7 +12,7 @@ class PlayerCharacter:
     attributes: dict[str, dict[str, int]] = field(default_factory=dict)
     background: str = field(default="")
     bonus: dict[str, int] = field(default_factory=dict)
-    cantrips: int = field(default=0)
+    cantrips: dict[str, dict[str, int]] = field(default_factory=dict)
     classes: dict[str, dict[str, Any]] = field(default_factory=dict)
     feats: list[str] = field(default_factory=list)
     features: dict[str, list[str]] = field(default_factory=dict)
