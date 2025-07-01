@@ -95,8 +95,11 @@ def assign_prepared_spells(klass: str) -> None:
     )
 
     number_of_prepared_spells = oSRD.getPreparedSpellCountByClass(
-        klass, spellcaster_level
+        klass, oPC.getLevelByClass(klass)
     )
+    if number_of_prepared_spells == 0:
+        return
+
     console.print(f"You can select ({number_of_prepared_spells}) prepared spells.")
     prepared_spells = list()
     spell_level_options = [str(l + 1) for l, _ in enumerate(oPC.getMySpellslots())]
@@ -118,17 +121,17 @@ def assign_subclass(klass: str, level: int) -> str:
     """Prompt to choose a primary/secondary class subclass.
 
     Args:
-        klass (str): Name of the class to apply class skills for.
-        primary_class (bool): Determines if primary class or not.
+        klass (str): Name of the class to choose a subclass for.
+        level (int): Level of the class to determine subclass eligibility.
 
     Returns:
         str: The selected subclass."""
-    subclass = ""
-    if level >= 3:
-        subclass = io(
-            oSRD.getSubclassesByClass(klass),
-        )[0]
-    return subclass
+    if level < 3:
+        return ""
+
+    return io(
+        oSRD.getSubclassesByClass(klass),
+    )[0]
 
 
 def calculate_modifier(score: int) -> int:
