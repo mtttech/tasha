@@ -86,25 +86,21 @@ def assign_prepared_spells(klass: str) -> None:
     if not oPC.isSpellcastingClass(klass):
         return
 
-    effective_spellcaster_level = oPC.getSpellcastingLevel(klass)
+    spellcaster_level = oPC.getSpellcastingLevel(klass)
     oPC.set(
         {
-            "cantrips": {
-                klass: oSRD.getCantripsKnownByClass(klass, effective_spellcaster_level)
-            },
-            "spell_slots": oSRD.getSpellslotsByClass(
-                klass, effective_spellcaster_level
-            ),
+            "cantrips": {klass: oSRD.getCantripsKnownByClass(klass, spellcaster_level)},
+            "spell_slots": oSRD.getSpellslotsByClass(klass, spellcaster_level),
         }
     )
 
-    prepared_spell_count = oSRD.getPreparedSpellCountByClass(
-        klass, effective_spellcaster_level
+    number_of_prepared_spells = oSRD.getPreparedSpellCountByClass(
+        klass, spellcaster_level
     )
-    console.print(f"You can select ({prepared_spell_count}) prepared spells.")
+    console.print(f"You can select ({number_of_prepared_spells}) prepared spells.")
     prepared_spells = list()
     spell_level_options = [str(l + 1) for l, _ in enumerate(oPC.getMySpellslots())]
-    while len(prepared_spells) < prepared_spell_count:
+    while len(prepared_spells) < number_of_prepared_spells:
         spell_level = IntPrompt.ask(
             "Choose a level to select spells from.",
             choices=spell_level_options,
