@@ -89,9 +89,9 @@ def assign_spells(klass: str) -> None:
     effective_spellcasting_level = oPC.getSpellcastingLevel(klass)
     oPC.set(
         {
-            "cantrips": oSRD.getCantripsKnownByClass(
-                klass, effective_spellcasting_level
-            ),
+            "cantrips": {
+                klass: oSRD.getCantripsKnownByClass(klass, effective_spellcasting_level)
+            },
             "spell_slots": oSRD.getSpellslotsByClass(
                 klass, effective_spellcasting_level
             ),
