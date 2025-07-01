@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from math import ceil
-from typing import Any, Dict, List
+from typing import Any
 
 
 @dataclass
@@ -8,30 +8,30 @@ class PlayerCharacter:
     """Stores/retrieves player character information."""
 
     alignment: str = field(default="")
-    armors: List[str] = field(default_factory=list)
-    attributes: Dict[str, Dict[str, int]] = field(default_factory=dict)
+    armors: list[str] = field(default_factory=list)
+    attributes: dict[str, dict[str, int]] = field(default_factory=dict)
     background: str = field(default="")
-    bonus: Dict[str, int] = field(default_factory=dict)
+    bonus: dict[str, int] = field(default_factory=dict)
     cantrips: int = field(default=0)
-    classes: Dict[str, Dict[str, Any]] = field(default_factory=dict)
-    feats: List[str] = field(default_factory=list)
-    features: Dict[str, List[str]] = field(default_factory=dict)
+    classes: dict[str, dict[str, Any]] = field(default_factory=dict)
+    feats: list[str] = field(default_factory=list)
+    features: dict[str, list[str]] = field(default_factory=dict)
     gender: str = field(default="")
     hit_points: int = field(init=False)
-    languages: List[str] = field(default_factory=list)
+    languages: list[str] = field(default_factory=list)
     level: int = field(default=1)
     name: str = field(default="")
-    prepared_spells: Dict[str, List[str]] = field(default_factory=dict)
+    prepared_spells: dict[str, list[str]] = field(default_factory=dict)
     proficiency_bonus: int = field(default=0)
-    savingthrows: List[str] = field(default_factory=list)
+    savingthrows: list[str] = field(default_factory=list)
     size: str = field(default="Medium")
-    skills: List[str] = field(default_factory=list)
+    skills: list[str] = field(default_factory=list)
     species: str = field(default="")
     speed: int = field(default=30)
-    spell_slots: List[int] = field(default_factory=list)
-    tools: List[str] = field(default_factory=list)
-    traits: List[str] = field(default_factory=list)
-    weapons: List[str] = field(default_factory=list)
+    spell_slots: list[int] = field(default_factory=list)
+    tools: list[str] = field(default_factory=list)
+    traits: list[str] = field(default_factory=list)
+    weapons: list[str] = field(default_factory=list)
 
     def __post_init__(self) -> None:
         # Calculate hit points/proficiency bonus.
@@ -111,18 +111,18 @@ class PlayerCharacter:
         except KeyError:
             return 0
 
-    def getMyArmorProficiencies(self) -> List[str]:
+    def getMyArmorProficiencies(self) -> list[str]:
         """Returns the character's armor proficiency list.
 
         Returns:
-            List[str]: Returns a list of the character's armor proficiencies."""
+            list[str]: Returns a list of the character's armor proficiencies."""
         return self.armors
 
-    def getMyAttributes(self) -> Dict[str, Dict[str, Any]]:
+    def getMyAttributes(self) -> dict[str, dict[str, int]]:
         """Returns a dictionary of all attributes.
 
         Returns:
-            Dict[str, Dict[str, Any]]: Returns character abilities/scores/modifiers."""
+            dict[str, dict[str, int]]: Returns character abilities/scores/modifiers."""
         return self.attributes
 
     def getMyBackground(self) -> str:
@@ -132,39 +132,39 @@ class PlayerCharacter:
             str: Returns the character's background."""
         return self.background
 
-    def getMyBonus(self) -> Dict[str, int]:
+    def getMyBonus(self) -> dict[str, int]:
         """Returns the character's bonus.
 
         Returns:
-            Dict[str, int]: Returns the character's ability score bonuses."""
+            dict[str, int]: Returns the character's ability score bonuses."""
         return self.bonus
 
-    def getMyClasses(self) -> List[str]:
+    def getMyClasses(self) -> list[str]:
         """Returns the character's classes.
 
         Returns:
-            List[str]: Returns a list of the character's classes."""
+            list[str]: Returns a list of the character's classes."""
         return list(self.classes.keys())
 
-    def getMyFeats(self) -> List[str]:
+    def getMyFeats(self) -> list[str]:
         """Returns the character's feats.
 
         Returns:
-            List[str]: Returns a list of all the character's feats."""
+            list[str]: Returns a list of all the character's feats."""
         return self.feats
 
-    def getMyFeatures(self) -> Dict[str, List[str]]:
+    def getMyFeatures(self) -> dict[str, list[str]]:
         """Returns the character's class features.
 
         Returns:
-            List[str]: Returns a list of all the character's class features."""
+            list[str]: Returns a list of all the character's class features."""
         return self.features
 
-    def getMyLanguages(self) -> List[str]:
+    def getMyLanguages(self) -> list[str]:
         """Returns the character's languages.
 
         Returns:
-            List[str]: Returns a list of the character's languages."""
+            list[str]: Returns a list of the character's languages."""
         return self.languages
 
     def getMyName(self) -> str:
@@ -174,15 +174,15 @@ class PlayerCharacter:
             str: Returns the character's name."""
         return self.name
 
-    def getMySavingThrows(self) -> List[str]:
+    def getMySavingThrows(self) -> list[str]:
         """Returns the character's saving throw list."""
         return self.savingthrows
 
-    def getMySkills(self) -> List[str]:
+    def getMySkills(self) -> list[str]:
         """Returns the character's skill list.
 
         Returns:
-            List[str]: Returns a list of the character's skills."""
+            list[str]: Returns a list of the character's skills."""
         return self.skills
 
     def getMySpecies(self) -> str:
@@ -199,11 +199,11 @@ class PlayerCharacter:
             int: Returns the character's speed value."""
         return self.speed
 
-    def getMySpellslots(self) -> List[int]:
+    def getMySpellslots(self) -> list[int]:
         """Returns the character's spell slots.
 
         Returns:
-            List[int]: Returns a list of the character's spell slots."""
+            list[int]: Returns a list of the character's spell slots."""
         return self.spell_slots
 
     def getMySubclassByClass(self, klass: str) -> str:
@@ -213,18 +213,18 @@ class PlayerCharacter:
             str: Returns a list of the character's subclasses."""
         return self.classes[klass]["subclass"]
 
-    def getMyToolProficiencies(self) -> List[str]:
+    def getMyToolProficiencies(self) -> list[str]:
         """Returns the character's tool proficiency list.
 
         Returns:
-            List[str]: Returns a list of the character's tool proficiencies."""
+            list[str]: Returns a list of the character's tool proficiencies."""
         return self.tools
 
-    def getMyWeaponProficiencies(self) -> List[str]:
+    def getMyWeaponProficiencies(self) -> list[str]:
         """Returns the character's weapon proficiency list.
 
         Returns:
-            List[str]: Returns a list of the character's weapon proficiencies."""
+            list[str]: Returns a list of the character's weapon proficiencies."""
         return self.weapons
 
     def getScoreByAbility(self, attribute: str) -> int:
