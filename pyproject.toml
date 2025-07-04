@@ -1,8 +1,8 @@
-[tool.poetry]
+[project]
 name = "tasha"
 version = "0.8.8"
 description = "Create characters for Dungeons & Dragons 5th edition (2024)."
-authors = ["Marcus T Taylor <mtaylor9754@hotmail.com>"]
+authors = [{ name = "Marcus T Taylor", email = "mtaylor9754@hotmail.com" }]
 license = "MIT"
 readme = "README.md"
 classifiers = [
@@ -13,19 +13,19 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Topic :: Games/Entertainment :: Role-Playing",
 ]
+requires-python = ">=3.12"
+dependencies = [
+    'dice',
+    'rich',
+    'toml',
+    'click',
+]
 
-
-[tool.poetry.urls]
+[project.urls]
 "Bug Tracker" = "https://github.com/mtttech/tasha/issues"
 
-[tool.poetry.dependencies]
-python = "^3.12"
-dice = "^4.0.0"
-rich = "^13.9.2"
-toml = "^0.10.2"
-click = "^8.2.1"
 
-[tool.poetry.scripts]
+[project.scripts]
 tasha='tasha.cli:cli'
 
 
