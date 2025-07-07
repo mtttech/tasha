@@ -2,7 +2,9 @@
 name = "tasha"
 version = "0.8.8"
 description = "Create 5.5e Dungeons & Dragons characters."
-authors = [{ name = "Marcus T Taylor", email = "mtaylor9754@hotmail.com" }]
+authors = [
+    { name = "Marcus T Taylor", email = "mtaylor9754@hotmail.com" }
+]
 license = "MIT"
 readme = "README.md"
 classifiers = [
