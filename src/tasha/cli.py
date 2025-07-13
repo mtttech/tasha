@@ -1,5 +1,6 @@
 from dataclasses import asdict, replace
 from pathlib import Path
+from typing import Any
 
 import click
 from rich.console import Console
@@ -235,24 +236,29 @@ def io(choices: list[str] | int, loop_count: int = 1) -> list[str]:
     Returns:
         list[str]: A list of the user's responses."""
 
+    def first_and_last(choices: dict[int, Any]) -> tuple[int, int]:
+        indexes = list(choices.keys())
+        return (indexes[0], indexes[-1])
+
+    def index_choices(choices: list[Any]) -> dict[int, Any]:
+        indexed_choices = {}
+        for index, option in enumerate(choices):  # pyright: ignore
+            indexed_choices[index + 1] = option
+        return indexed_choices
+
     # If using numbers, create a range, starting from 1.
     if isinstance(choices, int):
         choices = list(str(n + 1) for n in range(choices))
 
     selections = []
     for _ in range(0, loop_count):
-        # Map out menu selections
-        indexed_choices = {}
-        for index, option in enumerate(choices):  # pyright: ignore
-            indexed_choices[index + 1] = option
+        indexed_choices = index_choices(choices)
 
         # Automatically select the last option.
         if len(indexed_choices) == loop_count:
             return list(indexed_choices.values())
 
-        indexes = list(indexed_choices.keys())
-        first_index = indexes[0]
-        last_index = indexes[-1]
+        first_index, last_index = first_and_last(indexed_choices)
         message = (
             f"\n[prompt]Make a selection <{first_index}-{last_index}>.[/prompt]\n\n"
         )
