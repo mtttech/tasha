@@ -17,6 +17,7 @@ from tasha.stylesheet import css
 console = Console(
     style="default",
     theme=Theme(css),
+    width=80,
 )
 oPC = PlayerCharacter()
 oSRD = SystemResourceDocument()
@@ -486,9 +487,9 @@ def main(name: str) -> None:
             score, modifier = tuple(attribute_pair.values())
             table.add_row(attribute_name, str(score), str(modifier))
 
-        print("\n")
+        console.print("\n")
         console.print(table)
-        print("\n")
+        console.print("\n")
 
         if not Confirm.ask(
             "Are you satisfied with these ability scores?", console=console
@@ -569,5 +570,5 @@ def cli(new):
     try:
         main(new)
     except KeyboardInterrupt:
-        print("\n")
+        console.print("\n")
         console.print(":dagger:  [exit]Exited program.[/exit]")
