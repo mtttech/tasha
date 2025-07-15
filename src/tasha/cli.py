@@ -26,16 +26,16 @@ oSRD = SystemResourceDocument()
 def assign_ability_scores() -> dict[str, dict[str, int]]:
     """Prompt to assign the character's ability scores.
 
+    Continuously rerolls if one of the following is true:
+
+        1. smallest score < 8
+        2. or largest score < 15
+
     Returns:
         dict[str, dict[str, int]]: Returns dict of abilities."""
 
     def generate_scores() -> list[int]:
         """Randomly generates six scores.
-
-        Continuously rerolls if one of the following is true:
-
-        1. smallest score < 8
-        2. or largest score < 15
 
         Returns:
             list[int]: Returns a list of six integers."""
