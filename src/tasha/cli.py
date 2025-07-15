@@ -16,6 +16,7 @@ from tasha.stylesheet import css
 
 console = Console(
     style="default",
+    tab_size=4,
     theme=Theme(css),
     width=80,
 )
