@@ -48,13 +48,15 @@ Options:
   --help      Show this message and exit.
 ```
 
+Create a character.
+
 ```
-tasha --new 'My Character'
+tasha --new Rowena
 ```
 
 The program will send a series of prompts that will be used to generate your character.
 
-Finished characters will be saved within the same directory.
+You will be prompted to then save the finished character. Such characters will be saved as a .toml file within the same directory.
 
 Below is an example of such a character.
 
