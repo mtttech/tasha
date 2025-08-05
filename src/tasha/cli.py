@@ -129,7 +129,7 @@ def generate_scores() -> list[int]:
 
         1. smallest score < 8
         2. or largest score < 15
-        
+
     Returns:
         list[int]: Returns a list of six integers."""
     import dice  # pyright: ignore
@@ -350,7 +350,9 @@ def set_class_skills(klass: str, primary_class: bool) -> None:
 
     oPC.set(
         "skills",
-        menu(oSRD.getSkillsByClass(klass, oPC.getMySkills()), loop_count=allotted_skills),
+        menu(
+            oSRD.getSkillsByClass(klass, oPC.getMySkills()), loop_count=allotted_skills
+        ),
     )
 
 
