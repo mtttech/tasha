@@ -34,22 +34,6 @@ def assign_ability_scores() -> dict[str, dict[str, int]]:
 
     Returns:
         dict[str, dict[str, int]]: Returns dict of abilities."""
-
-    def generate_scores() -> list[int]:
-        """Randomly generates six scores.
-
-        Returns:
-            list[int]: Returns a list of six integers."""
-        import dice  # pyright: ignore
-
-        while True:
-            dice_rolls = [sum(dice.roll("4d6^3")) for _ in range(6)]  # pyright: ignore
-            if min(dice_rolls) >= 8 and max(dice_rolls) >= 15:
-                break
-
-        dice_rolls.sort(reverse=True)
-        return dice_rolls
-
     ability_score_array = {
         "Strength": {"score": 0, "modifier": 0},
         "Dexterity": {"score": 0, "modifier": 0},
@@ -58,10 +42,10 @@ def assign_ability_scores() -> dict[str, dict[str, int]]:
         "Wisdom": {"score": 0, "modifier": 0},
         "Charisma": {"score": 0, "modifier": 0},
     }
-    ability_names = list(ability_score_array.keys())
+    ability_score_names = list(ability_score_array.keys())
     for score in generate_scores():
         console.print(f"Assign an {score} to which ability?")
-        ability_score_array[io(ability_names)[0]] = {
+        ability_score_array[io(ability_score_names)[0]] = {
             "score": score,
             "modifier": calculate_modifier(score),
         }
@@ -150,6 +134,22 @@ def calculate_modifier(score: int) -> int:
     return floor((score - 10) / 2)
 
 
+def generate_scores() -> list[int]:
+    """Randomly generates six scores.
+
+    Returns:
+        list[int]: Returns a list of six integers."""
+    import dice  # pyright: ignore
+
+    while True:
+        dice_rolls = [sum(dice.roll("4d6^3")) for _ in range(6)]  # pyright: ignore
+        if min(dice_rolls) >= 8 and max(dice_rolls) >= 15:
+            break
+
+    dice_rolls.sort(reverse=True)
+    return dice_rolls
+
+    
 def get_allowed_feats() -> list[str]:
     """Returns a list of selectable feats.
 
