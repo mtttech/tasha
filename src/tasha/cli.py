@@ -27,11 +27,6 @@ oSRD = SystemResourceDocument()
 def assign_ability_scores() -> dict[str, dict[str, int]]:
     """Prompt to assign the character's ability scores.
 
-    Continuously rerolls if one of the following is true:
-
-        1. smallest score < 8
-        2. or largest score < 15
-
     Returns:
         dict[str, dict[str, int]]: Returns dict of abilities."""
     ability_score_array = {
@@ -137,6 +132,11 @@ def calculate_modifier(score: int) -> int:
 def generate_scores() -> list[int]:
     """Randomly generates six scores.
 
+    Continuously rerolls if one of the following is true:
+
+        1. smallest score < 8
+        2. or largest score < 15
+        
     Returns:
         list[int]: Returns a list of six integers."""
     import dice  # pyright: ignore
@@ -149,7 +149,7 @@ def generate_scores() -> list[int]:
     dice_rolls.sort(reverse=True)
     return dice_rolls
 
-    
+
 def get_allowed_feats() -> list[str]:
     """Returns a list of selectable feats.
 
