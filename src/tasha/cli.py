@@ -37,13 +37,6 @@ def assign_ability_scores() -> dict[str, dict[str, int]]:
         "Wisdom": {"score": 0, "modifier": 0},
         "Charisma": {"score": 0, "modifier": 0},
     }
-    ability_score_names = list(ability_score_array.keys())
-    for score in generate_scores():
-        console.print(f"Assign an {score} to which ability?")
-        ability_score_array[menu(ability_score_names)[0]] = {
-            "score": score,
-            "modifier": calculate_modifier(score),
-        }
 
     # Apply background ability bonuses.
     for ability, bonus in oPC.getMyBonus().items():
@@ -477,6 +470,15 @@ def main(name: str) -> None:
     attributes_array = {}
     while len(attributes_array) == 0:
         attributes_array = assign_ability_scores()
+        ability_score_names = list(attributes_array.keys())
+        for score in generate_scores():
+            console.print(f"Assign an {score} to which ability?")
+            ability_selection = menu(ability_score_names)[0]
+            score = score + attributes_array[ability_selection]["score"]
+            attributes_array[ability_selection] = {
+                "score": score,
+                "modifier": calculate_modifier(score),
+            }
 
         table = Table(
             title="Generated Ability Scores", caption="*Background bonuses applied"
@@ -567,7 +569,7 @@ def main(name: str) -> None:
 @click.version_option()
 @click.command()
 @click.option("--new", help="Generates a new player character.")
-def cli(new):
+def tasha_main(new):
     try:
         main(new)
     except KeyboardInterrupt:
