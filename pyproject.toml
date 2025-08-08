@@ -28,7 +28,7 @@ Issues = "https://github.com/mtttech/tasha/issues"
 
 
 [project.scripts]
-tasha='tasha.cli:tasha_main'
+tasha='tasha.tasha:tasha_main'
 
 
 [tool.poetry.group.dev.dependencies]
