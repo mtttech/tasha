@@ -379,11 +379,41 @@ def main(name: str) -> None:
     set_class_skills(first_class, True)
 
     # Choose a background
-    # Choose a species
-    # Choose equipment
     console.print("Choose your character's background.")
     oPC.set("background", menu(oSRD.getBackgrounds())[0])
 
+    console.print("A background gives your character a specified Origin feat.")
+    oPC.set("feats", menu(oSRD.getFeatsByCategory("Origin")))
+
+    console.print(
+        "A background gives your character proficiency in two specified skills."
+    )
+    background_skills = []
+    # Loop through background skills.
+    for skill in oSRD.getSkillsByBackground(oPC.getMyBackground()):
+        # If the skill is not known, add to the filtered background skill list.
+        if skill not in oPC.getMySkills():
+            background_skills.append(skill)
+
+    skills = menu(
+        background_skills,
+        loop_count=len(background_skills),
+    )
+
+    for skill in background_skills:
+        console.print(f":book: You learned the skill {skill} from your background.")
+
+    oPC.set("skills", skills)
+
+    console.print(
+        "Each background gives a character proficiency with one tool-either a "
+        "specific tool or one chosen from the Artisan's Tools category."
+    )
+    tool = menu(
+        oSRD.getToolProficienciesByBackground(oPC.getMyBackground()),
+    )
+    oPC.set("tools", tool)
+    
     # Choose ability bonuses
     console.print(
         "A background provides a bonus to up to three of your character's "
@@ -418,38 +448,7 @@ def main(name: str) -> None:
 
     oPC.set("bonus", ability_bonus_array)
 
-    console.print("A background gives your character a specified Origin feat.")
-    oPC.set("feats", menu(oSRD.getFeatsByCategory("Origin")))
-
-    console.print(
-        "A background gives your character proficiency in two specified skills."
-    )
-    background_skills = []
-    # Loop through background skills.
-    for skill in oSRD.getSkillsByBackground(oPC.getMyBackground()):
-        # If the skill is not known, add to the filtered background skill list.
-        if skill not in oPC.getMySkills():
-            background_skills.append(skill)
-
-    skills = menu(
-        background_skills,
-        loop_count=len(background_skills),
-    )
-
-    for skill in background_skills:
-        console.print(f":book: You learned the skill {skill} from your background.")
-
-    oPC.set("skills", skills)
-
-    console.print(
-        "Each background gives a character proficiency with one tool-either a "
-        "specific tool or one chosen from the Artisan's Tools category."
-    )
-    tool = menu(
-        oSRD.getToolProficienciesByBackground(oPC.getMyBackground()),
-    )
-    oPC.set("tools", tool)
-
+    # Choose a Species
     console.print("Choose a species for your character.")
     species = menu(oSRD.getSpecies())[0]
     oPC.set(
@@ -482,18 +481,18 @@ def main(name: str) -> None:
                 "modifier": calculate_modifier(score),
             }
 
-        table = Table(
+        attribute_table = Table(
             title="Generated Ability Scores", caption="*Background bonuses applied"
         )
-        table.add_column("")
-        table.add_column("Score", justify="center")
-        table.add_column("Modifier", justify="center")
+        attribute_table.add_column("")
+        attribute_table.add_column("Score", justify="center")
+        attribute_table.add_column("Modifier", justify="center")
         for attribute_name, attribute_pair in attributes_array.items():
             score, modifier = tuple(attribute_pair.values())
-            table.add_row(attribute_name, str(score), str(modifier))
+            attribute_table.add_row(attribute_name, str(score), str(modifier))
 
         console.print("\n")
-        console.print(table)
+        console.print(attribute_table)
         console.print("\n")
 
         if not Confirm.ask(
