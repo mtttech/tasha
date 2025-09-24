@@ -132,6 +132,7 @@ func AssignCharacterClasses(background string) (map[string]actor.Class, []string
 		class := MenuStr("Select your class", Classes)
 		Classes = utils.OmitStr(Classes, class)
 		level := MenuInt("What level are you", d20.GetLevelSlices(max_level))
+		// Decrement level for chosen class from max level.
 		max_level -= level
 		classes[class] = actor.Class{
 			Level:    level,
@@ -144,7 +145,7 @@ func AssignCharacterClasses(background string) (map[string]actor.Class, []string
 			skills = AssignSecondaryClassSkills(class, skills)
 		}
 
-		if ConfirmMenu(("Add another class")) {
+		if max_level > 0 && ConfirmMenu(("Add another class")) {
 			if !is_multiclassed {
 				is_multiclassed = true
 			}
