@@ -15,3 +15,7 @@ Run tasha by typing the following command.
 ```
 go run tasha new <CHARACTER_NAME>
 ```
+
+# TODO List
+
+* Basic multiclass selection implemented but doesn't check for multiclass ability score requirements. Planning to add this functionality next.
