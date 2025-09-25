@@ -41,10 +41,10 @@ var versionCmd = &cobra.Command{
 	},
 }
 
-var Backgrounds = d20.GetBackgroundSlices()
-var Classes = d20.GetClassSlices()
+var Backgrounds = d20.GetD20Backgrounds()
+var Classes = d20.GetD20Classes()
 var Genders = []string{"Female", "Male"}
-var Species = d20.GetSpeciesSlices()
+var Species = d20.GetD20Species()
 
 func Execute() {
 	err := rootCmd.Execute()
@@ -247,9 +247,6 @@ func MenuStr(label string, items []string) string {
 		Label: label,
 		Items: items,
 	}
-	_, selection, err := prompt.Run()
-	if err != nil {
-		return ""
-	}
+	_, selection, _ := prompt.Run()
 	return selection
 }
