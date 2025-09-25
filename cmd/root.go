@@ -28,14 +28,14 @@ var rootCmd = &cobra.Command{
 
 var newCmd = &cobra.Command{
 	Use:   "new",
-	Short: "Create a new character.",
+	Short: "Create a new character",
 	Args:  cobra.ExactArgs(1),
 	Run:   Tasha,
 }
 
 var versionCmd = &cobra.Command{
 	Use:   "version",
-	Short: "Display the current version.",
+	Short: "Display the current version",
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println(currentVersion)
 	},
@@ -97,7 +97,7 @@ func init() {
 Assign ability scores.
 */
 func AssignAbilityScores() map[string]attributes.AbilityScore {
-	Abilities := []string{
+	abilities := []string{
 		"Strength",
 		"Dexterity",
 		"Constitution",
@@ -105,28 +105,28 @@ func AssignAbilityScores() map[string]attributes.AbilityScore {
 		"Wisdom",
 		"Charisma",
 	}
-	var ability_scores = make(map[string]attributes.AbilityScore)
-	abilityScores := attributes.GenerateScores()
-	for _, attribute := range Abilities {
-		score := MenuInt(fmt.Sprintf("Assign your %s score", attribute), abilityScores)
-		ability_scores[attribute] = attributes.AbilityScore{
+	ability_score_map := make(map[string]attributes.AbilityScore)
+	scores := attributes.GenerateScores()
+	for _, ability := range abilities {
+		score := MenuInt(fmt.Sprintf("Assign your %s score", ability), scores)
+		ability_score_map[ability] = attributes.AbilityScore{
 			Score:    score,
 			Modifier: attributes.CalculateModifier(score),
 		}
-		abilityScores = utils.OmitInt(abilityScores, score)
+		scores = utils.OmitInt(scores, score)
 	}
 
-	return ability_scores
+	return ability_score_map
 }
 
 /*
-Assign character classes skills.
+Assign character's classes and skills.
 */
 func AssignCharacterClasses(background string) (map[string]actor.Class, []string) {
-	var classes = make(map[string]actor.Class)
-	var is_multiclassed = false
-	var max_level = 20
-	var skills = []string{}
+	classes := make(map[string]actor.Class)
+	is_multiclassed := false
+	max_level := 20
+	skills := []string{}
 
 	for {
 		class := MenuStr("Select your class", Classes)
@@ -168,7 +168,7 @@ func AssignCharacterClasses(background string) (map[string]actor.Class, []string
 Assign primary class skills.
 */
 func AssignPrimaryClassSkills(class string, background_skills []string) []string {
-	var skills = []string{}
+	skills := []string{}
 	classSkills := d20.GetSkillsByClass(class)
 	// Cycle through background skills.
 	for _, background_skill := range background_skills {
@@ -195,7 +195,7 @@ func AssignPrimaryClassSkills(class string, background_skills []string) []string
 Assign secondary class skills.
 */
 func AssignSecondaryClassSkills(class string, current_skills []string) []string {
-	var skills = []string{}
+	skills := []string{}
 	classSkills := d20.GetSkillsByClass(class)
 	// Cycle through current skills.
 	for _, current_skill := range current_skills {

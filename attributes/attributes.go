@@ -65,9 +65,9 @@ func CalculateModifier(score int) int {
 }
 
 /*
-Generates six ability scores.
+Generates six random attributes.
 
-Automatically rerolls the result if one of the following is true:
+Will automatically reroll the results if one of the following is true:
 
  1. If the smallest attribute < 8
  2. If the largest attribute < 15
