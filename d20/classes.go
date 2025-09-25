@@ -3,7 +3,10 @@ Copyright © 2025 Marcus Taylor <mtaylor9754@hotmail.com>
 */
 package d20
 
-import "slices"
+import (
+	"maps"
+	"slices"
+)
 
 type Class struct {
 	Armors       []string
@@ -344,11 +347,8 @@ func GetArmorsByClass(class string) []string {
 /*
 Returns a slice of DnD classes.
 */
-func GetClassSlices() []string {
-	classes := []string{}
-	for class := range characterClasses {
-		classes = append(classes, class)
-	}
+func GetD20Classes() []string {
+	classes := slices.Collect(maps.Keys(characterClasses))
 	slices.Sort(classes)
 	return classes
 }

@@ -3,7 +3,10 @@ Copyright © 2025 Marcus Taylor <mtaylor9754@hotmail.com>
 */
 package d20
 
-import "slices"
+import (
+	"maps"
+	"slices"
+)
 
 type Species struct {
 	Size   string
@@ -108,22 +111,19 @@ var characterSpecies = map[string]Species{
 }
 
 /*
+Returns a slice of DnD species.
+*/
+func GetD20Species() []string {
+	species := slices.Collect(maps.Keys(characterSpecies))
+	slices.Sort(species)
+	return species
+}
+
+/*
 Returns size str by species.
 */
 func GetSizeBySpecies(species string) string {
 	return characterSpecies[species].Size
-}
-
-/*
-Returns a slice of DnD species.
-*/
-func GetSpeciesSlices() []string {
-	species := []string{}
-	for race := range characterSpecies {
-		species = append(species, race)
-	}
-	slices.Sort(species)
-	return species
 }
 
 /*

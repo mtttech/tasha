@@ -3,7 +3,10 @@ Copyright © 2025 Marcus Taylor <mtaylor9754@hotmail.com>
 */
 package d20
 
-import "slices"
+import (
+	"maps"
+	"slices"
+)
 
 type Background struct {
 	Ability []string
@@ -167,15 +170,26 @@ var characterBackgrounds = map[string]Background{
 }
 
 /*
+Returns a slice of abilities by background.
+*/
+func GetAbilitiesByBackground(background string) []string {
+	return characterBackgrounds[background].Ability
+}
+
+/*
 Returns a slice of DnD backgrounds.
 */
-func GetBackgroundSlices() []string {
-	backgrounds := []string{}
-	for background := range characterBackgrounds {
-		backgrounds = append(backgrounds, background)
-	}
+func GetD20Backgrounds() []string {
+	backgrounds := slices.Collect(maps.Keys(characterBackgrounds))
 	slices.Sort(backgrounds)
 	return backgrounds
+}
+
+/*
+Returns a slice of feats by background.
+*/
+func GetFeatByBackground(background string) []string {
+	return characterBackgrounds[background].Feats
 }
 
 /*
@@ -183,4 +197,11 @@ Returns a slice of skills by background.
 */
 func GetSkillsByBackground(background string) []string {
 	return characterBackgrounds[background].Skills
+}
+
+/*
+Returns a slice of tools by background.
+*/
+func GetToolsByBackground(background string) []string {
+	return characterBackgrounds[background].Tools
 }
