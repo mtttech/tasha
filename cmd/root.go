@@ -28,14 +28,14 @@ var rootCmd = &cobra.Command{
 
 var newCmd = &cobra.Command{
 	Use:   "new",
-	Short: "Create a new character.",
+	Short: "Create a new character",
 	Args:  cobra.ExactArgs(1),
 	Run:   Tasha,
 }
 
 var versionCmd = &cobra.Command{
 	Use:   "version",
-	Short: "Display the current version.",
+	Short: "Display the current version",
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println(currentVersion)
 	},
