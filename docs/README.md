@@ -10,7 +10,13 @@ Below is a list of rulebooks incorporated into the program (more may be added as
 
 ## Usage
 
-Run tasha by typing the following command.
+Get the current version of tasha.
+
+```
+go run tasha version
+```
+
+Create a new character with the following command.
 
 ```
 go run tasha new <CHARACTER_NAME>
