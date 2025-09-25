@@ -134,9 +134,16 @@ func AssignCharacterClasses(background string) (map[string]actor.Class, []string
 		level := MenuInt("What level are you", d20.GetLevelSlices(max_level))
 		// Decrement level for chosen class from max level.
 		max_level -= level
+
+		// Apply subclass
+		var subclass = ""
+		if level >= 3 {
+			subclass = MenuStr("What is your subclass", d20.GetSubclassesByClass(class))
+		}
+
 		classes[class] = actor.Class{
 			Level:    level,
-			Subclass: "",
+			Subclass: subclass,
 		}
 
 		if !is_multiclassed {
