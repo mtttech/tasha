@@ -20,7 +20,6 @@ func Max(seq []int) int {
 Returns the smallest int within a sequence.
 */
 func Min(seq []int) int {
-
 	smallest_integer := seq[0]
 	for _, n := range seq {
 		if n <= smallest_integer {
@@ -34,7 +33,7 @@ func Min(seq []int) int {
 Returns the given items sequence minus the first instance of needle.
 */
 func OmitInt(items []int, needle int) []int {
-	var newIntArray = []int{}
+	newIntArray := []int{}
 	needleFound := false
 	for _, item := range items {
 		if !needleFound && needle == item {
@@ -50,7 +49,7 @@ func OmitInt(items []int, needle int) []int {
 Returns the given items sequence minus the instance of needle.
 */
 func OmitStr(items []string, needle string) []string {
-	var newStrArray = []string{}
+	newStrArray := []string{}
 	for _, item := range items {
 		if needle != item {
 			newStrArray = append(newStrArray, item)
