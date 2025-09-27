@@ -381,23 +381,23 @@ func GetSavingThrowsByClass(class string) []string {
 /*
 Gets the number of skill points by class.
 */
-func GetSkillPointsByPrimaryClass(class string, is_primary_class bool) int {
-	var allottedSkills = 0
+func GetSkillPointsByClass(class string, is_primary_class bool) int {
+	allotted_skills := 0
 	switch class {
 	case "Rogue":
-		allottedSkills = 4
+		allotted_skills = 4
 	case "Bard", "Ranger":
 		if is_primary_class {
-			allottedSkills = 3
+			allotted_skills = 3
 		} else {
-			allottedSkills = 1
+			allotted_skills = 1
 		}
 	default:
 		if is_primary_class {
-			allottedSkills = 2
+			allotted_skills = 2
 		}
 	}
-	return allottedSkills
+	return allotted_skills
 }
 
 /*
