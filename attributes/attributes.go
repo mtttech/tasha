@@ -56,7 +56,7 @@ func roll_six() []int {
 }
 
 /*
-Calculates modifier value from the specified score.
+Calculates modifier value for the specified score.
 
 Formula: score - 10 / 2
 */
