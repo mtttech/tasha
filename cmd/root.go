@@ -136,7 +136,7 @@ func AssignCharacterClasses(background string) (map[string]actor.Class, []string
 		max_level -= level
 
 		// Apply subclass
-		var subclass = ""
+		subclass := ""
 		if level >= 3 {
 			subclass = MenuStr("What is your subclass", d20.GetSubclassesByClass(class))
 		}
@@ -169,23 +169,23 @@ Assign primary class skills.
 */
 func AssignPrimaryClassSkills(class string, background_skills []string) []string {
 	skills := []string{}
-	classSkills := d20.GetSkillsByClass(class)
+	class_skill_list := d20.GetSkillsByClass(class)
 	// Cycle through background skills.
 	for _, background_skill := range background_skills {
-		if slices.Contains(classSkills, background_skill) {
+		if slices.Contains(class_skill_list, background_skill) {
 			// Apply background skill to the chosen skill pool.
 			skills = append(skills, background_skill)
 			// Remove background skill from the list of selectable class skills.
-			classSkills = utils.OmitStr(classSkills, background_skill)
+			class_skill_list = utils.OmitStr(class_skill_list, background_skill)
 			fmt.Printf("Background skill '%s' added.\n", background_skill)
 		}
 	}
 
 	// Start selecting class skills.
 	for i := 1; i <= d20.GetSkillPointsByClass(class, true); i++ {
-		skill := MenuStr("Choose a class skill", classSkills)
+		skill := MenuStr("Choose a class skill", class_skill_list)
 		skills = append(skills, skill)
-		classSkills = utils.OmitStr(classSkills, skill)
+		class_skill_list = utils.OmitStr(class_skill_list, skill)
 	}
 
 	return skills
@@ -196,22 +196,22 @@ Assign secondary class skills.
 */
 func AssignSecondaryClassSkills(class string, current_skills []string) []string {
 	skills := []string{}
-	classSkills := d20.GetSkillsByClass(class)
+	class_skill_list := d20.GetSkillsByClass(class)
 	// Cycle through current skills.
 	for _, current_skill := range current_skills {
-		if slices.Contains(classSkills, current_skill) {
+		if slices.Contains(class_skill_list, current_skill) {
 			// Apply current skill to the chosen skill pool.
 			skills = append(skills, current_skill)
 			// Remove skills the character already possesses.
-			classSkills = utils.OmitStr(classSkills, current_skill)
+			class_skill_list = utils.OmitStr(class_skill_list, current_skill)
 		}
 	}
 
 	// Start selecting class skills.
-	for i := 1; i <= d20.GetSkillPointsByClass(class, true); i++ {
-		skill := MenuStr("Choose a class skill", classSkills)
+	for i := 1; i <= d20.GetSkillPointsByClass(class, false); i++ {
+		skill := MenuStr("Choose a class skill", class_skill_list)
 		skills = append(skills, skill)
-		classSkills = utils.OmitStr(classSkills, skill)
+		class_skill_list = utils.OmitStr(class_skill_list, skill)
 	}
 
 	return skills
