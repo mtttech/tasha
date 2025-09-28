@@ -3,7 +3,11 @@ Copyright © 2025 Marcus Taylor <mtaylor9754@hotmail.com>
 */
 package d20
 
-import "tasha/attributes"
+import (
+	"maps"
+	"slices"
+	"tasha/attributes"
+)
 
 type Multiclass struct {
 	Ability []string
@@ -50,7 +54,7 @@ var characterMulticlasses = map[string]Multiclass{
 		Weapons: []string{},
 	},
 	"Paladin": {
-		Ability: []string{"Strength", "Charisma"},
+		Ability: []string{"Strength", "Charisma"}, // either or
 		Armors:  []string{"Light", "Medium", "Shield"},
 		Tools:   []string{},
 		Weapons: []string{"Martial"},
@@ -87,13 +91,30 @@ var characterMulticlasses = map[string]Multiclass{
 	},
 }
 
-func CanMulticlass(ability_score map[string]attributes.AbilityScore) {
-
+/*
+Checks if character can multiclass to the specified class.
+*/
+func can_multiclass_to_class(class string, ability_scores map[string]attributes.AbilityScore) bool {
+	abilities := characterMulticlasses[class].Ability
+	for _, ability := range abilities {
+		if ability_scores[ability].Score >= 17 {
+			return true
+		}
+	}
+	return false
 }
 
 /*
-Returns required abilities by class.
+Returns a slice of valid multiclass options.
 */
-func GetAbilityRequirementsByClass(class string) []string {
-	return characterMulticlasses[class].Ability
+func GetValidMulticlassOptions(ability_scores map[string]attributes.AbilityScore) []string {
+	valid_classes := []string{}
+	classes := slices.Collect(maps.Keys(characterMulticlasses))
+	slices.Sort(classes)
+	for _, class := range classes {
+		if can_multiclass_to_class(class, ability_scores) {
+			valid_classes = append(valid_classes, class)
+		}
+	}
+	return valid_classes
 }
