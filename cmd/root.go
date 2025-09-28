@@ -42,7 +42,6 @@ var versionCmd = &cobra.Command{
 }
 
 var Backgrounds = d20.GetD20Backgrounds()
-var Classes = d20.GetD20Classes()
 var Genders = []string{"Female", "Male"}
 var Species = d20.GetD20Species()
 
@@ -67,7 +66,7 @@ func Tasha(cmd *cobra.Command, args []string) {
 	ability_scores := AssignAbilityScores()
 
 	// Assign classes, skills
-	classes, skills := AssignCharacterClasses(background)
+	classes, skills := AssignCharacterClasses(background, ability_scores)
 
 	pc := actor.PC{
 		Name:          args[0],
@@ -122,16 +121,30 @@ func AssignAbilityScores() map[string]attributes.AbilityScore {
 /*
 Assign character's classes and skills.
 */
-func AssignCharacterClasses(background string) (map[string]actor.Class, []string) {
+func AssignCharacterClasses(background string, ability_scores map[string]attributes.AbilityScore) (map[string]actor.Class, []string) {
+	class := ""
 	classes := make(map[string]actor.Class)
+	single_class_options := d20.GetD20Classes()
 	is_multiclassed := false
 	max_level := 20
+	multi_class_options := []string{}
 	skills := []string{}
 
 	for {
-		class := MenuStr("Select your class", Classes)
-		Classes = utils.OmitStr(Classes, class)
+		if !is_multiclassed {
+			class = MenuStr("Select your class", single_class_options)
+			single_class_options = utils.OmitStr(single_class_options, class)
+		} else {
+			if len(multi_class_options) == 0 {
+				multi_class_options = d20.GetValidMulticlassOptions(ability_scores)
+			}
+			class = MenuStr("Select your class", multi_class_options)
+			multi_class_options = utils.OmitStr(multi_class_options, class)
+		}
+
+		// Set the class level
 		level := MenuInt("What level are you", d20.GetLevelSlices(max_level))
+
 		// Decrement level for chosen class from max level.
 		max_level -= level
 
@@ -152,7 +165,8 @@ func AssignCharacterClasses(background string) (map[string]actor.Class, []string
 			skills = AssignSecondaryClassSkills(class, skills)
 		}
 
-		if max_level > 0 && ConfirmMenu(("Add another class")) {
+		additional_classes := d20.GetValidMulticlassOptions(ability_scores)
+		if len(additional_classes) > 0 && max_level > 0 && ConfirmMenu(("Add another class")) {
 			if !is_multiclassed {
 				is_multiclassed = true
 			}
