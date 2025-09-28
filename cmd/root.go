@@ -122,7 +122,7 @@ func AssignAbilityScores() map[string]attributes.AbilityScore {
 Assign character's classes and skills.
 */
 func AssignCharacterClasses(background string, ability_scores map[string]attributes.AbilityScore) (map[string]actor.Class, []string) {
-	class := ""
+	var class string
 	classes := make(map[string]actor.Class)
 	single_class_options := d20.GetD20Classes()
 	is_multiclassed := false
@@ -130,15 +130,18 @@ func AssignCharacterClasses(background string, ability_scores map[string]attribu
 	multi_class_options := []string{}
 	skills := []string{}
 
+	// Populate multi_class_options variable, if applicable
+	if len(multi_class_options) == 0 {
+		multi_class_options = d20.GetValidMulticlassOptions(ability_scores)
+	}
+
 	for {
+		// Select a class
 		if !is_multiclassed {
 			class = MenuStr("Select your class", single_class_options)
 			single_class_options = utils.OmitStr(single_class_options, class)
 		} else {
-			if len(multi_class_options) == 0 {
-				multi_class_options = d20.GetValidMulticlassOptions(ability_scores)
-			}
-			class = MenuStr("Select your class", multi_class_options)
+			class = MenuStr("Select your additional class", multi_class_options)
 			multi_class_options = utils.OmitStr(multi_class_options, class)
 		}
 
@@ -165,8 +168,8 @@ func AssignCharacterClasses(background string, ability_scores map[string]attribu
 			skills = AssignSecondaryClassSkills(class, skills)
 		}
 
-		additional_classes := d20.GetValidMulticlassOptions(ability_scores)
-		if len(additional_classes) > 0 && max_level > 0 && ConfirmMenu(("Add another class")) {
+		// Add secondary class, if applicable
+		if len(multi_class_options) > 0 && max_level > 0 && ConfirmMenu(("Add another class")) {
 			if !is_multiclassed {
 				is_multiclassed = true
 			}
