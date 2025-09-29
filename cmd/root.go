@@ -5,6 +5,7 @@ package cmd
 
 import (
 	"fmt"
+	"maps"
 	"os"
 	"slices"
 	"strconv"
@@ -162,6 +163,12 @@ func AssignCharacterClasses(background string, ability_scores map[string]attribu
 			Subclass: subclass,
 		}
 
+		// Clean up already selected classes
+		for _, selected_class := range slices.Collect(maps.Keys(classes)) {
+			multi_class_options = utils.OmitStr(multi_class_options, selected_class)
+		}
+
+		// Assign class skills
 		if !is_multiclassed {
 			skills = AssignPrimaryClassSkills(class, d20.GetSkillsByBackground(background))
 		} else {
