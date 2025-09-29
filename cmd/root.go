@@ -192,24 +192,20 @@ func AssignCharacterClasses(background string, ability_scores map[string]attribu
 Assign primary class skills.
 */
 func AssignPrimaryClassSkills(class string, background_skills []string) []string {
-	skills := []string{}
-	class_skill_list := d20.GetSkillsByClass(class)
-	// Cycle through background skills.
+	skills := background_skills
+	class_skill_pool := d20.GetSkillsByClass(class)
+
+	// Remove background skills from class skill pool, if applicable
 	for _, background_skill := range background_skills {
-		if slices.Contains(class_skill_list, background_skill) {
-			// Apply background skill to the chosen skill pool.
-			skills = append(skills, background_skill)
-			// Remove background skill from the list of selectable class skills.
-			class_skill_list = utils.OmitStr(class_skill_list, background_skill)
-			fmt.Printf("Background skill '%s' added.\n", background_skill)
+		if slices.Contains(class_skill_pool, background_skill) {
+			class_skill_pool = utils.OmitStr(class_skill_pool, background_skill)
 		}
 	}
 
-	// Start selecting class skills.
 	for i := 1; i <= d20.GetSkillPointsByClass(class, true); i++ {
-		skill := MenuStr("Choose a class skill", class_skill_list)
+		skill := MenuStr("Choose a class skill", class_skill_pool)
 		skills = append(skills, skill)
-		class_skill_list = utils.OmitStr(class_skill_list, skill)
+		class_skill_pool = utils.OmitStr(class_skill_pool, skill)
 	}
 
 	return skills
@@ -219,14 +215,12 @@ func AssignPrimaryClassSkills(class string, background_skills []string) []string
 Assign secondary class skills.
 */
 func AssignSecondaryClassSkills(class string, current_skills []string) []string {
-	skills := []string{}
+	skills := current_skills
 	class_skill_list := d20.GetSkillsByClass(class)
-	// Cycle through current skills.
+
+	// Remove skills already selected
 	for _, current_skill := range current_skills {
 		if slices.Contains(class_skill_list, current_skill) {
-			// Apply current skill to the chosen skill pool.
-			skills = append(skills, current_skill)
-			// Remove skills the character already possesses.
 			class_skill_list = utils.OmitStr(class_skill_list, current_skill)
 		}
 	}
