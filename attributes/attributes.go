@@ -84,3 +84,13 @@ func GenerateScores() []int {
 	slices.Reverse(dice_rolls)
 	return dice_rolls
 }
+
+/*
+Updates ability score/modifier in the specified map.
+*/
+func UpdateAbilityScore(ability_score_map map[string]AbilityScore, ability string, new_score int) {
+	ability_score_map[ability] = AbilityScore{
+		Score:    new_score,
+		Modifier: CalculateModifier(new_score),
+	}
+}

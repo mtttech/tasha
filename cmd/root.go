@@ -109,11 +109,8 @@ func AssignAbilityScores(background string) map[string]attributes.AbilityScore {
 	scores := attributes.GenerateScores()
 	for _, ability := range abilities {
 		score := MenuInt(fmt.Sprintf("Assign your %s score", ability), scores)
-		ability_score_map[ability] = attributes.AbilityScore{
-			Score:    score,
-			Modifier: attributes.CalculateModifier(score),
-		}
 		scores = utils.OmitInt(scores, score)
+		attributes.UpdateAbilityScore(ability_score_map, ability, score)
 	}
 
 	// Apply background ability bonuses
@@ -125,19 +122,15 @@ func AssignAbilityScores(background string) map[string]attributes.AbilityScore {
 			ability := MenuStr(fmt.Sprintf("Choose your bonus ability +%d", bonus_value), background_abilities)
 			background_abilities = utils.OmitStr(background_abilities, ability)
 			new_score := ability_score_map[ability].Score + bonus_value
-			ability_score_map[ability] = attributes.AbilityScore{
-				Score:    new_score,
-				Modifier: attributes.CalculateModifier(new_score),
-			}
+			attributes.UpdateAbilityScore(ability_score_map, ability, new_score)
+			fmt.Printf("A +%d bonus was applied to your %s ability score.\n", bonus_value, ability)
 			bonus_value -= 1
 		}
 	} else {
 		for _, ability := range background_abilities {
 			new_score := ability_score_map[ability].Score + 1
-			ability_score_map[ability] = attributes.AbilityScore{
-				Score:    new_score,
-				Modifier: attributes.CalculateModifier(new_score),
-			}
+			attributes.UpdateAbilityScore(ability_score_map, ability, new_score)
+			fmt.Printf("A +1 bonus was applied to your %s ability score.\n", ability)
 		}
 	}
 
