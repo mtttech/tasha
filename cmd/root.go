@@ -149,10 +149,10 @@ func AssignCharacterClasses(background string, ability_scores map[string]attribu
 		// Set the class level
 		level := MenuInt("What level are you", d20.GetLevelSlices(max_level))
 
-		// Decrement level for chosen class from max level.
+		// Decrement level for the chosen class from max level
 		max_level -= level
 
-		// Apply subclass
+		// Apply subclass, if applicable
 		subclass := ""
 		if level >= 3 {
 			subclass = MenuStr("What is your subclass", d20.GetSubclassesByClass(class))
@@ -163,11 +163,6 @@ func AssignCharacterClasses(background string, ability_scores map[string]attribu
 			Subclass: subclass,
 		}
 
-		// Clean up already selected classes
-		for _, selected_class := range slices.Collect(maps.Keys(classes)) {
-			multi_class_options = utils.OmitStr(multi_class_options, selected_class)
-		}
-
 		// Assign class skills
 		if !is_multiclassed {
 			skills = AssignPrimaryClassSkills(class, d20.GetSkillsByBackground(background))
@@ -175,14 +170,20 @@ func AssignCharacterClasses(background string, ability_scores map[string]attribu
 			skills = AssignSecondaryClassSkills(class, skills)
 		}
 
+		// Clean up already selected classes for multiclassing
+		for _, selected_class := range slices.Collect(maps.Keys(classes)) {
+			multi_class_options = utils.OmitStr(multi_class_options, selected_class)
+		}
+
 		// Add secondary class, if applicable
 		if len(multi_class_options) > 0 && max_level > 0 && ConfirmMenu(("Add another class")) {
 			if !is_multiclassed {
 				is_multiclassed = true
 			}
-		} else {
-			break
+			continue
 		}
+
+		break
 	}
 
 	return classes, skills
@@ -236,7 +237,7 @@ func AssignSecondaryClassSkills(class string, current_skills []string) []string 
 }
 
 /*
-Select wrapper function with strings.
+Confirm menu wrapper.
 */
 func ConfirmMenu(label string) bool {
 	prompt := promptui.Select{
