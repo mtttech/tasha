@@ -64,7 +64,7 @@ func Tasha(cmd *cobra.Command, args []string) {
 	background := MenuStr("Select your background", Backgrounds)
 
 	// Assign ability scores
-	ability_scores := AssignAbilityScores()
+	ability_scores := AssignAbilityScores(background)
 
 	// Assign classes, skills
 	classes, skills := AssignCharacterClasses(background, ability_scores)
@@ -96,7 +96,7 @@ func init() {
 /*
 Assign ability scores.
 */
-func AssignAbilityScores() map[string]attributes.AbilityScore {
+func AssignAbilityScores(background string) map[string]attributes.AbilityScore {
 	abilities := []string{
 		"Strength",
 		"Dexterity",
@@ -114,6 +114,31 @@ func AssignAbilityScores() map[string]attributes.AbilityScore {
 			Modifier: attributes.CalculateModifier(score),
 		}
 		scores = utils.OmitInt(scores, score)
+	}
+
+	// Apply background ability bonuses
+	background_bonus := MenuStr("Choose your background bonus array", []string{"2/1", "1/1/1"})
+	background_abilities := d20.GetAbilitiesByBackground(background)
+	if background_bonus == "2/1" {
+		bonus_value := 2
+		for i := 1; i <= 2; i++ {
+			ability := MenuStr(fmt.Sprintf("Choose your bonus ability +%d", bonus_value), background_abilities)
+			background_abilities = utils.OmitStr(background_abilities, ability)
+			new_score := ability_score_map[ability].Score + bonus_value
+			ability_score_map[ability] = attributes.AbilityScore{
+				Score:    new_score,
+				Modifier: attributes.CalculateModifier(new_score),
+			}
+			bonus_value -= 1
+		}
+	} else {
+		for _, ability := range background_abilities {
+			new_score := ability_score_map[ability].Score + 1
+			ability_score_map[ability] = attributes.AbilityScore{
+				Score:    new_score,
+				Modifier: attributes.CalculateModifier(new_score),
+			}
+		}
 	}
 
 	return ability_score_map
