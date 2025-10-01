@@ -140,9 +140,9 @@ func AssignAbilityScores(background string) map[string]attributes.AbilityScore {
 /*
 Assign character's classes and skills.
 */
-func AssignCharacterClasses(background string, ability_scores map[string]attributes.AbilityScore) (map[string]actor.Class, []string) {
+func AssignCharacterClasses(background string, ability_scores map[string]attributes.AbilityScore) (map[string]d20.Class, []string) {
 	var class string
-	classes := make(map[string]actor.Class)
+	classes := make(map[string]d20.Class)
 	single_class_options := d20.GetD20Classes()
 	is_multiclassed := false
 	max_level := 20
@@ -176,7 +176,7 @@ func AssignCharacterClasses(background string, ability_scores map[string]attribu
 			subclass = MenuStr("What is your subclass", d20.GetSubclassesByClass(class))
 		}
 
-		classes[class] = actor.Class{
+		classes[class] = d20.Class{
 			Level:    level,
 			Subclass: subclass,
 		}

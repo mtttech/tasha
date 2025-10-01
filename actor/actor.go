@@ -5,7 +5,7 @@ package actor
 
 import (
 	"tasha/attributes"
-	"tasha/classes"
+	"tasha/d20"
 )
 
 type PC struct {
@@ -13,7 +13,7 @@ type PC struct {
 	Species       string
 	Gender        string
 	Background    string
-	Classes       map[string]classes.Class
+	Classes       map[string]d20.Class
 	AbilityScores map[string]attributes.AbilityScore
 	Skills        []string
 }
