@@ -9,6 +9,11 @@ import (
 )
 
 type Class struct {
+	Subclass string
+	Level    int
+}
+
+type ClassSnapshot struct {
 	Armors       []string
 	HitDie       int
 	SavingThrows []string
@@ -19,7 +24,7 @@ type Class struct {
 	Weapons      []string
 }
 
-var characterClasses = map[string]Class{
+var characterClasses = map[string]ClassSnapshot{
 	"Barbarian": {
 		Armors:       []string{"Light", "Medium", "Shield"},
 		HitDie:       12,
