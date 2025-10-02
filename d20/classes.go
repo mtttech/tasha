@@ -15,9 +15,9 @@ type Class struct {
 
 type ClassSnapshot struct {
 	Armors       []string
+	Features     map[int][]string
 	HitDie       int
 	SavingThrows []string
-	Features     map[int][]string
 	Skills       []string
 	Subclasses   []string
 	Tools        []string
@@ -26,7 +26,26 @@ type ClassSnapshot struct {
 
 var characterClasses = map[string]ClassSnapshot{
 	"Barbarian": {
-		Armors:       []string{"Light", "Medium", "Shield"},
+		Armors: []string{"Light", "Medium", "Shield"},
+		Features: map[int][]string{
+			1:  {"Rage", "Unarmored Defense", "Weapon Mastery"},
+			2:  {"Danger Sense", "Reckless Attack"},
+			3:  {"Barbarian Subclass", "Primal Knowledge"},
+			4:  {"Ability Score Improvement"},
+			5:  {"Extra Attack", "Fast Movement"},
+			7:  {"Feral Instinct", "Instinctive Pounce"},
+			8:  {"Ability Score Improvement"},
+			9:  {"Brutal Strike"},
+			11: {"Relentless Rage"},
+			12: {"Ability Score Improvement"},
+			13: {"Improved Brutal Strike"},
+			15: {"Persistent Rage"},
+			16: {"Ability Score Improvement"},
+			17: {"Improved Brutal Strike"},
+			18: {"Indomitable Might"},
+			19: {"Epic Boon"},
+			20: {"Primal Champion"},
+		},
 		HitDie:       12,
 		SavingThrows: []string{"Constitution", "Strength"},
 		Skills: []string{
@@ -47,7 +66,23 @@ var characterClasses = map[string]ClassSnapshot{
 		Weapons: []string{"Simple", "Martial"},
 	},
 	"Bard": {
-		Armors:       []string{"Light"},
+		Armors: []string{"Light"},
+		Features: map[int][]string{
+			1:  {"Bardic Inspiration", "Spellcasting"},
+			2:  {"Expertise", "Jack of All Trades"},
+			3:  {"Bard Subclass"},
+			4:  {"Ability Score Improvement"},
+			5:  {"Font of Inspiration"},
+			7:  {"Countercharm"},
+			8:  {"Ability Score Improvement"},
+			9:  {"Expertise"},
+			10: {"Magical Secrets"},
+			12: {"Ability Score Improvement"},
+			16: {"Ability Score Improvement"},
+			18: {"Superior Inspiration"},
+			19: {"Epic Boon"},
+			20: {"Words of Creation"},
+		},
 		HitDie:       8,
 		SavingThrows: []string{"Charisma", "Dexterity"},
 		Skills: []string{
@@ -80,7 +115,22 @@ var characterClasses = map[string]ClassSnapshot{
 		Weapons: []string{"Simple"},
 	},
 	"Cleric": {
-		Armors:       []string{"Light", "Medium", "Shield"},
+		Armors: []string{"Light", "Medium", "Shield"},
+		Features: map[int][]string{
+			1:  {"Divine Order", "Spellcasting"},
+			2:  {"Channel Divinity"},
+			3:  {"Cleric Subclass"},
+			4:  {"Ability Score Improvement"},
+			5:  {"Sear Undead"},
+			7:  {"Blessed Strikes"},
+			8:  {"Ability Score Improvement"},
+			10: {"Divine Intervention"},
+			12: {"Ability Score Improvement"},
+			14: {"Improved Blessed Strikes"},
+			16: {"Ability Score Improvement"},
+			19: {"Epic Boon"},
+			20: {"Greater Divine Intervention"},
+		},
 		HitDie:       8,
 		SavingThrows: []string{"Intelligence", "Wisdom"},
 		Skills: []string{
@@ -100,7 +150,22 @@ var characterClasses = map[string]ClassSnapshot{
 		Weapons: []string{"Simple"},
 	},
 	"Druid": {
-		Armors:       []string{"Light", "Shield"},
+		Armors: []string{"Light", "Shield"},
+		Features: map[int][]string{
+			1:  {"Druidic", "Primal Order", "Spellcasting"},
+			2:  {"Wild Companion", "Wild Shape"},
+			3:  {"Druid Subclass"},
+			4:  {"Ability Score Improvement"},
+			5:  {"Wild Resurgence"},
+			7:  {"Elemental Fury"},
+			8:  {"Ability Score Improvement"},
+			12: {"Ability Score Improvement"},
+			15: {"Improved Elemental Fury"},
+			16: {"Ability Score Improvement"},
+			18: {"Beast Spells"},
+			19: {"Epic Boon"},
+			20: {"Archdruid"},
+		},
 		HitDie:       8,
 		SavingThrows: []string{"Intelligence", "Wisdom"},
 		Skills: []string{
@@ -123,7 +188,25 @@ var characterClasses = map[string]ClassSnapshot{
 		Weapons: []string{"Simple"},
 	},
 	"Fighter": {
-		Armors:       []string{"Light", "Medium", "Shield"},
+		Armors: []string{"Light", "Medium", "Shield"},
+		Features: map[int][]string{
+			1:  {"Fighting Style", "Second Wind", "Weapon Mastery"},
+			2:  {"Action Surge (one use)", "Tactical Mind"},
+			3:  {"Fighter Subclass"},
+			4:  {"Ability Score Improvement"},
+			5:  {"Extra Attack", "Tactical Shift"},
+			6:  {"Ability Score Improvement"},
+			8:  {"Ability Score Improvement"},
+			9:  {"Indomitable (one use)", "Tactical Master"},
+			11: {"Two Extra Attacks"},
+			12: {"Ability Score Improvement"},
+			13: {"Indomitable (two uses)", "Studied Attacks"},
+			14: {"Ability Score Improvement"},
+			16: {"Ability Score Improvement"},
+			17: {"Action Surge (two uses)", "Indomitable (three uses)"},
+			19: {"Epic Boon"},
+			20: {"Three Extra Attacks"},
+		},
 		HitDie:       10,
 		SavingThrows: []string{"Constitution", "Strength"},
 		Skills: []string{
@@ -146,7 +229,27 @@ var characterClasses = map[string]ClassSnapshot{
 		Weapons: []string{"Simple", "Martial"},
 	},
 	"Monk": {
-		Armors:       []string{},
+		Armors: []string{},
+		Features: map[int][]string{
+			1:  {"Martial Arts", "Unarmored Defense"},
+			2:  {"Monk's Focus", "Unarmored Movement", "Uncanny Metabolism"},
+			3:  {"Deflect Attacks", "Monk Subclass"},
+			4:  {"Ability Score Improvement", "Slow Fall"},
+			5:  {"Extra Attack", "Stunning Strike"},
+			6:  {"Empowered Strikes"},
+			7:  {"Evasion"},
+			8:  {"Ability Score Improvement"},
+			9:  {"Acrobatic Movement"},
+			10: {"Heightened Focus", "Self-Restoration"},
+			12: {"Ability Score Improvement"},
+			13: {"Deflect Energy"},
+			14: {"Disciplined Survivor"},
+			15: {"Perfect Focus"},
+			16: {"Ability Score Improvement"},
+			18: {"Superior Defense"},
+			19: {"Epic Boon"},
+			20: {"Body and Mind"},
+		},
 		HitDie:       8,
 		SavingThrows: []string{"Dexterity", "Strength"},
 		Skills: []string{
