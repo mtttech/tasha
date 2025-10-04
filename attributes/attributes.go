@@ -6,8 +6,6 @@ package attributes
 import (
 	"math/rand"
 	"slices"
-
-	"tasha/utils"
 )
 
 type AbilityScore struct {
@@ -20,7 +18,7 @@ Drops the lowest value, then adds the remaining three values.
 */
 func add_three() int {
 	results := roll_four()
-	smallest_int := utils.Min(results)
+	smallest_int := slices.Min(results)
 	smallest_int_found := false
 	total := 0
 	for _, n := range results {
@@ -76,7 +74,7 @@ func GenerateScores() []int {
 	var dice_rolls []int
 	for {
 		dice_rolls = roll_six()
-		if utils.Min(dice_rolls) >= 8 && utils.Max(dice_rolls) >= 15 {
+		if slices.Min(dice_rolls) >= 8 && slices.Max(dice_rolls) >= 15 {
 			break
 		}
 	}
