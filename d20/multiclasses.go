@@ -48,19 +48,19 @@ var characterMulticlasses = map[string]Multiclass{
 		Weapons: []string{"Martial"},
 	},
 	"Monk": {
-		Ability: []string{"Dexterity", "Wisdom"},
+		Ability: []string{"Dexterity", "Wisdom"}, // all or nothing
 		Armors:  []string{},
 		Tools:   []string{},
 		Weapons: []string{},
 	},
 	"Paladin": {
-		Ability: []string{"Strength", "Charisma"}, // either or
+		Ability: []string{"Strength", "Charisma"}, // all or nothing
 		Armors:  []string{"Light", "Medium", "Shield"},
 		Tools:   []string{},
 		Weapons: []string{"Martial"},
 	},
 	"Ranger": {
-		Ability: []string{"Dexterity", "Wisdom"},
+		Ability: []string{"Dexterity", "Wisdom"}, // all or nothing
 		Armors:  []string{"Light", "Medium", "Shield"},
 		Tools:   []string{},
 		Weapons: []string{"Martial"},
@@ -96,8 +96,17 @@ Checks if character can multiclass to the specified class.
 */
 func can_multiclass_to_class(class string, ability_scores map[string]attributes.AbilityScore) bool {
 	abilities := characterMulticlasses[class].Ability
-	for _, ability := range abilities {
-		if ability_scores[ability].Score >= 17 {
+	switch class {
+	case "Fighter":
+		if ability_scores["Strength"].Score >= 13 || ability_scores["Dexterity"].Score >= 13 {
+			return true
+		}
+	case "Monk", "Paladin", "Ranger":
+		if ability_scores[abilities[0]].Score >= 13 && ability_scores[abilities[1]].Score >= 13 {
+			return true
+		}
+	default:
+		if ability_scores[abilities[0]].Score >= 13 {
 			return true
 		}
 	}
