@@ -118,13 +118,13 @@ func can_multiclass_to_class(class string, ability_scores map[string]attributes.
 Returns a slice of valid multiclass options.
 */
 func GetValidMulticlassOptions(ability_scores map[string]attributes.AbilityScore) []string {
-	valid_classes := []string{}
+	valid_class_options := []string{}
 	classes := slices.Collect(maps.Keys(characterMulticlasses))
 	slices.Sort(classes)
-	for _, class := range classes {
-		if can_multiclass_to_class(class, ability_scores) {
-			valid_classes = append(valid_classes, class)
+	for _, new_class := range classes {
+		if can_multiclass_to_class(new_class, ability_scores) {
+			valid_class_options = append(valid_class_options, new_class)
 		}
 	}
-	return valid_classes
+	return valid_class_options
 }
