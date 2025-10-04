@@ -111,6 +111,7 @@ func can_multiclass_to_class(class string, ability_scores map[string]attributes.
 			return true
 		}
 	}
+
 	return false
 }
 
@@ -126,5 +127,6 @@ func GetValidMulticlassOptions(ability_scores map[string]attributes.AbilityScore
 			valid_class_options = append(valid_class_options, new_class)
 		}
 	}
+
 	return valid_class_options
 }
