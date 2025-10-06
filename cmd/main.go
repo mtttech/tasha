@@ -19,32 +19,33 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var currentVersion = "1.0.0"
+var (
+	Version = "1.0.0"
+	rootCmd = &cobra.Command{
+		Use:   "tasha",
+		Short: "Create 5.5e Dungeons & Dragons characters.",
+		Long:  `Create 5.5e Dungeons & Dragons characters.`,
+	}
 
-var rootCmd = &cobra.Command{
-	Use:   "tasha",
-	Short: "Create 5.5e Dungeons & Dragons characters.",
-	Long:  `Create 5.5e Dungeons & Dragons characters.`,
-}
+	newCmd = &cobra.Command{
+		Use:   "new",
+		Short: "Create a new character",
+		Args:  cobra.ExactArgs(1),
+		Run:   Tasha,
+	}
 
-var newCmd = &cobra.Command{
-	Use:   "new",
-	Short: "Create a new character",
-	Args:  cobra.ExactArgs(1),
-	Run:   Tasha,
-}
+	versionCmd = &cobra.Command{
+		Use:   "version",
+		Short: "Display the current version",
+		Run: func(cmd *cobra.Command, args []string) {
+			fmt.Println(Version)
+		},
+	}
 
-var versionCmd = &cobra.Command{
-	Use:   "version",
-	Short: "Display the current version",
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(currentVersion)
-	},
-}
-
-var Backgrounds = d20.GetD20Backgrounds()
-var Genders = []string{"Female", "Male"}
-var Species = d20.GetD20Species()
+	Backgrounds = d20.GetD20Backgrounds()
+	Genders     = []string{"Female", "Male"}
+	Species     = d20.GetD20Species()
+)
 
 func Execute() {
 	err := rootCmd.Execute()
