@@ -1,6 +1,6 @@
 # TASHA
 
-**Tasha** is a tool for creating player characters for the 5th edition *Dungeons & Dragons (2024)* tabletop game.
+**Tasha** is a tool for creating player characters for the 5.5e *Dungeons & Dragons (2024)* tabletop game.
 
 ### Supported rulebooks
 
