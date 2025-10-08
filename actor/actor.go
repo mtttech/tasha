@@ -8,7 +8,7 @@ import (
 	"tasha/d20"
 )
 
-type PC struct {
+type PlayerCharacter struct {
 	Name          string
 	Species       string
 	Gender        string
@@ -16,4 +16,16 @@ type PC struct {
 	Classes       map[string]d20.Class
 	AbilityScores map[string]attributes.AbilityScore
 	Skills        []string
+}
+
+func (p *PlayerCharacter) GetGender() string {
+	return p.Gender
+}
+
+func (p *PlayerCharacter) GetName() string {
+	return p.Name
+}
+
+func (p *PlayerCharacter) GetSpecies() string {
+	return p.Species
 }
