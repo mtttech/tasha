@@ -70,7 +70,7 @@ func Tasha(cmd *cobra.Command, args []string) {
 	// Assign classes, skills
 	classes, skills := AssignCharacterClasses(background, ability_scores)
 
-	pc := actor.PC{
+	pc := actor.PlayerCharacter{
 		Name:          args[0],
 		Species:       species,
 		Gender:        gender,
@@ -80,9 +80,9 @@ func Tasha(cmd *cobra.Command, args []string) {
 		Skills:        skills,
 	}
 
-	fmt.Println(pc.Name)
-	fmt.Println(pc.Species)
-	fmt.Println(pc.Gender)
+	fmt.Println(pc.GetName())
+	fmt.Println(pc.GetSpecies())
+	fmt.Println(pc.GetGender())
 	fmt.Println(pc.Background)
 	fmt.Println(pc.Classes)
 	fmt.Println(pc.AbilityScores)
