@@ -184,9 +184,9 @@ func AssignCharacterClasses(background string, ability_scores map[string]attribu
 
 		// Assign class skills
 		if !is_multiclassed {
-			skills = AssignPrimaryClassSkills(class, d20.GetSkillsByBackground(background))
+			skills = AssignClassSkills(class, d20.GetSkillsByBackground(background), true)
 		} else {
-			skills = AssignSecondaryClassSkills(class, skills)
+			skills = AssignClassSkills(class, skills, false)
 		}
 
 		// Clean up already selected classes for multiclassing
@@ -209,49 +209,28 @@ func AssignCharacterClasses(background string, ability_scores map[string]attribu
 }
 
 /*
-Assign primary class skills.
+Assign class skills.
 */
-func AssignPrimaryClassSkills(class string, background_skills []string) []string {
-	skills := background_skills
-	class_skill_pool := d20.GetSkillsByClass(class)
-
-	// Remove background skills from class skill pool, if applicable
-	for _, background_skill := range background_skills {
-		if slices.Contains(class_skill_pool, background_skill) {
-			class_skill_pool = utils.OmitStr(class_skill_pool, background_skill)
-		}
-	}
-
-	for i := 1; i <= d20.GetSkillPointsByClass(class, true); i++ {
-		skill := MenuStr("Choose a class skill", class_skill_pool)
-		skills = append(skills, skill)
-		class_skill_pool = utils.OmitStr(class_skill_pool, skill)
-	}
-
-	return skills
-}
-
-/*
-Assign secondary class skills.
-*/
-func AssignSecondaryClassSkills(class string, current_skills []string) []string {
-	skills := current_skills
+func AssignClassSkills(class string, omitted_skills []string, is_primary_class bool) []string {
+	skills := omitted_skills
 	class_skill_list := d20.GetSkillsByClass(class)
 
-	// Remove skills already selected
-	for _, current_skill := range current_skills {
-		if slices.Contains(class_skill_list, current_skill) {
-			class_skill_list = utils.OmitStr(class_skill_list, current_skill)
+	// Remove omitted skills.
+	for _, omitted_skill := range omitted_skills {
+		if slices.Contains(class_skill_list, omitted_skill) {
+			class_skill_list = utils.OmitStr(class_skill_list, omitted_skill)
+			fmt.Printf("The skill %s was omitted.", omitted_skill)
 		}
 	}
 
-	// Start selecting class skills.
-	for i := 1; i <= d20.GetSkillPointsByClass(class, false); i++ {
+	// Select class skills.
+	for i := 1; i <= d20.GetSkillPointsByClass(class, is_primary_class); i++ {
 		skill := MenuStr("Choose a class skill", class_skill_list)
 		skills = append(skills, skill)
 		class_skill_list = utils.OmitStr(class_skill_list, skill)
 	}
 
+	slices.Sort(skills)
 	return skills
 }
 
