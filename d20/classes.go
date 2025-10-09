@@ -561,14 +561,14 @@ func GetD20Classes() []string {
 Returns a slice of class features by class and level.
 */
 func GetFeaturesByClass(class string, player_level int) []string {
-	player_features := []string{}
+	class_features := []string{}
 	for level, features := range characterClasses[class].Features {
 		if player_level >= level {
-			player_features = append(player_features, features...)
+			class_features = append(class_features, features...)
 		}
 	}
-	slices.Sort(player_features)
-	return player_features
+	slices.Sort(class_features)
+	return class_features
 }
 
 /*
