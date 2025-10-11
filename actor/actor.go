@@ -4,6 +4,9 @@ Copyright © 2025 Marcus Taylor <mtaylor9754@hotmail.com>
 package actor
 
 import (
+	"maps"
+	"slices"
+
 	"tasha/attributes"
 	"tasha/d20"
 )
@@ -16,6 +19,10 @@ type PlayerCharacter struct {
 	Classes       map[string]d20.Class
 	AbilityScores map[string]attributes.AbilityScore
 	Skills        []string
+}
+
+func (p *PlayerCharacter) GetClasses() []string {
+	return slices.Collect(maps.Keys(p.Classes))
 }
 
 func (p *PlayerCharacter) GetGender() string {
