@@ -80,11 +80,11 @@ func Tasha(cmd *cobra.Command, args []string) {
 		Skills:        skills,
 	}
 
-	fmt.Println(pc.GetName())
-	fmt.Println(pc.GetSpecies())
-	fmt.Println(pc.GetGender())
+	fmt.Println(pc.Name)
+	fmt.Println(pc.Species)
+	fmt.Println(pc.Gender)
 	fmt.Println(pc.Background)
-	fmt.Println(pc.GetClasses())
+	fmt.Println(pc.Classes)
 	fmt.Println(pc.AbilityScores)
 	fmt.Println(pc.Skills)
 }
