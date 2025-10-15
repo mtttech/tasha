@@ -110,7 +110,7 @@ func AssignAbilityScores(background string) map[string]attributes.AbilityScore {
 	scores := attributes.GenerateScores()
 	for _, ability := range abilities {
 		score := MenuInt(fmt.Sprintf("Assign your %s score", ability), scores)
-		scores = utils.OmitInt(scores, score)
+		scores = utils.OmitItem(scores, score)
 		attributes.UpdateAbilityScore(ability_score_map, ability, score)
 	}
 
@@ -121,7 +121,7 @@ func AssignAbilityScores(background string) map[string]attributes.AbilityScore {
 		bonus_value := 2
 		for i := 1; i <= 2; i++ {
 			ability := MenuStr(fmt.Sprintf("Choose your bonus ability +%d", bonus_value), background_abilities)
-			background_abilities = utils.OmitStr(background_abilities, ability)
+			background_abilities = utils.OmitItem(background_abilities, ability)
 			new_score := ability_score_map[ability].Score + bonus_value
 			attributes.UpdateAbilityScore(ability_score_map, ability, new_score)
 			fmt.Printf("A +%d bonus was applied to your %s ability score.\n", bonus_value, ability)
@@ -159,10 +159,10 @@ func AssignCharacterClasses(background string, ability_scores map[string]attribu
 		// Select a class
 		if !is_multiclassed {
 			class = MenuStr("Select your class", single_class_options)
-			single_class_options = utils.OmitStr(single_class_options, class)
+			single_class_options = utils.OmitItem(single_class_options, class)
 		} else {
 			class = MenuStr("Select your additional class", multi_class_options)
-			multi_class_options = utils.OmitStr(multi_class_options, class)
+			multi_class_options = utils.OmitItem(multi_class_options, class)
 		}
 
 		// Set the class level
@@ -191,7 +191,7 @@ func AssignCharacterClasses(background string, ability_scores map[string]attribu
 
 		// Clean up already selected classes for multiclassing
 		for _, selected_class := range slices.Collect(maps.Keys(classes)) {
-			multi_class_options = utils.OmitStr(multi_class_options, selected_class)
+			multi_class_options = utils.OmitItem(multi_class_options, selected_class)
 		}
 
 		// Add secondary class, if applicable
@@ -218,7 +218,7 @@ func AssignClassSkills(class string, omitted_skills []string, is_primary_class b
 	// Remove omitted skills.
 	for _, omitted_skill := range omitted_skills {
 		if slices.Contains(class_skill_list, omitted_skill) {
-			class_skill_list = utils.OmitStr(class_skill_list, omitted_skill)
+			class_skill_list = utils.OmitItem(class_skill_list, omitted_skill)
 			fmt.Printf("The skill %s was omitted.", omitted_skill)
 		}
 	}
@@ -227,7 +227,7 @@ func AssignClassSkills(class string, omitted_skills []string, is_primary_class b
 	for i := 1; i <= d20.GetSkillPointsByClass(class, is_primary_class); i++ {
 		skill := MenuStr("Choose a class skill", class_skill_list)
 		skills = append(skills, skill)
-		class_skill_list = utils.OmitStr(class_skill_list, skill)
+		class_skill_list = utils.OmitItem(class_skill_list, skill)
 	}
 
 	slices.Sort(skills)
