@@ -9,12 +9,14 @@ import (
 	"os"
 	"slices"
 	"strconv"
+	"strings"
 
 	"tasha/actor"
 	"tasha/attributes"
 	"tasha/d20"
 	"tasha/utils"
 
+	"github.com/BurntSushi/toml"
 	"github.com/manifoldco/promptui"
 	"github.com/spf13/cobra"
 )
@@ -70,23 +72,26 @@ func Tasha(cmd *cobra.Command, args []string) {
 	// Assign classes, skills
 	classes, skills := AssignCharacterClasses(background, ability_scores)
 
-	pc := actor.PlayerCharacter{
-		Name:          args[0],
-		Species:       species,
-		Gender:        gender,
-		Background:    background,
-		Classes:       classes,
-		AbilityScores: ability_scores,
-		Skills:        skills,
-	}
+	// Collect data, save to toml file
+	var config actor.Config
+	config.PlayerCharacter.Name = args[0]
+	config.PlayerCharacter.Species = species
+	config.PlayerCharacter.Gender = gender
+	config.PlayerCharacter.Background = background
+	config.PlayerCharacter.Classes = classes
+	config.PlayerCharacter.AbilityScores = ability_scores
+	config.PlayerCharacter.Skills = skills
 
-	fmt.Println(pc.Name)
-	fmt.Println(pc.Species)
-	fmt.Println(pc.Gender)
-	fmt.Println(pc.Background)
-	fmt.Println(pc.Classes)
-	fmt.Println(pc.AbilityScores)
-	fmt.Println(pc.Skills)
+	f, err := os.Create(fmt.Sprintf("%s.toml", strings.ToLower(args[0])))
+	if err != nil {
+		panic(err)
+	}
+	defer f.Close()
+
+	err = toml.NewEncoder(f).Encode(config)
+	if err != nil {
+		panic(err)
+	}
 }
 
 func init() {
