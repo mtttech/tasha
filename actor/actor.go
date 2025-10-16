@@ -8,12 +8,14 @@ import (
 	"tasha/d20"
 )
 
-type PlayerCharacter struct {
-	Name          string
-	Species       string
-	Gender        string
-	Background    string
-	Classes       map[string]d20.Class
-	AbilityScores map[string]attributes.AbilityScore
-	Skills        []string
+type Config struct {
+	PlayerCharacter struct {
+		Name          string                             `toml:"name"`
+		Species       string                             `toml:"species"`
+		Gender        string                             `toml:"gender"`
+		Background    string                             `toml:"background"`
+		Classes       map[string]d20.Class               `toml:"classes"`
+		AbilityScores map[string]attributes.AbilityScore `toml:"ability_score"`
+		Skills        []string                           `toml:"skills"`
+	}
 }
