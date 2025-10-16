@@ -82,7 +82,8 @@ func Tasha(cmd *cobra.Command, args []string) {
 	config.PlayerCharacter.AbilityScores = ability_scores
 	config.PlayerCharacter.Skills = skills
 
-	f, err := os.Create(fmt.Sprintf("%s.toml", strings.ToLower(args[0])))
+	cs_filename := strings.ToLower(strings.Replace(args[0], " ", "_", -1))
+	f, err := os.Create(fmt.Sprintf("%s.toml", cs_filename))
 	if err != nil {
 		panic(err)
 	}
