@@ -11,8 +11,8 @@ import (
 	"strconv"
 	"strings"
 
+	"tasha/abilities"
 	"tasha/actor"
-	"tasha/attributes"
 	"tasha/d20"
 	"tasha/utils"
 
@@ -103,8 +103,8 @@ func init() {
 /*
 Assign ability scores.
 */
-func AssignAbilityScores(background string) map[string]attributes.AbilityScore {
-	abilities := []string{
+func AssignAbilityScores(background string) map[string]abilities.AbilityScore {
+	ability_options := []string{
 		"Strength",
 		"Dexterity",
 		"Constitution",
@@ -112,12 +112,12 @@ func AssignAbilityScores(background string) map[string]attributes.AbilityScore {
 		"Wisdom",
 		"Charisma",
 	}
-	ability_score_map := make(map[string]attributes.AbilityScore)
-	scores := attributes.GenerateScores()
-	for _, ability := range abilities {
+	ability_score_map := make(map[string]abilities.AbilityScore)
+	scores := abilities.GenerateScores()
+	for _, ability := range ability_options {
 		score := MenuInt(fmt.Sprintf("Assign your %s score", ability), scores)
 		scores = utils.OmitItem(scores, score)
-		attributes.UpdateAbilityScore(ability_score_map, ability, score)
+		abilities.UpdateAbilityScore(ability_score_map, ability, score)
 	}
 
 	// Apply background ability bonuses
@@ -129,14 +129,14 @@ func AssignAbilityScores(background string) map[string]attributes.AbilityScore {
 			ability := MenuStr(fmt.Sprintf("Choose your bonus ability +%d", bonus_value), background_abilities)
 			background_abilities = utils.OmitItem(background_abilities, ability)
 			new_score := ability_score_map[ability].Score + bonus_value
-			attributes.UpdateAbilityScore(ability_score_map, ability, new_score)
+			abilities.UpdateAbilityScore(ability_score_map, ability, new_score)
 			fmt.Printf("A +%d bonus was applied to your %s ability score.\n", bonus_value, ability)
 			bonus_value -= 1
 		}
 	} else {
 		for _, ability := range background_abilities {
 			new_score := ability_score_map[ability].Score + 1
-			attributes.UpdateAbilityScore(ability_score_map, ability, new_score)
+			abilities.UpdateAbilityScore(ability_score_map, ability, new_score)
 			fmt.Printf("A +1 bonus was applied to your %s ability score.\n", ability)
 		}
 	}
@@ -147,7 +147,7 @@ func AssignAbilityScores(background string) map[string]attributes.AbilityScore {
 /*
 Assign character's classes and skills.
 */
-func AssignCharacterClasses(background string, ability_scores map[string]attributes.AbilityScore) (map[string]d20.Class, []string) {
+func AssignCharacterClasses(background string, ability_scores map[string]abilities.AbilityScore) (map[string]d20.Class, []string) {
 	var class string
 	classes := make(map[string]d20.Class)
 	single_class_options := d20.GetD20Classes()
