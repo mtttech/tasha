@@ -7,7 +7,7 @@ import (
 	"maps"
 	"slices"
 
-	"tasha/attributes"
+	"tasha/abilities"
 )
 
 type Multiclass struct {
@@ -95,7 +95,7 @@ var characterMulticlasses = map[string]Multiclass{
 /*
 Checks if character can multiclass to the specified class.
 */
-func can_multiclass_to_class(class string, ability_scores map[string]attributes.AbilityScore) bool {
+func can_multiclass_to_class(class string, ability_scores map[string]abilities.AbilityScore) bool {
 	abilities := characterMulticlasses[class].Ability
 	switch class {
 	case "Fighter":
@@ -118,7 +118,7 @@ func can_multiclass_to_class(class string, ability_scores map[string]attributes.
 /*
 Returns a slice of valid multiclass options.
 */
-func GetValidMulticlassOptions(ability_scores map[string]attributes.AbilityScore) []string {
+func GetValidMulticlassOptions(ability_scores map[string]abilities.AbilityScore) []string {
 	valid_class_options := []string{}
 	classes := slices.Collect(maps.Keys(characterMulticlasses))
 	slices.Sort(classes)
