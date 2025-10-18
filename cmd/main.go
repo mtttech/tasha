@@ -12,9 +12,8 @@ import (
 	"strings"
 
 	"tasha/abilities"
-	"tasha/actor"
 	"tasha/d20"
-	"tasha/utils"
+	"tasha/record"
 
 	"github.com/BurntSushi/toml"
 	"github.com/manifoldco/promptui"
@@ -73,23 +72,25 @@ func Tasha(cmd *cobra.Command, args []string) {
 	classes, skills := AssignCharacterClasses(background, ability_scores)
 
 	// Collect data, save to toml file
-	var config actor.Config
-	config.PlayerCharacter.Name = args[0]
-	config.PlayerCharacter.Species = species
-	config.PlayerCharacter.Gender = gender
-	config.PlayerCharacter.Background = background
-	config.PlayerCharacter.Classes = classes
-	config.PlayerCharacter.AbilityScores = ability_scores
-	config.PlayerCharacter.Skills = skills
+	name := strings.TrimSpace(args[0])
 
-	cs_filename := strings.ToLower(strings.Replace(args[0], " ", "_", -1))
+	var schema record.CharacterSheetTOMLSchema
+	schema.PC.Name = name
+	schema.PC.Species = species
+	schema.PC.Gender = gender
+	schema.PC.Background = background
+	schema.PC.Classes = classes
+	schema.PC.AbilityScores = ability_scores
+	schema.PC.Skills = skills
+
+	cs_filename := strings.ToLower(strings.Replace(name, " ", "_", 1))
 	f, err := os.Create(fmt.Sprintf("%s.toml", cs_filename))
 	if err != nil {
 		panic(err)
 	}
 	defer f.Close()
 
-	err = toml.NewEncoder(f).Encode(config)
+	err = toml.NewEncoder(f).Encode(schema)
 	if err != nil {
 		panic(err)
 	}
@@ -116,7 +117,7 @@ func AssignAbilityScores(background string) map[string]abilities.AbilityScore {
 	scores := abilities.GenerateScores()
 	for _, ability := range ability_options {
 		score := MenuInt(fmt.Sprintf("Assign your %s score", ability), scores)
-		scores = utils.OmitItem(scores, score)
+		scores = OmitItemFromHaystack(scores, score)
 		abilities.UpdateAbilityScore(ability_score_map, ability, score)
 	}
 
@@ -127,7 +128,7 @@ func AssignAbilityScores(background string) map[string]abilities.AbilityScore {
 		bonus_value := 2
 		for i := 1; i <= 2; i++ {
 			ability := MenuStr(fmt.Sprintf("Choose your bonus ability +%d", bonus_value), background_abilities)
-			background_abilities = utils.OmitItem(background_abilities, ability)
+			background_abilities = OmitItemFromHaystack(background_abilities, ability)
 			new_score := ability_score_map[ability].Score + bonus_value
 			abilities.UpdateAbilityScore(ability_score_map, ability, new_score)
 			fmt.Printf("A +%d bonus was applied to your %s ability score.\n", bonus_value, ability)
@@ -165,10 +166,10 @@ func AssignCharacterClasses(background string, ability_scores map[string]abiliti
 		// Select a class
 		if !is_multiclassed {
 			class = MenuStr("Select your class", single_class_options)
-			single_class_options = utils.OmitItem(single_class_options, class)
+			single_class_options = OmitItemFromHaystack(single_class_options, class)
 		} else {
 			class = MenuStr("Select your additional class", multi_class_options)
-			multi_class_options = utils.OmitItem(multi_class_options, class)
+			multi_class_options = OmitItemFromHaystack(multi_class_options, class)
 		}
 
 		// Set the class level
@@ -197,7 +198,7 @@ func AssignCharacterClasses(background string, ability_scores map[string]abiliti
 
 		// Clean up already selected classes for multiclassing
 		for _, selected_class := range slices.Collect(maps.Keys(classes)) {
-			multi_class_options = utils.OmitItem(multi_class_options, selected_class)
+			multi_class_options = OmitItemFromHaystack(multi_class_options, selected_class)
 		}
 
 		// Add secondary class, if applicable
@@ -224,7 +225,7 @@ func AssignClassSkills(class string, omitted_skills []string, is_primary_class b
 	// Remove omitted skills.
 	for _, omitted_skill := range omitted_skills {
 		if slices.Contains(class_skill_list, omitted_skill) {
-			class_skill_list = utils.OmitItem(class_skill_list, omitted_skill)
+			class_skill_list = OmitItemFromHaystack(class_skill_list, omitted_skill)
 			fmt.Printf("The skill %s was omitted.", omitted_skill)
 		}
 	}
@@ -233,7 +234,7 @@ func AssignClassSkills(class string, omitted_skills []string, is_primary_class b
 	for i := 1; i <= d20.GetSkillPointsByClass(class, is_primary_class); i++ {
 		skill := MenuStr("Choose a class skill", class_skill_list)
 		skills = append(skills, skill)
-		class_skill_list = utils.OmitItem(class_skill_list, skill)
+		class_skill_list = OmitItemFromHaystack(class_skill_list, skill)
 	}
 
 	slices.Sort(skills)
@@ -279,4 +280,20 @@ func MenuStr(label string, items []string) string {
 	}
 	_, selection, _ := prompt.Run()
 	return selection
+}
+
+/*
+Returns the given haystack minus the first instance of needle.
+*/
+func OmitItemFromHaystack[T comparable](haystack []T, needle T) []T {
+	updated_haystack := []T{}
+	needleFound := false
+	for _, item := range haystack {
+		if !needleFound && needle == item {
+			needleFound = true
+		} else {
+			updated_haystack = append(updated_haystack, item)
+		}
+	}
+	return updated_haystack
 }
