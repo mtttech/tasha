@@ -57,28 +57,28 @@ func Execute() {
 
 func Tasha(cmd *cobra.Command, args []string) {
 	// Select species
-	species := MenuStr("Select your species", Species)
+	species := Menu("Select your species", Species)
 
 	// Select gender
-	gender := MenuStr("Select your gender", Genders)
+	gender := Menu("Select your gender", Genders)
 
 	// Select background
-	background := MenuStr("Select your background", Backgrounds)
+	background := Menu("Select your background", Backgrounds)
 
 	// Assign ability scores
-	ability_scores := AssignAbilityScores(background)
+	ability_scores := AssignAbilityScores(background.(string))
 
 	// Assign classes, skills
-	classes, skills := AssignCharacterClasses(background, ability_scores)
+	classes, skills := AssignCharacterClasses(background.(string), ability_scores)
 
 	// Collect data, save to toml file
 	name := strings.TrimSpace(args[0])
 
 	var schema record.CharacterSheetTOMLSchema
 	schema.PC.Name = name
-	schema.PC.Species = species
-	schema.PC.Gender = gender
-	schema.PC.Background = background
+	schema.PC.Species = species.(string)
+	schema.PC.Gender = gender.(string)
+	schema.PC.Background = background.(string)
 	schema.PC.Classes = classes
 	schema.PC.AbilityScores = ability_scores
 	schema.PC.Skills = skills
@@ -116,21 +116,21 @@ func AssignAbilityScores(background string) map[string]abilities.AbilityScore {
 	ability_score_map := make(map[string]abilities.AbilityScore)
 	scores := abilities.GenerateScores()
 	for _, ability := range ability_options {
-		score := MenuInt(fmt.Sprintf("Assign your %s score", ability), scores)
-		scores = OmitItemFromHaystack(scores, score)
-		abilities.UpdateAbilityScore(ability_score_map, ability, score)
+		score := Menu(fmt.Sprintf("Assign your %s score", ability), scores)
+		scores = OmitItemFromHaystack(scores, score.(int))
+		abilities.UpdateAbilityScore(ability_score_map, ability, score.(int))
 	}
 
 	// Apply background ability bonuses
-	background_bonus := MenuStr("Choose your background bonus array", []string{"2/1", "1/1/1"})
+	background_bonus := Menu("Choose your background bonus array", []string{"2/1", "1/1/1"})
 	background_abilities := d20.GetAbilitiesByBackground(background)
 	if background_bonus == "2/1" {
 		bonus_value := 2
 		for i := 1; i <= 2; i++ {
-			ability := MenuStr(fmt.Sprintf("Choose your bonus ability +%d", bonus_value), background_abilities)
-			background_abilities = OmitItemFromHaystack(background_abilities, ability)
-			new_score := ability_score_map[ability].Score + bonus_value
-			abilities.UpdateAbilityScore(ability_score_map, ability, new_score)
+			ability := Menu(fmt.Sprintf("Choose your bonus ability +%d", bonus_value), background_abilities)
+			background_abilities = OmitItemFromHaystack(background_abilities, ability.(string))
+			new_score := ability_score_map[ability.(string)].Score + bonus_value
+			abilities.UpdateAbilityScore(ability_score_map, ability.(string), new_score)
 			fmt.Printf("A +%d bonus was applied to your %s ability score.\n", bonus_value, ability)
 			bonus_value -= 1
 		}
@@ -165,27 +165,27 @@ func AssignCharacterClasses(background string, ability_scores map[string]abiliti
 	for {
 		// Select a class
 		if !is_multiclassed {
-			class = MenuStr("Select your class", single_class_options)
+			class = Menu("Select your class", single_class_options).(string)
 			single_class_options = OmitItemFromHaystack(single_class_options, class)
 		} else {
-			class = MenuStr("Select your additional class", multi_class_options)
+			class = Menu("Select your additional class", multi_class_options).(string)
 			multi_class_options = OmitItemFromHaystack(multi_class_options, class)
 		}
 
 		// Set the class level
-		level := MenuInt("What level are you", d20.GetLevelSlices(max_level))
+		level := Menu("What level are you", d20.GetLevelSlices(max_level))
 
 		// Decrement level for the chosen class from max level
-		max_level -= level
+		max_level -= level.(int)
 
 		// Apply subclass, if applicable
 		subclass := ""
-		if level >= 3 {
-			subclass = MenuStr("What is your subclass", d20.GetSubclassesByClass(class))
+		if level.(int) >= 3 {
+			subclass = Menu("What is your subclass", d20.GetSubclassesByClass(class)).(string)
 		}
 
 		classes[class] = d20.Class{
-			Level:    level,
+			Level:    level.(int),
 			Subclass: subclass,
 		}
 
@@ -232,9 +232,9 @@ func AssignClassSkills(class string, omitted_skills []string, is_primary_class b
 
 	// Select class skills.
 	for i := 1; i <= d20.GetSkillPointsByClass(class, is_primary_class); i++ {
-		skill := MenuStr("Choose a class skill", class_skill_list)
-		skills = append(skills, skill)
-		class_skill_list = OmitItemFromHaystack(class_skill_list, skill)
+		skill := Menu("Choose a class skill", class_skill_list)
+		skills = append(skills, skill.(string))
+		class_skill_list = OmitItemFromHaystack(class_skill_list, skill.(string))
 	}
 
 	slices.Sort(skills)
@@ -258,28 +258,20 @@ func ConfirmMenu(label string) bool {
 }
 
 /*
-Select wrapper function with integers.
+Select wrapper function which accepts slices of strings or intergers.
 */
-func MenuInt(label string, items []int) int {
+func Menu[T comparable](label string, options []T) any {
 	prompt := promptui.Select{
 		Label: label,
-		Items: items,
+		Items: options,
 	}
 	_, selection, _ := prompt.Run()
-	result, _ := strconv.Atoi(selection)
-	return result
-}
-
-/*
-Select wrapper function with strings.
-*/
-func MenuStr(label string, items []string) string {
-	prompt := promptui.Select{
-		Label: label,
-		Items: items,
+	result, err := strconv.Atoi(selection)
+	if err == nil {
+		return result
+	} else {
+		return selection
 	}
-	_, selection, _ := prompt.Run()
-	return selection
 }
 
 /*
