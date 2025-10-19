@@ -63,13 +63,13 @@ func Tasha(cmd *cobra.Command, args []string) {
 	gender := Menu("Select your gender", Genders)
 
 	// Select background
-	background := Menu("Select your background", Backgrounds)
+	background := Menu("Select your background", Backgrounds).(string)
 
 	// Assign ability scores
-	ability_scores := AssignAbilityScores(background.(string))
+	ability_scores := AssignAbilityScores(background)
 
 	// Assign classes, skills
-	classes, skills := AssignCharacterClasses(background.(string), ability_scores)
+	classes, skills := AssignCharacterClasses(background, ability_scores)
 
 	// Collect data, save to toml file
 	name := strings.TrimSpace(args[0])
@@ -78,7 +78,7 @@ func Tasha(cmd *cobra.Command, args []string) {
 	schema.PC.Name = name
 	schema.PC.Species = species.(string)
 	schema.PC.Gender = gender.(string)
-	schema.PC.Background = background.(string)
+	schema.PC.Background = background
 	schema.PC.Classes = classes
 	schema.PC.AbilityScores = ability_scores
 	schema.PC.Skills = skills
@@ -116,9 +116,9 @@ func AssignAbilityScores(background string) map[string]abilities.AbilityScore {
 	ability_score_map := make(map[string]abilities.AbilityScore)
 	scores := abilities.GenerateScores()
 	for _, ability := range ability_options {
-		score := Menu(fmt.Sprintf("Assign your %s score", ability), scores)
-		scores = OmitItemFromHaystack(scores, score.(int))
-		abilities.UpdateAbilityScore(ability_score_map, ability, score.(int))
+		score := Menu(fmt.Sprintf("Assign your %s score", ability), scores).(int)
+		scores = OmitItemFromHaystack(scores, score)
+		abilities.UpdateAbilityScore(ability_score_map, ability, score)
 	}
 
 	// Apply background ability bonuses
@@ -127,10 +127,10 @@ func AssignAbilityScores(background string) map[string]abilities.AbilityScore {
 	if background_bonus == "2/1" {
 		bonus_value := 2
 		for i := 1; i <= 2; i++ {
-			ability := Menu(fmt.Sprintf("Choose your bonus ability +%d", bonus_value), background_abilities)
-			background_abilities = OmitItemFromHaystack(background_abilities, ability.(string))
-			new_score := ability_score_map[ability.(string)].Score + bonus_value
-			abilities.UpdateAbilityScore(ability_score_map, ability.(string), new_score)
+			ability := Menu(fmt.Sprintf("Choose your bonus ability +%d", bonus_value), background_abilities).(string)
+			background_abilities = OmitItemFromHaystack(background_abilities, ability)
+			new_score := ability_score_map[ability].Score + bonus_value
+			abilities.UpdateAbilityScore(ability_score_map, ability, new_score)
 			fmt.Printf("A +%d bonus was applied to your %s ability score.\n", bonus_value, ability)
 			bonus_value -= 1
 		}
@@ -173,19 +173,19 @@ func AssignCharacterClasses(background string, ability_scores map[string]abiliti
 		}
 
 		// Set the class level
-		level := Menu("What level are you", d20.GetLevelSlices(max_level))
+		level := Menu("What level are you", d20.GetLevelSlices(max_level)).(int)
 
 		// Decrement level for the chosen class from max level
-		max_level -= level.(int)
+		max_level -= level
 
 		// Apply subclass, if applicable
 		subclass := ""
-		if level.(int) >= 3 {
+		if level >= 3 {
 			subclass = Menu("What is your subclass", d20.GetSubclassesByClass(class)).(string)
 		}
 
 		classes[class] = d20.Class{
-			Level:    level.(int),
+			Level:    level,
 			Subclass: subclass,
 		}
 
@@ -232,9 +232,9 @@ func AssignClassSkills(class string, omitted_skills []string, is_primary_class b
 
 	// Select class skills.
 	for i := 1; i <= d20.GetSkillPointsByClass(class, is_primary_class); i++ {
-		skill := Menu("Choose a class skill", class_skill_list)
-		skills = append(skills, skill.(string))
-		class_skill_list = OmitItemFromHaystack(class_skill_list, skill.(string))
+		skill := Menu("Choose a class skill", class_skill_list).(string)
+		skills = append(skills, skill)
+		class_skill_list = OmitItemFromHaystack(class_skill_list, skill)
 	}
 
 	slices.Sort(skills)
