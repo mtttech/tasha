@@ -80,7 +80,7 @@ var characterSkills = map[string]Skills{
 		Classes: []string{"Bard", "Monk", "Ranger", "Rogue"},
 	},
 	"Survival": {
-		Ability: "Dexterity",
+		Ability: "Wisdom",
 		Classes: []string{"Barbarian", "Bard", "Druid", "Fighter", "Ranger"},
 	},
 }
