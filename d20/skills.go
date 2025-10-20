@@ -25,7 +25,7 @@ var characterSkills = map[string]Skills{
 	},
 	"Athletics": {
 		Ability: "Strength",
-		Classes: []string{"Barbarian", "Bard", "Fighter", "Paladin", "Ranger", "Rogue"},
+		Classes: []string{"Barbarian", "Bard", "Fighter", "Monk", "Paladin", "Ranger", "Rogue"},
 	},
 	"Deception": {
 		Ability: "Charisma",
