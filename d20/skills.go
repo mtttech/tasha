@@ -79,12 +79,16 @@ var characterSkills = map[string]Skills{
 		Ability: "Dexterity",
 		Classes: []string{"Bard", "Monk", "Ranger", "Rogue"},
 	},
+	"Survival": {
+		Ability: "Dexterity",
+		Classes: []string{"Barbarian", "Bard", "Druid", "Fighter", "Ranger"},
+	},
 }
 
 /*
 Returns a slice of skills by class.
 */
-func GetSkillsForClass(class string) []string {
+func GetSkillsByClass(class string) []string {
 	class_skills := []string{}
 	for skill := range characterSkills {
 		if slices.Contains(characterSkills[skill].Classes, class) {
