@@ -13,7 +13,7 @@ type Class struct {
 	Level    int
 }
 
-type ClassSnapshot struct {
+type Classes struct {
 	Armors       []string
 	Features     map[int][]string
 	HitDie       int
@@ -23,7 +23,7 @@ type ClassSnapshot struct {
 	Weapons      []string
 }
 
-var characterClasses = map[string]ClassSnapshot{
+var characterClasses = map[string]Classes{
 	"Barbarian": {
 		Armors: []string{"Light", "Medium", "Shield"},
 		Features: map[int][]string{
