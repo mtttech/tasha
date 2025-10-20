@@ -18,7 +18,6 @@ type ClassSnapshot struct {
 	Features     map[int][]string
 	HitDie       int
 	SavingThrows []string
-	Skills       []string
 	Subclasses   []string
 	Tools        []string
 	Weapons      []string
@@ -48,14 +47,6 @@ var characterClasses = map[string]ClassSnapshot{
 		},
 		HitDie:       12,
 		SavingThrows: []string{"Constitution", "Strength"},
-		Skills: []string{
-			"Animal Handling",
-			"Athletics",
-			"Intimidation",
-			"Nature",
-			"Perception",
-			"Survival",
-		},
 		Subclasses: []string{
 			"Path of the Berserker",
 			"Path of the Wild Heart",
@@ -85,26 +76,6 @@ var characterClasses = map[string]ClassSnapshot{
 		},
 		HitDie:       8,
 		SavingThrows: []string{"Charisma", "Dexterity"},
-		Skills: []string{
-			"Acrobatics",
-			"Animal Handling",
-			"Arcana",
-			"Athletics",
-			"Deception",
-			"History",
-			"Insight",
-			"Intimidation",
-			"Investigation",
-			"Medicine",
-			"Nature",
-			"Perception",
-			"Performance",
-			"Persuasion",
-			"Religion",
-			"Sleight of Hand",
-			"Stealth",
-			"Survival",
-		},
 		Subclasses: []string{
 			"College of Dance",
 			"College of Glamour",
@@ -133,13 +104,6 @@ var characterClasses = map[string]ClassSnapshot{
 		},
 		HitDie:       8,
 		SavingThrows: []string{"Intelligence", "Wisdom"},
-		Skills: []string{
-			"History",
-			"Insight",
-			"Medicine",
-			"Persuasion",
-			"Religion",
-		},
 		Subclasses: []string{
 			"Life Domain",
 			"Light Domain",
@@ -168,16 +132,6 @@ var characterClasses = map[string]ClassSnapshot{
 		},
 		HitDie:       8,
 		SavingThrows: []string{"Intelligence", "Wisdom"},
-		Skills: []string{
-			"Animal Handling",
-			"Arcana",
-			"Insight",
-			"Medicine",
-			"Nature",
-			"Perception",
-			"Religion",
-			"Survival",
-		},
 		Subclasses: []string{
 			"Circle of the Land",
 			"Circle of the Moon",
@@ -209,16 +163,6 @@ var characterClasses = map[string]ClassSnapshot{
 		},
 		HitDie:       10,
 		SavingThrows: []string{"Constitution", "Strength"},
-		Skills: []string{
-			"Acrobatics",
-			"Animal Handling",
-			"Athletics",
-			"History",
-			"Insight",
-			"Intimidation",
-			"Perception",
-			"Survival",
-		},
 		Subclasses: []string{
 			"Battle Master",
 			"Champion",
@@ -252,14 +196,6 @@ var characterClasses = map[string]ClassSnapshot{
 		},
 		HitDie:       8,
 		SavingThrows: []string{"Dexterity", "Strength"},
-		Skills: []string{
-			"Acrobatics",
-			"Athletics",
-			"History",
-			"Insight",
-			"Religion",
-			"Stealth",
-		},
 		Subclasses: []string{
 			"Warrior of Mercy",
 			"Warrior of Shadow",
@@ -329,14 +265,6 @@ var characterClasses = map[string]ClassSnapshot{
 		},
 		HitDie:       10,
 		SavingThrows: []string{"Charisma", "Wisdom"},
-		Skills: []string{
-			"Athletics",
-			"Insight",
-			"Intimidation",
-			"Medicine",
-			"Persuasion",
-			"Religion",
-		},
 		Subclasses: []string{
 			"Oath of Devotion",
 			"Oath of Glory",
@@ -369,17 +297,6 @@ var characterClasses = map[string]ClassSnapshot{
 		},
 		HitDie:       10,
 		SavingThrows: []string{"Dexterity", "Strength"},
-		Skills: []string{
-			"Animal Handling",
-			"Athletics",
-			"Insight",
-			"Investigation",
-			"Nature",
-			"Perception",
-			"Sleight of Hand",
-			"Stealth",
-			"Survival",
-		},
 		Subclasses: []string{
 			"Beast Master",
 			"Fey Wanderer",
@@ -411,19 +328,6 @@ var characterClasses = map[string]ClassSnapshot{
 		},
 		HitDie:       8,
 		SavingThrows: []string{"Dexterity", "Intelligence"},
-		Skills: []string{
-			"Acrobatics",
-			"Athletics",
-			"Deception",
-			"Insight",
-			"Intimidation",
-			"Investigation",
-			"Perception",
-			"Performance",
-			"Persuasion",
-			"Sleight of Hand",
-			"Stealth",
-		},
 		Subclasses: []string{
 			"Arcane Trickster",
 			"Assassin",
@@ -450,14 +354,6 @@ var characterClasses = map[string]ClassSnapshot{
 		},
 		HitDie:       6,
 		SavingThrows: []string{"Charisma", "Constitution"},
-		Skills: []string{
-			"Arcana",
-			"Deception",
-			"Insight",
-			"Intimidation",
-			"Persuasion",
-			"Religion",
-		},
 		Subclasses: []string{
 			"Aberrant Sorcery",
 			"Clockwork Sorcery",
@@ -487,15 +383,6 @@ var characterClasses = map[string]ClassSnapshot{
 		},
 		HitDie:       8,
 		SavingThrows: []string{"Charisma", "Wisdom"},
-		Skills: []string{
-			"Arcana",
-			"Deception",
-			"History",
-			"Intimidation",
-			"Investigation",
-			"Nature",
-			"Religion",
-		},
 		Subclasses: []string{
 			"Archfey Patron",
 			"Celestial Patron",
@@ -522,14 +409,6 @@ var characterClasses = map[string]ClassSnapshot{
 		},
 		HitDie:       6,
 		SavingThrows: []string{"Intelligence", "Wisdom"},
-		Skills: []string{
-			"Arcana",
-			"History",
-			"Insight",
-			"Investigation",
-			"Medicine",
-			"Religion",
-		},
 		Subclasses: []string{
 			"Abjurer",
 			"Diviner",
@@ -616,13 +495,6 @@ func GetSkillPointsByClass(class string, is_primary_class bool) int {
 		}
 	}
 	return allotted_skills
-}
-
-/*
-Returns a slice of skills by class.
-*/
-func GetSkillsByClass(class string) []string {
-	return characterClasses[class].Skills
 }
 
 /*
