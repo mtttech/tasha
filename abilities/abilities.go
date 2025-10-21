@@ -17,9 +17,9 @@ type AbilityScore struct {
 Drops the lowest value, then adds the remaining three values.
 */
 func add_three() int {
+	isSmallestIntFound := false
 	rollFourResults := roll_four()
 	smallestInt := slices.Min(rollFourResults)
-	isSmallestIntFound := false
 	totalValue := 0
 	for _, n := range rollFourResults {
 		if n == smallestInt && !isSmallestIntFound {

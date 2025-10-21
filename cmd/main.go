@@ -85,13 +85,13 @@ func Tasha(cmd *cobra.Command, args []string) {
 	schema.PC.Skills = assignedSkills
 
 	characterName := strings.ToLower(strings.Replace(assignedName, " ", "_", 1))
-	fptr, err := os.Create(fmt.Sprintf("%s.toml", characterName))
+	fp, err := os.Create(fmt.Sprintf("%s.toml", characterName))
 	if err != nil {
 		panic(err)
 	}
-	defer fptr.Close()
+	defer fp.Close()
 
-	err = toml.NewEncoder(fptr).Encode(schema)
+	err = toml.NewEncoder(fp).Encode(schema)
 	if err != nil {
 		panic(err)
 	}
@@ -151,10 +151,10 @@ func AssignCharacterClass(background string, ability_scores map[string]abilities
 	var assignedClass string
 	assignedClasses := make(map[string]d20.Class)
 	assignedSkills := []string{}
-	singleClassOptions := d20.GetD20Classes()
 	isMulticlassed := false
 	maxLevel := 20
 	multiClassOptions := []string{}
+	singleClassOptions := d20.GetD20Classes()
 
 	// Populate multi_class_options variable, if applicable
 	if len(multiClassOptions) == 0 {
@@ -276,8 +276,8 @@ func Menu[T comparable](label string, options []T) any {
 Returns the given haystack minus the first instance of needle.
 */
 func OmitNeedleFromHaystack[T comparable](haystack []T, needle T) []T {
-	updatedHaystack := []T{}
 	needleFound := false
+	updatedHaystack := []T{}
 	for _, obj := range haystack {
 		if !needleFound && needle == obj {
 			needleFound = true
