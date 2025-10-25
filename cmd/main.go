@@ -59,22 +59,16 @@ func Execute() {
 func Tasha(cmd *cobra.Command, args []string) {
 	// Select assignedSpecies
 	assignedSpecies := Menu("Select your species", Species).(string)
-
 	// Select assignedGender
 	assignedGender := Menu("Select your gender", Genders).(string)
-
 	// Select assignedBackground
 	assignedBackground := Menu("Select your background", Backgrounds).(string)
-
 	// Assign ability scores
 	assignedAbilityScores := AssignAbilityScores(assignedBackground)
-
 	// Assign assignedClass, assignedSkills
 	assignedClass, assignedSkills := AssignCharacterClass(assignedBackground, assignedAbilityScores)
-
 	// Collect data, save to toml file
 	assignedName := strings.TrimSpace(args[0])
-
 	var schema record.CharacterSheetTOMLSchema
 	schema.PC.Name = assignedName
 	schema.PC.Species = assignedSpecies
@@ -83,14 +77,12 @@ func Tasha(cmd *cobra.Command, args []string) {
 	schema.PC.Class = assignedClass
 	schema.PC.AbilityScores = assignedAbilityScores
 	schema.PC.Skills = assignedSkills
-
 	characterName := strings.ToLower(strings.Replace(assignedName, " ", "_", 1))
 	fp, err := os.Create(fmt.Sprintf("%s.toml", characterName))
 	if err != nil {
 		panic(err)
 	}
 	defer fp.Close()
-
 	err = toml.NewEncoder(fp).Encode(schema)
 	if err != nil {
 		panic(err)
@@ -155,12 +147,10 @@ func AssignCharacterClass(background string, ability_scores map[string]abilities
 	maxLevel := 20
 	multiClassOptions := []string{}
 	singleClassOptions := d20.GetD20Classes()
-
 	// Populate multi_class_options variable, if applicable
 	if len(multiClassOptions) == 0 {
 		multiClassOptions = d20.GetValidMulticlassOptions(ability_scores)
 	}
-
 	for {
 		// Select a class
 		if !isMulticlassed {
@@ -170,36 +160,29 @@ func AssignCharacterClass(background string, ability_scores map[string]abilities
 			assignedClass = Menu("Select your additional class", multiClassOptions).(string)
 			multiClassOptions = OmitNeedleFromHaystack(multiClassOptions, assignedClass)
 		}
-
 		// Set the class assignedLevel
 		assignedLevel := Menu("What level are you", d20.GetLevelSlices(maxLevel)).(int)
-
 		// Decrement level for the chosen class from max level
 		maxLevel -= assignedLevel
-
-		// Apply assignedSubclass, if applicable
+		// Apply the assigned subclass, if applicable
 		assignedSubclass := ""
 		if assignedLevel >= 3 {
 			assignedSubclass = Menu("What is your subclass", d20.GetSubclassesByClass(assignedClass)).(string)
 		}
-
 		assignedClasses[assignedClass] = d20.Class{
 			Level:    assignedLevel,
 			Subclass: assignedSubclass,
 		}
-
-		// Assign class skills
+		// Assign your class skills
 		if !isMulticlassed {
 			assignedSkills = AssignClassSkills(assignedClass, d20.GetSkillsByBackground(background), true)
 		} else {
 			assignedSkills = AssignClassSkills(assignedClass, assignedSkills, false)
 		}
-
-		// Clean up already selected classes for multiclassing
+		// Clean up selected classes for multiclassing
 		for _, selected_class := range slices.Collect(maps.Keys(assignedClasses)) {
 			multiClassOptions = OmitNeedleFromHaystack(multiClassOptions, selected_class)
 		}
-
 		// Add secondary class, if applicable
 		if len(multiClassOptions) > 0 && maxLevel > 0 && ConfirmMenu(("Add another class")) {
 			if !isMulticlassed {
@@ -207,7 +190,6 @@ func AssignCharacterClass(background string, ability_scores map[string]abilities
 			}
 			continue
 		}
-
 		break
 	}
 	return assignedClasses, assignedSkills
@@ -219,7 +201,6 @@ Assign class skills.
 func AssignClassSkills(class string, omitted_skills []string, is_primary_class bool) []string {
 	assignedSkills := omitted_skills
 	classSkillList := d20.GetSkillsByClass(class)
-
 	// Remove omitted skills.
 	for _, omitted_skill := range omitted_skills {
 		if slices.Contains(classSkillList, omitted_skill) {
@@ -227,14 +208,12 @@ func AssignClassSkills(class string, omitted_skills []string, is_primary_class b
 			fmt.Printf("The skill %s was omitted.", omitted_skill)
 		}
 	}
-
 	// Select class skills.
 	for i := 1; i <= d20.GetSkillPointsByClass(class, is_primary_class); i++ {
 		skill := Menu("Choose a class skill", classSkillList).(string)
 		assignedSkills = append(assignedSkills, skill)
 		classSkillList = OmitNeedleFromHaystack(classSkillList, skill)
 	}
-
 	slices.Sort(assignedSkills)
 	return assignedSkills
 }
