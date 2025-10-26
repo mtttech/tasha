@@ -65,8 +65,8 @@ func Tasha(cmd *cobra.Command, args []string) {
 	assignedBackground := Menu("Select your background", Backgrounds).(string)
 	// Assign ability scores
 	assignedAbilityScores := AssignAbilityScores(assignedBackground)
-	// Assign assignedClass, assignedSkills
-	assignedClass, assignedSkills := AssignCharacterClass(assignedBackground, assignedAbilityScores)
+	// Assign class, features, and skills
+	assignedClass, assignedFeatures, assignedSkills := AssignCharacterClass(assignedBackground, assignedAbilityScores)
 	// Collect data, save to toml file
 	assignedName := strings.TrimSpace(args[0])
 	var schema record.CharacterSheetTOMLSchema
@@ -75,6 +75,7 @@ func Tasha(cmd *cobra.Command, args []string) {
 	schema.PC.Gender = assignedGender
 	schema.PC.Background = assignedBackground
 	schema.PC.Class = assignedClass
+	schema.PC.Features = assignedFeatures
 	schema.PC.AbilityScores = assignedAbilityScores
 	schema.PC.Skills = assignedSkills
 	characterName := strings.ToLower(strings.Replace(assignedName, " ", "_", 1))
@@ -139,20 +140,21 @@ func AssignAbilityScores(background string) map[string]abilities.AbilityScore {
 /*
 Assign character's classes and skills.
 */
-func AssignCharacterClass(background string, ability_scores map[string]abilities.AbilityScore) (map[string]d20.Class, []string) {
+func AssignCharacterClass(background string, ability_scores map[string]abilities.AbilityScore) (map[string]d20.Class, []string, []string) {
 	var assignedClass string
 	assignedClasses := make(map[string]d20.Class)
+	assignedFeatures := []string{}
 	assignedSkills := []string{}
 	isMulticlassed := false
 	maxLevel := 20
 	multiClassOptions := []string{}
 	singleClassOptions := d20.GetD20Classes()
-	// Populate multi_class_options variable, if applicable
+	// Populate multiClassOptions, if applicable
 	if len(multiClassOptions) == 0 {
 		multiClassOptions = d20.GetValidMulticlassOptions(ability_scores)
 	}
+	// Select your class(es)
 	for {
-		// Select a class
 		if !isMulticlassed {
 			assignedClass = Menu("Select your class", singleClassOptions).(string)
 			singleClassOptions = OmitNeedleFromHaystack(singleClassOptions, assignedClass)
@@ -173,6 +175,8 @@ func AssignCharacterClass(background string, ability_scores map[string]abilities
 			Level:    assignedLevel,
 			Subclass: assignedSubclass,
 		}
+		// Assign your class features
+		assignedFeatures = append(assignedFeatures, d20.GetFeaturesByClass(assignedClass, assignedLevel)...)
 		// Assign your class skills
 		if !isMulticlassed {
 			assignedSkills = AssignClassSkills(assignedClass, d20.GetSkillsByBackground(background), true)
@@ -192,7 +196,7 @@ func AssignCharacterClass(background string, ability_scores map[string]abilities
 		}
 		break
 	}
-	return assignedClasses, assignedSkills
+	return assignedClasses, assignedFeatures, assignedSkills
 }
 
 /*
