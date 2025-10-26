@@ -66,7 +66,7 @@ func Tasha(cmd *cobra.Command, args []string) {
 	// Assign ability scores
 	assignedAbilityScores := AssignAbilityScores(assignedBackground)
 	// Assign class, features, and skills
-	assignedClass, assignedFeatures, assignedSkills := AssignCharacterClass(assignedBackground, assignedAbilityScores)
+	assignedClass, assignedArmors, assignedFeatures, assignedWeapons, assignedSkills := AssignCharacterClass(assignedBackground, assignedAbilityScores)
 	// Collect data, save to toml file
 	assignedName := strings.TrimSpace(args[0])
 	var schema record.CharacterSheetTOMLSchema
@@ -75,7 +75,9 @@ func Tasha(cmd *cobra.Command, args []string) {
 	schema.PC.Gender = assignedGender
 	schema.PC.Background = assignedBackground
 	schema.PC.Class = assignedClass
+	schema.PC.Armors = assignedArmors
 	schema.PC.Features = assignedFeatures
+	schema.PC.Weapons = assignedWeapons
 	schema.PC.AbilityScores = assignedAbilityScores
 	schema.PC.Skills = assignedSkills
 	characterName := strings.ToLower(strings.Replace(assignedName, " ", "_", 1))
@@ -140,11 +142,13 @@ func AssignAbilityScores(background string) map[string]abilities.AbilityScore {
 /*
 Assign character's classes and skills.
 */
-func AssignCharacterClass(background string, ability_scores map[string]abilities.AbilityScore) (map[string]d20.Class, []string, []string) {
+func AssignCharacterClass(background string, ability_scores map[string]abilities.AbilityScore) (map[string]d20.Class, []string, []string, []string, []string) {
+	assignedArmors := []string{}
 	var assignedClass string
 	assignedClasses := make(map[string]d20.Class)
 	assignedFeatures := []string{}
 	assignedSkills := []string{}
+	assignedWeapons := []string{}
 	isMulticlassed := false
 	maxLevel := 20
 	multiClassOptions := []string{}
@@ -175,8 +179,12 @@ func AssignCharacterClass(background string, ability_scores map[string]abilities
 			Level:    assignedLevel,
 			Subclass: assignedSubclass,
 		}
+		// Assign armor profiencies
+		assignedArmors = append(assignedArmors, d20.GetArmorsByClass(assignedClass)...)
 		// Assign your class features
 		assignedFeatures = append(assignedFeatures, d20.GetFeaturesByClass(assignedClass, assignedLevel)...)
+		// Assign weapon profiencies
+		assignedWeapons = append(assignedWeapons, d20.GetWeaponsByClass(assignedClass)...)
 		// Assign your class skills
 		if !isMulticlassed {
 			assignedSkills = AssignClassSkills(assignedClass, d20.GetSkillsByBackground(background), true)
@@ -196,7 +204,7 @@ func AssignCharacterClass(background string, ability_scores map[string]abilities
 		}
 		break
 	}
-	return assignedClasses, assignedFeatures, assignedSkills
+	return assignedClasses, assignedArmors, assignedFeatures, assignedWeapons, assignedSkills
 }
 
 /*
