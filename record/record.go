@@ -14,8 +14,9 @@ type CharacterSheetTOMLSchema struct {
 		Species       string                            `toml:"species"`
 		Gender        string                            `toml:"gender"`
 		Background    string                            `toml:"background"`
-		Class         map[string]d20.Class              `toml:"class"`
 		AbilityScores map[string]abilities.AbilityScore `toml:"ability_scores"`
+		Class         map[string]d20.Class              `toml:"class"`
+		Features      []string                          `toml:"features"`
 		Skills        []string                          `toml:"skills"`
 	}
 }
