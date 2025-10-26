@@ -57,11 +57,11 @@ func Execute() {
 }
 
 func Tasha(cmd *cobra.Command, args []string) {
-	// Select assignedSpecies
+	// Select Species
 	assignedSpecies := Menu("Select your species", Species).(string)
-	// Select assignedGender
+	// Select Gender
 	assignedGender := Menu("Select your gender", Genders).(string)
-	// Select assignedBackground
+	// Select Background
 	assignedBackground := Menu("Select your background", Backgrounds).(string)
 	// Assign ability scores
 	assignedAbilityScores := AssignAbilityScores(assignedBackground)
