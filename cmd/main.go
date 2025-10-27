@@ -43,10 +43,6 @@ var (
 			fmt.Println(curVersion)
 		},
 	}
-
-	Backgrounds = d20.GetD20Backgrounds()
-	Genders     = []string{"Female", "Male"}
-	Species     = d20.GetD20Species()
 )
 
 func Execute() {
@@ -57,12 +53,15 @@ func Execute() {
 }
 
 func Tasha(cmd *cobra.Command, args []string) {
+	backgroundOptions := d20.GetD20Backgrounds()
+	genderOptions := []string{"Female", "Male"}
+	specieOptions := d20.GetD20Species()
 	// Select Species
-	assignedSpecies := Menu("Select your species", Species).(string)
+	assignedSpecies := Menu("Select your species", specieOptions).(string)
 	// Select Gender
-	assignedGender := Menu("Select your gender", Genders).(string)
+	assignedGender := Menu("Select your gender", genderOptions).(string)
 	// Select Background
-	assignedBackground := Menu("Select your background", Backgrounds).(string)
+	assignedBackground := Menu("Select your background", backgroundOptions).(string)
 	// Assign ability scores
 	assignedAbilityScores := AssignAbilityScores(assignedBackground)
 	// Assign class, features, and skills
