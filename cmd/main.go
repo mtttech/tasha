@@ -55,16 +55,16 @@ func Execute() {
 func Tasha(cmd *cobra.Command, args []string) {
 	backgroundOptions := d20.GetD20Backgrounds()
 	genderOptions := []string{"Female", "Male"}
-	specieOptions := d20.GetD20Species()
-	// Select Species
-	assignedSpecies := Menu("Select your species", specieOptions).(string)
-	// Select Gender
+	speciesOptions := d20.GetD20Species()
+	// Assign your species
+	assignedSpecies := Menu("Select your species", speciesOptions).(string)
+	// Assign your gender
 	assignedGender := Menu("Select your gender", genderOptions).(string)
-	// Select Background
+	// Assign your background
 	assignedBackground := Menu("Select your background", backgroundOptions).(string)
-	// Assign ability scores
+	// Assign your ability scores
 	assignedAbilityScores := AssignAbilityScores(assignedBackground)
-	// Assign class, features, and skills
+	// Assign your class, features, and skills
 	assignedClass, assignedArmors, assignedFeatures, assignedWeapons, assignedSkills := AssignCharacterClass(assignedBackground, assignedAbilityScores)
 	// Collect data, save to toml file
 	assignedName := strings.TrimSpace(args[0])
@@ -73,11 +73,11 @@ func Tasha(cmd *cobra.Command, args []string) {
 	schema.PC.Species = assignedSpecies
 	schema.PC.Gender = assignedGender
 	schema.PC.Background = assignedBackground
+	schema.PC.AbilityScores = assignedAbilityScores
 	schema.PC.Class = assignedClass
 	schema.PC.Armors = assignedArmors
 	schema.PC.Features = assignedFeatures
 	schema.PC.Weapons = assignedWeapons
-	schema.PC.AbilityScores = assignedAbilityScores
 	schema.PC.Skills = assignedSkills
 	characterName := strings.ToLower(strings.Replace(assignedName, " ", "_", 1))
 	fp, err := os.Create(fmt.Sprintf("%s.toml", characterName))
