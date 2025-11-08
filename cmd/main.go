@@ -53,15 +53,12 @@ func Execute() {
 }
 
 func Tasha(cmd *cobra.Command, args []string) {
-	backgroundOptions := d20.GetD20Backgrounds()
-	genderOptions := []string{"Female", "Male"}
-	speciesOptions := d20.GetD20Species()
 	// Assign your species
-	assignedSpecies := Menu("Select your species", speciesOptions).(string)
+	assignedSpecies := Menu("Select your species", d20.GetD20Species()).(string)
 	// Assign your gender
-	assignedGender := Menu("Select your gender", genderOptions).(string)
+	assignedGender := Menu("Select your gender", []string{"Female", "Male"}).(string)
 	// Assign your background
-	assignedBackground := Menu("Select your background", backgroundOptions).(string)
+	assignedBackground := Menu("Select your background", d20.GetD20Backgrounds()).(string)
 	// Assign your ability scores
 	assignedAbilityScores := AssignAbilityScores(assignedBackground)
 	// Assign your class, features, and skills
@@ -165,11 +162,11 @@ func AssignCharacterClass(background string, ability_scores map[string]abilities
 			assignedClass = Menu("Select your additional class", multiClassOptions).(string)
 			multiClassOptions = OmitNeedleFromHaystack(multiClassOptions, assignedClass)
 		}
-		// Set the class assignedLevel
+		// Set the class level
 		assignedLevel := Menu("What level are you", d20.GetLevelSlices(maxLevel)).(int)
 		// Decrement level for the chosen class from max level
 		maxLevel -= assignedLevel
-		// Apply the assigned subclass, if applicable
+		// Apply subclass, if applicable
 		assignedSubclass := ""
 		if assignedLevel >= 3 {
 			assignedSubclass = Menu("What is your subclass", d20.GetSubclassesByClass(assignedClass)).(string)
