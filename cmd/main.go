@@ -136,6 +136,37 @@ func AssignAbilityScores(background string) map[string]abilities.AbilityScore {
 }
 
 /*
+Assign character's ability score bonuses.
+*/
+func AssignASIBonus(ability_scores map[string]abilities.AbilityScore) map[string]abilities.AbilityScore {
+	abilityOptions := []string{
+		"Strength",
+		"Dexterity",
+		"Constitution",
+		"Intelligence",
+		"Wisdom",
+		"Charisma",
+	}
+	asiBonus := Menu("Choose your bonus", []string{"2", "1"})
+	bonusValue, _ := strconv.Atoi(asiBonus.(string))
+	if bonusValue == 2 {
+		ability := Menu(fmt.Sprintf("Which ability do you want to upgrade by +%d", bonusValue), abilityOptions).(string)
+		newScore := ability_scores[ability].Score + bonusValue
+		abilities.UpdateAbilityScore(ability_scores, ability, newScore)
+		fmt.Printf("A +%d bonus was applied to your %s ability score.\n", bonusValue, ability)
+	} else {
+		for i := 1; i <= 2; i++ {
+			ability := Menu(fmt.Sprintf("Which ability do you want to upgrade by +%d", bonusValue), abilityOptions).(string)
+			abilityOptions = OmitNeedleFromHaystack(abilityOptions, ability)
+			new_score := ability_scores[ability].Score + 1
+			abilities.UpdateAbilityScore(ability_scores, ability, new_score)
+			fmt.Printf("A +1 bonus was applied to your %s ability score.\n", ability)
+		}
+	}
+	return ability_scores
+}
+
+/*
 Assign character's classes and skills.
 */
 func AssignCharacterClass(background string, ability_scores map[string]abilities.AbilityScore) (map[string]d20.Class, []string, []string, []string, []string) {
