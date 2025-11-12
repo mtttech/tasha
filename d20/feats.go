@@ -695,3 +695,10 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 }
+
+/*
+Returns a slice of ability score requirements by feat.
+*/
+func GetAbilityScoreRequirementsByFeat(feat string) []AbilityScoreRequirements {
+	return characterFeats[feat].Ability
+}
