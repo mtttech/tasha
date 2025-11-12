@@ -3,13 +3,13 @@ Copyright © 2025 Marcus Taylor <mtaylor9754@hotmail.com>
 */
 package d20
 
-type AbilityRequirement struct {
+type AbilityScoreRequirements struct {
 	Ability string
 	Score   int
 }
 
 type Feat struct {
-	Ability  []AbilityRequirement
+	Ability  []AbilityScoreRequirements
 	Armors   []string
 	Category string
 	Features []string
@@ -20,7 +20,7 @@ type Feat struct {
 
 var characterFeats = map[string]Feat{
 	"Ability Score Improvement": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "General",
 		Features: []string{},
@@ -29,7 +29,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Actor": {
-		Ability:  []AbilityRequirement{{Ability: "Charisma", Score: 13}},
+		Ability:  []AbilityScoreRequirements{{Ability: "Charisma", Score: 13}},
 		Armors:   []string{},
 		Category: "General",
 		Features: []string{},
@@ -38,7 +38,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Alert": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "Origin",
 		Features: []string{},
@@ -47,7 +47,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Archery": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "Fighting Style",
 		Features: []string{"Fighting Style"},
@@ -56,7 +56,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Athlete": {
-		Ability:  []AbilityRequirement{{Ability: "Strength", Score: 13}, {Ability: "Dexterity", Score: 13}},
+		Ability:  []AbilityScoreRequirements{{Ability: "Strength", Score: 13}, {Ability: "Dexterity", Score: 13}},
 		Armors:   []string{},
 		Category: "General",
 		Features: []string{},
@@ -65,7 +65,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Blind Fighting": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "Fighting Style",
 		Features: []string{"Fighting Style"},
@@ -74,7 +74,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Boon of Combat Prowess": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "Epic Boon",
 		Features: []string{},
@@ -83,7 +83,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Boon of Dimensional Travel": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "Epic Boon",
 		Features: []string{},
@@ -92,7 +92,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Boon of Energy Resistance": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "Epic Boon",
 		Features: []string{},
@@ -101,7 +101,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Boon of Fate": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "Epic Boon",
 		Features: []string{},
@@ -110,7 +110,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Boon of Fortitude": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "Epic Boon",
 		Features: []string{},
@@ -119,7 +119,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Boon of Irresistible Offense": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "Epic Boon",
 		Features: []string{},
@@ -128,7 +128,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Boon of Recovery": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "Epic Boon",
 		Features: []string{},
@@ -137,7 +137,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Boon of Skill": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "Epic Boon",
 		Features: []string{},
@@ -146,7 +146,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Boon of Speed": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "Epic Boon",
 		Features: []string{},
@@ -155,7 +155,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Boon of Spell Recall": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "Epic Boon",
 		Features: []string{"Spellcasting"},
@@ -164,7 +164,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Boon of the Night Spirit": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "Epic Boon",
 		Features: []string{},
@@ -173,7 +173,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Boon of Truesight": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "Epic Boon",
 		Features: []string{},
@@ -182,7 +182,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Charger": {
-		Ability:  []AbilityRequirement{{Ability: "Strength", Score: 13}, {Ability: "Dexterity", Score: 13}},
+		Ability:  []AbilityScoreRequirements{{Ability: "Strength", Score: 13}, {Ability: "Dexterity", Score: 13}},
 		Armors:   []string{},
 		Category: "General",
 		Features: []string{},
@@ -191,7 +191,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Chef": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "General",
 		Features: []string{},
@@ -200,7 +200,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Crafter": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "Origin",
 		Features: []string{},
@@ -209,7 +209,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Crossbow Expert": {
-		Ability:  []AbilityRequirement{{Ability: "Dexterity", Score: 13}},
+		Ability:  []AbilityScoreRequirements{{Ability: "Dexterity", Score: 13}},
 		Armors:   []string{},
 		Category: "General",
 		Features: []string{},
@@ -218,7 +218,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Crusher": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "General",
 		Features: []string{},
@@ -227,7 +227,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Defense": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "Fighting Style",
 		Features: []string{"Fighting Style"},
@@ -236,7 +236,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Defensive Duelist": {
-		Ability:  []AbilityRequirement{{Ability: "Dexterity", Score: 13}},
+		Ability:  []AbilityScoreRequirements{{Ability: "Dexterity", Score: 13}},
 		Armors:   []string{},
 		Category: "General",
 		Features: []string{},
@@ -245,7 +245,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Dual Wielder": {
-		Ability:  []AbilityRequirement{{Ability: "Strength", Score: 13}, {Ability: "Dexterity", Score: 13}},
+		Ability:  []AbilityScoreRequirements{{Ability: "Strength", Score: 13}, {Ability: "Dexterity", Score: 13}},
 		Armors:   []string{},
 		Category: "General",
 		Features: []string{},
@@ -254,7 +254,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Dueling": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "Fighting Style",
 		Features: []string{"Fighting Style"},
@@ -263,7 +263,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Durable": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "General",
 		Features: []string{},
@@ -272,7 +272,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Elemental Adept": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "General",
 		Features: []string{"Pact Magic", "Spellcasting"},
@@ -281,7 +281,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Fey-Touched": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "General",
 		Features: []string{},
@@ -290,7 +290,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Grappler": {
-		Ability:  []AbilityRequirement{{Ability: "Strength", Score: 13}, {Ability: "Dexterity", Score: 13}},
+		Ability:  []AbilityScoreRequirements{{Ability: "Strength", Score: 13}, {Ability: "Dexterity", Score: 13}},
 		Armors:   []string{},
 		Category: "General",
 		Features: []string{},
@@ -299,7 +299,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Great Weapon Fighting": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "Fighting Style",
 		Features: []string{"Fighting Style"},
@@ -308,7 +308,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Great Weapon Master": {
-		Ability:  []AbilityRequirement{{Ability: "Strength", Score: 13}},
+		Ability:  []AbilityScoreRequirements{{Ability: "Strength", Score: 13}},
 		Armors:   []string{},
 		Category: "General",
 		Features: []string{},
@@ -317,7 +317,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Healer": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "Origin",
 		Features: []string{},
@@ -326,7 +326,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Heavily Armored": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{"Medium"},
 		Category: "General",
 		Features: []string{},
@@ -335,7 +335,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Heavy Armor Master": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{"Heavy"},
 		Category: "General",
 		Features: []string{},
@@ -344,7 +344,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Inspiring Leader": {
-		Ability:  []AbilityRequirement{{Ability: "Wisdom", Score: 13}, {Ability: "Charisma", Score: 13}},
+		Ability:  []AbilityScoreRequirements{{Ability: "Wisdom", Score: 13}, {Ability: "Charisma", Score: 13}},
 		Armors:   []string{},
 		Category: "General",
 		Features: []string{},
@@ -353,7 +353,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Interception": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "Fighting Style",
 		Features: []string{"Fighting Style"},
@@ -362,7 +362,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Keen Mind": {
-		Ability:  []AbilityRequirement{{Ability: "Intelligence", Score: 13}},
+		Ability:  []AbilityScoreRequirements{{Ability: "Intelligence", Score: 13}},
 		Armors:   []string{},
 		Category: "General",
 		Features: []string{},
@@ -371,7 +371,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Lightly Armored": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{"Light", "Shields"},
 		Category: "General",
 		Features: []string{},
@@ -380,7 +380,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Lucky": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "Origin",
 		Features: []string{},
@@ -389,7 +389,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Mage Slayer": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "General",
 		Features: []string{},
@@ -398,7 +398,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Magic Initiate": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "Origin",
 		Features: []string{},
@@ -407,7 +407,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Martial Weapon Training": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "General",
 		Features: []string{},
@@ -416,7 +416,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Medium Armor Master": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{"Medium"},
 		Category: "General",
 		Features: []string{},
@@ -425,7 +425,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Moderately Armored": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{"Light"},
 		Category: "General",
 		Features: []string{},
@@ -434,7 +434,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Mounted Combatant": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "General",
 		Features: []string{},
@@ -443,7 +443,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Musician": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "Origin",
 		Features: []string{},
@@ -452,7 +452,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Observant": {
-		Ability:  []AbilityRequirement{{Ability: "Intelligence", Score: 13}, {Ability: "Wisdom", Score: 13}},
+		Ability:  []AbilityScoreRequirements{{Ability: "Intelligence", Score: 13}, {Ability: "Wisdom", Score: 13}},
 		Armors:   []string{},
 		Category: "General",
 		Features: []string{},
@@ -461,7 +461,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Piercer": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "General",
 		Features: []string{},
@@ -470,7 +470,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Poisoner": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "General",
 		Features: []string{},
@@ -479,7 +479,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Polearm Master": {
-		Ability:  []AbilityRequirement{{Ability: "Strength", Score: 13}, {Ability: "Dexterity", Score: 13}},
+		Ability:  []AbilityScoreRequirements{{Ability: "Strength", Score: 13}, {Ability: "Dexterity", Score: 13}},
 		Armors:   []string{},
 		Category: "General",
 		Features: []string{},
@@ -488,7 +488,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Protection": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "Fighting Style",
 		Features: []string{"Fighting Style"},
@@ -497,7 +497,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Resilient": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "General",
 		Features: []string{},
@@ -506,7 +506,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Ritual Caster": {
-		Ability:  []AbilityRequirement{{Ability: "Intelligence", Score: 13}, {Ability: "Wisdom", Score: 13}, {Ability: "Charisma", Score: 13}},
+		Ability:  []AbilityScoreRequirements{{Ability: "Intelligence", Score: 13}, {Ability: "Wisdom", Score: 13}, {Ability: "Charisma", Score: 13}},
 		Armors:   []string{},
 		Category: "General",
 		Features: []string{},
@@ -515,7 +515,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Savage Attacker": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "Origin",
 		Features: []string{},
@@ -524,7 +524,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Sentinel": {
-		Ability:  []AbilityRequirement{{Ability: "Strength", Score: 13}, {Ability: "Dexterity", Score: 13}},
+		Ability:  []AbilityScoreRequirements{{Ability: "Strength", Score: 13}, {Ability: "Dexterity", Score: 13}},
 		Armors:   []string{},
 		Category: "General",
 		Features: []string{},
@@ -533,7 +533,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Shadow-Touched": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "General",
 		Features: []string{},
@@ -542,7 +542,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Sharpshooter": {
-		Ability:  []AbilityRequirement{{Ability: "Dexterity", Score: 13}},
+		Ability:  []AbilityScoreRequirements{{Ability: "Dexterity", Score: 13}},
 		Armors:   []string{},
 		Category: "General",
 		Features: []string{},
@@ -551,7 +551,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Shield Master": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{"Shield"},
 		Category: "General",
 		Features: []string{},
@@ -560,7 +560,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Skilled": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "Origin",
 		Features: []string{},
@@ -569,7 +569,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Skill Expert": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "General",
 		Features: []string{},
@@ -578,7 +578,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Skulker": {
-		Ability:  []AbilityRequirement{{Ability: "Dexterity", Score: 13}},
+		Ability:  []AbilityScoreRequirements{{Ability: "Dexterity", Score: 13}},
 		Armors:   []string{},
 		Features: []string{},
 		Category: "General",
@@ -587,7 +587,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Slasher": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "General",
 		Features: []string{},
@@ -596,7 +596,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Speedy": {
-		Ability:  []AbilityRequirement{{Ability: "Dexterity", Score: 13}, {Ability: "Constitution", Score: 13}},
+		Ability:  []AbilityScoreRequirements{{Ability: "Dexterity", Score: 13}, {Ability: "Constitution", Score: 13}},
 		Armors:   []string{},
 		Category: "General",
 		Features: []string{},
@@ -605,7 +605,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Spell Sniper": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "General",
 		Features: []string{"Spellcasting", "Pact Magic"},
@@ -614,7 +614,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Tavern Brawler": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "Origin",
 		Features: []string{},
@@ -623,7 +623,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Telekinetic": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "General",
 		Features: []string{},
@@ -632,7 +632,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Telepathic": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "General",
 		Features: []string{},
@@ -641,7 +641,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Thrown Weapon Fighting": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "Fighting Style",
 		Features: []string{"Fighting Style"},
@@ -650,7 +650,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Tough": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Features: []string{},
 		Category: "Origin",
@@ -659,7 +659,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Two-Weapon Fighting": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "Fighting Style",
 		Features: []string{"Fighting Style"},
@@ -668,7 +668,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Unarmed Fighting": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "Fighting Style",
 		Features: []string{"Fighting Style"},
@@ -677,7 +677,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"War Caster": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "General",
 		Features: []string{"Spellcasting", "Pact Magic"},
@@ -686,7 +686,7 @@ var characterFeats = map[string]Feat{
 		Weapons:  []string{},
 	},
 	"Weapon Master": {
-		Ability:  []AbilityRequirement{},
+		Ability:  []AbilityScoreRequirements{},
 		Armors:   []string{},
 		Category: "General",
 		Features: []string{},
