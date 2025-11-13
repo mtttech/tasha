@@ -3,6 +3,11 @@ Copyright © 2025 Marcus Taylor <mtaylor9754@hotmail.com>
 */
 package d20
 
+import (
+	"maps"
+	"slices"
+)
+
 type AbilityScoreRequirements struct {
 	Ability string
 	Score   int
@@ -701,4 +706,20 @@ Returns a slice of ability score requirements by feat.
 */
 func GetAbilityScoreRequirementsByFeat(feat string) []AbilityScoreRequirements {
 	return characterFeats[feat].Ability
+}
+
+/*
+Returns a slice of DnD feats.
+*/
+func GetD20Feats(known_feats []string) []string {
+	feats := []string{}
+	for _, feat := range slices.Collect(maps.Keys(characterFeats)) {
+		// Already has this feat
+		if slices.Contains(known_feats, feat) {
+			continue
+		}
+		feats = append(feats, feat)
+	}
+	slices.Sort(feats)
+	return feats
 }
