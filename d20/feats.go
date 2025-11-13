@@ -6,6 +6,8 @@ package d20
 import (
 	"maps"
 	"slices"
+
+	"tasha/abilities"
 )
 
 type AbilityScoreRequirements struct {
@@ -702,16 +704,31 @@ var characterFeats = map[string]Feat{
 }
 
 /*
-Returns a slice of ability score requirements by feat.
+Returns a map of simplified ability/score values.
 */
-func GetAbilityScoreRequirementsByFeat(feat string) []AbilityScoreRequirements {
-	return characterFeats[feat].Ability
+func simplify_ability_scores(ability_scores map[string]abilities.AbilityScore) map[string]int {
+	simplified_scores := make(map[string]int)
+	for ability, values := range ability_scores {
+		simplified_scores[ability] = values.Score
+	}
+	return simplified_scores
+}
+
+/*
+Returns a map of ability/score requirements by feat.
+*/
+func GetAbilityScoreRequirementsByFeat(feat string) map[string]int {
+	requirements := make(map[string]int)
+	for _, values := range characterFeats[feat].Ability {
+		requirements[values.Ability] = values.Score
+	}
+	return requirements
 }
 
 /*
 Returns a slice of DnD feats.
 */
-func GetD20Feats(known_feats []string) []string {
+func GetD20Feats(ability_scores map[string]abilities.AbilityScore, known_feats []string) []string {
 	feats := []string{}
 	for _, feat := range slices.Collect(maps.Keys(characterFeats)) {
 		// Already has this feat
