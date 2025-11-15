@@ -728,26 +728,25 @@ func GetD20Feats(ability_scores map[string]abilities.AbilityScore, known_feats [
 			continue
 		}
 		// Check ability score requirements
-		feat_requirements := GetAbilityScoreRequirementsByFeat(feat)
-		if len(feat_requirements) == 0 {
-			continue
-		}
-		if feat == "Polearm Master" || feat == "Sentinel" {
-			if ability_scores["Dexterity"].Score < feat_requirements["Dexterity"] && ability_scores["Strength"].Score < feat_requirements["Strength"] {
-				continue
-			}
-		} else if feat == "Ritual Caster" {
-			if ability_scores["Charisma"].Score < feat_requirements["Charisma"] && ability_scores["Intelligence"].Score < feat_requirements["Intelligence"] && ability_scores["Wisdom"].Score < feat_requirements["Wisdom"] {
-				continue
-			}
-		} else if feat == "Speedy" {
-			if ability_scores["Dexterity"].Score < feat_requirements["Dexterity"] && ability_scores["Constitution"].Score < feat_requirements["Constitution"] {
-				continue
-			}
-		} else {
-			for _, ability := range slices.Collect(maps.Keys(feat_requirements)) {
-				if ability_scores[ability].Score < feat_requirements[ability] {
+		ability_requirements := GetAbilityScoreRequirementsByFeat(feat)
+		if len(ability_requirements) != 0 {
+			if feat == "Polearm Master" || feat == "Sentinel" {
+				if ability_scores["Dexterity"].Score < ability_requirements["Dexterity"] && ability_scores["Strength"].Score < ability_requirements["Strength"] {
 					continue
+				}
+			} else if feat == "Ritual Caster" {
+				if ability_scores["Charisma"].Score < ability_requirements["Charisma"] && ability_scores["Intelligence"].Score < ability_requirements["Intelligence"] && ability_scores["Wisdom"].Score < ability_requirements["Wisdom"] {
+					continue
+				}
+			} else if feat == "Speedy" {
+				if ability_scores["Dexterity"].Score < ability_requirements["Dexterity"] && ability_scores["Constitution"].Score < ability_requirements["Constitution"] {
+					continue
+				}
+			} else {
+				for _, ability := range slices.Collect(maps.Keys(ability_requirements)) {
+					if ability_scores[ability].Score < ability_requirements[ability] {
+						continue
+					}
 				}
 			}
 		}
