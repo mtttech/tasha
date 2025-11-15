@@ -720,7 +720,7 @@ func GetAbilityScoreRequirementsByFeat(feat string) map[string]int {
 /*
 Returns a slice of DnD feats.
 */
-func GetD20Feats(class string, ability_scores map[string]abilities.AbilityScore, known_feats []string) []string {
+func GetD20Feats(ability_scores map[string]abilities.AbilityScore, known_feats []string) []string {
 	feats := []string{}
 	for _, feat := range slices.Collect(maps.Keys(characterFeats)) {
 		// Already possesses this feat
@@ -729,16 +729,25 @@ func GetD20Feats(class string, ability_scores map[string]abilities.AbilityScore,
 		}
 		// Check ability score requirements
 		feat_requirements := GetAbilityScoreRequirementsByFeat(feat)
-		if len(feat_requirements) > 0 {
-			if feat == "Ritual Caster" {
-				if ability_scores["Charisma"].Score < feat_requirements["Charisma"] || ability_scores["Intelligence"].Score < feat_requirements["Intelligence"] || ability_scores["Wisdom"].Score < feat_requirements["Wisdom"] {
+		if len(feat_requirements) == 0 {
+			continue
+		}
+		if feat == "Polearm Master" || feat == "Sentinel" {
+			if ability_scores["Dexterity"].Score < feat_requirements["Dexterity"] && ability_scores["Strength"].Score < feat_requirements["Strength"] {
+				continue
+			}
+		} else if feat == "Ritual Caster" {
+			if ability_scores["Charisma"].Score < feat_requirements["Charisma"] && ability_scores["Intelligence"].Score < feat_requirements["Intelligence"] && ability_scores["Wisdom"].Score < feat_requirements["Wisdom"] {
+				continue
+			}
+		} else if feat == "Speedy" {
+			if ability_scores["Dexterity"].Score < feat_requirements["Dexterity"] && ability_scores["Constitution"].Score < feat_requirements["Constitution"] {
+				continue
+			}
+		} else {
+			for _, ability := range slices.Collect(maps.Keys(feat_requirements)) {
+				if ability_scores[ability].Score < feat_requirements[ability] {
 					continue
-				}
-			} else {
-				for _, ability := range slices.Collect(maps.Keys(feat_requirements)) {
-					if ability_scores[ability].Score < feat_requirements[ability] {
-						continue
-					}
 				}
 			}
 		}
