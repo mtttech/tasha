@@ -720,11 +720,11 @@ func GetAbilityScoreRequirementsByFeat(feat string) map[string]int {
 /*
 Returns a slice of DnD feats.
 */
-func GetD20Feats(ability_scores map[string]abilities.AbilityScore, known_feats []string) []string {
+func GetD20Feats(level int, ability_scores map[string]abilities.AbilityScore, known_feats []string) []string {
 	feats := []string{}
 	for _, feat := range slices.Collect(maps.Keys(characterFeats)) {
 		// Already possesses this feat
-		if slices.Contains(known_feats, feat) {
+		if feat != "Ability Score Improvement" && slices.Contains(known_feats, feat) {
 			continue
 		}
 		// Check ability score requirements
@@ -758,6 +758,10 @@ func GetD20Feats(ability_scores map[string]abilities.AbilityScore, known_feats [
 					}
 				}
 			}
+		}
+		// Check character level requirements
+		if level < characterFeats[feat].Level {
+			continue
 		}
 		feats = append(feats, feat)
 	}
