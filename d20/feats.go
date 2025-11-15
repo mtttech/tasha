@@ -730,19 +730,28 @@ func GetD20Feats(ability_scores map[string]abilities.AbilityScore, known_feats [
 		// Check ability score requirements
 		ability_requirements := GetAbilityScoreRequirementsByFeat(feat)
 		if len(ability_requirements) != 0 {
-			if feat == "Polearm Master" || feat == "Sentinel" {
+			switch feat {
+			case "Athlete", "Charger", "Dual Wielder", "Grappler", "Polearm Master", "Sentinel":
 				if ability_scores["Dexterity"].Score < ability_requirements["Dexterity"] && ability_scores["Strength"].Score < ability_requirements["Strength"] {
 					continue
 				}
-			} else if feat == "Ritual Caster" {
+			case "Inspiring Leader":
+				if ability_scores["Charisma"].Score < ability_requirements["Charisma"] && ability_scores["Wisdom"].Score < ability_requirements["Wisdom"] {
+					continue
+				}
+			case "Observant":
+				if ability_scores["Intelligence"].Score < ability_requirements["Intelligence"] && ability_scores["Wisdom"].Score < ability_requirements["Wisdom"] {
+					continue
+				}
+			case "Ritual Caster":
 				if ability_scores["Charisma"].Score < ability_requirements["Charisma"] && ability_scores["Intelligence"].Score < ability_requirements["Intelligence"] && ability_scores["Wisdom"].Score < ability_requirements["Wisdom"] {
 					continue
 				}
-			} else if feat == "Speedy" {
+			case "Speedy":
 				if ability_scores["Dexterity"].Score < ability_requirements["Dexterity"] && ability_scores["Constitution"].Score < ability_requirements["Constitution"] {
 					continue
 				}
-			} else {
+			default:
 				for _, ability := range slices.Collect(maps.Keys(ability_requirements)) {
 					if ability_scores[ability].Score < ability_requirements[ability] {
 						continue
