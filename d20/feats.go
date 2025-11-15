@@ -516,7 +516,7 @@ var characterFeats = map[string]Feat{
 		Ability:  []AbilityScoreRequirements{{Ability: "Intelligence", Score: 13}, {Ability: "Wisdom", Score: 13}, {Ability: "Charisma", Score: 13}},
 		Armors:   []string{},
 		Category: "General",
-		Features: []string{},
+		Features: []string{"Pact Magic", "Spellcasting"},
 		Level:    4,
 		Tools:    []string{},
 		Weapons:  []string{},
@@ -704,23 +704,15 @@ var characterFeats = map[string]Feat{
 }
 
 /*
-Returns a map of simplified ability/score values.
-*/
-func simplify_ability_scores(ability_scores map[string]abilities.AbilityScore) map[string]int {
-	simplified_scores := make(map[string]int)
-	for ability, values := range ability_scores {
-		simplified_scores[ability] = values.Score
-	}
-	return simplified_scores
-}
-
-/*
 Returns a map of ability/score requirements by feat.
 */
 func GetAbilityScoreRequirementsByFeat(feat string) map[string]int {
 	requirements := make(map[string]int)
-	for _, values := range characterFeats[feat].Ability {
-		requirements[values.Ability] = values.Score
+	required_abilities := characterFeats[feat].Ability
+	if len(required_abilities) > 0 {
+		for _, values := range required_abilities {
+			requirements[values.Ability] = values.Score
+		}
 	}
 	return requirements
 }
@@ -728,12 +720,27 @@ func GetAbilityScoreRequirementsByFeat(feat string) map[string]int {
 /*
 Returns a slice of DnD feats.
 */
-func GetD20Feats(ability_scores map[string]abilities.AbilityScore, known_feats []string) []string {
+func GetD20Feats(class string, ability_scores map[string]abilities.AbilityScore, known_feats []string) []string {
 	feats := []string{}
 	for _, feat := range slices.Collect(maps.Keys(characterFeats)) {
-		// Already has this feat
+		// Already possesses this feat
 		if slices.Contains(known_feats, feat) {
 			continue
+		}
+		// Check ability score requirements
+		feat_requirements := GetAbilityScoreRequirementsByFeat(feat)
+		if len(feat_requirements) > 0 {
+			if feat == "Ritual Caster" {
+				if ability_scores["Charisma"].Score < feat_requirements["Charisma"] || ability_scores["Intelligence"].Score < feat_requirements["Intelligence"] || ability_scores["Wisdom"].Score < feat_requirements["Wisdom"] {
+					continue
+				}
+			} else {
+				for _, ability := range slices.Collect(maps.Keys(feat_requirements)) {
+					if ability_scores[ability].Score < feat_requirements[ability] {
+						continue
+					}
+				}
+			}
 		}
 		feats = append(feats, feat)
 	}
