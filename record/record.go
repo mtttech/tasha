@@ -20,5 +20,6 @@ type CharacterSheetTOMLSchema struct {
 		Features      []string                          `toml:"features"`
 		Weapons       []string                          `toml:"weapons"`
 		Skills        []string                          `toml:"skills"`
+		Feats         []string                          `toml:"feats"`
 	}
 }
