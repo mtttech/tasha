@@ -704,12 +704,27 @@ var characterFeats = map[string]Feat{
 }
 
 /*
+Returns true if character meet features requirement for the specified feat.
+*/
+func has_feature(feat string, known_features []string) bool {
+	for _, feature := range characterFeats[feat].Features {
+		if slices.Contains(known_features, feature) {
+			return true
+		}
+	}
+	return false
+}
+
+/*
 Returns a map of ability/score requirements by feat.
 */
 func GetAbilityScoreRequirementsByFeat(feat string) map[string]int {
 	requirements := make(map[string]int)
 	required_abilities := characterFeats[feat].Ability
 	if len(required_abilities) > 0 {
+		/*
+			Returns a map of ability/score requirements by feat.
+		*/
 		for _, values := range required_abilities {
 			requirements[values.Ability] = values.Score
 		}
@@ -720,7 +735,7 @@ func GetAbilityScoreRequirementsByFeat(feat string) map[string]int {
 /*
 Returns a slice of DnD feats.
 */
-func GetD20Feats(level int, ability_scores map[string]abilities.AbilityScore, known_feats []string) []string {
+func GetD20Feats(level int, ability_scores map[string]abilities.AbilityScore, known_feats []string, known_features []string) []string {
 	feats := []string{}
 	for _, feat := range slices.Collect(maps.Keys(characterFeats)) {
 		// Already possesses this feat
@@ -758,6 +773,10 @@ func GetD20Feats(level int, ability_scores map[string]abilities.AbilityScore, kn
 					}
 				}
 			}
+		}
+		// Check features requirements
+		if !has_feature(feat, known_features) {
+			continue
 		}
 		// Check character level requirements
 		if level < characterFeats[feat].Level {
