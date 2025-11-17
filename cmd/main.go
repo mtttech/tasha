@@ -59,6 +59,7 @@ func Tasha(cmd *cobra.Command, args []string) {
 	assignedGender := Menu("Select your gender", []string{"Female", "Male"}).(string)
 	// Assign your background
 	assignedBackground := Menu("Select your background", d20.GetD20Backgrounds()).(string)
+	assignedFeats := d20.GetFeatByBackground(assignedBackground)
 	// Assign your ability scores
 	assignedAbilityScores := AssignAbilityScores(assignedBackground)
 	// Assign your class, features, and skills
@@ -76,6 +77,7 @@ func Tasha(cmd *cobra.Command, args []string) {
 	schema.PC.Features = assignedFeatures
 	schema.PC.Weapons = assignedWeapons
 	schema.PC.Skills = assignedSkills
+	schema.PC.Feats = assignedFeats
 	characterName := strings.ToLower(strings.Replace(assignedName, " ", "_", 1))
 	fp, err := os.Create(fmt.Sprintf("%s.toml", characterName))
 	if err != nil {
