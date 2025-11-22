@@ -423,8 +423,8 @@ var characterClasses = map[string]Classes{
 /*
 Returns a slice of armor proficiencies by class.
 */
-func GetArmorsByClass(class string) []string {
-	return characterClasses[class].Armors
+func GetArmorsByClass(c string) []string {
+	return characterClasses[c].Armors
 }
 
 /*
@@ -439,10 +439,10 @@ func GetD20Classes() []string {
 /*
 Returns a slice of class features by class and level.
 */
-func GetFeaturesByClass(class string, player_level int) []string {
+func GetFeaturesByClass(c string, l int) []string {
 	class_features := []string{}
-	for level, features := range characterClasses[class].Features {
-		if player_level >= level {
+	for level, features := range characterClasses[c].Features {
+		if l >= level {
 			class_features = append(class_features, features...)
 		}
 	}
@@ -453,16 +453,16 @@ func GetFeaturesByClass(class string, player_level int) []string {
 /*
 Returns hit die by class.
 */
-func GetHitDieByClass(class string) int {
-	return characterClasses[class].HitDie
+func GetHitDieByClass(c string) int {
+	return characterClasses[c].HitDie
 }
 
 /*
 Returns level slices from 1 to max.
 */
-func GetLevelSlices(max int) []int {
+func GetLevelSlices(m int) []int {
 	var levels []int
-	for i := 1; i <= max; i++ {
+	for i := 1; i <= m; i++ {
 		levels = append(levels, i)
 	}
 	return levels
@@ -471,26 +471,26 @@ func GetLevelSlices(max int) []int {
 /*
 Returns a slice of saving throws by class.
 */
-func GetSavingThrowsByClass(class string) []string {
-	return characterClasses[class].Subclasses
+func GetSavingThrowsByClass(c string) []string {
+	return characterClasses[c].Subclasses
 }
 
 /*
 Gets the number of skill points by class.
 */
-func GetSkillPointsByClass(class string, is_primary_class bool) int {
+func GetSkillPointsByClass(c string, p bool) int {
 	allotted_skills := 0
-	switch class {
+	switch c {
 	case "Rogue":
 		allotted_skills = 4
 	case "Bard", "Ranger":
-		if is_primary_class {
+		if p {
 			allotted_skills = 3
 		} else {
 			allotted_skills = 1
 		}
 	default:
-		if is_primary_class {
+		if p {
 			allotted_skills = 2
 		}
 	}
@@ -500,20 +500,31 @@ func GetSkillPointsByClass(class string, is_primary_class bool) int {
 /*
 Returns a slice of subclasses by class.
 */
-func GetSubclassesByClass(class string) []string {
-	return characterClasses[class].Subclasses
+func GetSubclassesByClass(c string) []string {
+	return characterClasses[c].Subclasses
 }
 
 /*
 Returns a slice of tool proficiencies by class.
 */
-func GetToolsByClass(class string) []string {
-	return characterClasses[class].Tools
+func GetToolsByClass(c string) []string {
+	return characterClasses[c].Tools
+}
+
+/*
+Returns a slice of tool proficiencies by class.
+*/
+func GetTotalLevel(c map[string]Class) int {
+	totalLevel := 0
+	for _, class := range c {
+		totalLevel += class.Level
+	}
+	return totalLevel
 }
 
 /*
 Returns a slice of weapon proficiencies by class.
 */
-func GetWeaponsByClass(class string) []string {
-	return characterClasses[class].Weapons
+func GetWeaponsByClass(c string) []string {
+	return characterClasses[c].Weapons
 }

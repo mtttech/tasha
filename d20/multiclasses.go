@@ -95,19 +95,19 @@ var characterMulticlasses = map[string]Multiclass{
 /*
 Checks if character can multiclass to the specified class.
 */
-func can_multiclass_to_class(class string, ability_scores map[string]abilities.AbilityScore) bool {
-	abilities := characterMulticlasses[class].Ability
-	switch class {
+func can_multiclass_to_class(c string, s map[string]abilities.AbilityScore) bool {
+	abilities := characterMulticlasses[c].Ability
+	switch c {
 	case "Fighter":
-		if ability_scores["Strength"].Score >= 13 || ability_scores["Dexterity"].Score >= 13 {
+		if s["Strength"].Score >= 13 || s["Dexterity"].Score >= 13 {
 			return true
 		}
 	case "Monk", "Paladin", "Ranger":
-		if ability_scores[abilities[0]].Score >= 13 && ability_scores[abilities[1]].Score >= 13 {
+		if s[abilities[0]].Score >= 13 && s[abilities[1]].Score >= 13 {
 			return true
 		}
 	default:
-		if ability_scores[abilities[0]].Score >= 13 {
+		if s[abilities[0]].Score >= 13 {
 			return true
 		}
 	}
@@ -118,12 +118,12 @@ func can_multiclass_to_class(class string, ability_scores map[string]abilities.A
 /*
 Returns a slice of valid multiclass options.
 */
-func GetValidMulticlassOptions(ability_scores map[string]abilities.AbilityScore) []string {
+func GetValidMulticlassOptions(s map[string]abilities.AbilityScore) []string {
 	valid_class_options := []string{}
 	classes := slices.Collect(maps.Keys(characterMulticlasses))
 	slices.Sort(classes)
 	for _, new_class := range classes {
-		if can_multiclass_to_class(new_class, ability_scores) {
+		if can_multiclass_to_class(new_class, s) {
 			valid_class_options = append(valid_class_options, new_class)
 		}
 	}
