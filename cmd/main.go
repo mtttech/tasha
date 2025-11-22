@@ -73,6 +73,7 @@ func Tasha(cmd *cobra.Command, args []string) {
 	schema.PC.Background = assignedBackground
 	schema.PC.AbilityScores = assignedAbilityScores
 	schema.PC.Class = assignedClass
+	schema.PC.Level = d20.GetTotalLevel(assignedClass)
 	schema.PC.Armors = assignedArmors
 	schema.PC.Features = assignedFeatures
 	schema.PC.Weapons = assignedWeapons
@@ -98,7 +99,7 @@ func init() {
 /*
 Assign ability scores.
 */
-func AssignAbilityScores(background string) map[string]abilities.AbilityScore {
+func AssignAbilityScores(b string) map[string]abilities.AbilityScore {
 	abilityOptions := []string{
 		"Strength",
 		"Dexterity",
@@ -116,7 +117,7 @@ func AssignAbilityScores(background string) map[string]abilities.AbilityScore {
 	}
 	// Apply background ability bonuses
 	backgroundBonus := Menu("Choose your background bonus array", []string{"2/1", "1/1/1"})
-	backgroundAbilities := d20.GetAbilitiesByBackground(background)
+	backgroundAbilities := d20.GetAbilitiesByBackground(b)
 	if backgroundBonus == "2/1" {
 		bonusValue := 2
 		for i := 1; i <= 2; i++ {
@@ -140,7 +141,7 @@ func AssignAbilityScores(background string) map[string]abilities.AbilityScore {
 /*
 Assign character's ability score bonuses.
 */
-func AssignASIBonus(ability_scores map[string]abilities.AbilityScore) map[string]abilities.AbilityScore {
+func AssignASIBonus(s map[string]abilities.AbilityScore) map[string]abilities.AbilityScore {
 	abilityOptions := []string{
 		"Strength",
 		"Dexterity",
@@ -153,25 +154,25 @@ func AssignASIBonus(ability_scores map[string]abilities.AbilityScore) map[string
 	bonusValue, _ := strconv.Atoi(asiBonus.(string))
 	if bonusValue == 2 {
 		ability := Menu(fmt.Sprintf("Which ability do you want to upgrade by +%d", bonusValue), abilityOptions).(string)
-		newScore := ability_scores[ability].Score + bonusValue
-		abilities.UpdateAbilityScore(ability_scores, ability, newScore)
+		newScore := s[ability].Score + bonusValue
+		abilities.UpdateAbilityScore(s, ability, newScore)
 		fmt.Printf("A +%d bonus was applied to your %s ability score.\n", bonusValue, ability)
 	} else {
 		for i := 1; i <= 2; i++ {
 			ability := Menu(fmt.Sprintf("Which ability do you want to upgrade by +%d", bonusValue), abilityOptions).(string)
 			abilityOptions = OmitNeedleFromHaystack(abilityOptions, ability)
-			new_score := ability_scores[ability].Score + 1
-			abilities.UpdateAbilityScore(ability_scores, ability, new_score)
+			new_score := s[ability].Score + 1
+			abilities.UpdateAbilityScore(s, ability, new_score)
 			fmt.Printf("A +1 bonus was applied to your %s ability score.\n", ability)
 		}
 	}
-	return ability_scores
+	return s
 }
 
 /*
 Assign character's classes and skills.
 */
-func AssignCharacterClass(background string, ability_scores map[string]abilities.AbilityScore) (map[string]d20.Class, []string, []string, []string, []string) {
+func AssignCharacterClass(b string, s map[string]abilities.AbilityScore) (map[string]d20.Class, []string, []string, []string, []string) {
 	assignedArmors := []string{}
 	var assignedClass string
 	assignedClasses := make(map[string]d20.Class)
@@ -184,7 +185,7 @@ func AssignCharacterClass(background string, ability_scores map[string]abilities
 	singleClassOptions := d20.GetD20Classes()
 	// Populate multiClassOptions, if applicable
 	if len(multiClassOptions) == 0 {
-		multiClassOptions = d20.GetValidMulticlassOptions(ability_scores)
+		multiClassOptions = d20.GetValidMulticlassOptions(s)
 	}
 	// Select your class(es)
 	for {
@@ -216,7 +217,7 @@ func AssignCharacterClass(background string, ability_scores map[string]abilities
 		assignedWeapons = append(assignedWeapons, d20.GetWeaponsByClass(assignedClass)...)
 		// Assign your class skills
 		if !isMulticlassed {
-			assignedSkills = AssignClassSkills(assignedClass, d20.GetSkillsByBackground(background), true)
+			assignedSkills = AssignClassSkills(assignedClass, d20.GetSkillsByBackground(b), true)
 		} else {
 			assignedSkills = AssignClassSkills(assignedClass, assignedSkills, false)
 		}
@@ -239,18 +240,18 @@ func AssignCharacterClass(background string, ability_scores map[string]abilities
 /*
 Assign class skills.
 */
-func AssignClassSkills(class string, omitted_skills []string, is_primary_class bool) []string {
-	assignedSkills := omitted_skills
-	classSkillList := d20.GetSkillsByClass(class)
+func AssignClassSkills(c string, s []string, p bool) []string {
+	assignedSkills := s
+	classSkillList := d20.GetSkillsByClass(c)
 	// Remove omitted skills.
-	for _, omitted_skill := range omitted_skills {
+	for _, omitted_skill := range s {
 		if slices.Contains(classSkillList, omitted_skill) {
 			classSkillList = OmitNeedleFromHaystack(classSkillList, omitted_skill)
 			fmt.Printf("The skill %s was omitted.", omitted_skill)
 		}
 	}
 	// Select class skills.
-	for i := 1; i <= d20.GetSkillPointsByClass(class, is_primary_class); i++ {
+	for i := 1; i <= d20.GetSkillPointsByClass(c, p); i++ {
 		skill := Menu("Choose a class skill", classSkillList).(string)
 		assignedSkills = append(assignedSkills, skill)
 		classSkillList = OmitNeedleFromHaystack(classSkillList, skill)
@@ -262,9 +263,9 @@ func AssignClassSkills(class string, omitted_skills []string, is_primary_class b
 /*
 Confirm menu wrapper.
 */
-func ConfirmMenu(label string) bool {
+func ConfirmMenu(l string) bool {
 	prompt := promptui.Select{
-		Label: label,
+		Label: l,
 		Items: []string{"Yes", "No"},
 	}
 	_, selection, _ := prompt.Run()
@@ -278,10 +279,10 @@ func ConfirmMenu(label string) bool {
 /*
 Select wrapper function which accepts slices of strings or intergers.
 */
-func Menu[T comparable](label string, options []T) any {
+func Menu[T comparable](l string, o []T) any {
 	prompt := promptui.Select{
-		Label: label,
-		Items: options,
+		Label: l,
+		Items: o,
 	}
 	_, selection, _ := prompt.Run()
 	result, err := strconv.Atoi(selection)
@@ -295,11 +296,11 @@ func Menu[T comparable](label string, options []T) any {
 /*
 Returns the given haystack minus the first instance of needle.
 */
-func OmitNeedleFromHaystack[T comparable](haystack []T, needle T) []T {
+func OmitNeedleFromHaystack[T comparable](h []T, n T) []T {
 	needleFound := false
 	updatedHaystack := []T{}
-	for _, obj := range haystack {
-		if !needleFound && needle == obj {
+	for _, obj := range h {
+		if !needleFound && n == obj {
 			needleFound = true
 		} else {
 			updatedHaystack = append(updatedHaystack, obj)
