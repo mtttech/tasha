@@ -706,9 +706,9 @@ var characterFeats = map[string]Feat{
 /*
 Returns true if character meet features requirement for the specified feat.
 */
-func has_feature(feat string, known_features []string) bool {
-	for _, feature := range characterFeats[feat].Features {
-		if slices.Contains(known_features, feature) {
+func has_feature(f string, k []string) bool {
+	for _, feature := range characterFeats[f].Features {
+		if slices.Contains(k, feature) {
 			return true
 		}
 	}
@@ -718,9 +718,9 @@ func has_feature(feat string, known_features []string) bool {
 /*
 Returns a map of ability/score requirements by feat.
 */
-func GetAbilityScoreRequirementsByFeat(feat string) map[string]int {
+func GetAbilityScoreRequirementsByFeat(f string) map[string]int {
 	requirements := make(map[string]int)
-	required_abilities := characterFeats[feat].Ability
+	required_abilities := characterFeats[f].Ability
 	if len(required_abilities) > 0 {
 		/*
 			Returns a map of ability/score requirements by feat.
@@ -735,11 +735,11 @@ func GetAbilityScoreRequirementsByFeat(feat string) map[string]int {
 /*
 Returns a slice of DnD feats.
 */
-func GetD20Feats(level int, ability_scores map[string]abilities.AbilityScore, known_feats []string, known_features []string) []string {
+func GetD20Feats(l int, s map[string]abilities.AbilityScore, f []string, c []string) []string {
 	feats := []string{}
 	for _, feat := range slices.Collect(maps.Keys(characterFeats)) {
 		// Already possesses this feat
-		if feat != "Ability Score Improvement" && slices.Contains(known_feats, feat) {
+		if feat != "Ability Score Improvement" && slices.Contains(f, feat) {
 			continue
 		}
 		// Check ability score requirements
@@ -747,39 +747,39 @@ func GetD20Feats(level int, ability_scores map[string]abilities.AbilityScore, kn
 		if len(ability_requirements) != 0 {
 			switch feat {
 			case "Athlete", "Charger", "Dual Wielder", "Grappler", "Polearm Master", "Sentinel":
-				if ability_scores["Dexterity"].Score < ability_requirements["Dexterity"] && ability_scores["Strength"].Score < ability_requirements["Strength"] {
+				if s["Dexterity"].Score < ability_requirements["Dexterity"] && s["Strength"].Score < ability_requirements["Strength"] {
 					continue
 				}
 			case "Inspiring Leader":
-				if ability_scores["Charisma"].Score < ability_requirements["Charisma"] && ability_scores["Wisdom"].Score < ability_requirements["Wisdom"] {
+				if s["Charisma"].Score < ability_requirements["Charisma"] && s["Wisdom"].Score < ability_requirements["Wisdom"] {
 					continue
 				}
 			case "Observant":
-				if ability_scores["Intelligence"].Score < ability_requirements["Intelligence"] && ability_scores["Wisdom"].Score < ability_requirements["Wisdom"] {
+				if s["Intelligence"].Score < ability_requirements["Intelligence"] && s["Wisdom"].Score < ability_requirements["Wisdom"] {
 					continue
 				}
 			case "Ritual Caster":
-				if ability_scores["Charisma"].Score < ability_requirements["Charisma"] && ability_scores["Intelligence"].Score < ability_requirements["Intelligence"] && ability_scores["Wisdom"].Score < ability_requirements["Wisdom"] {
+				if s["Charisma"].Score < ability_requirements["Charisma"] && s["Intelligence"].Score < ability_requirements["Intelligence"] && s["Wisdom"].Score < ability_requirements["Wisdom"] {
 					continue
 				}
 			case "Speedy":
-				if ability_scores["Dexterity"].Score < ability_requirements["Dexterity"] && ability_scores["Constitution"].Score < ability_requirements["Constitution"] {
+				if s["Dexterity"].Score < ability_requirements["Dexterity"] && s["Constitution"].Score < ability_requirements["Constitution"] {
 					continue
 				}
 			default:
 				for _, ability := range slices.Collect(maps.Keys(ability_requirements)) {
-					if ability_scores[ability].Score < ability_requirements[ability] {
+					if s[ability].Score < ability_requirements[ability] {
 						continue
 					}
 				}
 			}
 		}
 		// Check features requirements
-		if !has_feature(feat, known_features) {
+		if !has_feature(feat, c) {
 			continue
 		}
 		// Check character level requirements
-		if level < characterFeats[feat].Level {
+		if l < characterFeats[feat].Level {
 			continue
 		}
 		feats = append(feats, feat)

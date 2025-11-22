@@ -88,14 +88,14 @@ var characterSkills = map[string]Skills{
 /*
 Returns a slice of skills by class.
 */
-func GetSkillsByClass(class string) []string {
-	class_skills := []string{}
+func GetSkillsByClass(c string) []string {
+	classSkills := []string{}
 	for skill := range characterSkills {
-		if slices.Contains(characterSkills[skill].Classes, class) {
-			class_skills = append(class_skills, skill)
+		if slices.Contains(characterSkills[skill].Classes, c) {
+			classSkills = append(classSkills, skill)
 		}
 	}
 
-	slices.Sort(class_skills)
-	return class_skills
+	slices.Sort(classSkills)
+	return classSkills
 }

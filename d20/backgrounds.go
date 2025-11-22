@@ -172,8 +172,8 @@ var characterBackgrounds = map[string]Background{
 /*
 Returns a slice of abilities by background.
 */
-func GetAbilitiesByBackground(background string) []string {
-	return characterBackgrounds[background].Ability
+func GetAbilitiesByBackground(b string) []string {
+	return characterBackgrounds[b].Ability
 }
 
 /*
@@ -188,20 +188,20 @@ func GetD20Backgrounds() []string {
 /*
 Returns a slice of feats by background.
 */
-func GetFeatByBackground(background string) []string {
-	return characterBackgrounds[background].Feats
+func GetFeatByBackground(b string) []string {
+	return characterBackgrounds[b].Feats
 }
 
 /*
 Returns a slice of skills by background.
 */
-func GetSkillsByBackground(background string) []string {
-	return characterBackgrounds[background].Skills
+func GetSkillsByBackground(b string) []string {
+	return characterBackgrounds[b].Skills
 }
 
 /*
 Returns a slice of tools by background.
 */
-func GetToolsByBackground(background string) []string {
-	return characterBackgrounds[background].Tools
+func GetToolsByBackground(b string) []string {
+	return characterBackgrounds[b].Tools
 }
