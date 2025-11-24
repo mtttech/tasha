@@ -54,18 +54,18 @@ func roll_six() []int {
 }
 
 /*
-Calculates modifier value for the specified score.
+Calculates the modifier of s.
 
-Formula: score - 10 / 2
+Formula: (score - 10) / 2
 */
-func CalculateModifier(score int) int {
-	return (score - 10) / 2
+func CalculateModifier(s int) int {
+	return (s - 10) / 2
 }
 
 /*
-Generates six random attributes.
+Generates six random ability scores.
 
-Will automatically reroll the results if one of the following is true:
+Will automatically reroll the results if one or both of the following is true:
 
  1. If the smallest attribute < 8
  2. If the largest attribute < 15
@@ -84,11 +84,11 @@ func GenerateScores() []int {
 }
 
 /*
-Updates ability score/modifier in the specified map.
+Updates the ability scores map m by key k with the value v.
 */
-func UpdateAbilityScore(ability_score_map map[string]AbilityScore, ability string, new_score int) {
-	ability_score_map[ability] = AbilityScore{
-		Score:    new_score,
-		Modifier: CalculateModifier(new_score),
+func UpdateAbilityScore(m map[string]AbilityScore, k string, v int) {
+	m[k] = AbilityScore{
+		Score:    v,
+		Modifier: CalculateModifier(v),
 	}
 }
