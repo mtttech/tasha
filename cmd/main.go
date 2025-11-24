@@ -117,7 +117,7 @@ func AssignAbilityScores(b string) map[string]abilities.AbilityScore {
 	}
 	// Apply background ability bonuses
 	backgroundBonus := Menu("Choose your background bonus array", []string{"2/1", "1/1/1"})
-	backgroundAbilities := d20.GetAbilitiesByBackground(b)
+	backgroundAbilities := d20.GetAssociatedAbilitiesByBackground(b)
 	if backgroundBonus == "2/1" {
 		bonusValue := 2
 		for i := 1; i <= 2; i++ {
