@@ -9,23 +9,23 @@ import (
 )
 
 type Background struct {
-	Ability []string
-	Feats   []string
-	Skills  []string
-	Tools   []string
+	AssociatedAbilities []string
+	Feats               []string
+	Skills              []string
+	Tools               []string
 }
 
 var characterBackgrounds = map[string]Background{
 	"Acolyte": {
-		Ability: []string{"Intelligence", "Wisdom", "Charisma"},
-		Feats:   []string{"Magic Initiate"},
-		Skills:  []string{"Insight", "Religion"},
-		Tools:   []string{"Artisan's Tools - Cartographer's Supplies"},
+		AssociatedAbilities: []string{"Intelligence", "Wisdom", "Charisma"},
+		Feats:               []string{"Magic Initiate"},
+		Skills:              []string{"Insight", "Religion"},
+		Tools:               []string{"Artisan's Tools - Cartographer's Supplies"},
 	},
 	"Artisan": {
-		Ability: []string{"Strength", "Dexterity", "Intelligence"},
-		Feats:   []string{"Crafter"},
-		Skills:  []string{"Investigation", "Persuasion"},
+		AssociatedAbilities: []string{"Strength", "Dexterity", "Intelligence"},
+		Feats:               []string{"Crafter"},
+		Skills:              []string{"Investigation", "Persuasion"},
 		Tools: []string{
 			"Artisan's Tools - Alchemists supplies",
 			"Artisan's Tools - Brewer's supplies",
@@ -47,21 +47,21 @@ var characterBackgrounds = map[string]Background{
 		},
 	},
 	"Charlatan": {
-		Ability: []string{"Dexterity", "Constitution", "Charisma"},
-		Feats:   []string{"Skilled"},
-		Skills:  []string{"Deception", "Sleight of Hand"},
-		Tools:   []string{"Forgery Kit"},
+		AssociatedAbilities: []string{"Dexterity", "Constitution", "Charisma"},
+		Feats:               []string{"Skilled"},
+		Skills:              []string{"Deception", "Sleight of Hand"},
+		Tools:               []string{"Forgery Kit"},
 	},
 	"Criminal": {
-		Ability: []string{"Dexterity", "Constitution", "Intelligence"},
-		Feats:   []string{"Alert"},
-		Skills:  []string{"Deception", "Stealth"},
-		Tools:   []string{"Thieves' Tools"},
+		AssociatedAbilities: []string{"Dexterity", "Constitution", "Intelligence"},
+		Feats:               []string{"Alert"},
+		Skills:              []string{"Deception", "Stealth"},
+		Tools:               []string{"Thieves' Tools"},
 	},
 	"Entertainer": {
-		Ability: []string{"Strength", "Dexterity", "Charisma"},
-		Feats:   []string{"Musician"},
-		Skills:  []string{"Acrobatics", "Performance"},
+		AssociatedAbilities: []string{"Strength", "Dexterity", "Charisma"},
+		Feats:               []string{"Musician"},
+		Skills:              []string{"Acrobatics", "Performance"},
 		Tools: []string{
 			"Musical Instrument - Bagpipes",
 			"Musical Instrument - Birdpipes",
@@ -87,15 +87,15 @@ var characterBackgrounds = map[string]Background{
 		},
 	},
 	"Farmer": {
-		Ability: []string{"Strength", "Constitution", "Wisdom"},
-		Feats:   []string{"Tough"},
-		Skills:  []string{"Animal Handling", "Nature"},
-		Tools:   []string{"Artisan's Tools - Carpenter's Tools"},
+		AssociatedAbilities: []string{"Strength", "Constitution", "Wisdom"},
+		Feats:               []string{"Tough"},
+		Skills:              []string{"Animal Handling", "Nature"},
+		Tools:               []string{"Artisan's Tools - Carpenter's Tools"},
 	},
 	"Guard": {
-		Ability: []string{"Strength", "Intelligence", "Wisdom"},
-		Feats:   []string{"Alert"},
-		Skills:  []string{"Athletics", "Perception"},
+		AssociatedAbilities: []string{"Strength", "Intelligence", "Wisdom"},
+		Feats:               []string{"Alert"},
+		Skills:              []string{"Athletics", "Perception"},
 		Tools: []string{
 			"Gaming Set - Dice Set",
 			"Gaming Set - Dragonchess Set",
@@ -104,27 +104,27 @@ var characterBackgrounds = map[string]Background{
 		},
 	},
 	"Guide": {
-		Ability: []string{"Dexterity", "Constitution", "Wisdom"},
-		Feats:   []string{"Magic Initiate"},
-		Skills:  []string{"Stealth", "Survival"},
-		Tools:   []string{"Artisan's Tools - Cartographer's Tools"},
+		AssociatedAbilities: []string{"Dexterity", "Constitution", "Wisdom"},
+		Feats:               []string{"Magic Initiate"},
+		Skills:              []string{"Stealth", "Survival"},
+		Tools:               []string{"Artisan's Tools - Cartographer's Tools"},
 	},
 	"Hermit": {
-		Ability: []string{"Constitution", "Wisdom", "Charisma"},
-		Feats:   []string{"Healer"},
-		Skills:  []string{"Medicine", "Religion"},
-		Tools:   []string{"Herbalism kit"},
+		AssociatedAbilities: []string{"Constitution", "Wisdom", "Charisma"},
+		Feats:               []string{"Healer"},
+		Skills:              []string{"Medicine", "Religion"},
+		Tools:               []string{"Herbalism kit"},
 	},
 	"Merchant": {
-		Ability: []string{"Constitution", "Intelligence", "Charisma"},
-		Feats:   []string{"Lucky"},
-		Skills:  []string{"Animal Handling", "Persuasion"},
-		Tools:   []string{"Navigator's Tools"},
+		AssociatedAbilities: []string{"Constitution", "Intelligence", "Charisma"},
+		Feats:               []string{"Lucky"},
+		Skills:              []string{"Animal Handling", "Persuasion"},
+		Tools:               []string{"Navigator's Tools"},
 	},
 	"Noble": {
-		Ability: []string{"Strength", "Intelligence", "Charisma"},
-		Feats:   []string{"Skilled"},
-		Skills:  []string{"History", "Persuasion"},
+		AssociatedAbilities: []string{"Strength", "Intelligence", "Charisma"},
+		Feats:               []string{"Skilled"},
+		Skills:              []string{"History", "Persuasion"},
 		Tools: []string{
 			"Gaming Set - Dice Set",
 			"Gaming Set - Dragonchess Set",
@@ -133,15 +133,15 @@ var characterBackgrounds = map[string]Background{
 		},
 	},
 	"Sage": {
-		Ability: []string{"Constitution", "Intelligence", "Wisdom"},
-		Feats:   []string{"Magic Initiate"},
-		Skills:  []string{"Arcana", "History"},
-		Tools:   []string{"Artisan's Tools - Cartographer's Supplies"},
+		AssociatedAbilities: []string{"Constitution", "Intelligence", "Wisdom"},
+		Feats:               []string{"Magic Initiate"},
+		Skills:              []string{"Arcana", "History"},
+		Tools:               []string{"Artisan's Tools - Cartographer's Supplies"},
 	},
 	"Sailor": {
-		Ability: []string{"Strength", "Dexterity", "Wisdom"},
-		Feats:   []string{"Tavern Brawler"},
-		Skills:  []string{"Athletics", "Perception"},
+		AssociatedAbilities: []string{"Strength", "Dexterity", "Wisdom"},
+		Feats:               []string{"Tavern Brawler"},
+		Skills:              []string{"Athletics", "Perception"},
 		Tools: []string{
 			"Gaming Set - Dice Set",
 			"Gaming Set - Dragonchess Set",
@@ -150,22 +150,22 @@ var characterBackgrounds = map[string]Background{
 		},
 	},
 	"Scribe": {
-		Ability: []string{"Dexterity", "Intelligence", "Wisdom"},
-		Feats:   []string{"Skilled"},
-		Skills:  []string{"Investigation", "Perception"},
-		Tools:   []string{"Artisan's Tools - Cartographer's Supplies"},
+		AssociatedAbilities: []string{"Dexterity", "Intelligence", "Wisdom"},
+		Feats:               []string{"Skilled"},
+		Skills:              []string{"Investigation", "Perception"},
+		Tools:               []string{"Artisan's Tools - Cartographer's Supplies"},
 	},
 	"Soldier": {
-		Ability: []string{"Strength", "Dexterity", "Constitution"},
-		Feats:   []string{"Savage Attacker"},
-		Skills:  []string{"Athletics", "Intimidation"},
-		Tools:   []string{"Artisan's Tools - Cartographer's Supplies"},
+		AssociatedAbilities: []string{"Strength", "Dexterity", "Constitution"},
+		Feats:               []string{"Savage Attacker"},
+		Skills:              []string{"Athletics", "Intimidation"},
+		Tools:               []string{"Artisan's Tools - Cartographer's Supplies"},
 	},
 	"Wayfarer": {
-		Ability: []string{"Dexterity", "Wisdom", "Charisma"},
-		Feats:   []string{"Lucky"},
-		Skills:  []string{"Insight", "Stealth"},
-		Tools:   []string{"Thieves' Tools"},
+		AssociatedAbilities: []string{"Dexterity", "Wisdom", "Charisma"},
+		Feats:               []string{"Lucky"},
+		Skills:              []string{"Insight", "Stealth"},
+		Tools:               []string{"Thieves' Tools"},
 	},
 }
 
@@ -173,7 +173,7 @@ var characterBackgrounds = map[string]Background{
 Returns a slice of abilities by background.
 */
 func GetAssociatedAbilitiesByBackground(b string) []string {
-	return characterBackgrounds[b].Ability
+	return characterBackgrounds[b].AssociatedAbilities
 }
 
 /*
