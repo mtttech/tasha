@@ -77,7 +77,7 @@ func Tasha(cmd *cobra.Command, args []string) {
 	schema.PC.Traits = assignedTraits
 	schema.PC.Gender = assignedGender
 	schema.PC.Background = assignedBackground
-	schema.PC.AbilityScores = assignedAbilityScores
+	schema.PC.Abilities = assignedAbilityScores
 	schema.PC.Class = assignedClass
 	schema.PC.Level = d20.GetTotalLevel(assignedClass)
 	schema.PC.Armors = assignedArmors
