@@ -93,7 +93,7 @@ var characterMulticlasses = map[string]Multiclass{
 }
 
 /*
-Checks if character can multiclass to the specified class.
+Checks if character can multiclass to the class c with the ability scores s.
 */
 func can_multiclass_to_class(c string, s map[string]abilities.AbilityScore) bool {
 	abilities := characterMulticlasses[c].Ability
@@ -116,7 +116,7 @@ func can_multiclass_to_class(c string, s map[string]abilities.AbilityScore) bool
 }
 
 /*
-Returns a slice of valid multiclass options.
+Returns multiclass options by met ability score requirements s.
 */
 func GetValidMulticlassOptions(s map[string]abilities.AbilityScore) []string {
 	valid_class_options := []string{}

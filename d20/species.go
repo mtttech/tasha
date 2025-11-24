@@ -120,21 +120,21 @@ func GetD20Species() []string {
 }
 
 /*
-Returns size str by species.
+Returns size by species s.
 */
 func GetSizeBySpecies(s string) string {
 	return characterSpecies[s].Size
 }
 
 /*
-Returns speed int by species.
+Returns speed by species s.
 */
 func GetSpeedBySpecies(s string) int {
 	return characterSpecies[s].Speed
 }
 
 /*
-Returns a slice of traits by species.
+Returns traits by species s.
 */
 func GetTraitsBySpecies(s string) []string {
 	return characterSpecies[s].Traits

@@ -86,7 +86,7 @@ var characterSkills = map[string]Skills{
 }
 
 /*
-Returns a slice of skills by class.
+Returns skills by class c.
 */
 func GetSkillsByClass(c string) []string {
 	classSkills := []string{}
