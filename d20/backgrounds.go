@@ -172,7 +172,7 @@ var characterBackgrounds = map[string]Background{
 /*
 Returns a slice of abilities by background.
 */
-func GetAbilitiesByBackground(b string) []string {
+func GetAssociatedAbilitiesByBackground(b string) []string {
 	return characterBackgrounds[b].Ability
 }
 
