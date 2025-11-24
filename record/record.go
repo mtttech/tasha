@@ -12,6 +12,8 @@ type CharacterSheetTOMLSchema struct {
 	PC struct {
 		Name          string                            `toml:"name"`
 		Species       string                            `toml:"species"`
+		Size          string                            `toml:"size"`
+		Traits        []string                          `toml:"traits"`
 		Gender        string                            `toml:"gender"`
 		AbilityScores map[string]abilities.AbilityScore `toml:"ability_scores"`
 		Background    string                            `toml:"background"`
