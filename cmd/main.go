@@ -56,6 +56,7 @@ func Tasha(cmd *cobra.Command, args []string) {
 	// Assign your species
 	assignedSpecies := Menu("Select your species", d20.GetD20Species()).(string)
 	assignedSize := d20.GetSizeBySpecies(assignedSpecies)
+	assignedSpeed := d20.GetSpeedBySpecies(assignedSpecies)
 	assignedTraits := d20.GetTraitsBySpecies(assignedSpecies)
 	// Assign your gender
 	assignedGender := Menu("Select your gender", []string{"Female", "Male"}).(string)
@@ -72,6 +73,7 @@ func Tasha(cmd *cobra.Command, args []string) {
 	schema.PC.Name = assignedName
 	schema.PC.Species = assignedSpecies
 	schema.PC.Size = assignedSize
+	schema.PC.Speed = assignedSpeed
 	schema.PC.Traits = assignedTraits
 	schema.PC.Gender = assignedGender
 	schema.PC.Background = assignedBackground
