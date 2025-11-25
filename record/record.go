@@ -21,8 +21,9 @@ type CharacterSheetTOMLSchema struct {
 		Class      map[string]d20.Class              `toml:"class"`
 		Level      int                               `toml:"level"`
 		Armors     []string                          `toml:"armors"`
-		Features   []string                          `toml:"features"`
+		Tools      []string                          `toml:"tools"`
 		Weapons    []string                          `toml:"weapons"`
+		Features   []string                          `toml:"features"`
 		Skills     []string                          `toml:"skills"`
 		Feats      []string                          `toml:"feats"`
 	}
