@@ -67,6 +67,8 @@ func Tasha(cmd *cobra.Command, args []string) {
 	assignedAbilityScores := AssignAbilityScores(assignedBackground)
 	// Assign your class, features, and skills
 	assignedClass, assignedArmors, assignedFeatures, assignedWeapons, assignedSkills := AssignCharacterClass(assignedBackground, assignedAbilityScores)
+	// Assign tools
+	assignTools := []string{}
 	// Collect data, save to toml file
 	assignedName := strings.TrimSpace(args[0])
 	var schema record.CharacterSheetTOMLSchema
@@ -80,11 +82,12 @@ func Tasha(cmd *cobra.Command, args []string) {
 	schema.PC.Abilities = assignedAbilityScores
 	schema.PC.Class = assignedClass
 	schema.PC.Level = d20.GetTotalLevel(assignedClass)
-	schema.PC.Armors = assignedArmors
 	schema.PC.Features = assignedFeatures
-	schema.PC.Weapons = assignedWeapons
-	schema.PC.Skills = assignedSkills
 	schema.PC.Feats = assignedFeats
+	schema.PC.Armors = assignedArmors
+	schema.PC.Weapons = assignedWeapons
+	schema.PC.Tools = assignTools
+	schema.PC.Skills = assignedSkills
 	characterName := strings.ToLower(strings.Replace(assignedName, " ", "_", 1))
 	fp, err := os.Create(fmt.Sprintf("%s.toml", characterName))
 	if err != nil {
