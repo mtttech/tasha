@@ -704,7 +704,7 @@ var characterFeats = map[string]Feat{
 }
 
 /*
-Returns true if character meet features requirement for the specified feat.
+Returns true if the class feature f is found in the slice of class features k.
 */
 func has_feature(f string, k []string) bool {
 	for _, feature := range characterFeats[f].Features {
@@ -716,15 +716,12 @@ func has_feature(f string, k []string) bool {
 }
 
 /*
-Returns a map of ability/score requirements by feat.
+Returns a map of ability requirements by feat f.
 */
 func GetAbilityScoreRequirementsByFeat(f string) map[string]int {
 	requirements := make(map[string]int)
 	required_abilities := characterFeats[f].Ability
 	if len(required_abilities) > 0 {
-		/*
-			Returns a map of ability/score requirements by feat.
-		*/
 		for _, values := range required_abilities {
 			requirements[values.Ability] = values.Score
 		}
@@ -733,12 +730,25 @@ func GetAbilityScoreRequirementsByFeat(f string) map[string]int {
 }
 
 /*
-Returns a slice of DnD feats.
+Calculates the number of allotted feats by specified class features f.
+*/
+func GetAllottedFeats(f []string) int {
+	numberOfFeats := 0
+	for _, feature := range f {
+		if feature == "Ability Score Improvement" {
+			numberOfFeats += 1
+		}
+	}
+	return numberOfFeats
+}
+
+/*
+Returns a slice of feats by level l, checking ability scores s, feats f and class features c requirements.
 */
 func GetD20Feats(l int, s map[string]abilities.AbilityScore, f []string, c []string) []string {
 	feats := []string{}
 	for _, feat := range slices.Collect(maps.Keys(characterFeats)) {
-		// Already possesses this feat
+		// Ignore the Ability Score Improvement feat or already possesses the feat
 		if feat != "Ability Score Improvement" && slices.Contains(f, feat) {
 			continue
 		}
