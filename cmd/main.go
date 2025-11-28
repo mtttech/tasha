@@ -83,11 +83,12 @@ func Tasha(cmd *cobra.Command, args []string) {
 	schema.PC.Class = assignedClass
 	schema.PC.Level = d20.GetTotalLevel(assignedClass)
 	schema.PC.Features = assignedFeatures
-	schema.PC.Feats = assignedFeats
 	schema.PC.Armors = assignedArmors
-	schema.PC.Weapons = assignedWeapons
 	schema.PC.Tools = assignTools
+	schema.PC.Weapons = assignedWeapons
 	schema.PC.Skills = assignedSkills
+	schema.PC.Feats = assignedFeats
+	//d20.GetAllottedFeats(assignedFeatures)
 	characterName := strings.ToLower(strings.Replace(assignedName, " ", "_", 1))
 	fp, err := os.Create(fmt.Sprintf("%s.toml", characterName))
 	if err != nil {
