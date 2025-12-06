@@ -88,7 +88,6 @@ func Tasha(cmd *cobra.Command, args []string) {
 	schema.PC.Weapons = assignedWeapons
 	schema.PC.Skills = assignedSkills
 	schema.PC.Feats = assignedFeats
-	//d20.GetAllottedFeats(assignedFeatures)
 	characterName := strings.ToLower(strings.Replace(assignedName, " ", "_", 1))
 	fp, err := os.Create(fmt.Sprintf("%s.toml", characterName))
 	if err != nil {
@@ -107,7 +106,7 @@ func init() {
 }
 
 /*
-Assign ability scores.
+Assign ability scores applying ability score bonuses by background b.
 */
 func AssignAbilityScores(b string) map[string]abilities.AbilityScore {
 	abilityOptions := []string{
@@ -151,7 +150,7 @@ func AssignAbilityScores(b string) map[string]abilities.AbilityScore {
 /*
 Assign character's ability score bonuses.
 */
-func AssignASIBonus(s map[string]abilities.AbilityScore) map[string]abilities.AbilityScore {
+func AssignASIAbilityScoreBonus(s map[string]abilities.AbilityScore) map[string]abilities.AbilityScore {
 	abilityOptions := []string{
 		"Strength",
 		"Dexterity",
@@ -174,6 +173,23 @@ func AssignASIBonus(s map[string]abilities.AbilityScore) map[string]abilities.Ab
 			new_score := s[ability].Score + 1
 			abilities.UpdateAbilityScore(s, ability, new_score)
 			fmt.Printf("A +1 bonus was applied to your %s ability score.\n", ability)
+		}
+	}
+	return s
+}
+
+/*
+Assign upgrades based upon the instances of "Ability Score Improvement" in class features f.
+*/
+func AssignASIBonus(f []string, s map[string]abilities.AbilityScore) map[string]abilities.AbilityScore {
+	for i := 1; i < d20.GetAllottedFeats(f); i++ {
+		selection := Menu("Choose your bonus", []string{"Add Feat", "Upgrade Ability"})
+		switch selection {
+		case "Add Feat":
+			fmt.Println("Add additional feat.")
+		case "Upgrade Ability":
+			fmt.Println("Upgrade ability score.")
+			s = AssignASIAbilityScoreBonus(s)
 		}
 	}
 	return s
@@ -279,9 +295,10 @@ func ConfirmMenu(l string) bool {
 		Items: []string{"Yes", "No"},
 	}
 	_, selection, _ := prompt.Run()
-	if selection == "Yes" {
+	switch selection {
+	case "Yes":
 		return true
-	} else {
+	default:
 		return false
 	}
 }
