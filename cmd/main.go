@@ -295,15 +295,16 @@ func AssignToolProficiencies(c string, t []string) []string {
 	case "Bard":
 		tt := []string{}
 		for i := 1; i <= 3; i++ {
-			proficiency := Menu("Choose a bonus Musical Instrument.", t)
+			proficiency := Menu("Choose a bonus Musical Instrument", t)
 			tt = append(tt, proficiency.(string))
 			t = OmitNeedleFromHaystack(t, proficiency.(string))
 		}
 		t = tt
 	case "Monk":
-		proficiency := Menu("Choose a bonus Artisan Tool or Musical Instrument.", t)
+		proficiency := Menu("Choose a bonus Artisan Tool or Musical Instrument", t)
 		t = []string{proficiency.(string)}
 	}
+	slices.Sort(t)
 	return t
 }
 
