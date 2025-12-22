@@ -240,13 +240,13 @@ func AssignCharacterClass(b string, s map[string]abilities.AbilityScore) (map[st
 		assignedFeatures = append(assignedFeatures, d20.GetFeaturesByClass(assignedClass, assignedLevel)...)
 		// Assign weapon profiencies
 		assignedWeapons = append(assignedWeapons, d20.GetWeaponsByClass(assignedClass)...)
-		// Assign tool proficiencies
-		assignedTools = append(assignedTools, AssignToolProficiencies(assignedClass, d20.GetToolsByClass(assignedClass))...)
-		// Assign your class skills
+		// Assign your class skills, tool proficiencies
 		if !isMulticlassed {
 			assignedSkills = AssignClassSkills(assignedClass, d20.GetSkillsByBackground(b), true)
+			assignedTools = append(assignedTools, AssignToolProficiencies(assignedClass, d20.GetToolsByClass(assignedClass), true)...)
 		} else {
 			assignedSkills = AssignClassSkills(assignedClass, assignedSkills, false)
+			assignedTools = append(assignedTools, AssignToolProficiencies(assignedClass, d20.GetToolsByClass(assignedClass), false)...)
 		}
 		// Clean up selected classes for multiclassing
 		for _, selected_class := range slices.Collect(maps.Keys(assignedClasses)) {
@@ -290,19 +290,29 @@ func AssignClassSkills(c string, s []string, p bool) []string {
 /*
 Assign tool proficiencies by class c assigning tool proficiencies t.
 */
-func AssignToolProficiencies(c string, t []string) []string {
+func AssignToolProficiencies(c string, t []string, p bool) []string {
 	switch c {
 	case "Bard":
+		var num_of_bonuses int
+		if p {
+			num_of_bonuses = 3
+		} else {
+			num_of_bonuses = 1
+		}
 		tt := []string{}
-		for i := 1; i <= 3; i++ {
+		for i := 1; i <= num_of_bonuses; i++ {
 			proficiency := Menu("Choose a bonus Musical Instrument", t)
 			tt = append(tt, proficiency.(string))
-			t = OmitNeedleFromHaystack(t, proficiency.(string))
+			if num_of_bonuses == 3 {
+				t = OmitNeedleFromHaystack(t, proficiency.(string))
+			}
 		}
 		t = tt
 	case "Monk":
-		proficiency := Menu("Choose a bonus Artisan Tool or Musical Instrument", t)
-		t = []string{proficiency.(string)}
+		if p {
+			proficiency := Menu("Choose a bonus Artisan Tool or Musical Instrument", t)
+			t = []string{proficiency.(string)}
+		}
 	}
 	slices.Sort(t)
 	return t
