@@ -288,11 +288,12 @@ func AssignClassSkills(c string, s []string, p bool) []string {
 }
 
 /*
-Assign tool proficiencies.
+Assign tool proficiencies by class c assigning tool proficiencies t.
 */
 func AssignToolProficiencies(c string, t []string) []string {
-	if len(t) > 1 {
-		//t = append(t, d20.GetToolsByClass(c)...)
+	if c == "Monk" {
+		proficiency := Menu("Choose a bonus Artisan Tool or Musical Instrument.", t)
+		t = []string{proficiency.(string)}
 	}
 	return t
 }
