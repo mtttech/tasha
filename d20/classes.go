@@ -498,7 +498,7 @@ func GetSavingThrowsByClass(c string) []string {
 }
 
 /*
-Gets the number of skill points by class.
+Gets the number of skill points by class and if primary or secondary class p.
 */
 func GetSkillPointsByClass(c string, p bool) int {
 	allotted_skills := 0
@@ -520,21 +520,21 @@ func GetSkillPointsByClass(c string, p bool) int {
 }
 
 /*
-Returns a slice of subclasses by class.
+Returns a slice of subclasses by class c.
 */
 func GetSubclassesByClass(c string) []string {
 	return characterClasses[c].Subclasses
 }
 
 /*
-Returns a slice of tool proficiencies by class.
+Returns a slice of tool proficiencies by class c.
 */
 func GetToolsByClass(c string) []string {
 	return characterClasses[c].Tools
 }
 
 /*
-Returns a slice of tool proficiencies by class.
+Returns a slice of tool proficiencies by class c.
 */
 func GetTotalLevel(c map[string]Class) int {
 	totalLevel := 0
@@ -545,7 +545,7 @@ func GetTotalLevel(c map[string]Class) int {
 }
 
 /*
-Returns a slice of weapon proficiencies by class.
+Returns a slice of weapon proficiencies by class c.
 */
 func GetWeaponsByClass(c string) []string {
 	return characterClasses[c].Weapons
