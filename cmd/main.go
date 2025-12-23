@@ -87,14 +87,16 @@ func Tasha(cmd *cobra.Command, args []string) {
 	schema.PC.Skills = assignedSkills
 	schema.PC.Feats = assignedFeats
 	characterName := strings.ToLower(strings.Replace(assignedName, " ", "_", 1))
-	fp, err := os.Create(fmt.Sprintf("%s.toml", characterName))
-	if err != nil {
-		panic(err)
-	}
-	defer fp.Close()
-	err = toml.NewEncoder(fp).Encode(schema)
-	if err != nil {
-		panic(err)
+	if ConfirmMenu("Export this character") {
+		fp, err := os.Create(fmt.Sprintf("%s.toml", characterName))
+		if err != nil {
+			panic(err)
+		}
+		defer fp.Close()
+		err = toml.NewEncoder(fp).Encode(schema)
+		if err != nil {
+			panic(err)
+		}
 	}
 }
 
