@@ -272,14 +272,14 @@ Assign class skills.
 func AssignClassSkills(c string, s []string, p bool) []string {
 	assignedSkills := s
 	classSkillList := d20.GetSkillsByClass(c)
-	// Remove omitted skills.
+	// Remove skills that are already known to the player.
 	for _, omitted_skill := range s {
 		if slices.Contains(classSkillList, omitted_skill) {
 			classSkillList = OmitNeedleFromHaystack(classSkillList, omitted_skill)
 			fmt.Printf("The skill %s was omitted.", omitted_skill)
 		}
 	}
-	// Select class skills.
+	// Select class skills from a list of applicable skills.
 	for i := 1; i <= d20.GetSkillPointsByClass(c, p); i++ {
 		skill := Menu("Choose a class skill", classSkillList).(string)
 		assignedSkills = append(assignedSkills, skill)
@@ -355,7 +355,7 @@ func Menu[T comparable](l string, o []T) any {
 }
 
 /*
-Returns the given haystack minus the first instance of needle.
+Returns the given haystack h minus the first instance of needle n.
 */
 func OmitNeedleFromHaystack[T comparable](h []T, n T) []T {
 	needleFound := false
