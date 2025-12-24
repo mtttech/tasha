@@ -196,7 +196,16 @@ func AssignASIBonus(f []string, s map[string]abilities.AbilityScore) map[string]
 }
 
 /*
-Assign character's classes and skills.
+Assign PC's class using the specified background b and ability scores s.
+
+Returns the following PC details:
+
+	character class or classes
+	class features
+	armor proficiencies
+	tool proficiencies
+	weapon proficiencies
+	skills
 */
 func AssignCharacterClass(b string, s map[string]abilities.AbilityScore) (map[string]d20.Class, []string, []string, []string, []string, []string) {
 	assignedArmors := []string{}
@@ -267,7 +276,7 @@ func AssignCharacterClass(b string, s map[string]abilities.AbilityScore) (map[st
 }
 
 /*
-Assign class skills.
+Assign PC class skills by class c, exluding possessed skills s.
 */
 func AssignClassSkills(c string, s []string, p bool) []string {
 	assignedSkills := s
