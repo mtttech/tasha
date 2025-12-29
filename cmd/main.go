@@ -208,8 +208,8 @@ Returns the following PC details:
 	skills
 */
 func AssignCharacterClass(b string, s map[string]abilities.AbilityScore) (map[string]d20.Class, []string, []string, []string, []string, []string) {
-	assignedArmors := []string{}
 	var assignedClass string
+	assignedArmors := []string{}
 	assignedClasses := make(map[string]d20.Class)
 	assignedFeatures := []string{}
 	assignedSkills := []string{}
