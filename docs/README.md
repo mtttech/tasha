@@ -1,6 +1,6 @@
 # TASHA
 
-**Tasha** is a tool for creating player characters for the 5.5e *Dungeons & Dragons (2024)* tabletop game. It is a rewrite of a program that I originally wrote in python.
+**Tasha** is a tool for creating player characters for the 5.5e *Dungeons & Dragons (2024)* tabletop game. It is an incomplete rewrite of a program that I originally wrote in python.
 
 ### Supported rulebooks
 
