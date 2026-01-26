@@ -21,26 +21,23 @@ import (
 )
 
 var (
-	curVersion = "1.0.0"
-
-	rootCmd = &cobra.Command{
+	currentVer = "1.0.0"
+	rootCmd    = &cobra.Command{
 		Use:   "tasha",
 		Short: "Create 5.5e Dungeons & Dragons characters.",
 		Long:  `Create 5.5e Dungeons & Dragons characters.`,
 	}
-
 	newCmd = &cobra.Command{
 		Use:   "new",
 		Short: "Create a new character",
 		Args:  cobra.ExactArgs(1),
 		Run:   Tasha,
 	}
-
 	versionCmd = &cobra.Command{
 		Use:   "version",
 		Short: "Display the current version",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(curVersion)
+			fmt.Println(currentVer)
 		},
 	}
 )
