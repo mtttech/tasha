@@ -25,5 +25,5 @@ Get the current working version using the following command.
 Create a new character using the following command.
 
 ```
-./tasha new <CHARACTER_NAME>
+./tasha create <CHARACTER_NAME>
 ```
