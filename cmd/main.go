@@ -22,18 +22,65 @@ import (
 
 var (
 	currentVer = "1.0.0"
-	rootCmd    = &cobra.Command{
+	cmdRoot    = &cobra.Command{
 		Use:   "tasha",
 		Short: "Create 5.5e Dungeons & Dragons characters.",
 		Long:  `Create 5.5e Dungeons & Dragons characters.`,
 	}
-	newCmd = &cobra.Command{
-		Use:   "new",
+	cmdCreate = &cobra.Command{
+		Use:   "create",
 		Short: "Create a new character",
 		Args:  cobra.ExactArgs(1),
-		Run:   Tasha,
+		Run: func(cmd *cobra.Command, args []string) {
+			// Assign your species
+			assignedSpecies := Menu("Select your species", d20.GetD20Species()).(string)
+			assignedSize := d20.GetSizeBySpecies(assignedSpecies)
+			assignedSpeed := d20.GetSpeedBySpecies(assignedSpecies)
+			assignedTraits := d20.GetTraitsBySpecies(assignedSpecies)
+			// Assign your gender
+			assignedGender := Menu("Select your gender", []string{"Female", "Male"}).(string)
+			// Assign your background
+			assignedBackground := Menu("Select your background", d20.GetD20Backgrounds()).(string)
+			assignedFeats := d20.GetFeatByBackground(assignedBackground)
+			// Assign your ability scores
+			assignedAbilityScores := AssignAbilityScores(assignedBackground)
+			// Assign your class, features, proficiencies, and skills
+			assignedClass, assignedFeatures, assignedArmors, assignedTools, assignedWeapons, assignedSkills := AssignCharacterClass(assignedBackground, assignedAbilityScores)
+			// Collect character data
+			assignedName := strings.TrimSpace(args[0])
+			var schema record.CharacterSheetTOMLSchema
+			schema.PC.Name = assignedName
+			schema.PC.Species = assignedSpecies
+			schema.PC.Size = assignedSize
+			schema.PC.Speed = assignedSpeed
+			schema.PC.Traits = assignedTraits
+			schema.PC.Gender = assignedGender
+			schema.PC.Background = assignedBackground
+			schema.PC.Abilities = assignedAbilityScores
+			schema.PC.Class = assignedClass
+			schema.PC.Level = d20.GetTotalLevel(assignedClass)
+			schema.PC.Features = assignedFeatures
+			schema.PC.Armors = assignedArmors
+			schema.PC.Tools = assignedTools
+			schema.PC.Weapons = assignedWeapons
+			schema.PC.Skills = assignedSkills
+			schema.PC.Feats = assignedFeats
+			// Confirm, save to toml file
+			if ConfirmMenu("Export this character") {
+				characterName := strings.ToLower(strings.ReplaceAll(assignedName, " ", "_"))
+				fp, err := os.Create(fmt.Sprintf("%s.toml", characterName))
+				if err != nil {
+					panic(err)
+				}
+				defer fp.Close()
+				err = toml.NewEncoder(fp).Encode(schema)
+				if err != nil {
+					panic(err)
+				}
+			}
+		},
 	}
-	versionCmd = &cobra.Command{
+	cmdVersion = &cobra.Command{
 		Use:   "version",
 		Short: "Display the current version",
 		Run: func(cmd *cobra.Command, args []string) {
@@ -43,63 +90,15 @@ var (
 )
 
 func Execute() {
-	err := rootCmd.Execute()
+	err := cmdRoot.Execute()
 	if err != nil {
 		os.Exit(1)
 	}
 }
 
-func Tasha(cmd *cobra.Command, args []string) {
-	// Assign your species
-	assignedSpecies := Menu("Select your species", d20.GetD20Species()).(string)
-	assignedSize := d20.GetSizeBySpecies(assignedSpecies)
-	assignedSpeed := d20.GetSpeedBySpecies(assignedSpecies)
-	assignedTraits := d20.GetTraitsBySpecies(assignedSpecies)
-	// Assign your gender
-	assignedGender := Menu("Select your gender", []string{"Female", "Male"}).(string)
-	// Assign your background
-	assignedBackground := Menu("Select your background", d20.GetD20Backgrounds()).(string)
-	assignedFeats := d20.GetFeatByBackground(assignedBackground)
-	// Assign your ability scores
-	assignedAbilityScores := AssignAbilityScores(assignedBackground)
-	// Assign your class, features, proficiencies, and skills
-	assignedClass, assignedFeatures, assignedArmors, assignedTools, assignedWeapons, assignedSkills := AssignCharacterClass(assignedBackground, assignedAbilityScores)
-	// Collect data, save to toml file
-	assignedName := strings.TrimSpace(args[0])
-	var schema record.CharacterSheetTOMLSchema
-	schema.PC.Name = assignedName
-	schema.PC.Species = assignedSpecies
-	schema.PC.Size = assignedSize
-	schema.PC.Speed = assignedSpeed
-	schema.PC.Traits = assignedTraits
-	schema.PC.Gender = assignedGender
-	schema.PC.Background = assignedBackground
-	schema.PC.Abilities = assignedAbilityScores
-	schema.PC.Class = assignedClass
-	schema.PC.Level = d20.GetTotalLevel(assignedClass)
-	schema.PC.Features = assignedFeatures
-	schema.PC.Armors = assignedArmors
-	schema.PC.Tools = assignedTools
-	schema.PC.Weapons = assignedWeapons
-	schema.PC.Skills = assignedSkills
-	schema.PC.Feats = assignedFeats
-	characterName := strings.ToLower(strings.ReplaceAll(assignedName, " ", "_"))
-	if ConfirmMenu("Export this character") {
-		fp, err := os.Create(fmt.Sprintf("%s.toml", characterName))
-		if err != nil {
-			panic(err)
-		}
-		defer fp.Close()
-		err = toml.NewEncoder(fp).Encode(schema)
-		if err != nil {
-			panic(err)
-		}
-	}
-}
-
 func init() {
-	rootCmd.AddCommand(newCmd)
-	rootCmd.AddCommand(versionCmd)
+	cmdRoot.AddCommand(cmdCreate)
+	cmdRoot.AddCommand(cmdVersion)
 }
 
 /*
