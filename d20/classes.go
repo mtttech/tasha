@@ -357,7 +357,7 @@ var characterClasses = map[string]Classes{
 			"Thief",
 		},
 		Tools:   []string{"Thieves' Tools"},
-		Weapons: []string{"Simple", "Martial (Finesse, Light)"},
+		Weapons: []string{"Simple", "Hand Crossbow", "Rapier", "Scimitar", "Shortsword", "Whip"},
 	},
 	"Sorcerer": {
 		Armors: []string{},
