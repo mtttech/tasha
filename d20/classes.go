@@ -264,7 +264,7 @@ var characterClasses = map[string]Classes{
 			"Musical Instrument - Yarting",
 			"Musical Instrument - Zulkoon",
 		},
-		Weapons: []string{"Simple", "Martial (Light)"},
+		Weapons: []string{"Simple", "Hand Crossbow", "Scimitar", "Shortsword"},
 	},
 	"Paladin": {
 		Armors: []string{"Light", "Medium", "Heavy", "Shield"},
