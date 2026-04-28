@@ -37,23 +37,23 @@ var cmdCreate = &cobra.Command{
 		assignedClass, assignedFeatures, assignedArmors, assignedTools, assignedWeapons, assignedSkills := AssignCharacterClass(assignedBackground, assignedAbilityScores)
 		// Collect character data
 		assignedName := strings.TrimSpace(args[0])
-		var schema record.CharacterSheetTOMLSchema
-		schema.PC.Name = assignedName
-		schema.PC.Species = assignedSpecies
-		schema.PC.Size = assignedSize
-		schema.PC.Speed = assignedSpeed
-		schema.PC.Traits = assignedTraits
-		schema.PC.Gender = assignedGender
-		schema.PC.Background = assignedBackground
-		schema.PC.Abilities = assignedAbilityScores
-		schema.PC.Class = assignedClass
-		schema.PC.Level = d20.GetTotalLevel(assignedClass)
-		schema.PC.Features = assignedFeatures
-		schema.PC.Armors = assignedArmors
-		schema.PC.Tools = assignedTools
-		schema.PC.Weapons = assignedWeapons
-		schema.PC.Skills = assignedSkills
-		schema.PC.Feats = assignedFeats
+		var pc record.PC
+		pc.Name = assignedName
+		pc.Species = assignedSpecies
+		pc.Size = assignedSize
+		pc.Speed = assignedSpeed
+		pc.Traits = assignedTraits
+		pc.Gender = assignedGender
+		pc.Background = assignedBackground
+		pc.Abilities = assignedAbilityScores
+		pc.Class = assignedClass
+		pc.Level = d20.GetTotalLevel(assignedClass)
+		pc.Features = assignedFeatures
+		pc.Armors = assignedArmors
+		pc.Tools = assignedTools
+		pc.Weapons = assignedWeapons
+		pc.Skills = assignedSkills
+		pc.Feats = assignedFeats
 		// Confirm, save to toml file
 		if ConfirmMenu("Export this character") {
 			characterName := strings.ToLower(strings.ReplaceAll(assignedName, " ", "_"))
@@ -62,7 +62,7 @@ var cmdCreate = &cobra.Command{
 				log.Fatalf("Failed to create character sheet: %v", err)
 			}
 			defer fp.Close()
-			if err := toml.NewEncoder(fp).Encode(schema); err != nil {
+			if err := toml.NewEncoder(fp).Encode(pc); err != nil {
 				log.Fatalf("Failed to encode toml data: %v", err)
 			}
 		}
