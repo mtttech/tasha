@@ -27,8 +27,8 @@ var cmdRead = &cobra.Command{
 			log.Fatalf("Failed to open character sheet: %v", err)
 		}
 		defer fp.Close()
-		if err := toml.NewEncoder(fp).Encode(&cs); err != nil {
-			log.Fatalf("Failed to encode toml data: %v", err)
+		if _, err := toml.NewDecoder(fp).Decode(&cs); err != nil {
+			log.Fatalf("Failed to decode toml data: %v", err)
 		}
 
 		fmt.Println(cs.Name)
