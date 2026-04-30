@@ -56,8 +56,8 @@ var cmdCreate = &cobra.Command{
 		pc.Feats = assignedFeats
 		// Confirm, save to toml file
 		if ConfirmMenu("Export this character") {
-			characterName := strings.ToLower(strings.ReplaceAll(assignedName, " ", "_"))
-			fp, err := os.Create(fmt.Sprintf("%s.toml", characterName))
+			csFileName := fmt.Sprintf("%s.toml", strings.ToLower(strings.ReplaceAll(assignedName, " ", "_")))
+			fp, err := os.Create(csFileName)
 			if err != nil {
 				log.Fatalf("Failed to create character sheet: %v", err)
 			}
