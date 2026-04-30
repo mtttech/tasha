@@ -32,6 +32,15 @@ var cmdRead = &cobra.Command{
 		}
 
 		fmt.Println(cs.Name)
+		fmt.Printf("%s, %s\n", cs.Species, cs.Gender)
+
+		for class, params := range cs.Class {
+			if params.Subclass != "" {
+				fmt.Printf("%s (%s) - %v", class, params.Subclass, params.Level)
+			} else {
+				fmt.Printf("%s - %v", class, params.Level)
+			}
+		}
 	},
 }
 
