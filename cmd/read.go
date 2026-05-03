@@ -31,14 +31,15 @@ var cmdRead = &cobra.Command{
 			log.Fatalf("Failed to decode toml data: %v", err)
 		}
 
+		// Start character sheet
 		fmt.Println(cs.Name)
 		fmt.Printf("%s, %s\n", cs.Species, cs.Gender)
-
+		fmt.Println(cs.Background)
 		for class, params := range cs.Class {
 			if params.Subclass != "" {
-				fmt.Printf("%s (%s) - %v", class, params.Subclass, params.Level)
+				fmt.Printf("%s (%s) - %v\n", class, params.Subclass, params.Level)
 			} else {
-				fmt.Printf("%s - %v", class, params.Level)
+				fmt.Printf("%s - %v\n", class, params.Level)
 			}
 		}
 	},
