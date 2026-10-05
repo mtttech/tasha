@@ -1,0 +1,110 @@
+{
+  "Acrobatics": {
+    "ability": "Dexterity",
+    "classes": ["Bard", "Fighter", "Monk", "Rogue"]
+  },
+  "Animal Handling": {
+    "ability": "Wisdom",
+    "classes": ["Barbarian", "Bard", "Druid", "Fighter", "Ranger"]
+  },
+  "Arcana": {
+    "ability": "Intelligence",
+    "classes": ["Bard", "Druid", "Sorcerer", "Warlock", "Wizard"]
+  },
+  "Athletics": {
+    "ability": "Strength",
+    "classes": [
+      "Barbarian",
+      "Bard",
+      "Fighter",
+      "Monk",
+      "Paladin",
+      "Ranger",
+      "Rogue"
+    ]
+  },
+  "Deception": {
+    "ability": "Charisma",
+    "classes": ["Bard", "Rogue", "Sorcerer", "Warlock"]
+  },
+  "History": {
+    "ability": "Intelligence",
+    "classes": ["Bard", "Cleric", "Fighter", "Monk", "Warlock", "Wizard"]
+  },
+  "Insight": {
+    "ability": "Wisdom",
+    "classes": [
+      "Bard",
+      "Cleric",
+      "Druid",
+      "Fighter",
+      "Monk",
+      "Paladin",
+      "Ranger",
+      "Rogue",
+      "Sorcerer",
+      "Wizard"
+    ]
+  },
+  "Intimidation": {
+    "ability": "Charisma",
+    "classes": [
+      "Barbarian",
+      "Bard",
+      "Fighter",
+      "Paladin",
+      "Rogue",
+      "Sorcerer",
+      "Warlock"
+    ]
+  },
+  "Investigation": {
+    "ability": "Intelligence",
+    "classes": ["Bard", "Ranger", "Rogue", "Warlock", "Wizard"]
+  },
+  "Medicine": {
+    "ability": "Wisdom",
+    "classes": ["Bard", "Cleric", "Druid", "Paladin", "Wizard"]
+  },
+  "Nature": {
+    "ability": "Wisdom",
+    "classes": ["Barbarian", "Bard", "Druid", "Ranger", "Warlock"]
+  },
+  "Perception": {
+    "ability": "Wisdom",
+    "classes": ["Barbarian", "Bard", "Druid", "Fighter", "Ranger", "Rogue"]
+  },
+  "Performance": {
+    "ability": "Charisma",
+    "classes": ["Bard", "Rogue"]
+  },
+  "Persuasion": {
+    "ability": "Charisma",
+    "classes": ["Bard", "Cleric", "Paladin", "Rogue", "Sorcerer"]
+  },
+  "Religion": {
+    "ability": "Intelligence",
+    "classes": [
+      "Bard",
+      "Cleric",
+      "Druid",
+      "Monk",
+      "Paladin",
+      "Sorcerer",
+      "Warlock",
+      "Wizard"
+    ]
+  },
+  "Sleight of Hand": {
+    "ability": "Dexterity",
+    "classes": ["Bard", "Ranger", "Rogue"]
+  },
+  "Stealth": {
+    "ability": "Dexterity",
+    "classes": ["Bard", "Monk", "Ranger", "Rogue"]
+  },
+  "Survival": {
+    "ability": "Wisdom",
+    "classes": ["Barbarian", "Bard", "Druid", "Fighter", "Ranger"]
+  }
+}

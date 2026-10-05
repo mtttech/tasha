@@ -1,0 +1,96 @@
+{
+  "Barbarian": {
+    "ability": ["Strength"],
+    "armors": ["Shield"],
+    "tools": [],
+    "weapons": ["Martial"]
+  },
+  "Bard": {
+    "ability": ["Charisma"],
+    "armors": ["Light"],
+    "tools": [
+      "Musical Instrument - Bagpipes",
+      "Musical Instrument - Birdpipes",
+      "Musical Instrument - Drum",
+      "Musical Instrument - Dulcimer",
+      "Musical Instrument - Flute",
+      "Musical Instrument - Glaur",
+      "Musical Instrument - Hand Drum",
+      "Musical Instrument - Longhorn",
+      "Musical Instrument - Lute",
+      "Musical Instrument - Lyre",
+      "Musical Instrument - Horn",
+      "Musical Instrument - Pan flute",
+      "Musical Instrument - Shawm",
+      "Musical Instrument - Songhorn",
+      "Musical Instrument - Tantan",
+      "Musical Instrument - Thelarr",
+      "Musical Instrument - Tocken",
+      "Musical Instrument - Viol",
+      "Musical Instrument - Wargong",
+      "Musical Instrument - Yarting",
+      "Musical Instrument - Zulkoon"
+    ],
+    "weapons": []
+  },
+  "Cleric": {
+    "ability": ["Wisdom"],
+    "armors": ["Light", "Medium", "Shield"],
+    "tools": [],
+    "weapons": []
+  },
+  "Druid": {
+    "ability": ["Wisdom"],
+    "armors": ["Light", "Shield"],
+    "tools": [],
+    "weapons": []
+  },
+  "Fighter": {
+    "ability": ["Dexterity", "Strength"],
+    "armors": ["Light", "Medium", "Shield"],
+    "tools": [],
+    "weapons": ["Martial"]
+  },
+  "Monk": {
+    "ability": ["Dexterity", "Wisdom"],
+    "armors": [],
+    "tools": [],
+    "weapons": []
+  },
+  "Paladin": {
+    "ability": ["Strength", "Charisma"],
+    "armors": ["Light", "Medium", "Shield"],
+    "tools": [],
+    "weapons": ["Martial"]
+  },
+  "Ranger": {
+    "ability": ["Dexterity", "Wisdom"],
+    "armors": ["Light", "Medium", "Shield"],
+    "tools": [],
+    "weapons": ["Martial"]
+  },
+  "Rogue": {
+    "ability": ["Dexterity"],
+    "armors": ["Light"],
+    "tools": ["Thieves' Tools"],
+    "weapons": ["Simple"]
+  },
+  "Sorcerer": {
+    "ability": ["Charisma"],
+    "armors": [],
+    "tools": [],
+    "weapons": []
+  },
+  "Warlock": {
+    "ability": ["Charisma"],
+    "armors": ["Light"],
+    "tools": [],
+    "weapons": ["Simple"]
+  },
+  "Wizard": {
+    "ability": ["Intelligence"],
+    "armors": [],
+    "tools": [],
+    "weapons": []
+  }
+}
