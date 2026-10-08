@@ -1,5 +1,6 @@
-{
-  "Barbarian": {
+[
+  {
+    "name": "Barbarian",
     "armors": ["Light", "Medium", "Shield"],
     "features": {
       "1": ["Rage", "Unarmored Defense", "Weapon Mastery"],
@@ -31,7 +32,8 @@
     "tools": [],
     "weapons": ["Simple", "Martial"]
   },
-  "Bard": {
+  {
+    "name": "Bard",
     "armors": ["Light"],
     "features": {
       "1": ["Bardic Inspiration", "Spellcasting"],
@@ -82,7 +84,8 @@
     ],
     "weapons": ["Simple"]
   },
-  "Cleric": {
+  {
+    "name": "Cleric",
     "armors": ["Light", "Medium", "Shield"],
     "features": {
       "1": ["Divine Order", "Spellcasting"],
@@ -110,7 +113,8 @@
     "tools": [],
     "weapons": ["Simple"]
   },
-  "Druid": {
+  {
+    "name": "Druid",
     "armors": ["Light", "Shield"],
     "features": {
       "1": ["Druidic", "Primal Order", "Spellcasting"],
@@ -138,7 +142,8 @@
     "tools": ["Herbalism Kit"],
     "weapons": ["Simple"]
   },
-  "Fighter": {
+  {
+    "name": "Fighter",
     "armors": ["Light", "Medium", "Shield"],
     "features": {
       "1": ["Fighting Style", "Second Wind", "Weapon Mastery"],
@@ -169,7 +174,8 @@
     "tools": [],
     "weapons": ["Simple", "Martial"]
   },
-  "Monk": {
+  {
+    "name": "Monk",
     "armors": [],
     "features": {
       "1": ["Martial Arts", "Unarmored Defense"],
@@ -241,7 +247,8 @@
     ],
     "weapons": ["Simple", "Hand Crossbow", "Scimitar", "Shortsword"]
   },
-  "Paladin": {
+  {
+    "name": "Paladin",
     "armors": ["Light", "Medium", "Heavy", "Shield"],
     "features": {
       "1": ["Lay on Hands", "Spellcasting", "Weapon Mastery"],
@@ -259,7 +266,8 @@
       "16": ["Ability Score Improvement"]
     }
   },
-  "Ranger": {
+  {
+    "name": "Ranger",
     "armors": ["Light", "Medium", "Shield"],
     "features": {
       "1": ["Favored Enemy", "Spellcasting", "Weapon Mastery"],
@@ -285,7 +293,8 @@
     "tools": [],
     "weapons": ["Simple", "Martial"]
   },
-  "Rogue": {
+  {
+    "name": "Rogue",
     "armors": ["Light"],
     "features": {
       "1": ["Expertise", "Sneak Attack", "Thieves' Cant", "Weapon Mastery"],
@@ -314,7 +323,8 @@
       "Mastial weapons with Finesse or Light properties"
     ]
   },
-  "Sorcerer": {
+  {
+    "name": "Sorcerer",
     "armors": [],
     "features": {
       "1": ["Innate Sorcery", "Spellcasting"],
@@ -341,7 +351,8 @@
     "tools": [],
     "weapons": ["Dagger", "Quarterstaff", "Light Crossbow"]
   },
-  "Warlock": {
+  {
+    "name": "Warlock",
     "armors": ["Light"],
     "features": {
       "1": ["Eldritch Invocations", "Pact Magic", "Magical Cunning"],
@@ -372,7 +383,8 @@
     "tools": [],
     "weapons": ["Simple"]
   },
-  "Wizard": {
+  {
+    "name": "Wizard",
     "armors": [],
     "features": {
       "1": ["Arcane Recovery", "Spellcasting"],
@@ -398,4 +410,4 @@
     "tools": [],
     "weapons": ["Dagger", "Quarterstaff", "Light Crossbow"]
   }
-}
+]
