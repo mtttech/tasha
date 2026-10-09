@@ -6,6 +6,7 @@ package cmd
 import (
 	"fmt"
 	"log"
+	"math"
 	"os"
 	"strings"
 
@@ -45,9 +46,10 @@ var cmdCreate = &cobra.Command{
 		pc.Traits = assignedTraits
 		pc.Gender = assignedGender
 		pc.Background = assignedBackground
-		pc.Abilities = assignedAbilityScores
+		pc.AbilityScores = assignedAbilityScores
 		pc.Class = assignedClass
 		pc.Level = d20.GetTotalLevel(assignedClass)
+		pc.ProficiencyBonus = int(math.Ceil(float64(pc.Level) / float64(4)))
 		pc.Features = assignedFeatures
 		pc.Armors = assignedArmors
 		pc.Tools = assignedTools
