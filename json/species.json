@@ -1,5 +1,6 @@
-{
-  "Aasimar": {
+[
+  {
+    "name": "Aasimar",
     "size": "Medium",
     "speed": 30,
     "traits": [
@@ -13,7 +14,8 @@
       "Necrotic Shroud"
     ]
   },
-  "Dragonborn": {
+  {
+    "name": "Dragonborn",
     "size": "Medium",
     "speed": 30,
     "traits": [
@@ -24,7 +26,8 @@
       "Draconic Flight"
     ]
   },
-  "Dwarf": {
+  {
+    "name": "Dwarf",
     "size": "Medium",
     "speed": 30,
     "traits": [
@@ -34,7 +37,8 @@
       "Stonecunning"
     ]
   },
-  "Elf": {
+  {
+    "name": "Elf",
     "size": "Medium",
     "speed": 30,
     "traits": [
@@ -45,34 +49,40 @@
       "Trance"
     ]
   },
-  "Gnome": {
+  {
+    "name": "Gnome",
     "size": "Small",
     "speed": 30,
     "traits": ["Darkvision", "Gnomish Cunning", "Gnomish Lineage"]
   },
-  "Goliath": {
+  {
+    "name": "Goliath",
     "size": "Medium",
     "speed": 35,
     "traits": ["Giant Ancestry", "Large Form", "Powerful Build"]
   },
-  "Halfling": {
+  {
+    "name": "Halfling",
     "size": "Small",
     "speed": 30,
     "traits": ["Brave", "Halfling Nimbleness", "Luck", "Naturally Stealthy"]
   },
-  "Human": {
+  {
+    "name": "Human",
     "size": "Medium",
     "speed": 30,
     "traits": ["Resourceful", "Skillful", "Versatile"]
   },
-  "Orc": {
+  {
+    "name": "Orc",
     "size": "Medium",
     "speed": 30,
     "traits": ["Adrenaline Rush", "Darkvision", "Relentless Endurance"]
   },
-  "Tiefling": {
+  {
+    "name": "Tiefling",
     "size": "Medium",
     "speed": 30,
     "traits": ["Darkvision", "Fiendish Legacy", "Otherworldly Presence"]
   }
-}
+]
