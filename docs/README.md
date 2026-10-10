@@ -20,14 +20,8 @@ Get the current working version using the following command.
 ./tasha version
 ```
 
-Create a new character using the following command. Once the function has been complete, the user will be prompted to save the character. Note that your saved character's will be saved under the <CHARACTER_NAME> in all lower case values with .toml appended at the end. Spaces will be replaced with "_".
+Create a new character using the following command. Once the function has been complete, the user will be prompted to save the character. Note that your saved character's will be saved under the <CHARACTER_NAME> in all lower case values with .json appended at the end. Spaces will be replaced with "_".
 
 ```
 ./tasha create <CHARACTER_NAME>
-```
-
-Read details from an existing character sheet using the following command.
-
-```
-./tasha read <CHARACTER_NAME>
 ```
