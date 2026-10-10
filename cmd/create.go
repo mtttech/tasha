@@ -4,18 +4,38 @@ Copyright © 2025 Marcus Taylor <mtaylor9754@hotmail.com>
 package cmd
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"math"
 	"os"
 	"strings"
 
+	"tasha/abilities"
 	"tasha/d20"
-	"tasha/record"
 
-	"github.com/BurntSushi/toml"
 	"github.com/spf13/cobra"
 )
+
+type PC struct {
+	Name             string                            `json:"name"`
+	Species          string                            `json:"species"`
+	Size             string                            `json:"size"`
+	Speed            int                               `json:"speed"`
+	Traits           []string                          `json:"traits"`
+	Gender           string                            `json:"gender"`
+	AbilityScores    map[string]abilities.AbilityScore `json:"ability_scores"`
+	Background       string                            `json:"background"`
+	Class            map[string]d20.Class              `json:"class"`
+	Level            int                               `json:"level"`
+	ProficiencyBonus int                               `json:"proficiency_bonus"`
+	Armors           []string                          `json:"armors"`
+	Tools            []string                          `json:"tools"`
+	Weapons          []string                          `json:"weapons"`
+	Features         []string                          `json:"features"`
+	Skills           []string                          `json:"skills"`
+	Feats            []string                          `json:"feats"`
+}
 
 var cmdCreate = &cobra.Command{
 	Use:   "create",
@@ -38,7 +58,7 @@ var cmdCreate = &cobra.Command{
 		assignedClass, assignedFeatures, assignedArmors, assignedTools, assignedWeapons, assignedSkills := AssignCharacterClass(assignedBackground, assignedAbilityScores)
 		// Collect character data
 		assignedName := strings.TrimSpace(args[0])
-		var pc record.PC
+		var pc PC
 		pc.Name = assignedName
 		pc.Species = assignedSpecies
 		pc.Size = assignedSize
@@ -58,13 +78,17 @@ var cmdCreate = &cobra.Command{
 		pc.Feats = assignedFeats
 		// Confirm, save to toml file
 		if ConfirmMenu("Export this character") {
-			csFileName := fmt.Sprintf("%s.toml", strings.ToLower(strings.ReplaceAll(assignedName, " ", "_")))
+			csFileName := fmt.Sprintf("%s.json", strings.ToLower(strings.ReplaceAll(assignedName, " ", "_")))
 			fp, err := os.Create(csFileName)
 			if err != nil {
 				log.Fatalf("Failed to create character sheet: %v", err)
 			}
 			defer fp.Close()
-			if err := toml.NewEncoder(fp).Encode(pc); err != nil {
+
+			encoder := json.NewEncoder(fp)
+			encoder.SetIndent("", "		")
+
+			if err := encoder.Encode(pc); err != nil {
 				log.Fatalf("Failed to encode toml data: %v", err)
 			}
 		}
