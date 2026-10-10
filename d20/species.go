@@ -4,111 +4,41 @@ Copyright © 2025 Marcus Taylor <mtaylor9754@hotmail.com>
 package d20
 
 import (
+	"encoding/json"
+	"log"
 	"maps"
+	"os"
 	"slices"
 )
 
 type Species struct {
-	Size   string
-	Speed  int
-	Traits []string
+	Name   string   `json:"name"`
+	Size   string   `json:"size"`
+	Speed  int      `json:"speed"`
+	Traits []string `json:"traits"`
 }
 
-var characterSpecies = map[string]Species{
-	"Aasimar": {
-		Size:  "Medium",
-		Speed: 30,
-		Traits: []string{
-			"Celestial Resistance",
-			"Celestial Revelation",
-			"Darkvision",
-			"Healing Hands",
-			"Heavenly Wings",
-			"Inner Radiance",
-			"Light Bearer",
-			"Necrotic Shroud",
-		},
-	},
-	"Dragonborn": {
-		Size:  "Medium",
-		Speed: 30,
-		Traits: []string{
-			"Breath Weapon",
-			"Damage Resistance",
-			"Darkvision",
-			"Draconic Ancestry",
-			"Draconic Flight",
-		},
-	},
-	"Dwarf": {
-		Size:  "Medium",
-		Speed: 30,
-		Traits: []string{
-			"Darkvision",
-			"Dwarven Resilience",
-			"Dwarven Toughness",
-			"Stonecunning",
-		},
-	},
-	"Elf": {
-		Size:  "Medium",
-		Speed: 30,
-		Traits: []string{
-			"Darkvision",
-			"Elven Lineage",
-			"Fey Ancestry",
-			"Keen Senses",
-			"Trance",
-		},
-	},
-	"Gnome": {
-		Size:   "Small",
-		Speed:  30,
-		Traits: []string{"Darkvision", "Gnomish Cunning", "Gnomish Lineage"},
-	},
-	"Goliath": {
-		Size:  "Medium",
-		Speed: 35,
-		Traits: []string{
-			"Giant Ancestry",
-			"Large Form",
-			"Powerful Build",
-		},
-	},
-	"Halfling": {
-		Size:  "Small",
-		Speed: 30,
-		Traits: []string{
-			"Brave",
-			"Halfling Nimbleness",
-			"Luck",
-			"Naturally Stealthy",
-		},
-	},
-	"Human": {
-		Size:   "Medium",
-		Speed:  30,
-		Traits: []string{"Resourceful", "Skillful", "Versatile"},
-	},
-	"Orc": {
-		Size:  "Medium",
-		Speed: 30,
-		Traits: []string{
-			"Adrenaline Rush",
-			"Darkvision",
-			"Relentless Endurance",
-		},
-	},
-	"Tiefling": {
-		Size:  "Medium",
-		Speed: 30,
-		Traits: []string{
-			"Darkvision",
-			"Fiendish Legacy",
-			"Otherworldly Presence",
-		},
-	},
+func LoadSpecies() map[string]Species {
+	byteValue, err := os.ReadFile("json/species.json")
+	if err != nil {
+		log.Fatalf("Error reading file: %v", err)
+	}
+
+	var species []Species
+	err = json.Unmarshal(byteValue, &species)
+	if err != nil {
+		log.Fatalf("Error parsing JSON: %v", err)
+	}
+
+	s := make(map[string]Species)
+	for _, specie := range species {
+		s[specie.Name] = Species{specie.Name, specie.Size, specie.Speed, specie.Traits}
+	}
+
+	return s
 }
+
+var characterSpecies = LoadSpecies()
 
 /*
 Returns a slice of DnD species.
