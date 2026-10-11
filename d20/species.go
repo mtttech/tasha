@@ -18,7 +18,7 @@ type Species struct {
 	Traits []string `json:"traits"`
 }
 
-func LoadSpecies() map[string]Species {
+func load_species() map[string]Species {
 	byteValue, err := os.ReadFile("json/species.json")
 	if err != nil {
 		log.Fatalf("Error reading file: %v", err)
@@ -38,7 +38,7 @@ func LoadSpecies() map[string]Species {
 	return s
 }
 
-var characterSpecies = LoadSpecies()
+var characterSpecies = load_species()
 
 /*
 Returns a slice of DnD species.

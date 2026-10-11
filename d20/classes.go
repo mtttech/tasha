@@ -27,7 +27,7 @@ type Classes struct {
 	Weapons      []string         `json:"weapons"`
 }
 
-func LoadClasses() map[string]Classes {
+func load_classes() map[string]Classes {
 	byteValue, err := os.ReadFile("json/classes.json")
 	if err != nil {
 		log.Fatalf("Error reading file: %v", err)
@@ -47,7 +47,7 @@ func LoadClasses() map[string]Classes {
 	return c
 }
 
-var characterClasses = LoadClasses()
+var characterClasses = load_classes()
 
 /*
 Returns a slice of armor proficiencies by class.
