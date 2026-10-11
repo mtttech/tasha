@@ -14,12 +14,6 @@ Below is a list of incorporated rulebooks (more may be added as they become avai
 
 Below are details on the basic usage of tasha.
 
-Get the current working version using the following command.
-
-```
-./tasha version
-```
-
 Create a new character using the following command. Once the function has been complete, the user will be prompted to save the character. Note that your saved character's will be saved under the <CHARACTER_NAME> in all lower case values with .json appended at the end. Spaces will be replaced with "_".
 
 ```
