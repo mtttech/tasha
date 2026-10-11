@@ -81,15 +81,14 @@ var cmdCreate = &cobra.Command{
 			csFileName := fmt.Sprintf("%s.json", strings.ToLower(strings.ReplaceAll(assignedName, " ", "_")))
 			fp, err := os.Create(csFileName)
 			if err != nil {
-				log.Fatalf("Failed to create character sheet: %v", err)
+				log.Fatalf("Failed to create character: %v", err)
 			}
 			defer fp.Close()
 
 			encoder := json.NewEncoder(fp)
-			encoder.SetIndent("", "		")
-
+			encoder.SetIndent("", "	")
 			if err := encoder.Encode(pc); err != nil {
-				log.Fatalf("Failed to encode toml data: %v", err)
+				log.Fatalf("Failed to encode JSON data: %v", err)
 			}
 		}
 	},
