@@ -1,5 +1,6 @@
-{
-  "Ability Score Improvement": {
+[
+  {
+    "name": "Ability Score Improvement",
     "ability_score_requirements": [],
     "armors": [],
     "category": "General",
@@ -8,7 +9,8 @@
     "tools": [],
     "weapons": []
   },
-  "Actor": {
+  {
+    "name": "Actor",
     "ability_score_requirements": [{ "ability": "Charisma", "score": 13 }],
     "armors": [],
     "category": "General",
@@ -17,7 +19,8 @@
     "tools": [],
     "weapons": []
   },
-  "Alert": {
+  {
+    "name": "Alert",
     "ability_score_requirements": [],
     "armors": [],
     "category": "Origin",
@@ -26,7 +29,8 @@
     "tools": [],
     "weapons": []
   },
-  "Archery": {
+  {
+    "name": "Archery",
     "ability_score_requirements": [],
     "armors": [],
     "category": "Fighting Style",
@@ -35,7 +39,8 @@
     "tools": [],
     "weapons": []
   },
-  "Athlete": {
+  {
+    "name": "Athlete",
     "ability_score_requirements": [
       { "ability": "Strength", "score": 13 },
       { "ability": "Dexterity", "score": 13 }
@@ -47,7 +52,8 @@
     "tools": [],
     "weapons": []
   },
-  "Blind Fighting": {
+  {
+    "name": "Blind Fighting",
     "ability_score_requirements": [],
     "armors": [],
     "category": "Fighting Style",
@@ -56,7 +62,8 @@
     "tools": [],
     "weapons": []
   },
-  "Boon of Combat Prowess": {
+  {
+    "name": "Boon of Combat Prowess",
     "ability_score_requirements": [],
     "armors": [],
     "category": "Epic Boon",
@@ -65,7 +72,8 @@
     "tools": [],
     "weapons": []
   },
-  "Boon of Dimensional Travel": {
+  {
+    "name": "Boon of Dimensional Travel",
     "ability_score_requirements": [],
     "armors": [],
     "category": "Epic Boon",
@@ -74,7 +82,8 @@
     "tools": [],
     "weapons": []
   },
-  "Boon of Energy Resistance": {
+  {
+    "name": "Boon of Energy Resistance",
     "ability_score_requirements": [],
     "armors": [],
     "category": "Epic Boon",
@@ -83,7 +92,8 @@
     "tools": [],
     "weapons": []
   },
-  "Boon of Fate": {
+  {
+    "name": "Boon of Fate",
     "ability_score_requirements": [],
     "armors": [],
     "category": "Epic Boon",
@@ -92,7 +102,8 @@
     "tools": [],
     "weapons": []
   },
-  "Boon of Fortitude": {
+  {
+    "name": "Boon of Fortitude",
     "ability_score_requirements": [],
     "armors": [],
     "category": "Epic Boon",
@@ -101,7 +112,8 @@
     "tools": [],
     "weapons": []
   },
-  "Boon of Irresistible Offense": {
+  {
+    "name": "Boon of Irresistible Offense",
     "ability_score_requirements": [],
     "armors": [],
     "category": "Epic Boon",
@@ -110,7 +122,8 @@
     "tools": [],
     "weapons": []
   },
-  "Boon of Recovery": {
+  {
+    "name": "Boon of Recovery",
     "ability_score_requirements": [],
     "armors": [],
     "category": "Epic Boon",
@@ -119,7 +132,8 @@
     "tools": [],
     "weapons": []
   },
-  "Boon of Skill": {
+  {
+    "name": "Boon of Skill",
     "ability_score_requirements": [],
     "armors": [],
     "category": "Epic Boon",
@@ -128,7 +142,8 @@
     "tools": [],
     "weapons": []
   },
-  "Boon of Speed": {
+  {
+    "name": "Boon of Speed",
     "ability_score_requirements": [],
     "armors": [],
     "category": "Epic Boon",
@@ -137,7 +152,8 @@
     "tools": [],
     "weapons": []
   },
-  "Boon of Spell Recall": {
+  {
+    "name": "Boon of Spell Recall",
     "ability_score_requirements": [],
     "armors": [],
     "category": "Epic Boon",
@@ -146,7 +162,8 @@
     "tools": [],
     "weapons": []
   },
-  "Boon of the Night Spirit": {
+  {
+    "name": "Boon of the Night Spirit",
     "ability_score_requirements": [],
     "armors": [],
     "category": "Epic Boon",
@@ -155,7 +172,8 @@
     "tools": [],
     "weapons": []
   },
-  "Boon of Truesight": {
+  {
+    "name": "Boon of Truesight",
     "ability_score_requirements": [],
     "armors": [],
     "category": "Epic Boon",
@@ -164,7 +182,8 @@
     "tools": [],
     "weapons": []
   },
-  "Charger": {
+  {
+    "name": "Charger",
     "ability_score_requirements": [
       { "ability": "Strength", "score": 13 },
       { "ability": "Dexterity", "score": 13 }
@@ -176,7 +195,8 @@
     "tools": [],
     "weapons": []
   },
-  "Chef": {
+  {
+    "name": "Chef",
     "ability_score_requirements": [],
     "armors": [],
     "category": "General",
@@ -185,7 +205,8 @@
     "tools": [],
     "weapons": []
   },
-  "Crafter": {
+  {
+    "name": "Crafter",
     "ability_score_requirements": [],
     "armors": [],
     "category": "Origin",
@@ -194,7 +215,8 @@
     "tools": [],
     "weapons": []
   },
-  "Crossbow Expert": {
+  {
+    "name": "Crossbow Expert",
     "ability_score_requirements": [{ "ability": "Dexterity", "score": 13 }],
     "armors": [],
     "category": "General",
@@ -203,7 +225,8 @@
     "tools": [],
     "weapons": []
   },
-  "Crusher": {
+  {
+    "name": "Crusher",
     "ability_score_requirements": [],
     "armors": [],
     "category": "General",
@@ -212,7 +235,8 @@
     "tools": [],
     "weapons": []
   },
-  "Defense": {
+  {
+    "name": "Defense",
     "ability_score_requirements": [],
     "armors": [],
     "category": "Fighting Style",
@@ -221,7 +245,8 @@
     "tools": [],
     "weapons": []
   },
-  "Defensive Duelist": {
+  {
+    "name": "Defensive Duelist",
     "ability_score_requirements": [{ "ability": "Dexterity", "score": 13 }],
     "armors": [],
     "category": "General",
@@ -230,7 +255,8 @@
     "tools": [],
     "weapons": []
   },
-  "Dual Wielder": {
+  {
+    "name": "Dual Wielder",
     "ability_score_requirements": [
       { "ability": "Strength", "score": 13 },
       { "ability": "Dexterity", "score": 13 }
@@ -242,7 +268,8 @@
     "tools": [],
     "weapons": []
   },
-  "Dueling": {
+  {
+    "name": "Dueling",
     "ability_score_requirements": [],
     "armors": [],
     "category": "Fighting Style",
@@ -251,7 +278,8 @@
     "tools": [],
     "weapons": []
   },
-  "Durable": {
+  {
+    "name": "Durable",
     "ability_score_requirements": [],
     "armors": [],
     "category": "General",
@@ -260,7 +288,8 @@
     "tools": [],
     "weapons": []
   },
-  "Elemental Adept": {
+  {
+    "name": "Elemental Adept",
     "ability_score_requirements": [],
     "armors": [],
     "category": "General",
@@ -269,7 +298,8 @@
     "tools": [],
     "weapons": []
   },
-  "Fey-Touched": {
+  {
+    "name": "Fey-Touched",
     "ability_score_requirements": [],
     "armors": [],
     "category": "General",
@@ -278,7 +308,8 @@
     "tools": [],
     "weapons": []
   },
-  "Grappler": {
+  {
+    "name": "Grappler",
     "ability_score_requirements": [
       { "ability": "Strength", "score": 13 },
       { "ability": "Dexterity", "score": 13 }
@@ -290,7 +321,8 @@
     "tools": [],
     "weapons": []
   },
-  "Great Weapon Fighting": {
+  {
+    "name": "Great Weapon Fighting",
     "ability_score_requirements": [],
     "armors": [],
     "category": "Fighting Style",
@@ -299,7 +331,8 @@
     "tools": [],
     "weapons": []
   },
-  "Great Weapon Master": {
+  {
+    "name": "Great Weapon Master",
     "ability_score_requirements": [{ "ability": "Strength", "score": 13 }],
     "armors": [],
     "category": "General",
@@ -308,7 +341,8 @@
     "tools": [],
     "weapons": []
   },
-  "Healer": {
+  {
+    "name": "Healer",
     "ability_score_requirements": [],
     "armors": [],
     "category": "Origin",
@@ -317,7 +351,8 @@
     "tools": [],
     "weapons": []
   },
-  "Heavily Armored": {
+  {
+    "name": "Heavily Armored",
     "ability_score_requirements": [],
     "armors": ["Medium"],
     "category": "General",
@@ -326,7 +361,8 @@
     "tools": [],
     "weapons": []
   },
-  "Heavy Armor Master": {
+  {
+    "name": "Heavy Armor Master",
     "ability_score_requirements": [],
     "armors": ["Heavy"],
     "category": "General",
@@ -335,7 +371,8 @@
     "tools": [],
     "weapons": []
   },
-  "Inspiring Leader": {
+  {
+    "name": "Inspiring Leader",
     "ability_score_requirements": [
       { "ability": "Wisdom", "score": 13 },
       { "ability": "Charisma", "score": 13 }
@@ -347,7 +384,8 @@
     "tools": [],
     "weapons": []
   },
-  "Interception": {
+  {
+    "name": "Interception",
     "ability_score_requirements": [],
     "armors": [],
     "category": "Fighting Style",
@@ -356,7 +394,8 @@
     "tools": [],
     "weapons": []
   },
-  "Keen Mind": {
+  {
+    "name": "Keen Mind",
     "ability_score_requirements": [{ "ability": "Intelligence", "score": 13 }],
     "armors": [],
     "category": "General",
@@ -365,7 +404,8 @@
     "tools": [],
     "weapons": []
   },
-  "Lightly Armored": {
+  {
+    "name": "Lightly Armored",
     "ability_score_requirements": [],
     "armors": [],
     "category": "General",
@@ -374,7 +414,8 @@
     "tools": [],
     "weapons": []
   },
-  "Lucky": {
+  {
+    "name": "Lucky",
     "ability_score_requirements": [],
     "armors": [],
     "category": "Origin",
@@ -383,7 +424,8 @@
     "tools": [],
     "weapons": []
   },
-  "Mage Slayer": {
+  {
+    "name": "Mage Slayer",
     "ability_score_requirements": [
       { "ability": "Strength", "score": 13 },
       { "ability": "Dexterity", "score": 13 }
@@ -395,7 +437,8 @@
     "tools": [],
     "weapons": []
   },
-  "Magic Initiate": {
+  {
+    "name": "Magic Initiate",
     "ability_score_requirements": [],
     "armors": [],
     "category": "Origin",
@@ -404,7 +447,8 @@
     "tools": [],
     "weapons": []
   },
-  "Martial Weapon Training": {
+  {
+    "name": "Martial Weapon Training",
     "ability_score_requirements": [],
     "armors": [],
     "category": "General",
@@ -413,7 +457,8 @@
     "tools": [],
     "weapons": []
   },
-  "Medium Armor Master": {
+  {
+    "name": "Medium Armor Master",
     "ability_score_requirements": [],
     "armors": ["Medium"],
     "category": "General",
@@ -422,7 +467,8 @@
     "tools": [],
     "weapons": []
   },
-  "Moderately Armored": {
+  {
+    "name": "Moderately Armored",
     "ability_score_requirements": [],
     "armors": ["Light"],
     "category": "General",
@@ -431,7 +477,8 @@
     "tools": [],
     "weapons": []
   },
-  "Mounted Combatant": {
+  {
+    "name": "Mounted Combatant",
     "ability_score_requirements": [
       { "ability": "Strength", "score": 13 },
       { "ability": "Dexterity", "score": 13 }
@@ -443,7 +490,8 @@
     "tools": [],
     "weapons": []
   },
-  "Musician": {
+  {
+    "name": "Musician",
     "ability_score_requirements": [],
     "armors": [],
     "category": "Origin",
@@ -452,7 +500,8 @@
     "tools": [],
     "weapons": []
   },
-  "Observant": {
+  {
+    "name": "Observant",
     "ability_score_requirements": [
       { "ability": "Intelligence", "score": 13 },
       { "ability": "Wisdom", "score": 13 }
@@ -464,7 +513,8 @@
     "tools": [],
     "weapons": []
   },
-  "Piercer": {
+  {
+    "name": "Piercer",
     "ability_score_requirements": [
       { "ability": "Strength", "score": 13 },
       { "ability": "Dexterity", "score": 13 }
@@ -476,7 +526,8 @@
     "tools": [],
     "weapons": []
   },
-  "Poisoner": {
+  {
+    "name": "Poisoner",
     "ability_score_requirements": [
       { "ability": "Dexterity", "score": 13 },
       { "ability": "Intelligence", "score": 13 }
@@ -488,7 +539,8 @@
     "tools": [],
     "weapons": []
   },
-  "Polearm Master": {
+  {
+    "name": "Polearm Master",
     "ability_score_requirements": [
       { "ability": "Strength", "score": 13 },
       { "ability": "Dexterity", "score": 13 }
@@ -500,7 +552,8 @@
     "tools": [],
     "weapons": []
   },
-  "Protection": {
+  {
+    "name": "Protection",
     "ability_score_requirements": [],
     "armors": [],
     "category": "Fighting Style",
@@ -509,7 +562,8 @@
     "tools": [],
     "weapons": []
   },
-  "Resilient": {
+  {
+    "name": "Resilient",
     "ability_score_requirements": [],
     "armors": [],
     "category": "General",
@@ -518,7 +572,8 @@
     "tools": [],
     "weapons": []
   },
-  "Ritual Caster": {
+  {
+    "name": "Ritual Caster",
     "ability_score_requirements": [
       { "ability": "Intelligence", "score": 13 },
       { "ability": "Wisdom", "score": 13 }
@@ -530,7 +585,8 @@
     "tools": [],
     "weapons": []
   },
-  "Savage Attacker": {
+  {
+    "name": "Savage Attacker",
     "ability_score_requirements": [],
     "armors": [],
     "category": "Origin",
@@ -539,7 +595,8 @@
     "tools": [],
     "weapons": []
   },
-  "Sentinel": {
+  {
+    "name": "Sentinel",
     "ability_score_requirements": [
       { "ability": "Strength", "score": 13 },
       { "ability": "Dexterity", "score": 13 }
@@ -551,7 +608,8 @@
     "tools": [],
     "weapons": []
   },
-  "Shadow-Touched": {
+  {
+    "name": "Shadow-Touched",
     "ability_score_requirements": [
       { "ability": "Intelligence", "score": 13 },
       { "ability": "Wisdom", "score": 13 },
@@ -564,7 +622,8 @@
     "tools": [],
     "weapons": []
   },
-  "Sharpshooter": {
+  {
+    "name": "Sharpshooter",
     "ability_score_requirements": [{ "ability": "Dexterity", "score": 13 }],
     "armors": [],
     "category": "General",
@@ -573,7 +632,8 @@
     "tools": [],
     "weapons": []
   },
-  "Shield Master": {
+  {
+    "name": "Shield Master",
     "ability_score_requirements": [],
     "armors": ["Shield"],
     "category": "General",
@@ -582,7 +642,8 @@
     "tools": [],
     "weapons": []
   },
-  "Skilled": {
+  {
+    "name": "Skilled",
     "ability_score_requirements": [],
     "armors": [],
     "category": "Origin",
@@ -591,7 +652,8 @@
     "tools": [],
     "weapons": []
   },
-  "Skill Expert": {
+  {
+    "name": "Skill Expert",
     "ability_score_requirements": [],
     "armors": [],
     "category": "General",
@@ -600,7 +662,8 @@
     "tools": [],
     "weapons": []
   },
-  "Skulker": {
+  {
+    "name": "Skulker",
     "ability_score_requirements": [{ "ability": "Dexterity", "score": 13 }],
     "armors": [],
     "category": "General",
@@ -609,7 +672,8 @@
     "tools": [],
     "weapons": []
   },
-  "Slasher": {
+  {
+    "name": "Slasher",
     "ability_score_requirements": [
       { "ability": "Strength", "score": 13 },
       { "ability": "Dexterity", "score": 13 }
@@ -621,7 +685,8 @@
     "tools": [],
     "weapons": []
   },
-  "Speedy": {
+  {
+    "name": "Speedy",
     "ability_score_requirements": [{ "ability": "Dexterity", "score": 13 }],
     "armors": [],
     "category": "General",
@@ -630,7 +695,8 @@
     "tools": [],
     "weapons": []
   },
-  "Spell Sniper": {
+  {
+    "name": "Spell Sniper",
     "ability_score_requirements": [],
     "armors": [],
     "category": "General",
@@ -639,7 +705,8 @@
     "tools": [],
     "weapons": []
   },
-  "Tavern Brawler": {
+  {
+    "name": "Tavern Brawler",
     "ability_score_requirements": [],
     "armors": [],
     "category": "Origin",
@@ -648,7 +715,8 @@
     "tools": [],
     "weapons": []
   },
-  "Telekinetic": {
+  {
+    "name": "Telekinetic",
     "ability_score_requirements": [
       { "ability": "Intelligence", "score": 13 },
       { "ability": "Wisdom", "score": 13 },
@@ -661,7 +729,8 @@
     "tools": [],
     "weapons": []
   },
-  "Telepathic": {
+  {
+    "name": "Telepathic",
     "ability_score_requirements": [
       { "ability": "Intelligence", "score": 13 },
       { "ability": "Wisdom", "score": 13 },
@@ -674,7 +743,8 @@
     "tools": [],
     "weapons": []
   },
-  "Thrown Weapon Fighting": {
+  {
+    "name": "Thrown Weapon Fighting",
     "ability_score_requirements": [],
     "armors": [],
     "category": "Fighting Style",
@@ -683,7 +753,8 @@
     "tools": [],
     "weapons": []
   },
-  "Tough": {
+  {
+    "name": "Tough",
     "ability_score_requirements": [],
     "armors": [],
     "category": "Origin",
@@ -692,7 +763,8 @@
     "tools": [],
     "weapons": []
   },
-  "Two-Weapon Fighting": {
+  {
+    "name": "Two-Weapon Fighting",
     "ability_score_requirements": [],
     "armors": [],
     "category": "Fighting Style",
@@ -701,7 +773,8 @@
     "tools": [],
     "weapons": []
   },
-  "War Caster": {
+  {
+    "name": "War Caster",
     "ability_score_requirements": [],
     "armors": [],
     "category": "General",
@@ -710,7 +783,8 @@
     "tools": [],
     "weapons": []
   },
-  "Weapon Master": {
+  {
+    "name": "Weapon Master",
     "ability_score_requirements": [],
     "armors": [],
     "category": "General",
@@ -719,4 +793,4 @@
     "tools": [],
     "weapons": []
   }
-}
+]
