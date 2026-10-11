@@ -7,7 +7,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"math"
 	"os"
 	"strings"
 
@@ -69,7 +68,7 @@ var cmdCreate = &cobra.Command{
 		pc.AbilityScores = assignedAbilityScores
 		pc.Class = assignedClass
 		pc.Level = d20.GetTotalLevel(assignedClass)
-		pc.ProficiencyBonus = int(math.Ceil(float64(pc.Level) / float64(4)))
+		pc.ProficiencyBonus = 2 + (pc.Level-1)/4
 		pc.Features = assignedFeatures
 		pc.Armors = assignedArmors
 		pc.Tools = assignedTools
