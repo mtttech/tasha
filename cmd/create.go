@@ -41,6 +41,8 @@ var cmdCreate = &cobra.Command{
 	Short: "Create a new character",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
+		// Collect character data
+		assignedName := strings.TrimSpace(args[0])
 		// Assign your species
 		assignedSpecies := Menu("Select your species", d20.GetD20Species()).(string)
 		assignedSize := d20.GetSizeBySpecies(assignedSpecies)
@@ -55,8 +57,7 @@ var cmdCreate = &cobra.Command{
 		assignedAbilityScores := AssignAbilityScores(assignedBackground)
 		// Assign your class, features, proficiencies, and skills
 		assignedClass, assignedFeatures, assignedArmors, assignedTools, assignedWeapons, assignedSkills := AssignCharacterClass(assignedBackground, assignedAbilityScores)
-		// Collect character data
-		assignedName := strings.TrimSpace(args[0])
+
 		var pc PC
 		pc.Name = assignedName
 		pc.Species = assignedSpecies
@@ -75,16 +76,18 @@ var cmdCreate = &cobra.Command{
 		pc.Weapons = assignedWeapons
 		pc.Skills = assignedSkills
 		pc.Feats = assignedFeats
+
 		// Confirm, save to toml file
 		if ConfirmMenu("Export this character") {
-			csFileName := fmt.Sprintf("%s.json", strings.ToLower(strings.ReplaceAll(assignedName, " ", "_")))
-			fp, err := os.Create(csFileName)
+			charSheet := strings.ReplaceAll(assignedName, " ", "_")
+			charSheet = fmt.Sprintf("%s.json", strings.ToLower(charSheet))
+			fPointer, err := os.Create(charSheet)
 			if err != nil {
 				log.Fatalf("Failed to create character: %v", err)
 			}
-			defer fp.Close()
+			defer fPointer.Close()
 
-			encoder := json.NewEncoder(fp)
+			encoder := json.NewEncoder(fPointer)
 			encoder.SetIndent("", "	")
 			if err := encoder.Encode(pc); err != nil {
 				log.Fatalf("Failed to encode JSON data: %v", err)
