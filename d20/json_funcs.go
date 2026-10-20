@@ -9,12 +9,14 @@ import (
 	"os"
 )
 
-var characterBackgrounds = load_backgrounds()
-var characterClasses = load_classes()
-var characterFeats = load_feats()
-var characterMulticlasses = load_multiclasses()
-var characterSkills = load_skills()
-var characterSpecies = load_species()
+var (
+	characterBackgrounds  = load_backgrounds()
+	characterClasses      = load_classes()
+	characterFeats        = load_feats()
+	characterMulticlasses = load_multiclasses()
+	characterSkills       = load_skills()
+	characterSpecies      = load_species()
+)
 
 type Background struct {
 	Name    string   `json:"name"`
