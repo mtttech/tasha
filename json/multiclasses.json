@@ -1,11 +1,13 @@
-{
-  "Barbarian": {
+[
+  {
+    "name": "Barbarian",
     "ability": ["Strength"],
     "armors": ["Shield"],
     "tools": [],
     "weapons": ["Martial"]
   },
-  "Bard": {
+  {
+    "name": "Bard",
     "ability": ["Charisma"],
     "armors": ["Light"],
     "tools": [
@@ -33,64 +35,74 @@
     ],
     "weapons": []
   },
-  "Cleric": {
+  {
+    "name": "Cleric",
     "ability": ["Wisdom"],
     "armors": ["Light", "Medium", "Shield"],
     "tools": [],
     "weapons": []
   },
-  "Druid": {
+  {
+    "name": "Druid",
     "ability": ["Wisdom"],
     "armors": ["Light", "Shield"],
     "tools": [],
     "weapons": []
   },
-  "Fighter": {
+  {
+    "name": "Fighter",
     "ability": ["Dexterity", "Strength"],
     "armors": ["Light", "Medium", "Shield"],
     "tools": [],
     "weapons": ["Martial"]
   },
-  "Monk": {
+  {
+    "name": "Monk",
     "ability": ["Dexterity", "Wisdom"],
     "armors": [],
     "tools": [],
     "weapons": []
   },
-  "Paladin": {
+  {
+    "name": "Paladin",
     "ability": ["Strength", "Charisma"],
     "armors": ["Light", "Medium", "Shield"],
     "tools": [],
     "weapons": ["Martial"]
   },
-  "Ranger": {
+  {
+    "name": "Ranger",
     "ability": ["Dexterity", "Wisdom"],
     "armors": ["Light", "Medium", "Shield"],
     "tools": [],
     "weapons": ["Martial"]
   },
-  "Rogue": {
+  {
+    "name": "Rogue",
     "ability": ["Dexterity"],
     "armors": ["Light"],
     "tools": ["Thieves' Tools"],
     "weapons": ["Simple"]
   },
-  "Sorcerer": {
+  {
+    "name": "Sorcerer",
     "ability": ["Charisma"],
     "armors": [],
     "tools": [],
     "weapons": []
   },
-  "Warlock": {
+  {
+    "name": "Warlock",
     "ability": ["Charisma"],
     "armors": ["Light"],
     "tools": [],
     "weapons": ["Simple"]
   },
-  "Wizard": {
+  {
+    "name": "Wizard",
     "ability": ["Intelligence"],
     "armors": [],
     "tools": [],
     "weapons": []
   }
-}
+]
