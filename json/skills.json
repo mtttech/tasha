@@ -1,17 +1,21 @@
-{
-  "Acrobatics": {
+[
+  {
+    "name": "Acrobatics",
     "ability": "Dexterity",
     "classes": ["Bard", "Fighter", "Monk", "Rogue"]
   },
-  "Animal Handling": {
+  {
+    "name": "Animal Handling",
     "ability": "Wisdom",
     "classes": ["Barbarian", "Bard", "Druid", "Fighter", "Ranger"]
   },
-  "Arcana": {
+  {
+    "name": "Arcana",
     "ability": "Intelligence",
     "classes": ["Bard", "Druid", "Sorcerer", "Warlock", "Wizard"]
   },
-  "Athletics": {
+  {
+    "name": "Athletics",
     "ability": "Strength",
     "classes": [
       "Barbarian",
@@ -23,15 +27,18 @@
       "Rogue"
     ]
   },
-  "Deception": {
+  {
+    "name": "Deception",
     "ability": "Charisma",
     "classes": ["Bard", "Rogue", "Sorcerer", "Warlock"]
   },
-  "History": {
+  {
+    "name": "History",
     "ability": "Intelligence",
     "classes": ["Bard", "Cleric", "Fighter", "Monk", "Warlock", "Wizard"]
   },
-  "Insight": {
+  {
+    "name": "Insight",
     "ability": "Wisdom",
     "classes": [
       "Bard",
@@ -46,7 +53,8 @@
       "Wizard"
     ]
   },
-  "Intimidation": {
+  {
+    "name": "Intimidation",
     "ability": "Charisma",
     "classes": [
       "Barbarian",
@@ -58,31 +66,38 @@
       "Warlock"
     ]
   },
-  "Investigation": {
+  {
+    "name": "Investigation",
     "ability": "Intelligence",
     "classes": ["Bard", "Ranger", "Rogue", "Warlock", "Wizard"]
   },
-  "Medicine": {
+  {
+    "name": "Medicine",
     "ability": "Wisdom",
     "classes": ["Bard", "Cleric", "Druid", "Paladin", "Wizard"]
   },
-  "Nature": {
+  {
+    "name": "Nature",
     "ability": "Wisdom",
     "classes": ["Barbarian", "Bard", "Druid", "Ranger", "Warlock"]
   },
-  "Perception": {
+  {
+    "name": "Perception",
     "ability": "Wisdom",
     "classes": ["Barbarian", "Bard", "Druid", "Fighter", "Ranger", "Rogue"]
   },
-  "Performance": {
+  {
+    "name": "Performance",
     "ability": "Charisma",
     "classes": ["Bard", "Rogue"]
   },
-  "Persuasion": {
+  {
+    "name": "Persuasion",
     "ability": "Charisma",
     "classes": ["Bard", "Cleric", "Paladin", "Rogue", "Sorcerer"]
   },
-  "Religion": {
+  {
+    "name": "Religion",
     "ability": "Intelligence",
     "classes": [
       "Bard",
@@ -95,16 +110,19 @@
       "Wizard"
     ]
   },
-  "Sleight of Hand": {
+  {
+    "name": "Sleight of Hand",
     "ability": "Dexterity",
     "classes": ["Bard", "Ranger", "Rogue"]
   },
-  "Stealth": {
+  {
+    "name": "Stealth",
     "ability": "Dexterity",
     "classes": ["Bard", "Monk", "Ranger", "Rogue"]
   },
-  "Survival": {
+  {
+    "name": "Survival",
     "ability": "Wisdom",
     "classes": ["Barbarian", "Bard", "Druid", "Fighter", "Ranger"]
   }
-}
+]
