@@ -4,50 +4,9 @@ Copyright © 2025 Marcus Taylor <mtaylor9754@hotmail.com>
 package d20
 
 import (
-	"encoding/json"
-	"log"
 	"maps"
-	"os"
 	"slices"
 )
-
-type Class struct {
-	Subclass string
-	Level    int
-}
-
-type Classes struct {
-	Name         string           `json:"name"`
-	Armors       []string         `json:"armors"`
-	Features     map[int][]string `json:"features"`
-	HitDie       int              `json:"hit_die"`
-	SavingThrows []string         `json:"saving_throws"`
-	Subclasses   []string         `json:"subclasses"`
-	Tools        []string         `json:"tools"`
-	Weapons      []string         `json:"weapons"`
-}
-
-func load_classes() map[string]Classes {
-	byteValue, err := os.ReadFile("json/classes.json")
-	if err != nil {
-		log.Fatalf("Error reading file: %v", err)
-	}
-
-	var classes []Classes
-	err = json.Unmarshal(byteValue, &classes)
-	if err != nil {
-		log.Fatalf("Error parsing JSON: %v", err)
-	}
-
-	c := make(map[string]Classes)
-	for _, class := range classes {
-		c[class.Name] = Classes{class.Name, class.Armors, class.Features, class.HitDie, class.SavingThrows, class.Subclasses, class.Tools, class.Weapons}
-	}
-
-	return c
-}
-
-var characterClasses = load_classes()
 
 /*
 Returns a slice of armor proficiencies by class.

@@ -4,10 +4,7 @@ Copyright © 2025 Marcus Taylor <mtaylor9754@hotmail.com>
 package d20
 
 import (
-	"encoding/json"
-	"log"
 	"maps"
-	"os"
 	"slices"
 
 	"tasha/abilities"
@@ -17,39 +14,6 @@ type AbilityScoreRequirements struct {
 	Ability string
 	Score   int
 }
-
-type Feat struct {
-	Name     string                     `json:"name"`
-	Ability  []AbilityScoreRequirements `json:"ability"`
-	Armors   []string                   `json:"armors"`
-	Category string                     `json:"category"`
-	Features []string                   `json:"features"`
-	Level    int                        `json:"level"`
-	Tools    []string                   `json:"tools"`
-	Weapons  []string                   `json:"weapons"`
-}
-
-func load_feats() map[string]Feat {
-	byteValue, err := os.ReadFile("json/feats.json")
-	if err != nil {
-		log.Fatalf("Error reading file: %v", err)
-	}
-
-	var feats []Feat
-	err = json.Unmarshal(byteValue, &feats)
-	if err != nil {
-		log.Fatalf("Error parsing JSON: %v", err)
-	}
-
-	f := make(map[string]Feat)
-	for _, feat := range feats {
-		f[feat.Name] = Feat{feat.Name, feat.Ability, feat.Armors, feat.Category, feat.Features, feat.Level, feat.Tools, feat.Weapons}
-	}
-
-	return f
-}
-
-var characterFeats = load_feats()
 
 /*
 Returns true if the class feature f is found in the slice of class features k.
