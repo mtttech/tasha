@@ -13,6 +13,7 @@ var characterBackgrounds = load_backgrounds()
 var characterClasses = load_classes()
 var characterFeats = load_feats()
 var characterSkills = load_skills()
+var characterSpecies = load_species()
 
 type Background struct {
 	Name    string   `json:"name"`
@@ -55,24 +56,11 @@ type Skills struct {
 	Classes []string `json:"classes"`
 }
 
-func load_feats() map[string]Feat {
-	byteValue, err := os.ReadFile("json/feats.json")
-	if err != nil {
-		log.Fatalf("Error reading file: %v", err)
-	}
-
-	var feats []Feat
-	err = json.Unmarshal(byteValue, &feats)
-	if err != nil {
-		log.Fatalf("Error parsing JSON: %v", err)
-	}
-
-	f := make(map[string]Feat)
-	for _, feat := range feats {
-		f[feat.Name] = Feat{feat.Name, feat.Ability, feat.Armors, feat.Category, feat.Features, feat.Level, feat.Tools, feat.Weapons}
-	}
-
-	return f
+type Species struct {
+	Name   string   `json:"name"`
+	Size   string   `json:"size"`
+	Speed  int      `json:"speed"`
+	Traits []string `json:"traits"`
 }
 
 func load_backgrounds() map[string]Background {
@@ -115,6 +103,26 @@ func load_classes() map[string]Classes {
 	return c
 }
 
+func load_feats() map[string]Feat {
+	byteValue, err := os.ReadFile("json/feats.json")
+	if err != nil {
+		log.Fatalf("Error reading file: %v", err)
+	}
+
+	var feats []Feat
+	err = json.Unmarshal(byteValue, &feats)
+	if err != nil {
+		log.Fatalf("Error parsing JSON: %v", err)
+	}
+
+	f := make(map[string]Feat)
+	for _, feat := range feats {
+		f[feat.Name] = Feat{feat.Name, feat.Ability, feat.Armors, feat.Category, feat.Features, feat.Level, feat.Tools, feat.Weapons}
+	}
+
+	return f
+}
+
 func load_skills() map[string]Skills {
 	byteValue, err := os.ReadFile("json/skills.json")
 	if err != nil {
@@ -130,6 +138,26 @@ func load_skills() map[string]Skills {
 	s := make(map[string]Skills)
 	for _, skill := range skills {
 		s[skill.Name] = Skills{skill.Name, skill.Ability, skill.Classes}
+	}
+
+	return s
+}
+
+func load_species() map[string]Species {
+	byteValue, err := os.ReadFile("json/species.json")
+	if err != nil {
+		log.Fatalf("Error reading file: %v", err)
+	}
+
+	var species []Species
+	err = json.Unmarshal(byteValue, &species)
+	if err != nil {
+		log.Fatalf("Error parsing JSON: %v", err)
+	}
+
+	s := make(map[string]Species)
+	for _, specie := range species {
+		s[specie.Name] = Species{specie.Name, specie.Size, specie.Speed, specie.Traits}
 	}
 
 	return s
