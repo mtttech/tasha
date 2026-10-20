@@ -12,6 +12,7 @@ import (
 var characterBackgrounds = load_backgrounds()
 var characterClasses = load_classes()
 var characterFeats = load_feats()
+var characterMulticlasses = load_multiclasses()
 var characterSkills = load_skills()
 var characterSpecies = load_species()
 
@@ -48,6 +49,14 @@ type Feat struct {
 	Level    int                        `json:"level"`
 	Tools    []string                   `json:"tools"`
 	Weapons  []string                   `json:"weapons"`
+}
+
+type Multiclass struct {
+	Name    string   `json:"name"`
+	Ability []string `json:"ability"`
+	Armors  []string `json:"armors"`
+	Tools   []string `json:"tools"`
+	Weapons []string `json:"weapons"`
 }
 
 type Skills struct {
@@ -121,6 +130,26 @@ func load_feats() map[string]Feat {
 	}
 
 	return f
+}
+
+func load_multiclasses() map[string]Multiclass {
+	byteValue, err := os.ReadFile("json/multiclasses.json")
+	if err != nil {
+		log.Fatalf("Error reading file: %v", err)
+	}
+
+	var multiclasses []Multiclass
+	err = json.Unmarshal(byteValue, &multiclasses)
+	if err != nil {
+		log.Fatalf("Error parsing JSON: %v", err)
+	}
+
+	m := make(map[string]Multiclass)
+	for _, class := range multiclasses {
+		m[class.Name] = Multiclass{class.Name, class.Ability, class.Armors, class.Tools, class.Weapons}
+	}
+
+	return m
 }
 
 func load_skills() map[string]Skills {
