@@ -77,7 +77,7 @@ var cmdCreate = &cobra.Command{
 		pc.Skills = assignedSkills
 		pc.Feats = assignedFeats
 
-		// Confirm, save to toml file
+		// Confirmation to save character data as a .json file
 		if ConfirmMenu("Export this character") {
 			charSheet := strings.ReplaceAll(assignedName, " ", "_")
 			charSheet = fmt.Sprintf("%s.json", strings.ToLower(charSheet))
